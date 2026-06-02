@@ -1,9 +1,9 @@
-import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, c9 as toArray, cn as useMergedState, cu as warningOnce, b$ as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, c1 as reactExports, d as ConfigContext, bB as genStyleHooks, bY as merge, ca as unit, c2 as resetComponent, bA as genFocusStyle, c3 as resetIcon, ce as useComponentConfig, cp as useSize, aa as cloneElement, bP as initCollapseMotion, bZ as omit, I as Icon, cv as wrapperRaf, ck as useLayoutUpdateEffect, cg as useEvent, A as RefResizeObserver, cf as useComposeRef, bT as isMobile, bN as getTransitionName, c8 as textEllipsis, bz as genFocusOutline, cc as useCSSVarCls, u as RefIcon$2, bV as jsxRuntimeExports, i as FontAwesomeIcon, bh as faSliders, ao as faCalculator, ar as faCertificate, be as faShield, as as faCheckDouble, aA as faCreditCard, aw as faClone, aR as faHeart, br as faTruck, a$ as faMoneyBill, b7 as faReceipt, aP as faHashtag, bn as faTags, b9 as faRotate, aS as faHourglassHalf, an as faBarsProgress, bm as faTableList, ay as faCompress, bl as faTableColumns, ai as faArrowDownShortWide, aV as faList, b0 as faPalette, aY as faMapLocation, bo as faThumbsUp, b1 as faPaperPlane, au as faCircleInfo, aW as faLock, aD as faEnvelope, bu as faUserTag, aT as faImage, aJ as faFileLines, bt as faUser, bk as faStar, aq as faCamera, a_ as faMicrophone, aB as faCropSimple, bs as faUpload, bw as faWandSparkles, ag as faAlignLeft, b8 as faRepeat, bd as faShareNodes, bc as faSave, bb as faRotateRight, ak as faArrowRightToBracket, aI as faFileAudio, bv as faVideo, bg as faSignature, bp as faToggleOn, am as faBarcode, aO as faHandshake, aF as faExpand, aH as faEyeSlash, aZ as faMask, ap as faCalendar, av as faClock, b3 as faPercent, bi as faSpinner, aN as faGlobe, aQ as faHeading, aL as faFont, b4 as faPhone, aU as faLink, bj as faSquareCheck, at as faCircleDot, b2 as faPenToSquare, E as Tooltip, B as Button, bq as faTrash, b5 as faPlus, c5 as staticMethods, a2 as _pg, aj as faArrowLeft, ba as faRotateLeft, aG as faEye, ax as faCode, aK as faFloppyDisk, al as faArrowUp, ah as faArrowDown, aM as faGear, az as faCopy, aC as faCrown, ae as createRoot } from "./chunks/Header-Cwf5epXY.js";
+import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, c9 as toArray, cn as useMergedState, cu as warningOnce, b$ as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, c1 as reactExports, d as ConfigContext, bB as genStyleHooks, bY as merge, ca as unit, c2 as resetComponent, bA as genFocusStyle, c3 as resetIcon, ce as useComponentConfig, cp as useSize, aa as cloneElement, bP as initCollapseMotion, bZ as omit, I as Icon, cv as wrapperRaf, ck as useLayoutUpdateEffect, cg as useEvent, A as RefResizeObserver, cf as useComposeRef, bT as isMobile, bN as getTransitionName, c8 as textEllipsis, bz as genFocusOutline, cc as useCSSVarCls, u as RefIcon$2, bV as jsxRuntimeExports, i as FontAwesomeIcon, bh as faSliders, ao as faCalculator, ar as faCertificate, be as faShield, as as faCheckDouble, aA as faCreditCard, aw as faClone, aR as faHeart, br as faTruck, a$ as faMoneyBill, b7 as faReceipt, aP as faHashtag, bn as faTags, b9 as faRotate, aS as faHourglassHalf, an as faBarsProgress, bm as faTableList, ay as faCompress, bl as faTableColumns, ai as faArrowDownShortWide, aV as faList, b0 as faPalette, aY as faMapLocation, bo as faThumbsUp, b1 as faPaperPlane, au as faCircleInfo, aW as faLock, aD as faEnvelope, bu as faUserTag, aT as faImage, aJ as faFileLines, bt as faUser, bk as faStar, aq as faCamera, a_ as faMicrophone, aB as faCropSimple, bs as faUpload, bw as faWandSparkles, ag as faAlignLeft, b8 as faRepeat, bd as faShareNodes, bc as faSave, bb as faRotateRight, ak as faArrowRightToBracket, aI as faFileAudio, bv as faVideo, bg as faSignature, bp as faToggleOn, am as faBarcode, aO as faHandshake, aF as faExpand, aH as faEyeSlash, aZ as faMask, ap as faCalendar, av as faClock, b3 as faPercent, bi as faSpinner, aN as faGlobe, aQ as faHeading, aL as faFont, b4 as faPhone, aU as faLink, bj as faSquareCheck, at as faCircleDot, b2 as faPenToSquare, E as Tooltip, B as Button, bq as faTrash, b5 as faPlus, c5 as staticMethods, a2 as _pg, aj as faArrowLeft, ba as faRotateLeft, aG as faEye, ax as faCode, aK as faFloppyDisk, al as faArrowUp, ah as faArrowDown, aM as faGear, az as faCopy, aC as faCrown, ae as createRoot } from "./chunks/Header-B0wts1cq.js";
 import { h as getForm, k as updateForm, c as createForm } from "./chunks/api-CP2qo9fl.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { S as Switch } from "./chunks/index-BDHgA9Q0.js";
-import { e as genCollapseMotion, m as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-B1Q4DCZy.js";
-import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-Cungot-C.js";
+import { S as Switch } from "./chunks/index-CEQ7Ze7V.js";
+import { e as genCollapseMotion, m as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-Bl_Ufa6r.js";
+import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-CnfOx_s2.js";
 var PanelContent = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, forceRender = props.forceRender, className = props.className, style = props.style, children = props.children, isActive = props.isActive, role = props.role, customizeClassNames = props.classNames, styles = props.styles;
   var _React$useState = React.useState(isActive || forceRender), _React$useState2 = _slicedToArray(_React$useState, 2), rendered = _React$useState2[0], setRendered = _React$useState2[1];
@@ -176,7 +176,7 @@ function getActiveKeysArray(activeKey) {
     return String(key);
   });
 }
-var Collapse$2 = /* @__PURE__ */ React.forwardRef(function(props, ref) {
+var Collapse$3 = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-collapse" : _props$prefixCls, _props$destroyInactiv = props.destroyInactivePanel, destroyInactivePanel = _props$destroyInactiv === void 0 ? false : _props$destroyInactiv, style = props.style, accordion = props.accordion, className = props.className, children = props.children, collapsible = props.collapsible, openMotion = props.openMotion, expandIcon = props.expandIcon, rawActiveKey = props.activeKey, defaultActiveKey = props.defaultActiveKey, _onChange = props.onChange, items = props.items;
   var collapseClassName = classNames(prefixCls, className);
   var _useMergedState = useMergedState([], {
@@ -223,13 +223,13 @@ var Collapse$2 = /* @__PURE__ */ React.forwardRef(function(props, ref) {
     data: true
   })), mergedChildren);
 });
-const Collapse$3 = Object.assign(Collapse$2, {
+const Collapse$2 = Object.assign(Collapse$3, {
   /**
    * @deprecated use `items` instead, will be removed in `v4.0.0`
    */
   Panel: CollapsePanel$1
 });
-Collapse$3.Panel;
+Collapse$2.Panel;
 const CollapsePanel = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     getPrefixCls
@@ -243,7 +243,7 @@ const CollapsePanel = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const collapsePanelClassName = classNames({
     [`${prefixCls}-no-arrow`]: !showArrow
   }, className);
-  return /* @__PURE__ */ reactExports.createElement(Collapse$3.Panel, Object.assign({
+  return /* @__PURE__ */ reactExports.createElement(Collapse$2.Panel, Object.assign({
     ref
   }, props, {
     prefixCls,
@@ -516,7 +516,7 @@ const useStyle$1 = genStyleHooks("Collapse", (token) => {
   });
   return [genBaseStyle(collapseToken), genBorderlessStyle(collapseToken), genGhostStyle(collapseToken), genArrowStyle(collapseToken), genCollapseMotion(collapseToken)];
 }, prepareComponentToken$1);
-const Collapse = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
+const Collapse$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     getPrefixCls,
     direction,
@@ -594,7 +594,7 @@ const Collapse = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   }, [children]);
   return wrapCSSVar(
     // @ts-ignore
-    /* @__PURE__ */ reactExports.createElement(Collapse$3, Object.assign({
+    /* @__PURE__ */ reactExports.createElement(Collapse$2, Object.assign({
       ref,
       openMotion
     }, omit(props, ["rootClassName"]), {
@@ -607,7 +607,7 @@ const Collapse = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     }), items)
   );
 });
-const Collapse$1 = Object.assign(Collapse, {
+const Collapse = Object.assign(Collapse$1, {
   Panel: CollapsePanel
 });
 var PlusOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z" } }, { "tag": "path", "attrs": { "d": "M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8z" } }] }, "name": "plus", "theme": "outlined" };
@@ -994,7 +994,7 @@ var ExtraContent = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) 
     ref
   }, content) : null;
 });
-var OperationNode = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
+var OperationNode$1 = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, id = props.id, tabs = props.tabs, locale = props.locale, mobile = props.mobile, _props$more = props.more, moreProps = _props$more === void 0 ? {} : _props$more, style = props.style, className = props.className, editable = props.editable, tabBarGutter = props.tabBarGutter, rtl = props.rtl, removeAriaLabel = props.removeAriaLabel, onTabClick = props.onTabClick, getPopupContainer = props.getPopupContainer, popupClassName = props.popupClassName;
   var _useState = reactExports.useState(false), _useState2 = _slicedToArray(_useState, 2), open = _useState2[0], setOpen = _useState2[1];
   var _useState3 = reactExports.useState(null), _useState4 = _slicedToArray(_useState3, 2), selectedKey = _useState4[0], setSelectedKey = _useState4[1];
@@ -1136,7 +1136,7 @@ var OperationNode = /* @__PURE__ */ reactExports.forwardRef(function(props, ref)
     editable
   }));
 });
-const OperationNode$1 = /* @__PURE__ */ reactExports.memo(OperationNode, function(_, next) {
+const OperationNode = /* @__PURE__ */ reactExports.memo(OperationNode$1, function(_, next) {
   return (
     // https://github.com/ant-design/ant-design/issues/32544
     // We'd better remove syntactic sugar in `rc-menu` since this has perf issue
@@ -1648,7 +1648,7 @@ var TabNavList = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
   }), /* @__PURE__ */ reactExports.createElement("div", {
     className: classNames("".concat(prefixCls, "-ink-bar"), _defineProperty({}, "".concat(prefixCls, "-ink-bar-animated"), animated.inkBar)),
     style: indicatorStyle
-  }))))), /* @__PURE__ */ reactExports.createElement(OperationNode$1, _extends({}, props, {
+  }))))), /* @__PURE__ */ reactExports.createElement(OperationNode, _extends({}, props, {
     removeAriaLabel: locale === null || locale === void 0 ? void 0 : locale.removeAriaLabel,
     ref: operationsRef,
     prefixCls,
@@ -3068,10 +3068,6 @@ const FIELD_TYPES = {
       // Visible rows
       cols: "",
       // Visible columns (empty = 100%)
-      character_limit: "",
-      // 0 = unlimited
-      character_count_display: false,
-      // Show count
       resize: "vertical",
       // vertical, horizontal, both, none
       // === Validation ===
@@ -8196,6 +8192,12 @@ const COMMON_OPTION_VALUES = {
     { value: "left", label: "Left of Field" },
     { value: "right", label: "Right of Field" },
     { value: "hidden", label: "Hidden" }
+  ],
+  resize: [
+    { value: "vertical", label: "Vertical Only" },
+    { value: "horizontal", label: "Horizontal Only" },
+    { value: "both", label: "Both Directions" },
+    { value: "none", label: "None" }
   ]
 };
 const SECTION_ORDER = [
@@ -8260,6 +8262,42 @@ const TEXTAREA_OPTIONS = {
     min: 1,
     max: 50,
     description: "Number of rows for textarea"
+  },
+  cols: {
+    type: "number",
+    label: "Columns",
+    section: "general",
+    min: 1,
+    max: 100,
+    description: "Width of textarea in average character widths"
+  },
+  resize: {
+    type: "select",
+    label: "Resize Handle",
+    section: "general",
+    description: "Allow users to resize the textarea",
+    options: COMMON_OPTION_VALUES.resize || [
+      { value: "vertical", label: "Vertical Only" },
+      { value: "horizontal", label: "Horizontal Only" },
+      { value: "both", label: "Both Directions" },
+      { value: "none", label: "None" }
+    ]
+  },
+  max_length: {
+    type: "number",
+    label: "Max Length",
+    section: "validation",
+    min: 1,
+    placeholder: "No limit",
+    description: "Maximum number of characters allowed"
+  },
+  min_length: {
+    type: "number",
+    label: "Min Length",
+    section: "validation",
+    min: 0,
+    placeholder: "No minimum",
+    description: "Minimum number of characters required"
   }
 };
 const FIELD_TYPE_OPTIONS_MAP = {
@@ -8569,7 +8607,6 @@ function getApplicableOptions(fieldType, field = {}) {
     "steps",
     "questions",
     "pairs",
-    "rows",
     "tabs",
     "available_items",
     "selected_items",
@@ -8940,11 +8977,13 @@ function FieldTemplate({ field: f }) {
   ] });
   function renderInput() {
     if (f.type === "textarea") {
-      const charLimit2 = f.character_limit ? Number(f.character_limit) : 0;
+      const charLimit2 = f.max_length ? Number(f.max_length) : 0;
       const maxLength2 = charLimit2 > 0 ? charLimit2 : void 0;
+      const resizeValue = f.resize || "vertical";
+      const resizeStyle = resizeValue === "both" ? {} : { resize: resizeValue };
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
         f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", dangerouslySetInnerHTML: { __html: f.prefix_label } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { className: "fg-form-field-input", rows: f.rows || 4, placeholder: f.placeholder, defaultValue: f.default_value, maxLength: maxLength2, readOnly: true, style: { resize: "vertical", ...inputStyle } }, `textarea-${f.id}-${f.default_value || ""}-${f.character_limit || ""}`),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { className: "fg-form-field-input", rows: f.rows || 4, placeholder: f.placeholder, defaultValue: f.default_value, maxLength: maxLength2, readOnly: true, style: { ...resizeStyle, ...inputStyle } }, `textarea-${f.id}-${f.default_value || ""}-${f.max_length || ""}`),
         f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", dangerouslySetInnerHTML: { __html: f.suffix_label } })
       ] });
     }
@@ -8974,11 +9013,11 @@ function FieldTemplate({ field: f }) {
       if (proPreview) return proPreview;
     }
     const typeAttr = f.type === "number" ? "number" : f.type === "email" ? "email" : "text";
-    const charLimit = f.character_limit ? Number(f.character_limit) : 0;
+    const charLimit = f.max_length ? Number(f.max_length) : 0;
     const maxLength = charLimit > 0 ? charLimit : void 0;
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
       f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", dangerouslySetInnerHTML: { __html: f.prefix_label } }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "fg-form-field-input", type: typeAttr, placeholder: f.placeholder, defaultValue: f.default_value, maxLength, readOnly: true, style: inputStyle }, `input-${f.id}-${f.default_value || ""}-${f.character_limit || ""}`),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "fg-form-field-input", type: typeAttr, placeholder: f.placeholder, defaultValue: f.default_value, maxLength, readOnly: true, style: inputStyle }, `input-${f.id}-${f.default_value || ""}-${f.max_length || ""}`),
       f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", dangerouslySetInnerHTML: { __html: f.suffix_label } })
     ] });
   }
@@ -9069,7 +9108,7 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Collapse$1,
+      Collapse,
       {
         defaultActiveKey: ["general"],
         bordered: false,

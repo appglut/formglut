@@ -45,6 +45,8 @@ class FormGlut_Shortcode {
 	 */
 	private function __construct() {
 		add_shortcode( 'formglut', array( $this, 'render' ) );
+		// Register module type filter for frontend script.
+		add_filter( 'script_loader_tag', array( $this, 'add_module_type' ), 10, 3 );
 	}
 
 	/**
@@ -95,12 +97,15 @@ class FormGlut_Shortcode {
 		$build_url  = FORMGLUT_PLUGIN_URL . 'resources';
 		$build_path = FORMGLUT_PLUGIN_DIR . 'resources';
 
+		// Enqueue React and ReactDOM (WordPress includes these).
+		wp_enqueue_script( 'wp-i18n' );
+
 		// Enqueue frontend JS.
 		if ( file_exists( $build_path . '/form-frontend.js' ) ) {
 			wp_enqueue_script(
 				'formglut-frontend',
 				$build_url . '/form-frontend.js',
-				array( 'wp-i18n' ),
+				array( 'wp-i18n', 'wp-i18n' ),
 				FORMGLUT_VERSION,
 				true
 			);
@@ -327,9 +332,13 @@ class FormGlut_Shortcode {
 		$required = ! empty( $field['required'] );
 		$ph       = isset( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
 		$hidden   = ! empty( $field['hidden'] );
+		$prefix   = isset( $field['prefix_label'] ) ? $field['prefix_label'] : '';
+		$suffix   = isset( $field['suffix_label'] ) ? $field['suffix_label'] : '';
+		$default_value = isset( $field['default_value'] ) ? esc_attr( $field['default_value'] ) : '';
 
 		$help_text  = isset( $field['help_text'] ) ? esc_html( $field['help_text'] ) : '';
-		$maxlength  = ! empty( $field['maxlength'] ) ? ' maxlength="' . absint( $field['maxlength'] ) . '"' : '';
+		$char_limit = isset( $field['character_limit'] ) ? intval( $field['character_limit'] ) : 0;
+		$maxlength  = $char_limit > 0 ? ' maxlength="' . $char_limit . '"' : '';
 		$val_msg    = isset( $field['validation_message'] ) && '' !== $field['validation_message'] ? ' data-validation-message="' . esc_attr( $field['validation_message'] ) . '"' : '';
 		$req_mark   = $required ? ' <span class="formglut-required">*</span>' : '';
 		$req_attr   = $required ? ' required' : '';
@@ -349,7 +358,11 @@ class FormGlut_Shortcode {
 					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
 					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
 					<?php endif; ?>
-					<textarea name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" rows="<?php echo absint( $rows ); ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>></textarea>
+					<div class="formglut-input-group">
+						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+						<textarea name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" rows="<?php echo absint( $rows ); ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+					</div>
 					</div>
 				<?php
 				break;
@@ -358,15 +371,100 @@ class FormGlut_Shortcode {
 				$min = isset( $field['min'] ) ? ' min="' . absint( $field['min'] ) . '"' : '';
 				$max = isset( $field['max'] ) ? ' max="' . absint( $field['max'] ) . '"' : '';
 				$step = isset( $field['step'] ) ? ' step="' . absint( $field['step'] ) . '"' : '';
+				// Apply character limit to number input (max digits)
+				$num_maxlength = $char_limit > 0 ? ' maxlength="' . $char_limit . '"' : '';
 				?>
 				<div class="formglut-field formglut-field-number<?php echo esc_attr( $hidden_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
 					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
 					<?php endif; ?>
-					<input type="number" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $min . $max . $step . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+					  <div class="formglut-input-group">
+							<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+							<input type="number" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $min . $max . $step . $num_maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+							<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+						</div>
+
 				</div>
 				<?php
 				break;
+
+				case 'select':
+					$options = isset( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array();
+					$default_value = isset( $field['default_value'] ) ? esc_attr( $field['default_value'] ) : '';
+					$disable_first = ! isset( $field['disable_first_option'] ) || false !== $field['disable_first_option'];
+					$selection_limit = isset( $field['selection_limit'] ) && $field['selection_limit'] > 1 ? ' multiple' : '';
+					$select_name = $selection_limit ? esc_attr( $id ) . '[]' : esc_attr( $id );
+					?>
+					<div class="formglut-field formglut-field-select<?php echo esc_attr( $hidden_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+						<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
+						<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
+						<?php endif; ?>
+						<select name="<?php echo esc_attr( $select_name ); ?>" id="<?php echo esc_attr( $id ); ?>" class="formglut-input formglut-select"<?php echo $req_attr . $val_msg . $selection_limit . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+							<?php if ( $ph ) : ?>
+							<option value="" disabled <?php selected( $default_value, '' ); ?>><?php echo esc_html( $ph ); ?></option>
+							<?php endif; ?>
+							<?php foreach ( $options as $index => $option ) :
+								$opt_label = isset( $option['label'] ) ? esc_html( $option['label'] ) : '';
+								$opt_value = isset( $option['value'] ) ? esc_attr( $option['value'] ) : sanitize_title( $opt_label );
+								$opt_disabled = ( $disable_first && 0 === $index && ! $ph ) ? ' disabled' : '';
+								?>
+							<option value="<?php echo $opt_value; ?>"<?php echo $opt_disabled; ?><?php selected( $default_value, $opt_value ); ?>><?php echo $opt_label; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<?php
+					break;
+
+				case 'radio':
+					$options = isset( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array();
+					$inline = ! empty( $field['inline'] );
+					$inline_cls = $inline ? ' formglut-radio-inline' : '';
+					?>
+					<div class="formglut-field formglut-field-radio<?php echo esc_attr( $hidden_cls . $inline_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+						<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
+						<div class="formglut-label"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></div>
+						<?php endif; ?>
+						<div class="formglut-radio-group">
+							<?php foreach ( $options as $index => $option ) :
+								$opt_label = isset( $option['label'] ) ? esc_html( $option['label'] ) : '';
+								$opt_value = isset( $option['value'] ) ? esc_attr( $option['value'] ) : sanitize_title( $opt_label );
+								$opt_id = esc_attr( $id . '_' . $index );
+								$opt_default = isset( $field['default_value'] ) && $field['default_value'] === $opt_value ? ' checked' : '';
+								?>
+							<label class="formglut-radio-label" for="<?php echo $opt_id; ?>">
+								<input type="radio" name="<?php echo esc_attr( $id ); ?>" id="<?php echo $opt_id; ?>" value="<?php echo $opt_value; ?>"<?php echo $req_attr . $opt_default; ?> />
+								<span><?php echo $opt_label; ?></span>
+							</label>
+							<?php endforeach; ?>
+						</div>
+					</div>
+					<?php
+					break;
+
+				case 'checkbox':
+					$options = isset( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array();
+					$inline = ! empty( $field['inline'] );
+					$inline_cls = $inline ? ' formglut-checkbox-inline' : '';
+					?>
+					<div class="formglut-field formglut-field-checkbox<?php echo esc_attr( $hidden_cls . $inline_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+						<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
+						<div class="formglut-label"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></div>
+						<?php endif; ?>
+						<div class="formglut-checkbox-group">
+							<?php foreach ( $options as $index => $option ) :
+								$opt_label = isset( $option['label'] ) ? esc_html( $option['label'] ) : '';
+								$opt_value = isset( $option['value'] ) ? esc_attr( $option['value'] ) : sanitize_title( $opt_label );
+								$opt_id = esc_attr( $id . '_' . $index );
+								?>
+							<label class="formglut-checkbox-label" for="<?php echo $opt_id; ?>">
+								<input type="checkbox" name="<?php echo esc_attr( $id ); ?>[]" id="<?php echo $opt_id; ?>" value="<?php echo $opt_value; ?>"<?php echo $req_attr; ?> />
+								<span><?php echo $opt_label; ?></span>
+							</label>
+							<?php endforeach; ?>
+						</div>
+					</div>
+					<?php
+					break;
 
 			default: // text, email
 				$input_type = 'email' === $type ? 'email' : 'text';
@@ -377,7 +475,11 @@ class FormGlut_Shortcode {
 					<?php if ( 'left' === $s['label_placement'] && $label ) : ?>
 					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
 					<?php endif; ?>
-					<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+					<div class="formglut-input-group">
+						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+					</div>
 					<?php if ( 'right' === $s['label_placement'] && $label ) : ?>
 					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
 					<?php endif; ?>
@@ -387,7 +489,11 @@ class FormGlut_Shortcode {
 					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
 					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
 					<?php endif; ?>
-					<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+					<div class="formglut-input-group">
+						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
+					</div>
 					</div>
 				<?php
 				endif;
@@ -405,5 +511,20 @@ class FormGlut_Shortcode {
 	 */
 	private function render_honeypot() {
 		return '<div class="formglut-hp" style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;"><label>' . esc_html__( 'Do not fill this field', 'formglut' ) . '</label><input type="text" name="formglut_hp" tabindex="-1" autocomplete="off" /></div>';
+	}
+
+	/**
+	 * Add module type to frontend script tag.
+	 *
+	 * @param string $tag    The script tag.
+	 * @param string $handle The script handle.
+	 * @param string $src    The script source URL.
+	 * @return string Modified script tag.
+	 */
+	public function add_module_type( $tag, $handle, $src ) {
+		if ( 'formglut-frontend' === $handle ) {
+			return str_replace( '<script ', '<script type="module" ', $tag );
+		}
+		return $tag;
 	}
 }

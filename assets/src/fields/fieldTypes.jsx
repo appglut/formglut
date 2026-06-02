@@ -241,8 +241,6 @@ const FIELD_TYPES = {
       default_value: '',
       rows: 4, // Visible rows
       cols: '', // Visible columns (empty = 100%)
-      character_limit: '', // 0 = unlimited
-      character_count_display: false, // Show count
       resize: 'vertical', // vertical, horizontal, both, none
 
       // === Validation ===

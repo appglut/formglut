@@ -1,5 +1,5 @@
-import { c1 as reactExports, I as Icon$1, Z as _extends, cv as wrapperRaf, K as KeyCode, ab as composeRef, bJ as getNodeRef, R as React, c7 as supportRef, a1 as _objectWithoutProperties, a3 as _slicedToArray, a8 as classNames, G as Trigger, Y as _defineProperty, cm as useMemo, bS as isEqual, a0 as _objectSpread2, a5 as _toConsumableArray, bU as isVisible, cn as useMergedState, cu as warningOnce, cf as useComposeRef, bZ as omit, $ as _inherits, X as _createSuper, Q as _classCallCheck, U as _createClass, c9 as toArray, a as CSSMotion, a6 as _typeof, c0 as reactDomExports } from "./Header-Cwf5epXY.js";
-import { F as ForwardOverflow } from "./index-B1Q4DCZy.js";
+import { c1 as reactExports, I as Icon$1, Z as _extends, cv as wrapperRaf, K as KeyCode, ab as composeRef, bJ as getNodeRef, R as React, c7 as supportRef, a1 as _objectWithoutProperties, a3 as _slicedToArray, a8 as classNames, G as Trigger, Y as _defineProperty, cm as useMemo, bS as isEqual, a0 as _objectSpread2, a5 as _toConsumableArray, bU as isVisible, cn as useMergedState, cu as warningOnce, cf as useComposeRef, bZ as omit, $ as _inherits, X as _createSuper, Q as _classCallCheck, U as _createClass, c9 as toArray, a as CSSMotion, a6 as _typeof, c0 as reactDomExports } from "./Header-B0wts1cq.js";
+import { F as ForwardOverflow } from "./index-Bl_Ufa6r.js";
 var RightOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.4z" } }] }, "name": "right", "theme": "outlined" };
 var RightOutlined = function RightOutlined2(props, ref) {
   return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
@@ -125,7 +125,7 @@ var placements$1 = {
   }
 };
 var _excluded$8 = ["arrow", "prefixCls", "transitionName", "animation", "align", "placement", "placements", "getPopupContainer", "showAction", "hideAction", "overlayClassName", "overlayStyle", "visible", "trigger", "autoFocus", "overlay", "children", "onVisibleChange"];
-function Dropdown(props, ref) {
+function Dropdown$1(props, ref) {
   var _children$props;
   var _props$arrow = props.arrow, arrow = _props$arrow === void 0 ? false : _props$arrow, _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-dropdown" : _props$prefixCls, transitionName = props.transitionName, animation = props.animation, align = props.align, _props$placement = props.placement, placement = _props$placement === void 0 ? "bottomLeft" : _props$placement, _props$placements = props.placements, placements2 = _props$placements === void 0 ? placements$1 : _props$placements, getPopupContainer = props.getPopupContainer, showAction = props.showAction, hideAction = props.hideAction, overlayClassName = props.overlayClassName, overlayStyle = props.overlayStyle, visible = props.visible, _props$trigger = props.trigger, trigger = _props$trigger === void 0 ? ["hover"] : _props$trigger, autoFocus = props.autoFocus, overlay = props.overlay, children = props.children, onVisibleChange = props.onVisibleChange, otherProps = _objectWithoutProperties(props, _excluded$8);
   var _React$useState = React.useState(), _React$useState2 = _slicedToArray(_React$useState, 2), triggerVisible = _React$useState2[0], setTriggerVisible = _React$useState2[1];
@@ -212,7 +212,7 @@ function Dropdown(props, ref) {
     getPopupContainer
   }), childrenNode);
 }
-const Dropdown$1 = /* @__PURE__ */ React.forwardRef(Dropdown);
+const Dropdown = /* @__PURE__ */ React.forwardRef(Dropdown$1);
 var IdContext = /* @__PURE__ */ reactExports.createContext(null);
 function getMenuId(uuid, eventKey) {
   if (uuid === void 0) {
@@ -775,7 +775,7 @@ var InternalMenuItem = /* @__PURE__ */ reactExports.forwardRef(function(props, r
   }
   return renderNode;
 });
-function MenuItem(props, ref) {
+function MenuItem$1(props, ref) {
   var eventKey = props.eventKey;
   var measure = useMeasure();
   var connectedKeyPath = useFullPath(eventKey);
@@ -794,7 +794,7 @@ function MenuItem(props, ref) {
     ref
   }));
 }
-const MenuItem$1 = /* @__PURE__ */ reactExports.forwardRef(MenuItem);
+const MenuItem = /* @__PURE__ */ reactExports.forwardRef(MenuItem$1);
 var _excluded$4 = ["className", "children"];
 var InternalSubMenuList = function InternalSubMenuList2(_ref, ref) {
   var className = _ref.className, children = _ref.children, restProps = _objectWithoutProperties(_ref, _excluded$4);
@@ -1284,7 +1284,7 @@ function parseItems(children, items, keyPath, components, prefixCls) {
   var childNodes = children;
   var mergedComponents = _objectSpread2({
     divider: Divider,
-    item: MenuItem$1,
+    item: MenuItem,
     group: MenuItemGroup,
     submenu: SubMenu
   }, components);
@@ -1501,7 +1501,7 @@ var Menu = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
     ref: containerRef,
     prefixCls: "".concat(prefixCls, "-overflow"),
     component: "ul",
-    itemComponent: MenuItem$1,
+    itemComponent: MenuItem,
     className: classNames(prefixCls, "".concat(prefixCls, "-root"), "".concat(prefixCls, "-").concat(internalMode), className, _defineProperty(_defineProperty({}, "".concat(prefixCls, "-inline-collapsed"), internalInlineCollapsed), "".concat(prefixCls, "-rtl"), isRtl), rootClassName),
     dir: direction,
     style,
@@ -1570,7 +1570,7 @@ var Menu = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
   }, measureChildList)))));
 });
 var ExportMenu = Menu;
-ExportMenu.Item = MenuItem$1;
+ExportMenu.Item = MenuItem;
 ExportMenu.SubMenu = SubMenu;
 ExportMenu.ItemGroup = MenuItemGroup;
 ExportMenu.Divider = Divider;
@@ -1585,12 +1585,12 @@ var RefIcon = /* @__PURE__ */ reactExports.forwardRef(EllipsisOutlined);
 export {
   Divider as D,
   ExportMenu as E,
-  MenuItem$1 as M,
+  MenuItem as M,
   RefIcon as R,
   SubMenu as S,
-  Dropdown$1 as a,
+  Dropdown as a,
   MenuItemGroup as b,
   RefIcon$1 as c,
   useFullPath as u
 };
-//# sourceMappingURL=EllipsisOutlined-Cungot-C.js.map
+//# sourceMappingURL=EllipsisOutlined-CnfOx_s2.js.map

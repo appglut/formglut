@@ -121,7 +121,7 @@ function getApplicableOptions(fieldType, field = {}) {
     'id', 'type', 'options', 'conditions', 'conditional_logic', 'condition_match',
     'columns', 'levels', 'items',
     'images', 'variations', 'plans', 'steps', 'questions', 'pairs',
-    'rows', 'tabs', 'available_items', 'selected_items', 'child_fields',
+    'tabs', 'available_items', 'selected_items', 'child_fields',
     'chain_data', 'chain_rules', 'query_args', 'search_fields',
     'filter_fields', 'column_types', 'role_descriptions', 'custom_roles',
     'custom_icons', 'allowed_methods', 'available_methods', 'tax_rates',

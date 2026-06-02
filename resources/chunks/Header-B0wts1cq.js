@@ -21672,7 +21672,7 @@ var placements = {
   }
 };
 var _excluded = ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "children", "onVisibleChange", "afterVisibleChange", "transitionName", "animation", "motion", "placement", "align", "destroyTooltipOnHide", "defaultVisible", "getTooltipContainer", "overlayInnerStyle", "arrowContent", "overlay", "id", "showArrow", "classNames", "styles"];
-var Tooltip$1 = function Tooltip(props, ref) {
+var Tooltip$2 = function Tooltip(props, ref) {
   var overlayClassName = props.overlayClassName, _props$trigger = props.trigger, trigger = _props$trigger === void 0 ? ["hover"] : _props$trigger, _props$mouseEnterDela = props.mouseEnterDelay, mouseEnterDelay = _props$mouseEnterDela === void 0 ? 0 : _props$mouseEnterDela, _props$mouseLeaveDela = props.mouseLeaveDelay, mouseLeaveDelay = _props$mouseLeaveDela === void 0 ? 0.1 : _props$mouseLeaveDela, overlayStyle = props.overlayStyle, _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-tooltip" : _props$prefixCls, children = props.children, onVisibleChange = props.onVisibleChange, afterVisibleChange = props.afterVisibleChange, transitionName = props.transitionName, animation = props.animation, motion = props.motion, _props$placement = props.placement, placement = _props$placement === void 0 ? "right" : _props$placement, _props$align = props.align, align = _props$align === void 0 ? {} : _props$align, _props$destroyTooltip = props.destroyTooltipOnHide, destroyTooltipOnHide = _props$destroyTooltip === void 0 ? false : _props$destroyTooltip, defaultVisible = props.defaultVisible, getTooltipContainer = props.getTooltipContainer, overlayInnerStyle = props.overlayInnerStyle;
   props.arrowContent;
   var overlay = props.overlay, id2 = props.id, _props$showArrow = props.showArrow, showArrow = _props$showArrow === void 0 ? true : _props$showArrow, tooltipClassNames = props.classNames, tooltipStyles = props.styles, restProps = _objectWithoutProperties(props, _excluded);
@@ -21725,7 +21725,7 @@ var Tooltip$1 = function Tooltip(props, ref) {
     arrow: showArrow
   }, extraProps), getChildren());
 };
-const Tooltip$2 = /* @__PURE__ */ reactExports.forwardRef(Tooltip$1);
+const Tooltip$1 = /* @__PURE__ */ reactExports.forwardRef(Tooltip$2);
 function getArrowToken(token2) {
   const {
     sizePopupArrow,
@@ -22425,7 +22425,7 @@ const InternalTooltip = /* @__PURE__ */ reactExports.forwardRef((props, ref) => 
   }, colorInfo.className, rootClassName, hashId, cssVarCls, contextClassName, contextClassNames.root, tooltipClassNames === null || tooltipClassNames === void 0 ? void 0 : tooltipClassNames.root);
   const bodyClassNames = classNames(contextClassNames.body, tooltipClassNames === null || tooltipClassNames === void 0 ? void 0 : tooltipClassNames.body);
   const [zIndex, contextZIndex] = useZIndex("Tooltip", restProps.zIndex);
-  const content = /* @__PURE__ */ reactExports.createElement(Tooltip$2, Object.assign({}, restProps, {
+  const content = /* @__PURE__ */ reactExports.createElement(Tooltip$1, Object.assign({}, restProps, {
     zIndex,
     showArrow: mergedShowArrow,
     placement,
@@ -26893,4 +26893,4 @@ export {
   RefIcon$1 as y,
   RefIcon as z
 };
-//# sourceMappingURL=Header-Cwf5epXY.js.map
+//# sourceMappingURL=Header-B0wts1cq.js.map

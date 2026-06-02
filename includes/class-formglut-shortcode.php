@@ -337,8 +337,11 @@ class FormGlut_Shortcode {
 		$default_value = isset( $field['default_value'] ) ? esc_attr( $field['default_value'] ) : '';
 
 		$help_text  = isset( $field['help_text'] ) ? esc_html( $field['help_text'] ) : '';
-		$char_limit = isset( $field['character_limit'] ) ? intval( $field['character_limit'] ) : 0;
+		// Check both max_length and character_limit for backward compatibility
+		$char_limit = isset( $field['max_length'] ) ? intval( $field['max_length'] ) : ( isset( $field['character_limit'] ) ? intval( $field['character_limit'] ) : 0 );
 		$maxlength  = $char_limit > 0 ? ' maxlength="' . $char_limit . '"' : '';
+		$min_length = isset( $field['min_length'] ) && intval( $field['min_length'] ) > 0 ? intval( $field['min_length'] ) : 0;
+		$minlength  = $min_length > 0 ? ' minlength="' . $min_length . '"' : '';
 		$val_msg    = isset( $field['validation_message'] ) && '' !== $field['validation_message'] ? ' data-validation-message="' . esc_attr( $field['validation_message'] ) . '"' : '';
 		$req_mark   = $required ? ' <span class="formglut-required">*</span>' : '';
 		$req_attr   = $required ? ' required' : '';
@@ -352,7 +355,12 @@ class FormGlut_Shortcode {
 
 		switch ( $type ) {
 			case 'textarea':
-				$rows = isset( $field['rows'] ) ? absint( $field['rows'] ) : 4;
+				$rows = isset( $field['rows'] ) && $field['rows'] > 0 ? absint( $field['rows'] ) : 4;
+				$cols = isset( $field['cols'] ) && $field['cols'] > 0 ? absint( $field['cols'] ) : 0;
+				$cols_attr = $cols > 0 ? ' cols=\"' . esc_attr( $cols ) . '\"' : '';
+
+				$resize = isset( $field['resize'] ) && in_array( $field['resize'], array( 'vertical', 'horizontal', 'both', 'none' ) ) ? $field['resize'] : 'vertical';
+				$resize_style = $resize !== 'both' ? ' style="resize:' . esc_attr( $resize ) . ';"' : '';
 				?>
 				<div class="formglut-field formglut-field-textarea<?php echo esc_attr( $hidden_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
@@ -360,7 +368,7 @@ class FormGlut_Shortcode {
 					<?php endif; ?>
 					<div class="formglut-input-group">
 						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
-						<textarea name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" rows="<?php echo absint( $rows ); ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+						<textarea name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" rows="<?php echo absint( $rows ); ?>"<?php echo $cols_attr . $resize_style; ?> class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
 					</div>
 					</div>
@@ -477,7 +485,7 @@ class FormGlut_Shortcode {
 					<?php endif; ?>
 					<div class="formglut-input-group">
 						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
-						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
 					</div>
 					<?php if ( 'right' === $s['label_placement'] && $label ) : ?>
@@ -491,7 +499,7 @@ class FormGlut_Shortcode {
 					<?php endif; ?>
 					<div class="formglut-input-group">
 						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
-						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
 					</div>
 					</div>

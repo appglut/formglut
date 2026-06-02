@@ -128,7 +128,7 @@ class FormGlut_Ajax {
 				'required' => ! empty( $field['required'] ),
 			);
 
-			$optional_string_keys = array( 'placeholder', 'validation_message', 'css_class', 'default_value', 'help_text', 'html_content', 'tag', 'style', 'allowed_types' );
+			$optional_string_keys = array( 'placeholder', 'validation_message', 'css_class', 'default_value', 'help_text', 'html_content', 'tag', 'style', 'allowed_types', 'resize' );
 			foreach ( $optional_string_keys as $key ) {
 				if ( isset( $field[ $key ] ) ) {
 					$clean_field[ $key ] = sanitize_text_field( $field[ $key ] );
@@ -147,7 +147,7 @@ class FormGlut_Ajax {
 				}
 			}
 
-			$optional_int_keys = array( 'rows', 'maxlength', 'character_limit', 'min', 'max', 'step', 'min_selection', 'max_selection', 'max_size' );
+			$optional_int_keys = array( 'rows', 'cols', 'maxlength', 'character_limit', 'min_length', 'max_length', 'min', 'max', 'step', 'min_selection', 'max_selection', 'max_size' );
 			foreach ( $optional_int_keys as $key ) {
 				if ( isset( $field[ $key ] ) ) {
 					$clean_field[ $key ] = absint( $field[ $key ] );

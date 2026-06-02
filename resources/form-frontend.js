@@ -6,9 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 function initCharacterCount(form) {
-  form.querySelectorAll(".formglut-input[maxlength], textarea[maxlength]").forEach((input) => {
-    const maxLength = parseInt(input.getAttribute("maxlength"));
-    if (!maxLength || maxLength <= 0) return;
+  form.querySelectorAll(".formglut-input[maxlength], .formglut-input[minlength], textarea[maxlength], textarea[minlength]").forEach((input) => {
+    const maxLength = parseInt(input.getAttribute("maxlength")) || 0;
+    const minLength = parseInt(input.getAttribute("minlength")) || 0;
+    if (!maxLength && !minLength) return;
     const field = input.closest(".formglut-field");
     if (!field) return;
     const counterWrapper = document.createElement("div");
@@ -16,7 +17,7 @@ function initCharacterCount(form) {
     counterWrapper.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-top: 4px;";
     const counterEl = document.createElement("span");
     counterEl.className = "formglut-char-counter";
-    counterEl.textContent = `Typing input limit is ${maxLength}`;
+    counterEl.textContent = `Input limit is ${maxLength}`;
     counterEl.style.cssText = "font-size: 12px; color: #64748b;";
     const warningEl = document.createElement("span");
     warningEl.className = "formglut-char-warning";
@@ -32,18 +33,34 @@ function initCharacterCount(form) {
     }
     const updateCount = () => {
       const length = input.value.length;
-      const remaining = maxLength - length;
+      let counterText = "";
       if (length > 0) {
-        counterEl.textContent = `Typing input limit is ${maxLength}`;
+        counterText = "Typing";
       } else {
-        counterEl.textContent = `Input limit is ${maxLength}`;
+        counterText = "Input";
       }
-      if (remaining <= 0) {
+      if (maxLength && minLength) {
+        counterText += ` limit is ${minLength}-${maxLength}`;
+      } else if (maxLength) {
+        counterText += ` limit is ${maxLength}`;
+      } else if (minLength) {
+        counterText += ` minimum is ${minLength}`;
+      }
+      counterEl.textContent = counterText;
+      const remaining = maxLength ? maxLength - length : 0;
+      const minMet = minLength ? length >= minLength : true;
+      if (maxLength && remaining <= 0) {
         counterEl.style.color = "#dc2626";
         counterEl.style.fontWeight = "600";
         warningEl.textContent = `Character limit reached!`;
         input.classList.add("formglut-input-error");
-      } else if (remaining <= 5) {
+      } else if (minLength && !minMet && length > 0) {
+        const needed = minLength - length;
+        counterEl.style.color = "#f59e0b";
+        counterEl.style.fontWeight = "500";
+        warningEl.textContent = `${needed} more character${needed !== 1 ? "s" : ""} needed`;
+        input.classList.add("formglut-input-error");
+      } else if (maxLength && remaining <= 5 && remaining > 0) {
         counterEl.style.color = "#f59e0b";
         counterEl.style.fontWeight = "500";
         warningEl.textContent = `${remaining} character${remaining !== 1 ? "s" : ""} remaining`;

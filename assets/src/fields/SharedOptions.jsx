@@ -20,6 +20,12 @@ export const COMMON_OPTION_VALUES = {
     { value: 'right', label: 'Right of Field' },
     { value: 'hidden', label: 'Hidden' },
   ],
+  resize: [
+    { value: 'vertical', label: 'Vertical Only' },
+    { value: 'horizontal', label: 'Horizontal Only' },
+    { value: 'both', label: 'Both Directions' },
+    { value: 'none', label: 'None' },
+  ],
 };
 
 /**
@@ -105,6 +111,42 @@ export const TEXTAREA_OPTIONS = {
     min: 1,
     max: 50,
     description: 'Number of rows for textarea',
+  },
+  cols: {
+    type: 'number',
+    label: 'Columns',
+    section: 'general',
+    min: 1,
+    max: 100,
+    description: 'Width of textarea in average character widths',
+  },
+  resize: {
+    type: 'select',
+    label: 'Resize Handle',
+    section: 'general',
+    description: 'Allow users to resize the textarea',
+    options: COMMON_OPTION_VALUES.resize || [
+      { value: 'vertical', label: 'Vertical Only' },
+      { value: 'horizontal', label: 'Horizontal Only' },
+      { value: 'both', label: 'Both Directions' },
+      { value: 'none', label: 'None' }
+    ],
+  },
+  max_length: {
+    type: 'number',
+    label: 'Max Length',
+    section: 'validation',
+    min: 1,
+    placeholder: 'No limit',
+    description: 'Maximum number of characters allowed',
+  },
+  min_length: {
+    type: 'number',
+    label: 'Min Length',
+    section: 'validation',
+    min: 0,
+    placeholder: 'No minimum',
+    description: 'Minimum number of characters required',
   },
 };
 

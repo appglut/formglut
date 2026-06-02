@@ -71,12 +71,14 @@ function FieldTemplate({ field: f }) {
   function renderInput() {
     // Textarea
     if (f.type === 'textarea') {
-      const charLimit = f.character_limit ? Number(f.character_limit) : 0;
+      const charLimit = f.max_length ? Number(f.max_length) : 0;
       const maxLength = charLimit > 0 ? charLimit : undefined;
+      const resizeValue = f.resize || 'vertical';
+      const resizeStyle = resizeValue === 'both' ? {} : { resize: resizeValue };
       return (
         <div className="fg-input-group">
           {f.prefix_label && <span className="fg-input-prefix" dangerouslySetInnerHTML={{ __html: f.prefix_label }} />}
-          <textarea key={`textarea-${f.id}-${f.default_value || ''}-${f.character_limit || ''}`} className="fg-form-field-input" rows={f.rows || 4} placeholder={f.placeholder} defaultValue={f.default_value} maxLength={maxLength} readOnly style={{ resize: 'vertical', ...inputStyle }} />
+          <textarea key={`textarea-${f.id}-${f.default_value || ''}-${f.max_length || ''}`} className="fg-form-field-input" rows={f.rows || 4} placeholder={f.placeholder} defaultValue={f.default_value} maxLength={maxLength} readOnly style={{ ...resizeStyle, ...inputStyle }} />
           {f.suffix_label && <span className="fg-input-suffix" dangerouslySetInnerHTML={{ __html: f.suffix_label }} />}
         </div>
       );
@@ -137,12 +139,12 @@ function FieldTemplate({ field: f }) {
 
     // Default input
     const typeAttr = f.type === 'number' ? 'number' : f.type === 'email' ? 'email' : 'text';
-    const charLimit = f.character_limit ? Number(f.character_limit) : 0;
+    const charLimit = f.max_length ? Number(f.max_length) : 0;
     const maxLength = charLimit > 0 ? charLimit : undefined;
     return (
       <div className="fg-input-group">
         {f.prefix_label && <span className="fg-input-prefix" dangerouslySetInnerHTML={{ __html: f.prefix_label }} />}
-        <input key={`input-${f.id}-${f.default_value || ''}-${f.character_limit || ''}`} className="fg-form-field-input" type={typeAttr} placeholder={f.placeholder} defaultValue={f.default_value} maxLength={maxLength} readOnly style={inputStyle} />
+        <input key={`input-${f.id}-${f.default_value || ''}-${f.max_length || ''}`} className="fg-form-field-input" type={typeAttr} placeholder={f.placeholder} defaultValue={f.default_value} maxLength={maxLength} readOnly style={inputStyle} />
         {f.suffix_label && <span className="fg-input-suffix" dangerouslySetInnerHTML={{ __html: f.suffix_label }} />}
       </div>
     );
