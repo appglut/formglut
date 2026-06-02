@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - All Forms</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header {
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .fg-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .fg-header-logo .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #e94560, #c62a4a);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 800;
+        }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a {
+            color: rgba(255,255,255,0.7);
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .fg-header-nav a:hover, .fg-header-nav a.active {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+        .fg-header-nav a.active { background: rgba(233, 69, 96, 0.3); color: #fff; }
+        .fg-header-right { display: flex; align-items: center; gap: 12px; }
+        .fg-header-search {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: #fff;
+            font-size: 13px;
+            width: 200px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .fg-header-search::placeholder { color: rgba(255,255,255,0.4); }
+        .fg-header-search:focus { background: rgba(255,255,255,0.15); border-color: #e94560; width: 260px; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+        .fg-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .fg-stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+        .fg-stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .fg-stat-label { font-size: 13px; color: #64748b; font-weight: 500; }
+        .fg-stat-value { font-size: 28px; font-weight: 700; color: #1a1a2e; margin: 4px 0; }
+        .fg-stat-change { font-size: 12px; font-weight: 600; }
+        .fg-stat-change.up { color: #10b981; }
+        .fg-stat-change.down { color: #ef4444; }
+
+        .fg-table-wrap {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+        }
+        .fg-table-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .fg-table-toolbar-left { display: flex; gap: 8px; align-items: center; }
+        .fg-table-toolbar-right { display: flex; gap: 8px; align-items: center; }
+
+        .fg-form-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .fg-form-type-badge.contact { background: #ede9fe; color: #7c3aed; }
+        .fg-form-type-badge.survey { background: #dbeafe; color: #2563eb; }
+        .fg-form-type-badge.payment { background: #d1fae5; color: #059669; }
+        .fg-form-type-badge.quiz { background: #fef3c7; color: #d97706; }
+        .fg-form-type-badge.newsletter { background: #fce7f3; color: #db2777; }
+        .fg-form-type-badge.blank { background: #f1f5f9; color: #64748b; }
+
+        .fg-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .fg-status-dot.active { background: #10b981; }
+        .fg-status-dot.draft { background: #f59e0b; }
+        .fg-status-dot.closed { background: #ef4444; }
+
+        .fg-shortcode {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fg-shortcode:hover { border-color: #e94560; color: #e94560; }
+
+        .fg-row-actions {
+            display: flex; flex-wrap: wrap; gap: 2px; margin-top: 6px;
+            opacity: 0; transition: opacity 0.15s;
+        }
+        tr:hover .fg-row-actions { opacity: 1; }
+        .fg-row-actions a, .fg-row-actions span {
+            font-size: 12px; color: #64748b; text-decoration: none;
+            padding: 1px 4px; border-radius: 3px; cursor: pointer;
+            transition: all 0.15s;
+        }
+        .fg-row-actions a:hover, .fg-row-actions span:hover { color: #e94560; }
+        .fg-row-actions .fg-action-sep { color: #d1d5db; padding: 0 1px; cursor: default; font-size: 11px; }
+        .fg-row-actions .fg-action-delete { color: #ef4444; }
+        .fg-row-actions .fg-action-delete:hover { color: #dc2626; background: #fef2f2; }
+
+        .fg-create-card {
+            border: 2px solid #e5e7eb; border-radius: 12px; padding: 32px 24px;
+            text-align: center; cursor: pointer; transition: all 0.2s; background: #fff;
+            height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .fg-create-card:hover { border-color: #e94560; box-shadow: 0 8px 24px rgba(233,69,96,0.12); transform: translateY(-2px); }
+        .fg-create-card-icon { font-size: 36px; color: #e94560; margin-bottom: 16px; }
+        .fg-create-card-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+        .fg-create-card-desc { font-size: 13px; color: #64748b; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Table, Button, Tag, Dropdown, Input, Space, Tooltip, Badge, Progress, Switch, Breadcrumb, Modal, Popconfirm, Row, Col, message } = antd;
+        const {
+            PlusOutlined, SearchOutlined, MoreOutlined, CopyOutlined,
+            EditOutlined, DeleteOutlined, EyeOutlined, ExportOutlined,
+            BarChartOutlined, SettingOutlined, FileTextOutlined,
+            CloudUploadOutlined, AppstoreOutlined, ReloadOutlined,
+            FormOutlined, FilterOutlined, DownloadOutlined, InboxOutlined,
+            StarOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html', active: true },
+            { label: 'Entries', href: 'all-entries.html' },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const mockForms = [
+            { id: 1, title: 'Contact Form', type: 'contact', status: 'active', entries: 1284, views: 3210, conversion: 68, created: '2024-01-15 09:32:17', lastEntry: '2 hours ago', shortcode: '[formglut id="1"]' },
+            { id: 2, title: 'Customer Survey Q1', type: 'survey', status: 'active', entries: 456, views: 1085, conversion: 42, created: '2024-02-20 14:08:45', lastEntry: '1 day ago', shortcode: '[formglut id="2"]' },
+            { id: 3, title: 'Product Order Form', type: 'payment', status: 'active', entries: 892, views: 1621, conversion: 55, created: '2024-03-10 11:55:03', lastEntry: '30 min ago', shortcode: '[formglut id="3"]' },
+            { id: 4, title: 'Newsletter Signup', type: 'newsletter', status: 'active', entries: 3421, views: 4172, conversion: 82, created: '2024-01-05 16:22:59', lastEntry: '5 min ago', shortcode: '[formglut id="4"]' },
+            { id: 5, title: 'Job Application', type: 'blank', status: 'draft', entries: 0, views: 0, conversion: 0, created: '2024-04-01 08:10:31', lastEntry: '-', shortcode: '[formglut id="5"]' },
+            { id: 6, title: 'Event Registration', type: 'survey', status: 'closed', entries: 215, views: 302, conversion: 71, created: '2024-03-22 17:41:08', lastEntry: '3 days ago', shortcode: '[formglut id="6"]' },
+            { id: 7, title: 'Product Feedback Quiz', type: 'quiz', status: 'active', entries: 167, views: 439, conversion: 38, created: '2024-04-05 10:07:22', lastEntry: '6 hours ago', shortcode: '[formglut id="7"]' },
+            { id: 8, title: 'Support Request', type: 'contact', status: 'active', entries: 523, views: 687, conversion: 76, created: '2024-02-14 13:48:55', lastEntry: '1 hour ago', shortcode: '[formglut id="8"]' },
+        ];
+
+        function App() {
+            const [searchText, setSearchText] = useState('');
+            const [showCreateModal, setShowCreateModal] = useState(false);
+            const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+            const filtered = mockForms.filter(f => f.title.toLowerCase().includes(searchText.toLowerCase()));
+
+            const columns = [
+                {
+                    title: '',
+                    dataIndex: 'select',
+                    width: 48,
+                    render: function(_, r) { return <input type="checkbox" />; },
+                },
+                {
+                    title: 'Form Name',
+                    dataIndex: 'title',
+                    render: function(text, r) {
+                        return (
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <a href="form-editor.html" style={{ width: 36, height: 36, borderRadius: 8, background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', textDecoration: 'none' }}>
+                                        <EditOutlined style={{ color: '#64748b' }} />
+                                    </a>
+                                    <div>
+                                        <div style={{ fontWeight: 600, fontSize: 14 }}>
+                                            <a href="form-editor.html" style={{ color: '#1a1a2e' }}>{text}</a>
+                                            <span style={{ color: '#94a3b8', fontWeight: 400, fontSize: 12, marginLeft: 6 }}> ({r.type})</span>
+                                        </div>
+                                        <div style={{ fontSize: 11, color: '#b0b8c4', marginTop: 1 }}>{r.created}</div>
+                                    </div>
+                                </div>
+                                <div className="fg-row-actions">
+                                    <a href="form-settings.html">Settings</a>
+                                    <span className="fg-action-sep">|</span>
+                                    <a href="#" onClick={function(e) { e.preventDefault(); window.open('', '_blank'); }}>Preview</a>
+                                    <span className="fg-action-sep">|</span>
+                                    <Switch size="small" defaultChecked={r.status === 'active'}
+                                        checkedChildren="Active" unCheckedChildren="Draft"
+                                        style={{ marginTop: -2 }} />
+                                </div>
+                            </div>
+                        );
+                    },
+                },
+                {
+                    title: 'Shortcode',
+                    dataIndex: 'shortcode',
+                    width: 220,
+                    render: function(v) { return <span className="fg-shortcode" onClick={function() { navigator.clipboard?.writeText(v); message.success('Copied!'); }}>{v}</span>; },
+                },
+                {
+                    title: 'Views',
+                    dataIndex: 'views',
+                    width: 100,
+                    sorter: function(a, b) { return a.views - b.views; },
+                    render: function(v) { return <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{v.toLocaleString()}</span>; },
+                },
+                {
+                    title: 'Entries',
+                    dataIndex: 'entries',
+                    width: 180,
+                    sorter: function(a, b) { return a.entries - b.entries; },
+                    render: function(v, r) {
+                        return (
+                            <div>
+                                <a href="form-entries.html" style={{ fontWeight: 600, color: '#1a1a2e' }}>{v.toLocaleString()}</a>
+                                {r.lastEntry !== '-' && <span style={{ fontSize: 12, color: '#94a3b8', marginLeft: 6 }}>({r.lastEntry})</span>}
+                            </div>
+                        );
+                    },
+                },
+                {
+                    title: 'Conversion',
+                    dataIndex: 'conversion',
+                    width: 100,
+                    sorter: function(a, b) { return a.conversion - b.conversion; },
+                    render: function(v) { return <span style={{ fontWeight: 600, color: v > 60 ? '#10b981' : v > 30 ? '#f59e0b' : '#ef4444' }}>{v}%</span>; },
+                },
+                {
+                    title: 'Action',
+                    dataIndex: 'action',
+                    width: 100,
+                    align: 'center',
+                    render: function(_, r) {
+                        return (
+                            <Space size={4}>
+                                <Tooltip title="Duplicate form">
+                                    <Button type="text" icon={<CopyOutlined />} style={{ color: '#64748b' }} onClick={function() { message.success('Form duplicated!'); }} />
+                                </Tooltip>
+                                <Popconfirm title="Are you sure to delete this?" okText="Confirm" cancelText="Cancel" okButtonProps={{ danger: true }}>
+                                    <Tooltip title="Delete form">
+                                        <Button type="text" icon={<DeleteOutlined />} danger />
+                                    </Tooltip>
+                                </Popconfirm>
+                            </Space>
+                        );
+                    },
+                },
+            ];
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div>
+                            FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => (
+                                <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>
+                            ))}
+                        </nav>
+                        <div className="fg-header-right">
+                            <input className="fg-header-search" placeholder="Search forms... (⌘K)" />
+                        </div>
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">All Forms</div>
+                                <div className="fg-page-subtitle">Manage and monitor all your forms</div>
+                            </div>
+                            <Space>
+                                <Button icon={<InboxOutlined />}>Import</Button>
+                                <Button type="primary" icon={<PlusOutlined />} style={{ background: '#e94560', borderColor: '#e94560' }} onClick={function() { setShowCreateModal(true); }}>
+                                    Add New Form
+                                </Button>
+                            </Space>
+                        </div>
+
+                        <div className="fg-stats-row">
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Total Forms</div>
+                                <div className="fg-stat-value">8</div>
+                                <div className="fg-stat-change up">+2 this month</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Total Entries</div>
+                                <div className="fg-stat-value">6,958</div>
+                                <div className="fg-stat-change up">+12.5% vs last month</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Avg. Conversion</div>
+                                <div className="fg-stat-value">54%</div>
+                                <div className="fg-stat-change up">+3.2%</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Active Forms</div>
+                                <div className="fg-stat-value">6</div>
+                                <div className="fg-stat-change down">1 draft</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-table-wrap">
+                            <div className="fg-table-toolbar">
+                                <div className="fg-table-toolbar-left">
+                                    <Input placeholder="Search forms..." prefix={<SearchOutlined />} style={{ width: 240 }} value={searchText} onChange={e => setSearchText(e.target.value)} allowClear />
+                                    <Button icon={<FilterOutlined />}>Filter</Button>
+                                </div>
+                                <div className="fg-table-toolbar-right">
+                                    <Button icon={<ReloadOutlined />}>Refresh</Button>
+                                    <Button icon={<ExportOutlined />}>Export</Button>
+                                </div>
+                            </div>
+                            <Table
+                                dataSource={filtered}
+                                columns={columns}
+                                rowKey="id"
+                                scroll={{ x: 'max-content' }}
+                                pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (t) => `${t} forms total` }}
+                                style={{ padding: '0 8px' }}
+                            />
+                        </div>
+                    </div>
+                    <CreateFormModal open={showCreateModal} onClose={function() { setShowCreateModal(false); }} />
+                </div>
+            );
+        }
+
+        function CreateFormModal(props) {
+            return (
+                <Modal
+                    title={<span style={{ fontSize: 18, fontWeight: 700 }}>Create A New Form</span>}
+                    open={props.open}
+                    onCancel={props.onClose}
+                    footer={null}
+                    width="64%"
+                    style={{ top: 50 }}
+                >
+                    <Row gutter={24} style={{ marginTop: 24, marginBottom: 16 }}>
+                        <Col span={8}>
+                            <div className="fg-create-card" onClick={function() { location.href = 'form-editor.html'; }}>
+                                <div className="fg-create-card-icon"><PlusOutlined /></div>
+                                <div className="fg-create-card-title">New Blank Form</div>
+                                <div className="fg-create-card-desc">Create a new blank form from scratch.</div>
+                            </div>
+                        </Col>
+                        <Col span={8}>
+                            <div className="fg-create-card">
+                                <div className="fg-create-card-icon"><FormOutlined /></div>
+                                <div className="fg-create-card-title">Choose a Template</div>
+                                <div className="fg-create-card-desc">Choose a pre-made form template and customize it.</div>
+                            </div>
+                        </Col>
+                        <Col span={8}>
+                            <div className="fg-create-card">
+                                <div className="fg-create-card-icon"><StarOutlined /></div>
+                                <div className="fg-create-card-title">Create Conversational Form</div>
+                                <div className="fg-create-card-desc">Turn your content, surveys into conversations.</div>
+                            </div>
+                        </Col>
+                    </Row>
+                </Modal>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

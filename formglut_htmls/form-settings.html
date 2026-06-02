@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Form Settings</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-editor-header { background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 64px; }
+        .fg-editor-header-left { display: flex; align-items: center; gap: 16px; }
+        .fg-editor-back { display: flex; align-items: center; gap: 6px; color: #64748b; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; transition: all 0.2s; }
+        .fg-editor-back:hover { background: #f1f5f9; color: #1a1a2e; }
+        .fg-editor-title { font-size: 16px; font-weight: 600; color: #1a1a2e; }
+        .fg-editor-header-center { display: flex; gap: 4px; }
+        .fg-editor-tab { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: #64748b; text-decoration: none; border: none; background: none; }
+        .fg-editor-tab:hover { background: #f1f5f9; color: #1a1a2e; }
+        .fg-editor-tab.active { background: #e94560; color: #fff; }
+        .fg-editor-header-right { display: flex; gap: 8px; align-items: center; }
+
+        .fg-content { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .fg-page-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+        .fg-page-subtitle { color: #64748b; font-size: 13px; margin-bottom: 24px; }
+
+        .fg-settings-section { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; padding: 24px; margin-bottom: 16px; }
+        .fg-settings-section-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+        .fg-settings-section-desc { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
+
+        .fg-setting-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
+        .fg-setting-row:last-child { border-bottom: none; }
+        .fg-setting-row-info { flex: 1; }
+        .fg-setting-row-label { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+        .fg-setting-row-desc { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        .fg-setting-row-action { flex-shrink: 0; margin-left: 20px; }
+
+        .fg-sidebar-tabs { display: flex; gap: 2px; margin-bottom: 24px; background: #fff; border-radius: 10px; padding: 4px; border: 1px solid #f0f0f0; flex-wrap: wrap; }
+        .fg-sidebar-tab { padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; color: #64748b; cursor: pointer; transition: all 0.2s; border: none; background: none; white-space: nowrap; }
+        .fg-sidebar-tab:hover { color: #1a1a2e; background: #f8fafc; }
+        .fg-sidebar-tab.active { background: #e94560; color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Switch, Input, Select, Tabs, message, Alert } = antd;
+        const {
+            ArrowLeftOutlined, SaveOutlined, SettingOutlined,
+            MailOutlined, LockOutlined, NotificationOutlined,
+            CodeOutlined, CalendarOutlined, SafetyOutlined,
+            EditOutlined, StarFilled
+        } = icons;
+
+        const tabs = [
+            { key: 'general', label: 'General', icon: <SettingOutlined /> },
+            { key: 'email', label: 'Email', icon: <MailOutlined /> },
+            { key: 'schedule', label: 'Schedule', icon: <CalendarOutlined /> },
+            { key: 'restrict', label: 'Restrictions', icon: <LockOutlined /> },
+            { key: 'style', label: 'Styling', icon: <EditOutlined /> },
+            { key: 'logic', label: 'Logic', icon: <StarFilled /> },
+            { key: 'code', label: 'Custom CSS/JS', icon: <CodeOutlined /> },
+        ];
+
+        function SettingRow({ label, desc, children }) {
+            return (
+                <div className="fg-setting-row">
+                    <div className="fg-setting-row-info">
+                        <div className="fg-setting-row-label">{label}</div>
+                        {desc && <div className="fg-setting-row-desc">{desc}</div>}
+                    </div>
+                    <div className="fg-setting-row-action">{children}</div>
+                </div>
+            );
+        }
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('general');
+
+            return (
+                <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+                    <header className="fg-editor-header">
+                        <div className="fg-editor-header-left">
+                            <a className="fg-editor-back" href="all-forms.html"><ArrowLeftOutlined /> Back</a>
+                            <span className="fg-editor-title">Contact Form</span>
+                        </div>
+                        <div className="fg-editor-header-center">
+                            <a className="fg-editor-tab" href="form-editor.html">Editor</a>
+                            <button className="fg-editor-tab active">Settings</button>
+                            <a className="fg-editor-tab" href="form-entries.html">Entries</a>
+                        </div>
+                        <div className="fg-editor-header-right">
+                            <Button type="primary" icon={<SaveOutlined />} style={{ background: '#e94560', borderColor: '#e94560' }}>Save Settings</Button>
+                        </div>
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-title">Form Settings</div>
+                        <div className="fg-page-subtitle">Configure behavior, notifications, and display options for this form</div>
+
+                        <div className="fg-sidebar-tabs">
+                            {tabs.map(t => (
+                                <button key={t.key} className={`fg-sidebar-tab ${activeTab === t.key ? 'active' : ''}`} onClick={() => setActiveTab(t.key)}>
+                                    {t.icon} {t.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {activeTab === 'general' && (
+                            <>
+                                <div className="fg-settings-section">
+                                    <div className="fg-settings-section-title">Form Display</div>
+                                    <div className="fg-settings-section-desc">Control how this form appears to visitors</div>
+                                    <SettingRow label="Form Status" desc="Set form as active, draft, or closed">
+                                        <Select defaultValue="active" style={{ width: 140 }} options={[
+                                            { value: 'active', label: 'Active' },
+                                            { value: 'draft', label: 'Draft' },
+                                            { value: 'closed', label: 'Closed' },
+                                        ]} />
+                                    </SettingRow>
+                                    <SettingRow label="Form Title" desc="Displayed at the top of the form">
+                                        <Input defaultValue="Contact Form" style={{ width: 200 }} />
+                                    </SettingRow>
+                                    <SettingRow label="Submit Button Text" desc="Text shown on the submit button">
+                                        <Input defaultValue="Submit Form" style={{ width: 200 }} />
+                                    </SettingRow>
+                                    <SettingRow label="Show Title" desc="Display form title above the form fields">
+                                        <Switch defaultChecked={true} />
+                                    </SettingRow>
+                                    <SettingRow label="Show Description" desc="Display form description below the title">
+                                        <Switch defaultChecked={true} />
+                                    </SettingRow>
+                                    <SettingRow label="Disable After Submission" desc="Hide or show success message after form submission">
+                                        <Select defaultValue="msg" style={{ width: 180 }} options={[
+                                            { value: 'msg', label: 'Show Message' },
+                                            { value: 'redirect', label: 'Redirect URL' },
+                                            { value: 'hide', label: 'Hide Form' },
+                                        ]} />
+                                    </SettingRow>
+                                </div>
+
+                                <div className="fg-settings-section">
+                                    <div className="fg-settings-section-title">Form Behavior</div>
+                                    <div className="fg-settings-section-desc">Configure how the form interacts with users</div>
+                                    <SettingRow label="Require Login" desc="Only logged-in users can submit this form">
+                                        <Switch />
+                                    </SettingRow>
+                                    <SettingRow label="Limit Entries" desc="Stop accepting submissions after a certain count">
+                                        <Switch />
+                                    </SettingRow>
+                                    <SettingRow label="Save Progress" desc="Allow users to save and resume form later">
+                                        <Switch />
+                                    </SettingRow>
+                                    <SettingRow label="Anti-Spam Honeypot" desc="Add invisible field to trap bots">
+                                        <Switch defaultChecked={true} />
+                                    </SettingRow>
+                                </div>
+                            </>
+                        )}
+
+                        {activeTab === 'email' && (
+                            <div className="fg-settings-section">
+                                <div className="fg-settings-section-title">Email Notifications</div>
+                                <div className="fg-settings-section-desc">Configure who receives emails when this form is submitted</div>
+                                <SettingRow label="Send To" desc="Email address(es) for admin notifications, comma-separated">
+                                    <Input defaultValue="admin@example.com" style={{ width: 240 }} />
+                                </SettingRow>
+                                <SettingRow label="From Name" desc="Sender name for notification emails">
+                                    <Input defaultValue="FormGlut" style={{ width: 200 }} />
+                                </SettingRow>
+                                <SettingRow label="Subject" desc="Email subject line. Use {field_name} for dynamic values">
+                                    <Input defaultValue="New submission from {form_name}" style={{ width: 280 }} />
+                                </SettingRow>
+                                <SettingRow label="Reply-To" desc="Set reply-to from a form email field">
+                                    <Select defaultValue="email" style={{ width: 200 }} options={[
+                                        { value: 'email', label: 'Email Field' },
+                                        { value: 'none', label: 'None' },
+                                    ]} />
+                                </SettingRow>
+                                <SettingRow label="Send Confirmation to User" desc="Auto-send confirmation email to the submitter">
+                                    <Switch defaultChecked={true} />
+                                </SettingRow>
+                                <SettingRow label="Attach Files" desc="Include uploaded files as email attachments">
+                                    <Switch />
+                                </SettingRow>
+                                <SettingRow label="Email Format" desc="Choose email body format">
+                                    <Select defaultValue="html" style={{ width: 140 }} options={[
+                                        { value: 'html', label: 'HTML' },
+                                        { value: 'text', label: 'Plain Text' },
+                                    ]} />
+                                </SettingRow>
+                            </div>
+                        )}
+
+                        {activeTab === 'schedule' && (
+                            <div className="fg-settings-section">
+                                <div className="fg-settings-section-title">Form Scheduling</div>
+                                <div className="fg-settings-section-desc">Set when this form should be available or closed</div>
+                                <SettingRow label="Enable Scheduling" desc="Automatically open/close form based on dates">
+                                    <Switch />
+                                </SettingRow>
+                                <SettingRow label="Start Date" desc="Form becomes available from this date">
+                                    <Input type="datetime-local" style={{ width: 220 }} />
+                                </SettingRow>
+                                <SettingRow label="End Date" desc="Form closes after this date">
+                                    <Input type="datetime-local" style={{ width: 220 }} />
+                                </SettingRow>
+                                <SettingRow label="Closed Message" desc="Message shown when form is closed">
+                                    <Input.TextArea defaultValue="This form is no longer accepting submissions." rows={3} style={{ width: 300 }} />
+                                </SettingRow>
+                            </div>
+                        )}
+
+                        {activeTab === 'restrict' && (
+                            <div className="fg-settings-section">
+                                <div className="fg-settings-section-title">Access Restrictions</div>
+                                <div className="fg-settings-section-desc">Limit who can submit and how often</div>
+                                <SettingRow label="Require Login" desc="Only logged-in users can view and submit">
+                                    <Switch />
+                                </SettingRow>
+                                <SettingRow label="One Entry Per User" desc="Each user can submit only once">
+                                    <Switch />
+                                </SettingRow>
+                                <SettingRow label="Max Entries" desc="Maximum total submissions allowed">
+                                    <Input type="number" defaultValue="" placeholder="Unlimited" style={{ width: 120 }} />
+                                </SettingRow>
+                                <SettingRow label="Schedule Form" desc="Set availability window">
+                                    <Switch />
+                                </SettingRow>
+                                <SettingRow label="Password Protect" desc="Require a password to access this form">
+                                    <Switch />
+                                </SettingRow>
+                                <SettingRow label="Country Restriction" desc="Allow or block specific countries">
+                                    <Select mode="multiple" style={{ width: 280 }} placeholder="Select countries..." options={[
+                                        { value: 'us', label: 'United States' },
+                                        { value: 'uk', label: 'United Kingdom' },
+                                        { value: 'ca', label: 'Canada' },
+                                        { value: 'bd', label: 'Bangladesh' },
+                                        { value: 'in', label: 'India' },
+                                    ]} />
+                                </SettingRow>
+                            </div>
+                        )}
+
+                        {(activeTab === 'style' || activeTab === 'logic' || activeTab === 'code') && (
+                            <div className="fg-settings-section">
+                                <div className="fg-settings-section-title">
+                                    {activeTab === 'style' ? 'Form Styling' : activeTab === 'logic' ? 'Conditional Logic' : 'Custom CSS / JS'}
+                                </div>
+                                <div className="fg-settings-section-desc">
+                                    {activeTab === 'style' ? 'Customize the visual appearance of this form'
+                                        : activeTab === 'logic' ? 'Show/hide fields based on user input conditions'
+                                        : 'Add custom CSS and JavaScript to this form'}
+                                </div>
+                                <Alert
+                                    message={activeTab === 'style' ? 'Form styling is available in the visual editor. Drag fields to rearrange.' :
+                                        activeTab === 'logic' ? 'Conditional logic rules are configured per field in the editor\'s properties panel.' :
+                                        'Custom code will be loaded only when this form is displayed.'}
+                                    type="info"
+                                    showIcon
+                                    style={{ marginBottom: 16 }}
+                                />
+                                {activeTab === 'code' && (
+                                    <>
+                                        <div style={{ marginBottom: 12 }}>
+                                            <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a2e', marginBottom: 6 }}>Custom CSS</div>
+                                            <Input.TextArea rows={6} defaultValue={`/* Custom CSS for this form */\n.formglut-form {\n  /* your styles */\n}`} style={{ fontFamily: 'monospace', fontSize: 12 }} />
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a2e', marginBottom: 6 }}>Custom JavaScript</div>
+                                            <Input.TextArea rows={6} defaultValue={`// Custom JS for this form\n// Runs after form is loaded`} style={{ fontFamily: 'monospace', fontSize: 12 }} />
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

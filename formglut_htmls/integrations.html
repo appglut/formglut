@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Integrations</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header { background: #000; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        .fg-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: #fff; border-radius: 10px; padding: 4px; border: 1px solid #f0f0f0; width: fit-content; }
+        .fg-tab { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; transition: all 0.2s; border: none; background: none; }
+        .fg-tab:hover { color: '#1a1a2e'; }
+        .fg-tab.active { background: '#e94560'; color: '#fff'; }
+
+        .fg-integrations-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .fg-int-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; padding: 24px; transition: all 0.2s; cursor: pointer; display: flex; flex-direction: column; }
+        .fg-int-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: #e2e8f0; }
+        .fg-int-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .fg-int-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; }
+        .fg-int-name { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+        .fg-int-category { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .fg-int-desc { font-size: 12.5px; color: #64748b; line-height: 1.5; flex: 1; margin-bottom: 16px; }
+        .fg-int-footer { display: flex; align-items: center; justify-content: space-between; }
+        .fg-int-status { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+        .fg-int-status.connected { background: #d1fae5; color: #059669; }
+        .fg-int-status.available { background: #dbeafe; color: #2563eb; }
+        .fg-int-status.pro { background: #fef3c7; color: #d97706; }
+
+        .fg-upgrade-banner {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+            border-radius: 12px; padding: 24px 32px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .fg-upgrade-text h3 { color: #fff; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .fg-upgrade-text p { color: rgba(255,255,255,0.7); font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Input, Tag, Select } = antd;
+        const {
+            SearchOutlined, AppstoreOutlined, CloudOutlined,
+            MailOutlined, CreditCardOutlined, CustomerServiceOutlined,
+            BarChartOutlined, DatabaseOutlined, SendOutlined,
+            TeamOutlined, MessageOutlined,ShoppingCartOutlined,
+            NotificationOutlined, ApiOutlined, StarFilled
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html' },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html', active: true },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const integrations = [
+            { name: 'Slack', icon: 'S', color: '#4A154B', bg: '#f3eef5', category: 'Communication', desc: 'Send form notifications to Slack channels instantly.', status: 'connected' },
+            { name: 'Mailchimp', icon: 'M', color: '#ffe01b', bg: '#fffce8', category: 'Email Marketing', desc: 'Add subscribers to your Mailchimp audience lists.', status: 'connected' },
+            { name: 'Stripe', icon: '$', color: '#635bff', bg: '#eeedfc', category: 'Payment', desc: 'Accept one-time and recurring payments through forms.', status: 'connected' },
+            { name: 'Zapier', icon: 'Z', color: '#ff4a00', bg: '#fff0e8', category: 'Automation', desc: 'Connect FormGlut to 5000+ apps via Zapier workflows.', status: 'available' },
+            { name: 'Google Sheets', icon: 'G', color: '#0f9d58', bg: '#e6f4ea', category: 'Productivity', desc: 'Sync form entries directly to Google Spreadsheets.', status: 'available' },
+            { name: 'HubSpot', icon: 'H', color: '#ff7a59', bg: '#fff0ec', category: 'CRM', desc: 'Create contacts and deals from form submissions.', status: 'available' },
+            { name: 'Trello', icon: 'T', color: '#0079bf', bg: '#e4f0fa', category: 'Project Management', desc: 'Create cards on Trello boards from form entries.', status: 'pro' },
+            { name: 'PayPal', icon: 'P', color: '#003087', bg: '#e8f0fc', category: 'Payment', desc: 'Accept PayPal payments and subscriptions on forms.', status: 'pro' },
+            { name: 'Webhooks', icon: 'W', color: '#64748b', bg: '#f1f5f9', category: 'Developer', desc: 'Send real-time HTTP POST payloads on submission.', status: 'available' },
+            { name: 'WhatsApp', icon: 'W', color: '#25d366', bg: '#e8f8ee', category: 'Communication', desc: 'Send form notifications via WhatsApp Business API.', status: 'pro' },
+            { name: 'Notion', icon: 'N', color: '#000000', bg: '#f1f1f1', category: 'Productivity', desc: 'Add form entries as Notion database records.', status: 'pro' },
+            { name: 'Twilio', icon: 'T', color: '#f22f46', bg: '#fef0f1', category: 'SMS', desc: 'Send SMS notifications when forms are submitted.', status: 'available' },
+        ];
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('all');
+            const [search, setSearch] = useState('');
+
+            const filtered = integrations.filter(i => {
+                const matchSearch = i.name.toLowerCase().includes(search.toLowerCase()) || i.category.toLowerCase().includes(search.toLowerCase());
+                if (activeTab === 'all') return matchSearch;
+                if (activeTab === 'connected') return matchSearch && i.status === 'connected';
+                return matchSearch;
+            });
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo"><div className="logo-icon">FG</div> FormGlut</div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">Integrations</div>
+                                <div className="fg-page-subtitle">Connect FormGlut with your favorite tools</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-upgrade-banner">
+                            <div className="fg-upgrade-text">
+                                <h3><StarFilled style={{ marginRight: 8 }} />Unlock Premium Integrations</h3>
+                                <p>Get access to Trello, PayPal, WhatsApp, Notion and 50+ more integrations with Pro.</p>
+                            </div>
+                            <Button type="primary" size="large" style={{ background: '#e94560', borderColor: '#e94560', fontWeight: 600 }}>Upgrade to Pro</Button>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                            <div className="fg-tabs">
+                                <button className={`fg-tab ${activeTab === 'all' ? 'active' : ''}`} onClick={() => setActiveTab('all')}>All ({integrations.length})</button>
+                                <button className={`fg-tab ${activeTab === 'connected' ? 'active' : ''}`} onClick={() => setActiveTab('connected')}>Connected (3)</button>
+                            </div>
+                            <Input placeholder="Search integrations..." prefix={<SearchOutlined />} allowClear style={{ width: 260 }} value={search} onChange={e => setSearch(e.target.value)} />
+                        </div>
+
+                        <div className="fg-integrations-grid">
+                            {filtered.map(int => (
+                                <div className="fg-int-card" key={int.name}>
+                                    <div className="fg-int-card-header">
+                                        <div className="fg-int-icon" style={{ background: int.bg, color: int.color }}>{int.icon}</div>
+                                        <div>
+                                            <div className="fg-int-name">{int.name}</div>
+                                            <div className="fg-int-category">{int.category}</div>
+                                        </div>
+                                    </div>
+                                    <div className="fg-int-desc">{int.desc}</div>
+                                    <div className="fg-int-footer">
+                                        <span className={`fg-int-status ${int.status}`}>
+                                            {int.status === 'connected' ? 'Connected' : int.status === 'pro' ? 'Pro Only' : 'Available'}
+                                        </span>
+                                        <Button type={int.status === 'connected' ? 'default' : 'primary'} size="small"
+                                            style={int.status !== 'connected' ? { background: '#e94560', borderColor: '#e94560' } : {}}>
+                                            {int.status === 'connected' ? 'Configure' : int.status === 'pro' ? 'Upgrade' : 'Connect'}
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Form Entries</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header { background: #000; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        .fg-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-layout { display: flex; gap: 24px; }
+        .fg-layout-list { width: 380px; flex-shrink: 0; }
+        .fg-layout-detail { flex: 1; }
+
+        .fg-entry-list { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; overflow: hidden; }
+        .fg-entry-list-header { padding: 16px; border-bottom: 1px solid #f0f0f0; }
+        .fg-entry-list-scroll { max-height: calc(100vh - 200px); overflow-y: auto; }
+        .fg-entry-item { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; transition: all 0.15s; display: flex; gap: 12px; }
+        .fg-entry-item:hover { background: #f8fafc; }
+        .fg-entry-item.selected { background: #fef2f2; border-left: 3px solid #e94560; }
+        .fg-entry-item.unread .fg-entry-item-name { font-weight: 700; }
+        .fg-entry-item-avatar { width: 38px; height: 38px; border-radius: 50%; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #4f46e5; font-size: 14px; flex-shrink: 0; }
+        .fg-entry-item-body { flex: 1; min-width: 0; }
+        .fg-entry-item-name { font-size: 13px; color: #1a1a2e; }
+        .fg-entry-item-preview { font-size: 12px; color: #94a3b8; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fg-entry-item-meta { font-size: 11px; color: #c0c6ce; margin-top: 4px; }
+
+        .fg-detail-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; overflow: hidden; }
+        .fg-detail-header { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+        .fg-detail-body { padding: 24px; }
+        .fg-detail-row { display: flex; padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
+        .fg-detail-row:last-child { border-bottom: none; }
+        .fg-detail-label { width: 180px; font-size: 13px; font-weight: 600; color: #64748b; flex-shrink: 0; }
+        .fg-detail-value { font-size: 13px; color: #1a1a2e; flex: 1; }
+        .fg-detail-section { margin-top: 24px; }
+        .fg-detail-section-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e94560; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Tag, Space, Tooltip, Input, Badge, Dropdown, Descriptions, message } = antd;
+        const {
+            ArrowLeftOutlined, StarOutlined, StarFilled, DeleteOutlined,
+            MailOutlined, MoreOutlined, PrinterOutlined, DownloadOutlined,
+            SearchOutlined, FilterOutlined, ExportOutlined,
+            EnvironmentOutlined, GlobalOutlined, CalendarOutlined,
+            FileTextOutlined, UserOutlined, CheckCircleOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html', active: true },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const entries = [
+            { id: 1, name: 'John Smith', email: 'john@example.com', avatar: 'JS', unread: true, subject: 'General Inquiry', message: 'I would like to know more about your services and pricing plans.', date: '2 hours ago', form: 'Contact Form' },
+            { id: 2, name: 'Sarah Johnson', email: 'sarah@company.com', avatar: 'SJ', unread: false, subject: 'Partnership Request', message: 'Our company is interested in exploring partnership opportunities with your team.', date: '5 hours ago', form: 'Contact Form' },
+            { id: 3, name: 'Mike Davis', email: 'mike@gmail.com', avatar: 'MD', unread: false, subject: 'Order #4521', message: 'Order for 3 items totaling $249.99. Payment via Stripe completed.', date: '1 day ago', form: 'Product Order' },
+            { id: 4, name: 'Emily Chen', email: 'emily@startup.io', avatar: 'EC', unread: true, subject: 'New Subscription', message: 'Subscribed to the weekly newsletter. Interest areas: Tech, Design.', date: '1 day ago', form: 'Newsletter' },
+            { id: 5, name: 'David Wilson', email: 'david@corp.com', avatar: 'DW', unread: false, subject: 'Survey Response', message: 'Rated our service 4/5. Suggested improvements to the checkout flow.', date: '2 days ago', form: 'Survey' },
+            { id: 6, name: 'Lisa Brown', email: 'lisa@agency.co', avatar: 'LB', unread: true, subject: 'Bug Report', message: 'Form validation not working correctly on mobile Safari browser.', date: '3 days ago', form: 'Support' },
+        ];
+
+        function App() {
+            const [selectedId, setSelectedId] = useState(1);
+            const [searchText, setSearchText] = useState('');
+
+            const selected = entries.find(e => e.id === selectedId);
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div> FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">Contact Form - Entries</div>
+                                <div className="fg-page-subtitle">1,284 total submissions</div>
+                            </div>
+                            <Space>
+                                <a href="all-entries.html"><Button icon={<ArrowLeftOutlined />}>All Entries</Button></a>
+                                <Button icon={<ExportOutlined />}>Export</Button>
+                            </Space>
+                        </div>
+
+                        <div className="fg-layout">
+                            <div className="fg-layout-list">
+                                <div className="fg-entry-list">
+                                    <div className="fg-entry-list-header">
+                                        <Input placeholder="Filter entries..." prefix={<SearchOutlined />} allowClear size="small" value={searchText} onChange={e => setSearchText(e.target.value)} />
+                                    </div>
+                                    <div className="fg-entry-list-scroll">
+                                        {entries.filter(e => e.name.toLowerCase().includes(searchText.toLowerCase())).map(e => (
+                                            <div key={e.id} className={`fg-entry-item ${e.id === selectedId ? 'selected' : ''} ${e.unread ? 'unread' : ''}`} onClick={() => setSelectedId(e.id)}>
+                                                <div className="fg-entry-item-avatar">{e.avatar}</div>
+                                                <div className="fg-entry-item-body">
+                                                    <div className="fg-entry-item-name">{e.name}</div>
+                                                    <div className="fg-entry-item-preview">{e.message}</div>
+                                                    <div className="fg-entry-item-meta">{e.date} &middot; {e.form}</div>
+                                                </div>
+                                                {e.unread && <Badge status="processing" style={{ marginTop: 8 }} />}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="fg-layout-detail">
+                                <div className="fg-detail-card">
+                                    <div className="fg-detail-header">
+                                        <div>
+                                            <div style={{ fontSize: 16, fontWeight: 700, color: '#1a1a2e' }}>{selected?.subject}</div>
+                                            <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>Submitted {selected?.date} via {selected?.form}</div>
+                                        </div>
+                                        <Space>
+                                            <Tooltip title="Star"><Button type="text" icon={<StarOutlined />} /></Tooltip>
+                                            <Tooltip title="Print"><Button type="text" icon={<PrinterOutlined />} /></Tooltip>
+                                            <Tooltip title="Delete"><Button type="text" icon={<DeleteOutlined />} danger /></Tooltip>
+                                            <Dropdown menu={{ items: [
+                                                { key: 'email', icon: <MailOutlined />, label: 'Reply via Email' },
+                                                { key: 'note', icon: <FileTextOutlined />, label: 'Add Note' },
+                                            ]}} trigger={['click']}>
+                                                <Button type="text" icon={<MoreOutlined />} />
+                                            </Dropdown>
+                                        </Space>
+                                    </div>
+                                    <div className="fg-detail-body">
+                                        <div className="fg-detail-section">
+                                            <div className="fg-detail-section-title">Submission Data</div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><UserOutlined style={{ marginRight: 6 }} />Full Name</div>
+                                                <div className="fg-detail-value">{selected?.name}</div>
+                                            </div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><MailOutlined style={{ marginRight: 6 }} />Email</div>
+                                                <div className="fg-detail-value"><a href={`mailto:${selected?.email}`}>{selected?.email}</a></div>
+                                            </div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><FileTextOutlined style={{ marginRight: 6 }} />Subject</div>
+                                                <div className="fg-detail-value">{selected?.subject}</div>
+                                            </div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><CheckCircleOutlined style={{ marginRight: 6 }} />Message</div>
+                                                <div className="fg-detail-value">{selected?.message}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="fg-detail-section">
+                                            <div className="fg-detail-section-title">Metadata</div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><CalendarOutlined style={{ marginRight: 6 }} />Submitted</div>
+                                                <div className="fg-detail-value">April 12, 2024 at 2:23 PM</div>
+                                            </div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><GlobalOutlined style={{ marginRight: 6 }} />IP Address</div>
+                                                <div className="fg-detail-value" style={{ fontFamily: 'monospace' }}>192.168.1.1</div>
+                                            </div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label"><EnvironmentOutlined style={{ marginRight: 6 }} />Browser</div>
+                                                <div className="fg-detail-value">Chrome 123 / macOS</div>
+                                            </div>
+                                            <div className="fg-detail-row">
+                                                <div className="fg-detail-label">Source URL</div>
+                                                <div className="fg-detail-value" style={{ fontFamily: 'monospace', fontSize: 12 }}>https://example.com/contact</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

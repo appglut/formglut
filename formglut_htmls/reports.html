@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Reports</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header { background: #000; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        .fg-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .fg-stat-card { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #f0f0f0; transition: all 0.2s; }
+        .fg-stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .fg-stat-label { font-size: 13px; color: #64748b; font-weight: 500; }
+        .fg-stat-value { font-size: 28px; font-weight: 700; color: #1a1a2e; margin: 4px 0; }
+        .fg-stat-change { font-size: 12px; font-weight: 600; }
+        .fg-stat-change.up { color: #10b981; }
+        .fg-stat-change.down { color: #ef4444; }
+
+        .fg-chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+        .fg-chart-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; padding: 24px; }
+        .fg-chart-card-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
+
+        .fg-bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding-top: 10px; }
+        .fg-bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+        .fg-bar { width: 100%; border-radius: 4px 4px 0 0; transition: all 0.3s; min-height: 4px; }
+        .fg-bar:hover { opacity: 0.8; }
+        .fg-bar-label { font-size: 10px; color: #94a3b8; text-align: center; }
+        .fg-bar-value { font-size: 10px; font-weight: 600; color: #475569; }
+
+        .fg-donut-wrapper { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 20px 0; }
+        .fg-donut { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(#e94560 0% 35%, #3b82f6 35% 55%, #10b981 55% 75%, #f59e0b 75% 90%, #64748b 90% 100%); display: flex; align-items: center; justify-content: center; }
+        .fg-donut-inner { width: 100px; height: 100px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .fg-donut-inner-value { font-size: 24px; font-weight: 800; color: #1a1a2e; }
+        .fg-donut-inner-label { font-size: 10px; color: #94a3b8; }
+        .fg-legend { display: flex; flex-direction: column; gap: 10px; }
+        .fg-legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #475569; }
+        .fg-legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+        .fg-top-forms { margin-top: 0; }
+        .fg-top-form-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+        .fg-top-form-item:last-child { border-bottom: none; }
+        .fg-top-form-rank { width: 24px; height: 24px; border-radius: 6px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #64748b; }
+        .fg-top-form-rank.top { background: #fef3c7; color: #d97706; }
+        .fg-top-form-info { flex: 1; }
+        .fg-top-form-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+        .fg-top-form-meta { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Select, Space, Tabs, Progress, Tooltip } = antd;
+        const {
+            BarChartOutlined, PieChartOutlined, DownloadOutlined,
+            CalendarOutlined, ArrowUpOutlined, ArrowDownOutlined,
+            FormOutlined, EyeOutlined,
+            StarFilled, TeamOutlined, FileTextOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html' },
+            { label: 'Reports', href: 'reports.html', active: true },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const barData = [
+            { label: 'Mon', value: 45, color: '#e94560' },
+            { label: 'Tue', value: 72, color: '#e94560' },
+            { label: 'Wed', value: 58, color: '#e94560' },
+            { label: 'Thu', value: 89, color: '#e94560' },
+            { label: 'Fri', value: 63, color: '#e94560' },
+            { label: 'Sat', value: 34, color: '#a5b4c6' },
+            { label: 'Sun', value: 28, color: '#a5b4c6' },
+        ];
+
+        const topForms = [
+            { name: 'Newsletter Signup', entries: 3421, conv: 82 },
+            { name: 'Contact Form', entries: 1284, conv: 68 },
+            { name: 'Product Order', entries: 892, conv: 55 },
+            { name: 'Customer Survey', entries: 456, conv: 42 },
+            { name: 'Support Request', entries: 523, conv: 76 },
+        ];
+
+        function App() {
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div> FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">Reports</div>
+                                <div className="fg-page-subtitle">Analytics and performance insights</div>
+                            </div>
+                            <Space>
+                                <Select defaultValue="7d" style={{ width: 120 }} options={[
+                                    { value: '24h', label: 'Last 24h' },
+                                    { value: '7d', label: 'Last 7 days' },
+                                    { value: '30d', label: 'Last 30 days' },
+                                    { value: '90d', label: 'Last 90 days' },
+                                ]} />
+                                <Button icon={<DownloadOutlined />}>Export Report</Button>
+                            </Space>
+                        </div>
+
+                        <div className="fg-stats-row">
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label"><FormOutlined style={{ marginRight: 6 }} />Total Submissions</div>
+                                <div className="fg-stat-value">6,958</div>
+                                <div className="fg-stat-change up"><ArrowUpOutlined /> 12.5% vs last period</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label"><EyeOutlined style={{ marginRight: 6 }} />Total Views</div>
+                                <div className="fg-stat-value">18,421</div>
+                                <div className="fg-stat-change up"><ArrowUpOutlined /> 8.3%</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label"><StarFilled style={{ marginRight: 6 }} />Avg. Conversion</div>
+                                <div className="fg-stat-value">54%</div>
+                                <div className="fg-stat-change up"><ArrowUpOutlined /> 3.2%</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label"><TeamOutlined style={{ marginRight: 6 }} />Unique Visitors</div>
+                                <div className="fg-stat-value">12,340</div>
+                                <div className="fg-stat-change down"><ArrowDownOutlined /> 2.1%</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-chart-grid">
+                            <div className="fg-chart-card">
+                                <div className="fg-chart-card-title">Submissions Over Time</div>
+                                <div className="fg-bar-chart">
+                                    {barData.map(b => (
+                                        <div className="fg-bar-col" key={b.label}>
+                                            <div className="fg-bar-value">{b.value}</div>
+                                            <div className="fg-bar" style={{ height: `${(b.value / 90) * 180}px`, background: b.color }}></div>
+                                            <div className="fg-bar-label">{b.label}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="fg-chart-card">
+                                <div className="fg-chart-card-title">Entries by Form</div>
+                                <div className="fg-donut-wrapper">
+                                    <div className="fg-donut">
+                                        <div className="fg-donut-inner">
+                                            <div className="fg-donut-inner-value">6.9K</div>
+                                            <div className="fg-donut-inner-label">Total</div>
+                                        </div>
+                                    </div>
+                                    <div className="fg-legend">
+                                        <div className="fg-legend-item"><div className="fg-legend-dot" style={{ background: '#e94560' }} /> Newsletter 35%</div>
+                                        <div className="fg-legend-item"><div className="fg-legend-dot" style={{ background: '#3b82f6' }} /> Contact 20%</div>
+                                        <div className="fg-legend-item"><div className="fg-legend-dot" style={{ background: '#10b981' }} /> Order 20%</div>
+                                        <div className="fg-legend-item"><div className="fg-legend-dot" style={{ background: '#f59e0b' }} /> Support 15%</div>
+                                        <div className="fg-legend-item"><div className="fg-legend-dot" style={{ background: '#64748b' }} /> Others 10%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                            <div className="fg-chart-card">
+                                <div className="fg-chart-card-title">Top Performing Forms</div>
+                                <div className="fg-top-forms">
+                                    {topForms.map((f, i) => (
+                                        <div className="fg-top-form-item" key={f.name}>
+                                            <div className={`fg-top-form-rank ${i === 0 ? 'top' : ''}`}>{i + 1}</div>
+                                            <div className="fg-top-form-info">
+                                                <div className="fg-top-form-name">{f.name}</div>
+                                                <div className="fg-top-form-meta">{f.entries.toLocaleString()} entries &middot; {f.conv}% conversion</div>
+                                            </div>
+                                            <Progress type="circle" percent={f.conv} size={40} strokeColor={f.conv > 60 ? '#10b981' : '#f59e0b'} format={p => ''} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="fg-chart-card">
+                                <div className="fg-chart-card-title">Conversion Funnel</div>
+                                <div style={{ padding: '10px 0' }}>
+                                    {[
+                                        { label: 'Form Views', value: 18421, pct: 100, color: '#3b82f6' },
+                                        { label: 'Form Started', value: 12540, pct: 68, color: '#8b5cf6' },
+                                        { label: 'Fields Completed', value: 9320, pct: 51, color: '#f59e0b' },
+                                        { label: 'Form Submitted', value: 6958, pct: 38, color: '#10b981' },
+                                    ].map(s => (
+                                        <div key={s.label} style={{ marginBottom: 16 }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                                                <span style={{ fontSize: 13, color: '#475569' }}>{s.label}</span>
+                                                <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a2e' }}>{s.value.toLocaleString()}</span>
+                                            </div>
+                                            <div style={{ background: '#f1f5f9', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+                                                <div style={{ background: s.color, height: '100%', width: `${s.pct}%`, borderRadius: 4, transition: 'width 0.5s' }}></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

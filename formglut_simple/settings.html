@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; min-height: 100vh; }
+
+        .fg-header {
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 68px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .fg-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .fg-header-logo .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #e94560, #c62a4a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+        }
+        .fg-header-nav { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.06); border-radius: 10px; padding: 4px; }
+        .fg-header-nav a {
+            color: rgba(255,255,255,0.65);
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .fg-header-nav a:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+        .fg-header-nav a.active {
+            background: rgba(233, 69, 96, 0.25);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+        }
+
+        .fg-content { max-width: 800px; margin: 0 auto; padding: 32px; }
+
+        .fg-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .fg-page-title { font-size: 26px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-card {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e8ecf1;
+            padding: 36px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .fg-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { Form, Input, Button, Switch, message } = antd;
+        const { SaveOutlined } = icons;
+
+        const _pg = (typeof formglut_admin !== 'undefined' && formglut_admin.pages) ? formglut_admin.pages : {
+            all_forms: 'all-forms.html', editor: 'form-editor.html', entries: 'entries.html', settings: 'settings.html', entry_detail: 'single-entry.html'
+        };
+
+        const headerNav = [
+            { label: 'Forms', href: _pg.all_forms },
+            { label: 'Entries', href: _pg.entries },
+            { label: 'Settings', href: _pg.settings, active: true },
+        ];
+
+        function App() {
+            const [form] = Form.useForm();
+
+            const onFinish = function(values) {
+                message.success('Settings saved!');
+            };
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div>
+                            FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => (
+                                <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>
+                            ))}
+                        </nav>
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">Settings</div>
+                                <div className="fg-page-subtitle">Configure FormGlut plugin</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-card">
+                            <div className="fg-card-title">General</div>
+                            <Form
+                                form={form}
+                                layout="vertical"
+                                onFinish={onFinish}
+                                initialValues={{
+                                    ajaxSubmit: true,
+                                    adminEmail: 'admin@yoursite.com',
+                                }}
+                            >
+                                <Form.Item label="AJAX Form Submission" name="ajaxSubmit" valuePropName="checked">
+                                    <Switch checkedChildren="On" unCheckedChildren="Off" />
+                                </Form.Item>
+
+                                <Form.Item label="Admin Notification Email" name="adminEmail" rules={[{ type: 'email', message: 'Enter a valid email' }]}>
+                                    <Input placeholder="admin@yoursite.com" />
+                                </Form.Item>
+
+                                <Form.Item style={{ marginTop: 28, marginBottom: 0 }}>
+                                    <Button type="primary" htmlType="submit" icon={<SaveOutlined />} style={{ background: '#e94560', borderColor: '#e94560', height: 40, borderRadius: 8, fontWeight: 600, paddingInline: 24 }}>
+                                        Save Settings
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Tools</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header { background: #000; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; display: flex; gap: 24px; }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+
+        .fg-sidebar { width: 240px; flex-shrink: 0; }
+        .fg-sidebar-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; overflow: hidden; }
+        .fg-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: all 0.15s; border-left: 3px solid transparent; }
+        .fg-sidebar-item:hover { background: #f8fafc; color: '#1a1a2e'; }
+        .fg-sidebar-item.active { background: #fef2f2; color: #e94560; border-left-color: '#e94560'; font-weight: 600; }
+
+        .fg-main { flex: 1; min-width: 0; }
+        .fg-tools-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; padding: 28px; margin-bottom: 16px; }
+        .fg-tools-card-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+        .fg-tools-card-desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+
+        .fg-export-forms { margin-bottom: 12px; }
+        .fg-export-form-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px; transition: all 0.15s; cursor: pointer; }
+        .fg-export-form-item:hover { border-color: #e94560; background: #fef8f8; }
+        .fg-export-form-item.selected { border-color: #e94560; background: #fef2f2; }
+        .fg-export-form-name { font-size: 13px; font-weight: 600; color: '#1a1a2e'; flex: 1; }
+        .fg-export-form-meta { font-size: 11px; color: #94a3b8; }
+
+        .fg-log-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+        .fg-log-item:last-child { border-bottom: none; }
+        .fg-log-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .fg-log-info { flex: 1; }
+        .fg-log-action { font-size: 13px; font-weight: 500; color: #1a1a2e; }
+        .fg-log-meta { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Upload, Select, Tabs, Table, Tag, Space, Input, message, Alert } = antd;
+        const {
+            ExportOutlined, ArrowLeftOutlined, CloudUploadOutlined,
+            DownloadOutlined, DeleteOutlined, HistoryOutlined,
+            ApiOutlined, FileTextOutlined, FormOutlined,
+            SearchOutlined, ReloadOutlined,
+            InboxOutlined, CheckCircleOutlined, WarningOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html' },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html', active: true },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const sidebarItems = [
+            { icon: <ExportOutlined />, label: 'Export Forms', active: true },
+            { icon: <ArrowLeftOutlined />, label: 'Import Forms' },
+            { icon: <CloudUploadOutlined />, label: 'Import Entries' },
+            { icon: <ArrowLeftOutlined />, label: 'Migrator' },
+            { icon: <HistoryOutlined />, label: 'Activity Logs' },
+            { icon: <ApiOutlined />, label: 'API Logs' },
+        ];
+
+        const forms = [
+            { id: 1, name: 'Contact Form', entries: 1284 },
+            { id: 2, name: 'Customer Survey Q1', entries: 456 },
+            { id: 3, name: 'Product Order Form', entries: 892 },
+            { id: 4, name: 'Newsletter Signup', entries: 3421 },
+            { id: 5, name: 'Event Registration', entries: 215 },
+        ];
+
+        const logs = [
+            { action: 'Form "Contact Form" was updated', user: 'Admin', time: '2 minutes ago', type: 'update' },
+            { action: 'New entry #6958 submitted via "Newsletter Signup"', user: 'Visitor', time: '15 minutes ago', type: 'entry' },
+            { action: 'Form "Product Order" settings changed', user: 'Admin', time: '1 hour ago', type: 'update' },
+            { action: 'Entry #6955 was deleted', user: 'Admin', time: '2 hours ago', type: 'delete' },
+            { action: 'New form "Feedback Quiz" created', user: 'Admin', time: '3 hours ago', type: 'create' },
+            { action: 'Export of 5 forms completed', user: 'Admin', time: '1 day ago', type: 'export' },
+            { action: 'SMTP settings updated', user: 'Admin', time: '2 days ago', type: 'update' },
+        ];
+
+        function App() {
+            const [selectedForms, setSelectedForms] = useState([1]);
+
+            const toggleForm = (id) => {
+                setSelectedForms(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
+            };
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo"><div className="logo-icon">FG</div> FormGlut</div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-sidebar">
+                            <div className="fg-page-title">Tools</div>
+                            <div className="fg-page-subtitle">Import, export & logs</div>
+                            <div className="fg-sidebar-card" style={{ marginTop: 8 }}>
+                                {sidebarItems.map(s => (
+                                    <div key={s.label} className={`fg-sidebar-item ${s.active ? 'active' : ''}`}>
+                                        {s.icon} {s.label}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="fg-main">
+                            <div className="fg-tools-card">
+                                <div className="fg-tools-card-title">Export Forms</div>
+                                <div className="fg-tools-card-desc">Select forms to export as JSON. You can import them into another site.</div>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Button type="link" size="small" onClick={() => setSelectedForms(forms.map(f => f.id))}>Select All</Button>
+                                    <Button type="link" size="small" onClick={() => setSelectedForms([])}>Deselect All</Button>
+                                </div>
+                                {forms.map(f => (
+                                    <div key={f.id} className={`fg-export-form-item ${selectedForms.includes(f.id) ? 'selected' : ''}`} onClick={() => toggleForm(f.id)}>
+                                        <input type="checkbox" checked={selectedForms.includes(f.id)} readOnly />
+                                        <FormOutlined style={{ color: '#64748b' }} />
+                                        <span className="fg-export-form-name">{f.name}</span>
+                                        <span className="fg-export-form-meta">{f.entries.toLocaleString()} entries</span>
+                                    </div>
+                                ))}
+                                <div style={{ marginTop: 20, display: 'flex', gap: 8 }}>
+                                    <Button type="primary" icon={<DownloadOutlined />} disabled={selectedForms.length === 0} style={{ background: '#e94560', borderColor: '#e94560' }}>
+                                        Export {selectedForms.length} Form{selectedForms.length !== 1 ? 's' : ''}
+                                    </Button>
+                                </div>
+                            </div>
+
+                            <div className="fg-tools-card">
+                                <div className="fg-tools-card-title">Import Forms</div>
+                                <div className="fg-tools-card-desc">Upload a JSON file exported from FormGlut</div>
+                                <div style={{ border: '2px dashed #d1d5db', borderRadius: 12, padding: 40, textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' }}
+                                    onMouseOver={e => e.currentTarget.style.borderColor = '#e94560'}
+                                    onMouseOut={e => e.currentTarget.style.borderColor = '#d1d5db'}>
+                                    <CloudUploadOutlined style={{ fontSize: 32, color: '#94a3b8', marginBottom: 8 }} />
+                                    <div style={{ fontSize: 14, fontWeight: 600, color: '#475569', marginBottom: 4 }}>Click or drag JSON file here</div>
+                                    <div style={{ fontSize: 12, color: '#94a3b8' }}>Supports .json files up to 5MB</div>
+                                </div>
+                            </div>
+
+                            <div className="fg-tools-card">
+                                <div className="fg-tools-card-title">Activity Logs</div>
+                                <div className="fg-tools-card-desc">Recent actions performed on your forms</div>
+                                <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
+                                    <Input placeholder="Search logs..." prefix={<SearchOutlined />} style={{ width: 240 }} allowClear size="small" />
+                                    <Button icon={<ReloadOutlined />} size="small">Refresh</Button>
+                                </div>
+                                {logs.map((l, i) => (
+                                    <div className="fg-log-item" key={i}>
+                                        <div className="fg-log-icon" style={{
+                                            background: l.type === 'create' ? '#d1fae5' : l.type === 'delete' ? '#fef2f2' : l.type === 'entry' ? '#dbeafe' : '#f1f5f9',
+                                            color: l.type === 'create' ? '#059669' : l.type === 'delete' ? '#ef4444' : l.type === 'entry' ? '#2563eb' : '#64748b'
+                                        }}>
+                                            {l.type === 'create' ? <CheckCircleOutlined /> : l.type === 'delete' ? <DeleteOutlined /> : l.type === 'entry' ? <InboxOutlined /> : <HistoryOutlined />}
+                                        </div>
+                                        <div className="fg-log-info">
+                                            <div className="fg-log-action">{l.action}</div>
+                                            <div className="fg-log-meta">By {l.user} &middot; {l.time}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

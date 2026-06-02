@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - All Forms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; min-height: 100vh; }
+
+        .fg-header {
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 68px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .fg-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .fg-header-logo .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #e94560, #c62a4a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+        }
+        .fg-header-nav { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.06); border-radius: 10px; padding: 4px; }
+        .fg-header-nav a {
+            color: rgba(255,255,255,0.65);
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .fg-header-nav a:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+        .fg-header-nav a.active {
+            background: rgba(233, 69, 96, 0.25);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+        }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 32px; }
+
+        .fg-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .fg-page-title { font-size: 26px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-table-wrap {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e8ecf1;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .fg-shortcode {
+            background: #f4f6f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fg-shortcode:hover { border-color: #e94560; color: #e94560; background: #fef2f2; }
+
+        .fg-row-actions {
+            display: flex; flex-wrap: wrap; gap: 2px; margin-top: 6px;
+            opacity: 0; transition: opacity 0.15s;
+        }
+        tr:hover .fg-row-actions { opacity: 1; }
+        .fg-row-actions a, .fg-row-actions span {
+            font-size: 12px; color: #64748b; text-decoration: none;
+            padding: 1px 4px; border-radius: 3px; cursor: pointer;
+            transition: all 0.15s;
+        }
+        .fg-row-actions a:hover, .fg-row-actions span:hover { color: #e94560; }
+        .fg-row-actions .fg-action-sep { color: #d1d5db; padding: 0 1px; cursor: default; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Table, Button, Input, Space, Tooltip, Switch, Popconfirm, message } = antd;
+        const {
+            PlusOutlined, SearchOutlined, CopyOutlined,
+            EditOutlined, DeleteOutlined, FormOutlined
+        } = icons;
+
+        const _pg = (typeof formglut_admin !== 'undefined' && formglut_admin.pages) ? formglut_admin.pages : {
+            all_forms: 'all-forms.html', editor: 'form-editor.html', entries: 'entries.html', settings: 'settings.html', entry_detail: 'single-entry.html'
+        };
+
+        const headerNav = [
+            { label: 'Forms', href: _pg.all_forms, active: true },
+            { label: 'Entries', href: _pg.entries },
+            { label: 'Settings', href: _pg.settings },
+        ];
+
+        const mockForms = [
+            { id: 1, title: 'Contact Form', type: 'contact', status: 'active', entries: 1284, views: 3210, conversion: 68, created: '2024-01-15 09:32:17', lastEntry: '2 hours ago', shortcode: '[formglut id="1"]' },
+            { id: 2, title: 'Customer Survey Q1', type: 'survey', status: 'active', entries: 456, views: 1085, conversion: 42, created: '2024-02-20 14:08:45', lastEntry: '1 day ago', shortcode: '[formglut id="2"]' },
+            { id: 3, title: 'Product Order Form', type: 'payment', status: 'active', entries: 892, views: 1621, conversion: 55, created: '2024-03-10 11:55:03', lastEntry: '30 min ago', shortcode: '[formglut id="3"]' },
+            { id: 4, title: 'Newsletter Signup', type: 'newsletter', status: 'active', entries: 3421, views: 4172, conversion: 82, created: '2024-01-05 16:22:59', lastEntry: '5 min ago', shortcode: '[formglut id="4"]' },
+            { id: 5, title: 'Job Application', type: 'blank', status: 'draft', entries: 0, views: 0, conversion: 0, created: '2024-04-01 08:10:31', lastEntry: '-', shortcode: '[formglut id="5"]' },
+        ];
+
+        function App() {
+            const [searchText, setSearchText] = useState('');
+
+            const filtered = mockForms.filter(f => f.title.toLowerCase().includes(searchText.toLowerCase()));
+
+            const columns = [
+                {
+                    title: 'Form Name',
+                    dataIndex: 'title',
+                    render: function(text, r) {
+                        return (
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                    <a href={_pg.editor + '&form_id=' + r.id} style={{ width: 40, height: 40, borderRadius: 10, background: '#f4f6f9', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e8ecf1', textDecoration: 'none' }}>
+                                        <EditOutlined style={{ color: '#64748b' }} />
+                                    </a>
+                                    <div>
+                                        <div style={{ fontWeight: 600, fontSize: 14 }}>
+                                            <a href={_pg.editor + '&form_id=' + r.id} style={{ color: '#1a1a2e' }}>{text}</a>
+                                            <span style={{ color: '#94a3b8', fontWeight: 400, fontSize: 12, marginLeft: 8 }}> ({r.type})</span>
+                                        </div>
+                                        <div style={{ fontSize: 11, color: '#b0b8c4', marginTop: 2 }}>{r.created}</div>
+                                    </div>
+                                </div>
+                                <div className="fg-row-actions">
+                                    <a href="#" onClick={function(e) { e.preventDefault(); window.open('', '_blank'); }}>Preview</a>
+                                    <span className="fg-action-sep">|</span>
+                                    <Switch size="small" defaultChecked={r.status === 'active'}
+                                        checkedChildren="Active" unCheckedChildren="Draft"
+                                        style={{ marginTop: -2 }} />
+                                </div>
+                            </div>
+                        );
+                    },
+                },
+                {
+                    title: 'Shortcode',
+                    dataIndex: 'shortcode',
+                    width: 220,
+                    render: function(v) { return <span className="fg-shortcode" onClick={function() { navigator.clipboard?.writeText(v); message.success('Copied!'); }}>{v}</span>; },
+                },
+                {
+                    title: 'Views',
+                    dataIndex: 'views',
+                    width: 100,
+                    render: function(v) { return <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{v.toLocaleString()}</span>; },
+                },
+                {
+                    title: 'Entries',
+                    dataIndex: 'entries',
+                    width: 180,
+                    render: function(v, r) {
+                        return (
+                            <div>
+                                <a href={_pg.entries} style={{ fontWeight: 600, color: '#1a1a2e' }}>{v.toLocaleString()}</a>
+                                {r.lastEntry !== '-' && <span style={{ fontSize: 12, color: '#94a3b8', marginLeft: 6 }}>({r.lastEntry})</span>}
+                            </div>
+                        );
+                    },
+                },
+                {
+                    title: 'Action',
+                    dataIndex: 'action',
+                    width: 100,
+                    align: 'center',
+                    render: function(_, r) {
+                        return (
+                            <Space size={4}>
+                                <Tooltip title="Duplicate form">
+                                    <Button type="text" icon={<CopyOutlined />} style={{ color: '#64748b' }} onClick={function() { message.success('Form duplicated!'); }} />
+                                </Tooltip>
+                                <Popconfirm title="Are you sure to delete this?" okText="Confirm" cancelText="Cancel" okButtonProps={{ danger: true }}>
+                                    <Tooltip title="Delete form">
+                                        <Button type="text" icon={<DeleteOutlined />} danger />
+                                    </Tooltip>
+                                </Popconfirm>
+                            </Space>
+                        );
+                    },
+                },
+            ];
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div>
+                            FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => (
+                                <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>
+                            ))}
+                        </nav>
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">All Forms</div>
+                                <div className="fg-page-subtitle">Manage your forms</div>
+                            </div>
+                            <Button type="primary" icon={<PlusOutlined />} style={{ background: '#e94560', borderColor: '#e94560', height: 40, borderRadius: 8, fontWeight: 600, paddingInline: 20 }} href={_pg.editor}>
+                                Add New Form
+                            </Button>
+                        </div>
+
+                        <div className="fg-table-wrap">
+                            <Table
+                                dataSource={filtered}
+                                columns={columns}
+                                rowKey="id"
+                                scroll={{ x: 'max-content' }}
+                                pagination={{ pageSize: 10, showTotal: function(t) { return t + ' forms total'; } }}
+                                style={{ padding: '0 8px' }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

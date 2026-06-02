@@ -1,0 +1,12 @@
+/**
+ * FormGlut Admin Styles
+ *
+ * Scoped to .formglut-admin-page to avoid conflicts.
+ *
+ * @package FormGlut
+ */
+
+.formglut-admin-page {
+	background: #f0f2f5;
+}
+

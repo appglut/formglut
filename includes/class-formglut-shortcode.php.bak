@@ -1,0 +1,409 @@
+<?php
+/**
+ * FormGlut Shortcode.
+ *
+ * Registers the [formglut] shortcode and renders forms on the frontend.
+ *
+ * @package FormGlut
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * FormGlut_Shortcode class.
+ */
+class FormGlut_Shortcode {
+
+	/**
+	 * Single instance.
+	 *
+	 * @var FormGlut_Shortcode|null
+	 */
+	private static $instance = null;
+
+	/**
+	 * Track whether frontend assets have been enqueued (avoid duplicates).
+	 *
+	 * @var bool
+	 */
+	private static $assets_enqueued = false;
+
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return FormGlut_Shortcode
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Constructor — register shortcode.
+	 */
+	private function __construct() {
+		add_shortcode( 'formglut', array( $this, 'render' ) );
+	}
+
+	/**
+	 * Render the shortcode.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 * @return string HTML output.
+	 */
+	public function render( $atts ) {
+		$atts = shortcode_atts( array(
+			'id' => 0,
+		), $atts, 'formglut' );
+
+		$form_id = absint( $atts['id'] );
+
+		if ( ! $form_id ) {
+			return '';
+		}
+
+		$form = FormGlut_Form::get( $form_id );
+
+		if ( ! $form || ! in_array( $form->status, array( 'active', 'published' ), true ) ) {
+			return '';
+		}
+
+		// Increment view count.
+		FormGlut_Form::increment_views( $form_id );
+
+		// Enqueue frontend assets (once per page load).
+		$this->enqueue_frontend_assets();
+
+		// Build form HTML.
+		return $this->build_form_html( $form );
+	}
+
+	/**
+	 * Enqueue frontend CSS and JS.
+	 *
+	 * @return void
+	 */
+	private function enqueue_frontend_assets() {
+		if ( self::$assets_enqueued ) {
+			return;
+		}
+
+		self::$assets_enqueued = true;
+
+		$build_url  = FORMGLUT_PLUGIN_URL . 'resources';
+		$build_path = FORMGLUT_PLUGIN_DIR . 'resources';
+
+		// Enqueue frontend JS.
+		if ( file_exists( $build_path . '/form-frontend.js' ) ) {
+			wp_enqueue_script(
+				'formglut-frontend',
+				$build_url . '/form-frontend.js',
+				array( 'wp-i18n' ),
+				FORMGLUT_VERSION,
+				true
+			);
+			wp_set_script_translations( 'formglut-frontend', 'formglut', FORMGLUT_PLUGIN_DIR . 'languages' );
+		}
+
+		// Enqueue frontend CSS.
+		if ( file_exists( $build_path . '/assets/form-frontend.css' ) ) {
+			wp_enqueue_style(
+				'formglut-frontend',
+				$build_url . '/assets/form-frontend.css',
+				array(),
+				FORMGLUT_VERSION
+			);
+		}
+
+		// Localize AJAX data for frontend submission.
+		wp_localize_script( 'formglut-frontend', 'formglutFrontend', array(
+			'ajax_url'           => admin_url( 'admin-ajax.php' ),
+			'nonce'              => wp_create_nonce( 'formglut_submit_nonce' ),
+			'recaptcha_enabled'  => (bool) FormGlut_Settings::get( 'formglut_recaptcha_enabled', false ),
+			'recaptcha_site_key' => FormGlut_Settings::get( 'formglut_recaptcha_site_key', '' ),
+		) );
+
+		// Enqueue reCAPTCHA v3 script if enabled and configured.
+		$recaptcha_enabled  = FormGlut_Settings::get( 'formglut_recaptcha_enabled', false );
+		$recaptcha_site_key = FormGlut_Settings::get( 'formglut_recaptcha_site_key', '' );
+		if ( $recaptcha_enabled && ! empty( $recaptcha_site_key ) ) {
+			wp_enqueue_script(
+				'formglut-recaptcha',
+				'https://www.google.com/recaptcha/api.js?render=' . esc_attr( $recaptcha_site_key ),
+				array(),
+				FORMGLUT_VERSION,
+				true
+			);
+		}
+	}
+
+	/**
+	 * Build the complete form HTML.
+	 *
+	 * @param object $form Form object with decoded fields.
+	 * @return string HTML output (escaped).
+	 */
+	private function build_form_html( $form ) {
+		$form_id  = absint( $form->id );
+		$title    = esc_html( $form->title );
+		$fields   = is_array( $form->fields ) ? $form->fields : array();
+		$btn      = is_array( $form->submit_btn ) ? $form->submit_btn : array();
+		$btn_text = isset( $btn['text'] ) ? esc_html( $btn['text'] ) : __( 'Submit', 'formglut' );
+		$btn_text = $btn_text ? $btn_text : __( 'Submit', 'formglut' );
+
+		// Submit button styles.
+		$btn_styles = $this->build_button_styles( $btn );
+
+		ob_start();
+		?>
+		<div class="formglut-form-wrapper" id="formglut-form-<?php echo esc_attr( $form_id ); ?>">
+			<form class="formglut-form" data-form-id="<?php echo esc_attr( $form_id ); ?>" novalidate>
+				<?php wp_nonce_field( 'formglut_submit_nonce', 'formglut_nonce_field' ); ?>
+				<input type="hidden" name="action" value="formglut_submit_form" />
+				<input type="hidden" name="form_id" value="<?php echo esc_attr( $form_id ); ?>" />
+				<input type="hidden" name="nonce" class="formglut-nonce" value="" />
+
+				<?php foreach ( $fields as $field ) : ?>
+					<?php echo $this->render_field( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each field method escapes internally. ?>
+				<?php endforeach; ?>
+
+				<?php if ( FormGlut_Settings::get( 'formglut_honeypot', true ) ) : ?>
+					<?php echo $this->render_honeypot(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php endif; ?>
+
+				<div class="formglut-form-actions" style="<?php echo esc_attr( $btn_styles['align'] ); ?>">
+					<button type="submit" class="formglut-submit-btn" style="<?php echo esc_attr( $btn_styles['inline'] ); ?>">
+						<span class="formglut-btn-text"><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped above. ?></span>
+						<span class="formglut-btn-spinner" style="display:none;">&nbsp;&hellip;</span>
+					</button>
+				</div>
+
+				<div class="formglut-form-message formglut-success" style="display:none;"></div>
+				<div class="formglut-form-message formglut-error" style="display:none;"></div>
+			</form>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Build inline styles for the submit button.
+	 *
+	 * @param array $btn Button config.
+	 * @return array With 'inline' and 'align' style strings.
+	 */
+	private function build_button_styles( $btn ) {
+		$inline_parts = array();
+		$align_style  = '';
+
+		if ( ! empty( $btn['bg_color'] ) ) {
+			$inline_parts[] = 'background-color:' . sanitize_hex_color( $btn['bg_color'] );
+			$inline_parts[] = 'border-color:' . sanitize_hex_color( $btn['bg_color'] );
+		}
+		if ( ! empty( $btn['text_color'] ) ) {
+			$inline_parts[] = 'color:' . sanitize_hex_color( $btn['text_color'] );
+		}
+		if ( isset( $btn['border_radius'] ) ) {
+			$inline_parts[] = 'border-radius:' . absint( $btn['border_radius'] ) . 'px';
+		}
+		if ( isset( $btn['font_size'] ) ) {
+			$inline_parts[] = 'font-size:' . absint( $btn['font_size'] ) . 'px';
+		}
+		if ( ! empty( $btn['font_weight'] ) ) {
+			$inline_parts[] = 'font-weight:' . absint( $btn['font_weight'] );
+		}
+		if ( isset( $btn['height'] ) ) {
+			$inline_parts[] = 'height:' . absint( $btn['height'] ) . 'px';
+		}
+
+		$size = isset( $btn['size'] ) ? $btn['size'] : 'large';
+		if ( 'small' === $size ) {
+			$inline_parts[] = 'padding:6px 16px';
+		} elseif ( 'medium' === $size ) {
+			$inline_parts[] = 'padding:8px 24px';
+		} else {
+			$inline_parts[] = 'padding:10px 32px';
+		}
+
+		$alignment = isset( $btn['alignment'] ) ? $btn['alignment'] : 'full';
+		if ( 'left' === $alignment ) {
+			$align_style = 'text-align:left';
+		} elseif ( 'center' === $alignment ) {
+			$align_style = 'text-align:center';
+		} elseif ( 'right' === $alignment ) {
+			$align_style = 'text-align:right';
+		} else {
+			$align_style = 'text-align:center';
+			$inline_parts[] = 'width:100%';
+		}
+
+		return array(
+			'inline' => implode( ';', $inline_parts ),
+			'align'  => $align_style,
+		);
+	}
+
+	/**
+	 * Build inline style strings for a field.
+	 *
+	 * @param array $field Field configuration.
+	 * @return array With keys: input_style_str, label_style_str, wrapper_style_str, use_flex, label_placement.
+	 */
+	private function build_field_styles( $field ) {
+		$input_styles   = array();
+		$label_styles   = array();
+		$wrapper_styles = array();
+		$use_flex       = false;
+
+		if ( ! empty( $field['bg_color'] ) ) {
+			$input_styles[] = 'background-color:' . sanitize_hex_color( $field['bg_color'] );
+		}
+		if ( ! empty( $field['border_color'] ) ) {
+			$input_styles[] = 'border-color:' . sanitize_hex_color( $field['border_color'] );
+		}
+		if ( ! empty( $field['text_color'] ) ) {
+			$input_styles[] = 'color:' . sanitize_hex_color( $field['text_color'] );
+		}
+		if ( isset( $field['border_radius'] ) ) {
+			$input_styles[] = 'border-radius:' . absint( $field['border_radius'] ) . 'px';
+		}
+		$pt = isset( $field['padding_top'] ) ? absint( $field['padding_top'] ) : 10;
+		$pr = isset( $field['padding_right'] ) ? absint( $field['padding_right'] ) : 14;
+		$pb = isset( $field['padding_bottom'] ) ? absint( $field['padding_bottom'] ) : 10;
+		$pl = isset( $field['padding_left'] ) ? absint( $field['padding_left'] ) : 14;
+		$input_styles[] = 'padding:' . $pt . 'px ' . $pr . 'px ' . $pb . 'px ' . $pl . 'px';
+		$mt = isset( $field['margin_top'] ) ? absint( $field['margin_top'] ) : 0;
+		$mr = isset( $field['margin_right'] ) ? absint( $field['margin_right'] ) : 0;
+		$mb = isset( $field['margin_bottom'] ) ? absint( $field['margin_bottom'] ) : 0;
+		$ml = isset( $field['margin_left'] ) ? absint( $field['margin_left'] ) : 0;
+		if ( $mt || $mr || $mb || $ml ) {
+			$input_styles[] = 'margin:' . $mt . 'px ' . $mr . 'px ' . $mb . 'px ' . $ml . 'px';
+		}
+
+		$label_placement = isset( $field['label_placement'] ) ? $field['label_placement'] : 'top';
+		if ( 'hidden' === $label_placement ) {
+			$label_styles[] = 'display:none';
+		} elseif ( 'left' === $label_placement || 'right' === $label_placement ) {
+			$use_flex = true;
+			$label_styles[] = 'flex:0 0 auto';
+			$label_styles[] = 'white-space:nowrap';
+			$label_styles[] = 'margin-bottom:0';
+			$lw = isset( $field['label_width'] ) ? $field['label_width'] : 'auto';
+			if ( 'custom' === $lw && ! empty( $field['label_width_custom'] ) ) {
+				$label_styles[] = 'width:' . absint( $field['label_width_custom'] ) . 'px';
+			} elseif ( 'auto' !== $lw && '100%' !== $lw ) {
+				$label_styles[] = 'width:' . esc_attr( $lw );
+			}
+		}
+
+		$fw = isset( $field['field_width'] ) ? $field['field_width'] : '100%';
+		if ( 'custom' === $fw && ! empty( $field['field_width_custom'] ) ) {
+			$wrapper_styles[] = 'max-width:' . absint( $field['field_width_custom'] ) . 'px';
+		} elseif ( ! empty( $fw ) && '100%' !== $fw ) {
+			$wrapper_styles[] = 'max-width:' . esc_attr( $fw );
+		}
+
+		return array(
+			'input_style_str'   => ! empty( $input_styles ) ? ' style="' . esc_attr( implode( ';', $input_styles ) ) . '"' : '',
+			'label_style_str'   => ! empty( $label_styles ) ? ' style="' . esc_attr( implode( ';', $label_styles ) ) . '"' : '',
+			'wrapper_style_str' => ! empty( $wrapper_styles ) ? ' style="' . esc_attr( implode( ';', $wrapper_styles ) ) . '"' : '',
+			'use_flex'          => $use_flex,
+			'label_placement'   => $label_placement,
+		);
+	}
+
+	/**
+	 * Render a single form field.
+	 *
+	 * @param array $field Field configuration.
+	 * @return string HTML.
+	 */
+	private function render_field( $field ) {
+		$type     = isset( $field['type'] ) ? sanitize_key( $field['type'] ) : 'text';
+		$id       = isset( $field['id'] ) ? sanitize_text_field( $field['id'] ) : '';
+		$label    = isset( $field['label'] ) ? esc_html( $field['label'] ) : '';
+		$required = ! empty( $field['required'] );
+		$ph       = isset( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
+		$hidden   = ! empty( $field['hidden'] );
+
+		$help_text  = isset( $field['help_text'] ) ? esc_html( $field['help_text'] ) : '';
+		$maxlength  = ! empty( $field['maxlength'] ) ? ' maxlength="' . absint( $field['maxlength'] ) . '"' : '';
+		$val_msg    = isset( $field['validation_message'] ) && '' !== $field['validation_message'] ? ' data-validation-message="' . esc_attr( $field['validation_message'] ) . '"' : '';
+		$req_mark   = $required ? ' <span class="formglut-required">*</span>' : '';
+		$req_attr   = $required ? ' required' : '';
+		$hidden_cls = $hidden ? ' formglut-hidden' : '';
+
+		$s = $this->build_field_styles( $field );
+
+		$help_html = $help_text ? '<span class="formglut-help-tip"><span class="formglut-help-icon"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.75" fill="currentColor"/></svg></span><span class="formglut-help-tooltip">' . $help_text . '</span></span>' : '';
+
+		ob_start();
+
+		switch ( $type ) {
+			case 'textarea':
+				$rows = isset( $field['rows'] ) ? absint( $field['rows'] ) : 4;
+				?>
+				<div class="formglut-field formglut-field-textarea<?php echo esc_attr( $hidden_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
+					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
+					<?php endif; ?>
+					<textarea name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" rows="<?php echo absint( $rows ); ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>></textarea>
+					</div>
+				<?php
+				break;
+
+			case 'number':
+				$min = isset( $field['min'] ) ? ' min="' . absint( $field['min'] ) . '"' : '';
+				$max = isset( $field['max'] ) ? ' max="' . absint( $field['max'] ) . '"' : '';
+				$step = isset( $field['step'] ) ? ' step="' . absint( $field['step'] ) . '"' : '';
+				?>
+				<div class="formglut-field formglut-field-number<?php echo esc_attr( $hidden_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
+					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
+					<?php endif; ?>
+					<input type="number" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $min . $max . $step . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+				</div>
+				<?php
+				break;
+
+			default: // text, email
+				$input_type = 'email' === $type ? 'email' : 'text';
+
+				if ( $s['use_flex'] ) :
+				?>
+				<div class="formglut-field formglut-field-<?php echo esc_attr( $type ); ?><?php echo esc_attr( $hidden_cls ); ?>" style="display:flex;align-items:center;gap:8px;<?php echo ! empty( $s['wrapper_style_str'] ) ? esc_attr( trim( str_replace( array('style="', '"'), '', $s['wrapper_style_str'] ), ';' ) ) . ';' : ''; ?>">
+					<?php if ( 'left' === $s['label_placement'] && $label ) : ?>
+					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
+					<?php endif; ?>
+					<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+					<?php if ( 'right' === $s['label_placement'] && $label ) : ?>
+					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
+					<?php endif; ?>
+					</div>
+				<?php else : ?>
+				<div class="formglut-field formglut-field-<?php echo esc_attr( $type ); ?><?php echo esc_attr( $hidden_cls ); ?>"<?php echo $s['wrapper_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+					<?php if ( $label && 'hidden' !== $s['label_placement'] ) : ?>
+					<label class="formglut-label" for="<?php echo esc_attr( $id ); ?>"<?php echo $s['label_style_str']; ?>><?php echo '<span class="formglut-label-text">' . $label . '</span>' . $req_mark . $help_html; // phpcs:ignore ?></label>
+					<?php endif; ?>
+					<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+					</div>
+				<?php
+				endif;
+				break;
+		}
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render a honeypot field for spam protection.
+	 * Hidden from real users; bots fill it and get rejected.
+	 *
+	 * @return string HTML.
+	 */
+	private function render_honeypot() {
+		return '<div class="formglut-hp" style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;"><label>' . esc_html__( 'Do not fill this field', 'formglut' ) . '</label><input type="text" name="formglut_hp" tabindex="-1" autocomplete="off" /></div>';
+	}
+}

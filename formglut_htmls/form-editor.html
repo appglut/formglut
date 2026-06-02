@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Form Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; height: 100vh; overflow: hidden; }
+
+        /* Header */
+        .fg-editor-header {
+            background: #fff; border-bottom: 1px solid #e5e7eb;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; height: 64px;
+        }
+        .fg-editor-header-left { display: flex; align-items: center; gap: 16px; }
+        .fg-editor-back { display: flex; align-items: center; gap: 6px; color: #64748b; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+        .fg-editor-back:hover { background: #f1f5f9; color: #1a1a2e; }
+        .fg-editor-title-input { border: none; outline: none; font-size: 16px; font-weight: 600; color: #1a1a2e; padding: 4px 8px; border-radius: 4px; width: 260px; }
+        .fg-editor-title-input:focus { background: #f8fafc; }
+        .fg-editor-header-center { display: flex; gap: 4px; }
+        .fg-editor-tab { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; color: #64748b; text-decoration: none; border: none; background: none; }
+        .fg-editor-tab:hover { background: #f1f5f9; color: #1a1a2e; }
+        .fg-editor-tab.active { background: #e94560; color: #fff; }
+        .fg-editor-header-right { display: flex; gap: 8px; align-items: center; }
+
+        /* Body Layout */
+        .fg-editor-body { display: flex; height: calc(100vh - 64px); }
+
+        /* Sidebar */
+        .fg-sidebar {
+            width: 30%; min-width: 320px; max-width: 420px;
+            background: #fff; border-right: 1px solid #e5e7eb;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .fg-sidebar .ant-tabs { flex: 1; display: flex; flex-direction: column; }
+        .fg-sidebar .ant-tabs-content-holder { flex: 1; overflow-y: auto; }
+        .fg-sidebar .ant-tabs-tabpane { padding: 16px; }
+
+        /* Field Items */
+        .fg-field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .fg-field-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 12px; border-radius: 6px; cursor: grab;
+            background: #f5f5f5; border: 1px solid transparent;
+            font-size: 14px; font-weight: 700; color: #334155;
+            transition: all 0.15s; user-select: none;
+        }
+        .fg-field-btn:hover { background: #ebebeb; border-color: #d9d9d9; }
+        .fg-field-btn:active { cursor: grabbing; border-color: #e94560; background: #fef2f2; }
+        .fg-field-btn-icon { font-size: 18px; color: #64748b; flex-shrink: 0; }
+
+        /* Canvas */
+        .fg-canvas-area { flex: 1; background: #f0f2f5; display: flex; flex-direction: column; overflow: hidden; }
+        .fg-canvas-toolbar { background: #fff; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb; }
+        .fg-canvas { flex: 1; overflow-y: auto; padding: 24px; display: flex; justify-content: center; }
+        .fg-canvas-form {
+            width: 100%; max-width: 640px; background: #fff;
+            border-radius: 12px; border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 32px;
+        }
+        .fg-canvas-form-header { text-align: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
+        .fg-canvas-form-title { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+        .fg-canvas-form-desc { font-size: 13px; color: #94a3b8; margin-top: 6px; }
+
+        .fg-form-field {
+            padding: 14px; border: 2px solid transparent; border-radius: 8px;
+            margin-bottom: 12px; cursor: pointer; transition: all 0.15s; position: relative;
+        }
+        .fg-form-field:hover { border-color: #e2e8f0; background: #fafbfc; }
+        .fg-form-field.selected { border-color: #e94560; background: #fef8f8; }
+        .fg-form-field-label { font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+        .fg-form-field-label .required { color: #e94560; }
+        .fg-form-field-input {
+            width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0;
+            border-radius: 6px; font-size: 13px; color: #94a3b8; background: #fafbfc;
+        }
+        .fg-form-field-actions {
+            position: absolute; top: -28px; right: 8px;
+            background: #1a1a2e; border-radius: 6px; padding: 3px; display: none; gap: 2px;
+        }
+        .fg-form-field:hover .fg-form-field-actions,
+        .fg-form-field.selected .fg-form-field-actions { display: flex; }
+        .fg-form-field-actions button {
+            background: none; border: none; color: #fff; padding: 3px 6px;
+            border-radius: 4px; cursor: pointer; font-size: 12px;
+        }
+        .fg-form-field-actions button:hover { background: rgba(255,255,255,0.15); }
+
+        .fg-canvas-dropzone { border: 2px dashed #d1d5db; border-radius: 8px; padding: 32px; text-align: center; color: #9ca3af; margin-top: 8px; }
+        .fg-canvas-dropzone:hover { border-color: #e94560; color: #e94560; }
+
+        /* Properties */
+        .fg-prop-section { margin-bottom: 20px; }
+        .fg-prop-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 10px; }
+        .fg-prop-field { margin-bottom: 12px; }
+        .fg-prop-label { font-size: 12px; font-weight: 500; color: #64748b; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Switch, Input, Select, Collapse, Tabs, message } = antd;
+
+        var ic = window.icons || {};
+        var ArrowLeftOutlined = ic.ArrowLeftOutlined || function() { return null; };
+        var SaveOutlined = ic.SaveOutlined || function() { return null; };
+        var EyeOutlined = ic.EyeOutlined || function() { return null; };
+        var UndoOutlined = ic.UndoOutlined || function() { return null; };
+        var RedoOutlined = ic.RedoOutlined || function() { return null; };
+        var SettingOutlined = ic.SettingOutlined || function() { return null; };
+        var CodeOutlined = ic.CodeOutlined || function() { return null; };
+        var CopyOutlined = ic.CopyOutlined || function() { return null; };
+        var DeleteOutlined = ic.DeleteOutlined || function() { return null; };
+        var MoreOutlined = ic.MoreOutlined || function() { return null; };
+        var FormOutlined = ic.FormOutlined || function() { return null; };
+        var EditOutlined = ic.EditOutlined || function() { return null; };
+        var MailOutlined = ic.MailOutlined || function() { return null; };
+        var PhoneOutlined = ic.PhoneOutlined || function() { return null; };
+        var CalendarOutlined = ic.CalendarOutlined || function() { return null; };
+        var CheckSquareOutlined = ic.CheckSquareOutlined || function() { return null; };
+        var UploadOutlined = ic.UploadOutlined || function() { return null; };
+        var StarOutlined = ic.StarOutlined || function() { return null; };
+        var FileTextOutlined = ic.FileTextOutlined || function() { return null; };
+        var LinkOutlined = ic.LinkOutlined || function() { return null; };
+        var MinusOutlined = ic.MinusOutlined || function() { return null; };
+        var FlagOutlined = ic.FlagOutlined || function() { return null; };
+        var TeamOutlined = ic.TeamOutlined || function() { return null; };
+        var LockOutlined = ic.LockOutlined || function() { return null; };
+        var FileOutlined = ic.FileOutlined || function() { return null; };
+        var SearchOutlined = ic.SearchOutlined || function() { return null; };
+        var PlusOutlined = ic.PlusOutlined || function() { return null; };
+        var BarChartOutlined = ic.BarChartOutlined || function() { return null; };
+        var UserOutlined = ic.UserOutlined || function() { return null; };
+        var DragOutlined = ic.DragOutlined || function() { return null; };
+        var GlobalOutlined = ic.GlobalOutlined || function() { return null; };
+        var PictureOutlined = ic.PictureOutlined || function() { return null; };
+        var DollarOutlined = ic.DollarOutlined || function() { return null; };
+        var BellOutlined = ic.BellOutlined || function() { return null; };
+        var BoldOutlined = ic.BoldOutlined || function() { return null; };
+
+        var generalFields = [
+            { name: 'Text Input', icon: <EditOutlined /> },
+            { name: 'Email', icon: <MailOutlined /> },
+            { name: 'Text Area', icon: <FileTextOutlined /> },
+            { name: 'Select', icon: <BarChartOutlined /> },
+            { name: 'Multiple Select', icon: <CheckSquareOutlined /> },
+            { name: 'Country Select', icon: <GlobalOutlined /> },
+            { name: 'Address Fields', icon: <FlagOutlined /> },
+            { name: 'Numeric Field', icon: <MinusOutlined /> },
+            { name: 'Spinner', icon: <PlusOutlined /> },
+            { name: 'Name Fields', icon: <UserOutlined /> },
+            { name: 'Heading Field', icon: <BoldOutlined /> },
+            { name: 'Mask Input', icon: <LockOutlined /> },
+            { name: 'Radio Field', icon: <StarOutlined /> },
+            { name: 'Checkbox', icon: <CheckSquareOutlined /> },
+            { name: 'URL Input', icon: <LinkOutlined /> },
+            { name: 'Date & Time', icon: <CalendarOutlined /> },
+            { name: 'Image Upload', icon: <PictureOutlined /> },
+            { name: 'File Upload', icon: <UploadOutlined /> },
+            { name: 'Custom HTML', icon: <CodeOutlined /> },
+            { name: 'Phone/Mobile', icon: <PhoneOutlined /> },
+        ];
+
+        var advancedFields = [
+            { name: 'Password', icon: <LockOutlined /> },
+            { name: 'Confirm Password', icon: <LockOutlined /> },
+            { name: 'reCAPTCHA', icon: <BellOutlined /> },
+            { name: 'hCaptcha', icon: <BellOutlined /> },
+            { name: 'Hidden Field', icon: <EyeOutlined /> },
+            { name: 'Rating', icon: <StarOutlined /> },
+            { name: 'Color Picker', icon: <BellOutlined /> },
+            { name: 'Like Dislike', icon: <StarOutlined /> },
+        ];
+
+        var containerFields = [
+            { name: 'Section Break', icon: <MinusOutlined /> },
+            { name: 'Two Column', icon: <BarChartOutlined /> },
+            { name: 'Three Column', icon: <BarChartOutlined /> },
+            { name: 'Four Column', icon: <BarChartOutlined /> },
+            { name: 'Repeatable', icon: <PlusOutlined /> },
+        ];
+
+        var paymentFields = [
+            { name: 'Stripe', icon: <DollarOutlined /> },
+            { name: 'PayPal', icon: <DollarOutlined /> },
+            { name: 'Razorpay', icon: <DollarOutlined /> },
+            { name: 'Mollie', icon: <DollarOutlined /> },
+        ];
+
+        function FieldGrid(props) {
+            return (
+                <div className="fg-field-grid">
+                    {props.fields.map(function(f) {
+                        return (
+                            <div className="fg-field-btn" key={f.name} draggable>
+                                <span className="fg-field-btn-icon">{f.icon}</span>
+                                {f.name}
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        function AddFieldsTab() {
+            return (
+                <div>
+                    <Input.Search placeholder="Search fields..." style={{ marginBottom: 12 }} />
+                    <Collapse
+                        defaultActiveKey={['general']}
+                        ghost
+                        items={[
+                            {
+                                key: 'general',
+                                label: 'General Fields',
+                                children: <FieldGrid fields={generalFields} />
+                            },
+                            {
+                                key: 'advanced',
+                                label: 'Advanced Fields',
+                                children: <FieldGrid fields={advancedFields} />
+                            },
+                            {
+                                key: 'container',
+                                label: 'Container Layouts',
+                                children: <FieldGrid fields={containerFields} />
+                            },
+                            {
+                                key: 'payment',
+                                label: 'Payment Fields',
+                                children: <FieldGrid fields={paymentFields} />
+                            },
+                        ]}
+                    />
+                </div>
+            );
+        }
+
+        function FieldOptionsTab() {
+            return (
+                <div>
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">General</div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Field Label</div>
+                            <Input defaultValue="Full Name" size="small" />
+                        </div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Admin Label</div>
+                            <Input placeholder="Same as field label" size="small" />
+                        </div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Placeholder</div>
+                            <Input defaultValue="Enter your full name" size="small" />
+                        </div>
+                        <div className="fg-prop-field" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span className="fg-prop-label" style={{ marginBottom: 0 }}>Required</span>
+                            <Switch defaultChecked size="small" />
+                        </div>
+                    </div>
+
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">Validation</div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Validation Message</div>
+                            <Input defaultValue="This field is required" size="small" />
+                        </div>
+                    </div>
+
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">Advanced</div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">CSS Class</div>
+                            <Input placeholder="Add CSS class" size="small" />
+                        </div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Field Size</div>
+                            <Select defaultValue="large" size="small" style={{ width: '100%' }} options={[
+                                { value: 'small', label: 'Small' },
+                                { value: 'medium', label: 'Medium' },
+                                { value: 'large', label: 'Large' },
+                            ]} />
+                        </div>
+                        <div className="fg-prop-field" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span className="fg-prop-label" style={{ marginBottom: 0 }}>Conditional Logic</span>
+                            <Switch size="small" />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function StyleOptionsTab() {
+            return (
+                <div>
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">Layout</div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Label Placement</div>
+                            <Select defaultValue="top" size="small" style={{ width: '100%' }} options={[
+                                { value: 'top', label: 'Top' },
+                                { value: 'left', label: 'Left' },
+                                { value: 'right', label: 'Right' },
+                                { value: 'hidden', label: 'Hidden' },
+                            ]} />
+                        </div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Form Width</div>
+                            <Select defaultValue="100%" size="small" style={{ width: '100%' }} options={[
+                                { value: '480px', label: 'Small (480px)' },
+                                { value: '640px', label: 'Medium (640px)' },
+                                { value: '100%', label: 'Full Width' },
+                            ]} />
+                        </div>
+                    </div>
+
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">Form Theme</div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Theme</div>
+                            <Select defaultValue="default" size="small" style={{ width: '100%' }} options={[
+                                { value: 'default', label: 'Default' },
+                                { value: 'classic', label: 'Classic' },
+                                { value: 'modern', label: 'Modern' },
+                                { value: 'bold', label: 'Bold' },
+                            ]} />
+                        </div>
+                    </div>
+
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">Submit Button</div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Button Text</div>
+                            <Input defaultValue="Submit Form" size="small" />
+                        </div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Button Size</div>
+                            <Select defaultValue="large" size="small" style={{ width: '100%' }} options={[
+                                { value: 'small', label: 'Small' },
+                                { value: 'medium', label: 'Medium' },
+                                { value: 'large', label: 'Large' },
+                            ]} />
+                        </div>
+                        <div className="fg-prop-field">
+                            <div className="fg-prop-label">Button Alignment</div>
+                            <Select defaultValue="left" size="small" style={{ width: '100%' }} options={[
+                                { value: 'left', label: 'Left' },
+                                { value: 'center', label: 'Center' },
+                                { value: 'right', label: 'Right' },
+                                { value: 'full', label: 'Full Width' },
+                            ]} />
+                        </div>
+                    </div>
+
+                    <div className="fg-prop-section">
+                        <div className="fg-prop-section-title">Custom CSS</div>
+                        <div className="fg-prop-field">
+                            <Input.TextArea rows={4} placeholder="/* Custom CSS */" style={{ fontFamily: 'monospace', fontSize: 12 }} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            var stateArr = useState('name');
+            var selectedField = stateArr[0];
+            var setSelectedField = stateArr[1];
+            var tabArr = useState('addFields');
+            var activeTab = tabArr[0];
+            var setActiveTab = tabArr[1];
+
+            return (
+                <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+                    {/* Header */}
+                    <header className="fg-editor-header">
+                        <div className="fg-editor-header-left">
+                            <a className="fg-editor-back" href="all-forms.html">
+                                <ArrowLeftOutlined /> Back
+                            </a>
+                            <input className="fg-editor-title-input" defaultValue="Contact Form" />
+                        </div>
+                        <div className="fg-editor-header-center">
+                            <button className="fg-editor-tab active">Editor</button>
+                            <a className="fg-editor-tab" href="form-settings.html">Settings</a>
+                            <a className="fg-editor-tab" href="form-entries.html">Entries</a>
+                        </div>
+                        <div className="fg-editor-header-right">
+                            <Button icon={React.createElement(UndoOutlined)} size="small" type="text" />
+                            <Button icon={React.createElement(RedoOutlined)} size="small" type="text" />
+                            <Button icon={React.createElement(EyeOutlined)}>Preview</Button>
+                            <Button icon={React.createElement(SaveOutlined)} type="primary" style={{ background: '#e94560', borderColor: '#e94560' }}>
+                                Save Form
+                            </Button>
+                        </div>
+                    </header>
+
+                    {/* Body */}
+                    <div className="fg-editor-body">
+
+                        {/* Sidebar with Tabs */}
+                        <div className="fg-sidebar">
+                            <Tabs
+                                activeKey={activeTab}
+                                onChange={setActiveTab}
+                                centered
+                                items={[
+                                    { key: 'addFields', label: 'Add Fields', children: <AddFieldsTab /> },
+                                    { key: 'fieldOptions', label: 'Field Options', children: <FieldOptionsTab /> },
+                                    { key: 'styleOptions', label: 'Style Options', children: <StyleOptionsTab /> },
+                                ]}
+                            />
+                        </div>
+
+                        {/* Canvas */}
+                        <div className="fg-canvas-area">
+                            <div className="fg-canvas-toolbar">
+                                <div style={{ display: 'flex', gap: 8 }}>
+                                    <Select defaultValue="640px" size="small" style={{ width: 100 }} options={[
+                                        { value: '480px', label: 'Mobile' },
+                                        { value: '640px', label: 'Tablet' },
+                                        { value: '100%', label: 'Desktop' },
+                                    ]} />
+                                </div>
+                                <div style={{ fontSize: 12, color: '#94a3b8' }}>5 fields</div>
+                            </div>
+                            <div className="fg-canvas">
+                                <div className="fg-canvas-form">
+                                    <div className="fg-canvas-form-header">
+                                        <div className="fg-canvas-form-title">Contact Form</div>
+                                        <div className="fg-canvas-form-desc">We'd love to hear from you. Please fill out this form.</div>
+                                    </div>
+
+                                    <div className={"fg-form-field " + (selectedField === 'name' ? 'selected' : '')} onClick={function() { setSelectedField('name'); }}>
+                                        <div className="fg-form-field-actions">
+                                            <button><CopyOutlined /></button>
+                                            <button><DeleteOutlined /></button>
+                                            <button><DragOutlined /></button>
+                                        </div>
+                                        <div className="fg-form-field-label">Full Name <span className="required">*</span></div>
+                                        <div style={{ display: 'flex', gap: 8 }}>
+                                            <input className="fg-form-field-input" placeholder="First Name" readOnly />
+                                            <input className="fg-form-field-input" placeholder="Last Name" readOnly />
+                                        </div>
+                                    </div>
+
+                                    <div className={"fg-form-field " + (selectedField === 'email' ? 'selected' : '')} onClick={function() { setSelectedField('email'); }}>
+                                        <div className="fg-form-field-actions">
+                                            <button><CopyOutlined /></button>
+                                            <button><DeleteOutlined /></button>
+                                            <button><DragOutlined /></button>
+                                        </div>
+                                        <div className="fg-form-field-label">Email Address <span className="required">*</span></div>
+                                        <input className="fg-form-field-input" placeholder="email@example.com" readOnly />
+                                    </div>
+
+                                    <div className={"fg-form-field " + (selectedField === 'subject' ? 'selected' : '')} onClick={function() { setSelectedField('subject'); }}>
+                                        <div className="fg-form-field-actions">
+                                            <button><CopyOutlined /></button>
+                                            <button><DeleteOutlined /></button>
+                                            <button><DragOutlined /></button>
+                                        </div>
+                                        <div className="fg-form-field-label">Subject</div>
+                                        <input className="fg-form-field-input" placeholder="How can we help?" readOnly />
+                                    </div>
+
+                                    <div className={"fg-form-field " + (selectedField === 'message' ? 'selected' : '')} onClick={function() { setSelectedField('message'); }}>
+                                        <div className="fg-form-field-actions">
+                                            <button><CopyOutlined /></button>
+                                            <button><DeleteOutlined /></button>
+                                            <button><DragOutlined /></button>
+                                        </div>
+                                        <div className="fg-form-field-label">Message <span className="required">*</span></div>
+                                        <textarea className="fg-form-field-input" rows="4" placeholder="Type your message..." readOnly style={{ resize: 'vertical' }}></textarea>
+                                    </div>
+
+                                    <div className={"fg-form-field " + (selectedField === 'file' ? 'selected' : '')} onClick={function() { setSelectedField('file'); }}>
+                                        <div className="fg-form-field-actions">
+                                            <button><CopyOutlined /></button>
+                                            <button><DeleteOutlined /></button>
+                                            <button><DragOutlined /></button>
+                                        </div>
+                                        <div className="fg-form-field-label">Attachment</div>
+                                        <div style={{ border: '2px dashed #e2e8f0', borderRadius: 8, padding: 20, textAlign: 'center', color: '#94a3b8', fontSize: 13 }}>
+                                            <UploadOutlined style={{ fontSize: 20, display: 'block', marginBottom: 6 }} />
+                                            Click or drag to upload
+                                        </div>
+                                    </div>
+
+                                    <div style={{ marginTop: 24 }}>
+                                        <Button type="primary" size="large" block style={{ background: '#e94560', borderColor: '#e94560', height: 44, fontWeight: 600 }}>
+                                            Submit Form
+                                        </Button>
+                                    </div>
+
+                                    <div className="fg-canvas-dropzone" style={{ marginTop: 20 }}>
+                                        <PlusOutlined style={{ fontSize: 18, marginBottom: 6 }} />
+                                        <div style={{ fontSize: 13 }}>Drop a field here</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    </script>
+</body>
+</html>

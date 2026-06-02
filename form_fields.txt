@@ -1,0 +1,136 @@
+### General Fields:
+- Text Input
+- Email
+- Text Area
+- Select
+- Multiple Select
+- Country Select
+- Address Fields
+- Numeric Field
+- Spinner(incremenet/decrement number)
+- Name Fields
+- Heading field
+- Mask Input
+- Radio Field
+- Checkbox
+- URL Input
+- Date & Time
+- Image Upload
+- File Upload
+- Custom HTML
+- Facebook Like-dislike
+- Phone/Mobile
+
+### Advanced Fields:
+- Ratings
+- Signatures
+- Password
+- Section Break
+- Terms & Conditions
+- Hidden Field
+- Video Embed
+- Image Select from multiple images
+- Audio Upload
+- Checkable Grid
+- Form Step
+- Multiple choice grid(https://weformspro.com/docs/form-field-types/multiple-choice-grid/)
+- Mark on map
+- GDPR Agreement
+- reCaptcha
+- hCaptcha
+- Turnstile
+- Shortcode
+- Action Hook
+- Like-dislike
+- Custom Submit Button
+- Range Slider
+- Net Promoter Score
+- Chained Select
+- Color Picker
+- Repeat Field
+- Post/CPT Selection
+- Rich Text Input
+- Save & Resume
+- Reset Button
+- Quiz Score
+- Social Media Profiles
+
+### Container Layouts:
+- One Column Container
+- Two Column Container
+- Three Column Container
+- Four Column Container
+- Five Column Container
+- Six Column Container
+
+### Payment Fields:
+- Select Payment method
+- Shipping Address
+- Payment Item
+- Multiple product(https://weformspro.com/docs/form-field-types/multiple-product/)
+- Subscription
+- Custom Payment Amount
+- Item Quantity
+- Payment Summary
+- Coupon
+
+### Additional General / Input Fields:
+- Toggle Switch (on/off switch vs checkbox)
+- Searchable Dropdown (select with search/filter)
+- Tag Input (add/remove tags)
+- Dual List Box (multi-select with add/remove panes)
+- Date Picker Only (separate from datetime)
+- Time Picker Only (separate from datetime)
+- Currency/Money Input (auto-formatted currency)
+- Percentage Input
+- Color Swatch (visual color selection)
+
+### Additional Advanced / Smart Fields:
+- Calculated Field (auto-calculate based on other fields)
+- Password with Confirmation (verify password twice)
+- Email Confirmation (verify email twice)
+- Address Autocomplete (Google Places integration)
+- Likert Scale (agree/disagree survey scale)
+- Star Rating (visual star rating - 5 stars)
+- Emoji Rating (😃 😐 😑 rating)
+- Ranking/Ordering (drag to reorder items)
+- Lookup Field (search posts/users/taxonomies)
+- Dynamic List / Table (add/remove rows)
+
+### Security / Spam Protection:
+- Honeypot Field (hidden spam trap)
+- Math Captcha (simple math challenge)
+- Slider Captcha (slide to verify)
+
+### Upload / Media:
+- Multi-file with Progress Bar
+- Cropped Image Upload (built-in cropping)
+- Webcam Capture (capture photo directly)
+- Voice Recording (record audio input)
+
+### Layout / UX:
+- Collapsible/Accordion Section
+- Tabs Container
+- Progress Bar (show form completion)
+- Countdown Timer (time-limited forms)
+- Tooltip Field (field with help tooltip)
+
+### Survey / Quiz:
+- Matrix Question (grid with rows + columns)
+- Semantic Differential Scale
+- Image Comparison (choose between images)
+- Slider with Labels (labeled range slider)
+
+### Payment (extended):
+- Credit Card Fields (Stripe-ready inputs)
+- Donation with Preset Amounts
+- Product Variations (size/color options)
+- Tax Calculation Field
+- Recurring Amount (subscription with intervals)
+
+### WordPress Specific:
+- User Registration Fields (username, password)
+- Post Submission (title, content, excerpt)
+- Featured Image Upload
+- Category/Tag Selection
+- User Role Selection

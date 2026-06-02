@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Entry Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; min-height: 100vh; }
+
+        .fg-header {
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 68px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .fg-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .fg-header-logo .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #e94560, #c62a4a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+        }
+        .fg-header-nav { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.06); border-radius: 10px; padding: 4px; }
+        .fg-header-nav a {
+            color: rgba(255,255,255,0.65);
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .fg-header-nav a.active { background: rgba(233, 69, 96, 0.25); color: #fff; box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2); }
+
+        .fg-content { max-width: 960px; margin: 0 auto; padding: 32px; }
+
+        .fg-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .fg-page-title-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-card {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e8ecf1;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+        }
+        .fg-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 28px;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafbfc;
+        }
+        .fg-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .fg-card-body { padding: 0; }
+
+        .fg-entry-row {
+            display: flex;
+            border-bottom: 1px solid #f4f5f7;
+        }
+        .fg-entry-row:last-child { border-bottom: none; }
+        .fg-entry-label {
+            width: 200px;
+            min-width: 200px;
+            padding: 16px 28px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            background: #fafbfc;
+        }
+        .fg-entry-value {
+            flex: 1;
+            padding: 16px 28px;
+            font-size: 14px;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        .fg-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 24px 28px;
+        }
+        .fg-meta-item {
+            padding: 14px 16px;
+            background: #f8f9fb;
+            border-radius: 10px;
+            border: 1px solid #e8ecf1;
+        }
+        .fg-meta-item-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .fg-meta-item-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+            word-break: break-all;
+        }
+
+        .fg-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .fg-status-badge.read { background: #d1fae5; color: #059669; }
+        .fg-status-badge.unread { background: #dbeafe; color: #2563eb; }
+
+        .fg-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+        .fg-back-link:hover { background: #e8ecf1; color: #1a1a2e; }
+
+        @media (max-width: 768px) {
+            .fg-meta-grid { grid-template-columns: 1fr; }
+            .fg-entry-row { flex-direction: column; }
+            .fg-entry-label { width: 100%; min-width: unset; padding-bottom: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { Button, Space, Tooltip, Popconfirm, message, Tag } = antd;
+        const { ArrowLeftOutlined, PrinterOutlined, DeleteOutlined, MailOutlined, StarOutlined, StarFilled, MoreOutlined } = icons;
+
+        const _pg = (typeof formglut_admin !== 'undefined' && formglut_admin.pages) ? formglut_admin.pages : {
+            all_forms: 'all-forms.html', editor: 'form-editor.html', entries: 'entries.html', settings: 'settings.html', entry_detail: 'single-entry.html'
+        };
+
+        const headerNav = [
+            { label: 'Forms', href: _pg.all_forms },
+            { label: 'Entries', href: _pg.entries, active: true },
+            { label: 'Settings', href: _pg.settings },
+        ];
+
+        var mockEntry = {
+            id: 1,
+            formName: 'Contact Form',
+            status: 'unread',
+            starred: false,
+            date: '2024-04-05 14:32:10',
+            fields: [
+                { label: 'Full Name', value: 'John Doe' },
+                { label: 'Email Address', value: 'john@example.com' },
+                { label: 'Phone', value: '+1 (555) 123-4567' },
+                { label: 'Subject', value: 'General Inquiry' },
+                { label: 'Message', value: 'Hi there, I wanted to ask about your enterprise pricing plans. We are a team of 50+ and are looking for a form solution that integrates with our existing CRM (Salesforce). Could you provide more details on custom integrations and volume pricing? Thanks!' },
+                { label: 'Company', value: 'Acme Corp' },
+                { label: 'Budget Range', value: '$500 - $1,000 / month' },
+            ],
+            meta: {
+                ip: '192.168.1.42',
+                browser: 'Chrome 123 / macOS',
+                sourceUrl: 'https://example.com/contact',
+                country: 'United States',
+            },
+        };
+
+        function App() {
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div>
+                            FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => (
+                                <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>
+                            ))}
+                        </nav>
+                    </header>
+
+                    <div className="fg-content">
+                        <a className="fg-back-link" href={_pg.entries}>
+                            <ArrowLeftOutlined /> Back to Entries
+                        </a>
+
+                        <div className="fg-page-header">
+                            <div className="fg-page-title-row">
+                                <div className="fg-page-title">Entry #{mockEntry.id}</div>
+                                <span className={'fg-status-badge ' + mockEntry.status}>
+                                    {mockEntry.status === 'unread' ? 'Unread' : 'Read'}
+                                </span>
+                            </div>
+                            <Space size={8}>
+                                <Tooltip title="Star entry">
+                                    <Button type="text" icon={mockEntry.starred ? <StarFilled style={{ color: '#f59e0b' }} /> : <StarOutlined />} />
+                                </Tooltip>
+                                <Tooltip title="Print">
+                                    <Button type="text" icon={<PrinterOutlined />} style={{ color: '#64748b' }} />
+                                </Tooltip>
+                                <Tooltip title="Reply by email">
+                                    <Button type="text" icon={<MailOutlined />} style={{ color: '#64748b' }} />
+                                </Tooltip>
+                                <Popconfirm title="Delete this entry?" okText="Confirm" cancelText="Cancel" okButtonProps={{ danger: true }}>
+                                    <Button type="text" icon={<DeleteOutlined />} danger />
+                                </Popconfirm>
+                            </Space>
+                        </div>
+
+                        <div className="fg-page-subtitle" style={{ marginTop: -20, marginBottom: 24 }}>
+                            Submitted via <strong>{mockEntry.formName}</strong> on {mockEntry.date}
+                        </div>
+
+                        {/* Entry Fields */}
+                        <div className="fg-card">
+                            <div className="fg-card-header">
+                                <div className="fg-card-title">Submission Data</div>
+                            </div>
+                            <div className="fg-card-body">
+                                {mockEntry.fields.map(function(f, i) {
+                                    return (
+                                        <div className="fg-entry-row" key={i}>
+                                            <div className="fg-entry-label">{f.label}</div>
+                                            <div className="fg-entry-value">{f.value}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Metadata */}
+                        <div className="fg-card">
+                            <div className="fg-card-header">
+                                <div className="fg-card-title">Entry Metadata</div>
+                            </div>
+                            <div className="fg-meta-grid">
+                                <div className="fg-meta-item">
+                                    <div className="fg-meta-item-label">IP Address</div>
+                                    <div className="fg-meta-item-value">{mockEntry.meta.ip}</div>
+                                </div>
+                                <div className="fg-meta-item">
+                                    <div className="fg-meta-item-label">Browser / OS</div>
+                                    <div className="fg-meta-item-value">{mockEntry.meta.browser}</div>
+                                </div>
+                                <div className="fg-meta-item">
+                                    <div className="fg-meta-item-label">Source URL</div>
+                                    <div className="fg-meta-item-value">{mockEntry.meta.sourceUrl}</div>
+                                </div>
+                                <div className="fg-meta-item">
+                                    <div className="fg-meta-item-label">Country</div>
+                                    <div className="fg-meta-item-value">{mockEntry.meta.country}</div>
+                                </div>
+                                <div className="fg-meta-item">
+                                    <div className="fg-meta-item-label">Submitted</div>
+                                    <div className="fg-meta-item-value">{mockEntry.date}</div>
+                                </div>
+                                <div className="fg-meta-item">
+                                    <div className="fg-meta-item-label">Form</div>
+                                    <div className="fg-meta-item-value">{mockEntry.formName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

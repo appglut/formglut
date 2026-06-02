@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Payments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header { background: #000; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        .fg-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .fg-stat-card { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #f0f0f0; transition: all 0.2s; }
+        .fg-stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .fg-stat-label { font-size: 13px; color: #64748b; font-weight: 500; }
+        .fg-stat-value { font-size: 28px; font-weight: 700; color: #1a1a2e; margin: 4px 0; }
+        .fg-stat-change { font-size: 12px; font-weight: 600; }
+        .fg-stat-change.up { color: #10b981; }
+        .fg-stat-change.down { color: #ef4444; }
+
+        .fg-table-wrap { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; overflow: hidden; }
+        .fg-table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f0f0f0; }
+
+        .fg-payment-status { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .fg-payment-status.paid { background: #d1fae5; color: #059669; }
+        .fg-payment-status.pending { background: #fef3c7; color: #d97706; }
+        .fg-payment-status.failed { background: #fef2f2; color: #ef4444; }
+        .fg-payment-status.refunded { background: #e0e7ff; color: #4f46e5; }
+
+        .fg-amount { font-weight: 700; color: #1a1a2e; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Table, Button, Input, Space, Select, Dropdown, Tabs, Tag, message } = antd;
+        const {
+            SearchOutlined, FilterOutlined, ReloadOutlined, ExportOutlined,
+            MoreOutlined, EyeOutlined, CreditCardOutlined, ArrowUpOutlined,
+            ArrowLeftOutlined, DownloadOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html' },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html', active: true },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const payments = [
+            { id: 'PAY-4521', form: 'Product Order', customer: 'Mike Davis', email: 'mike@gmail.com', amount: 249.99, method: 'Stripe', status: 'paid', date: '2024-04-12 14:23' },
+            { id: 'PAY-4520', form: 'Product Order', customer: 'Nina Patel', email: 'nina@shop.in', amount: 89.00, method: 'Stripe', status: 'paid', date: '2024-04-12 11:05' },
+            { id: 'PAY-4519', form: 'Event Registration', customer: 'Anna Lee', email: 'anna@events.org', amount: 150.00, method: 'PayPal', status: 'pending', date: '2024-04-11 18:42' },
+            { id: 'PAY-4518', form: 'Product Order', customer: 'Tom Harris', email: 'tom@dev.net', amount: 34.50, method: 'Stripe', status: 'paid', date: '2024-04-11 15:45' },
+            { id: 'PAY-4517', form: 'Donation Form', customer: 'Emily Chen', email: 'emily@startup.io', amount: 500.00, method: 'Stripe', status: 'paid', date: '2024-04-10 22:15' },
+            { id: 'PAY-4516', form: 'Product Order', customer: 'Lisa Brown', email: 'lisa@agency.co', amount: 175.00, method: 'PayPal', status: 'failed', date: '2024-04-10 16:10' },
+            { id: 'PAY-4515', form: 'Product Order', customer: 'David Wilson', email: 'david@corp.com', amount: 420.00, method: 'Stripe', status: 'refunded', date: '2024-04-09 09:30' },
+            { id: 'PAY-4514', form: 'Event Registration', customer: 'Chris Park', email: 'chris@seeker.com', amount: 75.00, method: 'Stripe', status: 'paid', date: '2024-04-08 14:00' },
+        ];
+
+        function App() {
+            const [search, setSearch] = useState('');
+            const [activeTab, setActiveTab] = useState('all');
+
+            const filtered = payments.filter(p => {
+                const match = p.customer.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase());
+                if (activeTab === 'all') return match;
+                return match && p.status === activeTab;
+            });
+
+            const totalRevenue = payments.filter(p => p.status === 'paid').reduce((s, p) => s + p.amount, 0);
+
+            const columns = [
+                { title: '', width: 40, render: () => <input type="checkbox" /> },
+                { title: 'Transaction', dataIndex: 'id', render: t => <span style={{ fontWeight: 600, color: '#1a1a2e', fontFamily: 'monospace', fontSize: 12 }}>{t}</span> },
+                { title: 'Form', dataIndex: 'form', width: 150, render: t => <span style={{ fontSize: 12, color: '#64748b', background: '#f1f5f9', padding: '2px 8px', borderRadius: 4 }}>{t}</span> },
+                { title: 'Customer', dataIndex: 'customer', render: (t, r) => <div><div style={{ fontWeight: 600, fontSize: 13, color: '#1a1a2e' }}>{t}</div><div style={{ fontSize: 11, color: '#94a3b8' }}>{r.email}</div></div> },
+                { title: 'Amount', dataIndex: 'amount', width: 120, sorter: (a, b) => a.amount - b.amount, render: v => <span className="fg-amount">${v.toFixed(2)}</span> },
+                { title: 'Method', dataIndex: 'method', width: 100, render: t => <Tag color={t === 'Stripe' ? 'purple' : 'blue'}>{t}</Tag> },
+                { title: 'Status', dataIndex: 'status', width: 110, render: s => <span className={`fg-payment-status ${s}`}>{s.charAt(0).toUpperCase() + s.slice(1)}</span> },
+                { title: 'Date', dataIndex: 'date', width: 150, sorter: (a, b) => new Date(a.date) - new Date(b.date), render: t => <span style={{ fontSize: 12, color: '#64748b' }}>{t}</span> },
+                { title: '', width: 60, render: () => <Button type="text" icon={<MoreOutlined />} size="small" /> },
+            ];
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo"><div className="logo-icon">FG</div> FormGlut</div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">Payments</div>
+                                <div className="fg-page-subtitle">Track and manage all payment transactions</div>
+                            </div>
+                            <Space>
+                                <Button icon={<ExportOutlined />}>Export</Button>
+                            </Space>
+                        </div>
+
+                        <div className="fg-stats-row">
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label"><CreditCardOutlined style={{ marginRight: 6 }} />Total Revenue</div>
+                                <div className="fg-stat-value">${totalRevenue.toLocaleString('en', { minimumFractionDigits: 2 })}</div>
+                                <div className="fg-stat-change up"><ArrowUpOutlined /> 18% vs last month</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label"><ArrowLeftOutlined style={{ marginRight: 6 }} />Transactions</div>
+                                <div className="fg-stat-value">{payments.length}</div>
+                                <div className="fg-stat-change up">+5 this week</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Pending</div>
+                                <div className="fg-stat-value">$150.00</div>
+                                <div className="fg-stat-change down">1 pending</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Refunded</div>
+                                <div className="fg-stat-value">$420.00</div>
+                                <div className="fg-stat-change down">1 refund</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-table-wrap">
+                            <div className="fg-table-toolbar">
+                                <div style={{ display: 'flex', gap: 8 }}>
+                                    <Input placeholder="Search payments..." prefix={<SearchOutlined />} style={{ width: 240 }} value={search} onChange={e => setSearch(e.target.value)} allowClear />
+                                    <Select defaultValue="all" style={{ width: 130 }} options={[
+                                        { value: 'all', label: 'All Methods' },
+                                        { value: 'Stripe', label: 'Stripe' },
+                                        { value: 'PayPal', label: 'PayPal' },
+                                    ]} />
+                                </div>
+                                <div style={{ display: 'flex', gap: 8 }}>
+                                    <Button icon={<ReloadOutlined />}>Refresh</Button>
+                                    <Button icon={<DownloadOutlined />}>Export CSV</Button>
+                                </div>
+                            </div>
+                            <div style={{ padding: '0 20px', borderBottom: '1px solid #f0f0f0' }}>
+                                <Tabs activeKey={activeTab} onChange={setActiveTab} items={[
+                                    { key: 'all', label: 'All' },
+                                    { key: 'paid', label: 'Paid' },
+                                    { key: 'pending', label: 'Pending' },
+                                    { key: 'failed', label: 'Failed' },
+                                    { key: 'refunded', label: 'Refunded' },
+                                ]} />
+                            </div>
+                            <Table dataSource={filtered} columns={columns} rowKey="id" pagination={{ pageSize: 10, showTotal: t => `${t} transactions` }} style={{ padding: '0 8px' }} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

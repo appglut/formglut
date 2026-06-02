@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - Support</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header { background: #000; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        .fg-page-header { margin-bottom: 32px; text-align: center; }
+        .fg-page-title { font-size: 28px; font-weight: 800; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 15px; margin-top: 8px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+        .fg-search-box { max-width: 560px; margin: 0 auto 40px; }
+        .fg-search-box input { font-size: 15px; height: 48px; border-radius: 12px; }
+
+        .fg-help-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+        .fg-help-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; padding: 28px; transition: all 0.2s; cursor: pointer; text-align: center; }
+        .fg-help-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .fg-help-card-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 14px; }
+        .fg-help-card-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+        .fg-help-card-desc { font-size: 13px; color: #64748b; line-height: 1.5; }
+
+        .fg-faq-section { margin-bottom: 40px; }
+        .fg-faq-title { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
+        .fg-faq-item { background: #fff; border-radius: 10px; border: 1px solid #f0f0f0; margin-bottom: 8px; overflow: hidden; }
+        .fg-faq-question { padding: 16px 20px; font-size: 14px; font-weight: 600; color: #1a1a2e; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; }
+        .fg-faq-question:hover { background: #f8fafc; }
+        .fg-faq-answer { padding: 0 20px 16px; font-size: 13px; color: #64748b; line-height: 1.6; }
+
+        .fg-contact-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .fg-contact-card { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; padding: 28px; }
+        .fg-contact-card h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+        .fg-contact-card p { font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 16px; }
+
+        .fg-system-info { background: #f8fafc; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 12px; color: #475569; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Button, Input, Collapse, Space, message } = antd;
+        const {
+            SearchOutlined, BookOutlined, CustomerServiceOutlined,
+            BugOutlined, TeamOutlined, QuestionCircleOutlined,
+            DownOutlined, UpOutlined, MailOutlined, MessageOutlined,
+            CodeOutlined, CopyOutlined, CheckCircleOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html' },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html', active: true },
+        ];
+
+        const faqs = [
+            { q: 'How do I create my first form?', a: 'Go to the Forms page and click "Add New Form". You can start with a blank form or choose from pre-built templates. Use the drag-and-drop editor to add fields, configure validation, and customize the design.' },
+            { q: 'How do I embed a form on my website?', a: 'Each form has a shortcode (e.g., [formglut id="1"]) that you can paste into any page or post. You can also use the Gutenberg block or Elementor widget for easier embedding.' },
+            { q: 'Can I accept payments through forms?', a: 'Yes! FormGlut integrates with Stripe and PayPal (Pro). You can accept one-time payments, subscriptions, and donations directly through your forms.' },
+            { q: 'How do I set up email notifications?', a: 'Go to Form Settings > Email Notifications. Configure the recipient, subject, and email body. You can use smart tags to include form data dynamically.' },
+            { q: 'Is my form data GDPR compliant?', a: 'FormGlut includes built-in GDPR tools: consent checkboxes, data export, data deletion, and cookie-less form embedding. You can also configure data retention policies.' },
+            { q: 'How do I export form entries?', a: 'Go to Entries, select the entries you want to export, and click "Export CSV". You can also set up automatic exports to Google Sheets via our integration.' },
+        ];
+
+        function App() {
+            const [openFaq, setOpenFaq] = useState(null);
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo"><div className="logo-icon">FG</div> FormGlut</div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div className="fg-page-title">How Can We Help?</div>
+                            <div className="fg-page-subtitle">Find answers, learn features, and get in touch with our support team</div>
+                        </div>
+
+                        <div className="fg-search-box">
+                            <Input placeholder="Search documentation, FAQs, guides..." prefix={<SearchOutlined />} size="large" allowClear />
+                        </div>
+
+                        <div className="fg-help-grid">
+                            <div className="fg-help-card">
+                                <div className="fg-help-card-icon" style={{ background: '#eff6ff', color: '#3b82f6' }}><BookOutlined /></div>
+                                <div className="fg-help-card-title">Documentation</div>
+                                <div className="fg-help-card-desc">Comprehensive guides and tutorials to help you get the most out of FormGlut</div>
+                            </div>
+                            <div className="fg-help-card">
+                                <div className="fg-help-card-icon" style={{ background: '#fef3c7', color: '#d97706' }}><BugOutlined /></div>
+                                <div className="fg-help-card-title">Report a Bug</div>
+                                <div className="fg-help-card-desc">Found an issue? Let us know and we'll get it fixed as quickly as possible</div>
+                            </div>
+                            <div className="fg-help-card">
+                                <div className="fg-help-card-icon" style={{ background: '#ecfdf5', color: '#059669' }}><CustomerServiceOutlined /></div>
+                                <div className="fg-help-card-title">Contact Support</div>
+                                <div className="fg-help-card-desc">Our team is ready to help. Reach out via email or live chat for assistance</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-faq-section">
+                            <div className="fg-faq-title">Frequently Asked Questions</div>
+                            {faqs.map((faq, i) => (
+                                <div className="fg-faq-item" key={i}>
+                                    <div className="fg-faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                                        {faq.q}
+                                        {openFaq === i ? <UpOutlined style={{ color: '#e94560' }} /> : <DownOutlined style={{ color: '#94a3b8' }} />}
+                                    </div>
+                                    {openFaq === i && <div className="fg-faq-answer">{faq.a}</div>}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="fg-contact-row">
+                            <div className="fg-contact-card">
+                                <h3><MailOutlined style={{ marginRight: 8 }} />Email Support</h3>
+                                <p>Send us a detailed message and we'll respond within 24 hours on business days.</p>
+                                <Button type="primary" icon={<MailOutlined />} style={{ background: '#e94560', borderColor: '#e94560' }}>Send Email</Button>
+                            </div>
+                            <div className="fg-contact-card">
+                                <h3><CodeOutlined style={{ marginRight: 8 }} />System Information</h3>
+                                <p>Include this info when contacting support for faster resolution.</p>
+                                <div className="fg-system-info">
+                                    FormGlut Version: 1.0.0<br/>
+                                    WordPress Version: 6.5.2<br/>
+                                    PHP Version: 8.2.15<br/>
+                                    MySQL Version: 8.0.36<br/>
+                                    Server: Apache/2.4.59<br/>
+                                    Memory Limit: 256MB
+                                </div>
+                                <Button icon={<CopyOutlined />} size="small" style={{ marginTop: 10 }} onClick={() => message.success('Copied!')}>Copy System Info</Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

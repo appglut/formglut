@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormGlut - All Entries</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css" />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.6/dist/index.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        .fg-header {
+            background: #000; display: flex; align-items: center; justify-content: space-between;
+            height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .fg-header-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 700; }
+        .fg-header-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #e94560, #c62a4a); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .fg-header-nav { display: flex; align-items: center; gap: 4px; }
+        .fg-header-nav a { color: rgba(255,255,255,0.7); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fg-header-nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fg-header-nav a.active { background: rgba(233,69,96,0.3); color: #fff; }
+        .fg-header-search { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 12px; color: #fff; font-size: 14px; width: 220px; outline: none; }
+        .fg-header-search::placeholder { color: rgba(255,255,255,0.4); }
+        .fg-header-search:focus { background: rgba(255,255,255,0.15); border-color: #e94560; width: 260px; }
+
+        .fg-content { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        .fg-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .fg-page-title { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+        .fg-page-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .fg-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .fg-stat-card { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #f0f0f0; transition: all 0.2s; }
+        .fg-stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .fg-stat-label { font-size: 13px; color: #64748b; font-weight: 500; }
+        .fg-stat-value { font-size: 28px; font-weight: 700; color: #1a1a2e; margin: 4px 0; }
+        .fg-stat-change { font-size: 12px; font-weight: 600; }
+        .fg-stat-change.up { color: #10b981; }
+        .fg-stat-change.down { color: #ef4444; }
+
+        .fg-table-wrap { background: #fff; border-radius: 12px; border: 1px solid #f0f0f0; overflow: hidden; }
+        .fg-table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f0f0f0; }
+        .fg-table-toolbar-left { display: flex; gap: 8px; align-items: center; }
+        .fg-table-toolbar-right { display: flex; gap: 8px; align-items: center; }
+
+        .fg-entry-status { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .fg-entry-status.read { background: #dbeafe; color: #2563eb; }
+        .fg-entry-status.unread { background: #fef3c7; color: #d97706; }
+        .fg-entry-status.starred { background: #fce7f3; color: #db2777; }
+
+        .fg-entry-form-name { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Table, Button, Tag, Dropdown, Input, Space, Tooltip, Select, message, Tabs } = antd;
+        const {
+            SearchOutlined, FilterOutlined, ReloadOutlined, ExportOutlined,
+            DeleteOutlined, EyeOutlined, MoreOutlined, InboxOutlined,
+            StarOutlined, StarFilled, DownloadOutlined, MailOutlined,
+            CalendarOutlined, PlusOutlined
+        } = icons;
+
+        const headerNav = [
+            { label: 'Forms', href: 'all-forms.html' },
+            { label: 'Entries', href: 'all-entries.html', active: true },
+            { label: 'Reports', href: 'reports.html' },
+            { label: 'Payments', href: 'payments.html' },
+            { label: 'Settings', href: 'settings.html' },
+            { label: 'Tools', href: 'tools.html' },
+            { label: 'Integrations', href: 'integrations.html' },
+            { label: 'Support', href: 'support.html' },
+        ];
+
+        const mockEntries = [
+            { id: 1, formName: 'Contact Form', name: 'John Smith', email: 'john@example.com', subject: 'General Inquiry', status: 'unread', date: '2024-04-12 14:23', ip: '192.168.1.1' },
+            { id: 2, formName: 'Contact Form', name: 'Sarah Johnson', email: 'sarah@company.com', subject: 'Partnership Request', status: 'read', date: '2024-04-12 11:05', ip: '10.0.0.45' },
+            { id: 3, formName: 'Product Order', name: 'Mike Davis', email: 'mike@gmail.com', subject: 'Order #4521', status: 'starred', date: '2024-04-11 18:42', ip: '172.16.0.22' },
+            { id: 4, formName: 'Newsletter Signup', name: 'Emily Chen', email: 'emily@startup.io', subject: 'New Subscription', status: 'read', date: '2024-04-11 16:10', ip: '192.168.2.55' },
+            { id: 5, formName: 'Customer Survey', name: 'David Wilson', email: 'david@corp.com', subject: 'Survey Response', status: 'unread', date: '2024-04-11 09:30', ip: '10.1.1.100' },
+            { id: 6, formName: 'Support Request', name: 'Lisa Brown', email: 'lisa@agency.co', subject: 'Bug Report', status: 'starred', date: '2024-04-10 22:15', ip: '192.168.3.88' },
+            { id: 7, formName: 'Contact Form', name: 'Tom Harris', email: 'tom@dev.net', subject: 'Feature Request', status: 'read', date: '2024-04-10 15:45', ip: '172.16.1.33' },
+            { id: 8, formName: 'Event Registration', name: 'Anna Lee', email: 'anna@events.org', subject: 'RSVP Confirmed', status: 'unread', date: '2024-04-10 12:00', ip: '10.0.2.17' },
+            { id: 9, formName: 'Job Application', name: 'Chris Park', email: 'chris@seeker.com', subject: 'Frontend Dev Position', status: 'read', date: '2024-04-09 10:20', ip: '192.168.5.44' },
+            { id: 10, formName: 'Product Order', name: 'Nina Patel', email: 'nina@shop.in', subject: 'Order #4498', status: 'unread', date: '2024-04-09 08:55', ip: '172.16.2.91' },
+        ];
+
+        function App() {
+            const [searchText, setSearchText] = useState('');
+            const [activeTab, setActiveTab] = useState('all');
+
+            const filtered = mockEntries.filter(e => {
+                const matchSearch = e.name.toLowerCase().includes(searchText.toLowerCase()) || e.email.toLowerCase().includes(searchText.toLowerCase());
+                if (activeTab === 'all') return matchSearch;
+                if (activeTab === 'unread') return matchSearch && e.status === 'unread';
+                if (activeTab === 'starred') return matchSearch && e.status === 'starred';
+                return matchSearch;
+            });
+
+            const columns = [
+                {
+                    title: '',
+                    width: 40,
+                    render: () => <input type="checkbox" />,
+                },
+                {
+                    title: 'Submitted By',
+                    dataIndex: 'name',
+                    render: (text, r) => (
+                        <div>
+                            <div style={{ fontWeight: 600, fontSize: 13, color: '#1a1a2e' }}>{text}</div>
+                            <div style={{ fontSize: 12, color: '#94a3b8' }}>{r.email}</div>
+                        </div>
+                    ),
+                },
+                {
+                    title: 'Form',
+                    dataIndex: 'formName',
+                    width: 150,
+                    render: t => <span className="fg-entry-form-name">{t}</span>,
+                },
+                {
+                    title: 'Subject',
+                    dataIndex: 'subject',
+                    render: t => <span style={{ fontSize: 13, color: '#475569' }}>{t}</span>,
+                },
+                {
+                    title: 'Status',
+                    dataIndex: 'status',
+                    width: 110,
+                    render: s => <span className={`fg-entry-status ${s}`}>{s.charAt(0).toUpperCase() + s.slice(1)}</span>,
+                },
+                {
+                    title: 'Date',
+                    dataIndex: 'date',
+                    width: 160,
+                    sorter: (a, b) => new Date(a.date) - new Date(b.date),
+                    render: t => <span style={{ fontSize: 13, color: '#64748b' }}>{t}</span>,
+                },
+                {
+                    title: 'IP',
+                    dataIndex: 'ip',
+                    width: 130,
+                    render: t => <span style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>{t}</span>,
+                },
+                {
+                    title: '',
+                    width: 80,
+                    render: (_, r) => (
+                        <Space>
+                            <Tooltip title="View"><Button type="text" icon={<EyeOutlined />} size="small" onClick={() => location.href = 'form-entries.html'} /></Tooltip>
+                            <Dropdown menu={{
+                                items: [
+                                    { key: 'star', icon: <StarOutlined />, label: 'Star' },
+                                    { key: 'email', icon: <MailOutlined />, label: 'Send Email' },
+                                    { type: 'divider' },
+                                    { key: 'del', icon: <DeleteOutlined />, label: 'Delete', danger: true },
+                                ]
+                            }} trigger={['click']}>
+                                <Button type="text" icon={<MoreOutlined />} size="small" />
+                            </Dropdown>
+                        </Space>
+                    ),
+                },
+            ];
+
+            return (
+                <div>
+                    <header className="fg-header">
+                        <div className="fg-header-logo">
+                            <div className="logo-icon">FG</div> FormGlut
+                        </div>
+                        <nav className="fg-header-nav">
+                            {headerNav.map(n => <a key={n.label} href={n.href} className={n.active ? 'active' : ''}>{n.label}</a>)}
+                        </nav>
+                        <input className="fg-header-search" placeholder="Search entries... (⌘K)" />
+                    </header>
+
+                    <div className="fg-content">
+                        <div className="fg-page-header">
+                            <div>
+                                <div className="fg-page-title">All Entries</div>
+                                <div className="fg-page-subtitle">View and manage all form submissions</div>
+                            </div>
+                            <Space>
+                                <Button icon={<ExportOutlined />}>Export CSV</Button>
+                                <Button icon={<DeleteOutlined />} danger>Trash Selected</Button>
+                            </Space>
+                        </div>
+
+                        <div className="fg-stats-row">
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Total Entries</div>
+                                <div className="fg-stat-value">6,958</div>
+                                <div className="fg-stat-change up">+234 this week</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Unread</div>
+                                <div className="fg-stat-value">42</div>
+                                <div className="fg-stat-change down">Needs attention</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Starred</div>
+                                <div className="fg-stat-value">18</div>
+                                <div className="fg-stat-change up">Important</div>
+                            </div>
+                            <div className="fg-stat-card">
+                                <div className="fg-stat-label">Today</div>
+                                <div className="fg-stat-value">56</div>
+                                <div className="fg-stat-change up">+18% vs yesterday</div>
+                            </div>
+                        </div>
+
+                        <div className="fg-table-wrap">
+                            <div className="fg-table-toolbar">
+                                <div className="fg-table-toolbar-left">
+                                    <Input placeholder="Search entries..." prefix={<SearchOutlined />} style={{ width: 260 }} value={searchText} onChange={e => setSearchText(e.target.value)} allowClear />
+                                    <Select defaultValue="all-forms" style={{ width: 160 }} size="middle" options={[
+                                        { value: 'all-forms', label: 'All Forms' },
+                                        { value: 'contact', label: 'Contact Form' },
+                                        { value: 'order', label: 'Product Order' },
+                                        { value: 'survey', label: 'Customer Survey' },
+                                        { value: 'newsletter', label: 'Newsletter Signup' },
+                                    ]} />
+                                    <Select defaultValue="all-dates" style={{ width: 140 }} size="middle" options={[
+                                        { value: 'all-dates', label: 'All Dates' },
+                                        { value: 'today', label: 'Today' },
+                                        { value: 'week', label: 'This Week' },
+                                        { value: 'month', label: 'This Month' },
+                                    ]} />
+                                </div>
+                                <div className="fg-table-toolbar-right">
+                                    <Button icon={<ReloadOutlined />}>Refresh</Button>
+                                    <Button icon={<DownloadOutlined />}>Export</Button>
+                                </div>
+                            </div>
+                            <div style={{ padding: '0 20px', borderBottom: '1px solid #f0f0f0' }}>
+                                <Tabs activeKey={activeTab} onChange={setActiveTab} items={[
+                                    { key: 'all', label: 'All Entries' },
+                                    { key: 'unread', label: 'Unread' },
+                                    { key: 'starred', label: 'Starred' },
+                                ]} />
+                            </div>
+                            <Table dataSource={filtered} columns={columns} rowKey="id" pagination={{ pageSize: 10, showSizeChanger: true, showTotal: t => `${t} entries` }} style={{ padding: '0 8px' }} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

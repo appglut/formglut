@@ -1,0 +1,348 @@
+/* ── FormGlut Frontend Styles ──────────────────────────────────────── */
+
+.formglut-form-wrapper {
+  max-width: 640px;
+  margin: 1.5em auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  color: #1e293b;
+}
+
+/* ── Form ─────────────────────────────────────────────────────────── */
+
+.formglut-form {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.formglut-form-title {
+  margin: 0 0 20px 0;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* ── Field ────────────────────────────────────────────────────────── */
+
+.formglut-field {
+  margin-bottom: 18px;
+}
+
+.formglut-field.formglut-hidden {
+  display: none;
+}
+
+.formglut-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.formglut-required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.formglut-input,
+.formglut-form textarea.formglut-input {
+  display: block;
+  width: 100%;
+  padding: 10px 14px !important;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1e293b !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+  min-height: auto !important;
+  box-shadow: 0 0 0 transparent !important;
+}
+
+.formglut-input:focus,
+.formglut-form textarea.formglut-input:focus {
+  border-color: #e94560;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+  background: #fff;
+}
+
+.formglut-input::placeholder {
+  color: #94a3b8;
+}
+
+.formglut-form textarea.formglut-input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formglut-help-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  cursor: help;
+}
+
+.formglut-help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+}
+
+.formglut-help-tip:hover .formglut-help-icon {
+  color: #475569;
+}
+
+.formglut-help-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 10;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.formglut-help-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #1e293b;
+}
+
+.formglut-help-tip:hover .formglut-help-tooltip {
+  display: block;
+}
+
+/* ── Submit Button ─────────────────────────────────────────────────── */
+
+.formglut-form-actions {
+  margin-top: 24px;
+}
+
+.formglut-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s, transform 0.1s;
+  border-radius: 8px;
+}
+
+.formglut-submit-btn:hover {
+  opacity: 0.9;
+}
+
+.formglut-submit-btn:active {
+  transform: scale(0.98);
+}
+
+.formglut-submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ── Messages ──────────────────────────────────────────────────────── */
+
+.formglut-form-message {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.formglut-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.formglut-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+/* ── Field Errors ──────────────────────────────────────────────────── */
+
+.formglut-input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.formglut-field-error {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ── Honeypot (hidden from real users) ─────────────────────────────── */
+
+.formglut-hp {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ── Select Field ──────────────────────────────────────────────────── */
+
+.formglut-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.formglut-select::-ms-expand {
+  display: none;
+}
+
+.formglut-select option {
+  padding: 8px 12px;
+}
+
+.formglut-select option:disabled {
+  color: #94a3b8;
+}
+
+/* ── Radio Field ───────────────────────────────────────────────────── */
+
+.formglut-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formglut-radio-inline .formglut-radio-group {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.formglut-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+  user-select: none;
+}
+
+.formglut-radio-label input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #e94560;
+  cursor: pointer;
+}
+
+.formglut-radio-label input[type="radio"]:focus-visible {
+  outline: 2px solid #e94560;
+  outline-offset: 2px;
+}
+
+.formglut-radio-label:hover {
+  color: #1e293b;
+}
+
+.formglut-radio-label span {
+  line-height: 1.4;
+}
+
+/* ── Checkbox Field ────────────────────────────────────────────────── */
+
+.formglut-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formglut-checkbox-inline .formglut-checkbox-group {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.formglut-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+  user-select: none;
+}
+
+.formglut-checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #e94560;
+  cursor: pointer;
+}
+
+.formglut-checkbox-label input[type="checkbox"]:focus-visible {
+  outline: 2px solid #e94560;
+  outline-offset: 2px;
+}
+
+.formglut-checkbox-label:hover {
+  color: #1e293b;
+}
+
+.formglut-checkbox-label span {
+  line-height: 1.4;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .formglut-form {
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+
+  .formglut-form-title {
+    font-size: 18px;
+  }
+
+  .formglut-submit-btn {
+    width: 100%;
+  }
+}
