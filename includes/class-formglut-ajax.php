@@ -105,8 +105,10 @@ class FormGlut_Ajax {
 	private function sanitize_form_fields( $fields ) {
 		$allowed_types = array(
 			'text', 'email', 'textarea', 'number', 'select',
-			'radio', 'checkbox', 'date', 'file', 'hidden',
+			'multiselect', 'radio', 'checkbox', 'date', 'file', 'hidden',
 			'url', 'phone', 'name', 'address', 'html', 'heading', 'divider',
+			'password', 'time', 'country_select', 'currency', 'percentage',
+			'masked_input', 'spinner', 'section_break', 'terms_conditions',
 		);
 
 		$clean = array();

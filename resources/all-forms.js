@@ -1,13 +1,13 @@
-import { cl as useLocale, bX as localeValues, R as React, u as RefIcon, b$ as pickAttrs, c1 as reactExports, a5 as _toConsumableArray, bQ as initMotion, n as Keyframe, cf as useComposeRef, a0 as _objectSpread2, a8 as classNames, a6 as _typeof, Z as _extends, a3 as _slicedToArray, a as CSSMotion, ci as useId, ac as contains, K as KeyCode, q as Portal, a7 as canUseDom, cg as useEvent, B as Button, ad as convertLegacyProps, bH as getConfirmLocale, h as DisabledContextProvider, bB as genStyleHooks, bR as initZoomMotion, bY as merge, ca as unit, c2 as resetComponent, bA as genFocusStyle, d as ConfigContext, cc as useCSSVarCls, ab as composeRef, cs as useZIndex, g as ContextIsolator, cw as zIndexContext, bN as getTransitionName, bC as genSubStyleComponent, a9 as clearFix, e as ConfigProvider, cq as useToken, C as CONTAINER_MAX_OFFSET, v as RefIcon$1, w as RefIcon$2, x as RefIcon$3, y as RefIcon$4, cb as unstableSetRender, bO as globalConfig, c5 as staticMethods, bV as jsxRuntimeExports, i as FontAwesomeIcon, b2 as faPenToSquare, a2 as _pg, E as Tooltip, az as faCopy, bq as faTrash, H as Header, b5 as faPlus, aX as faMagnifyingGlass, bb as faRotateRight, aJ as faFileLines, bk as faStar, ae as createRoot } from "./chunks/Header-B0wts1cq.js";
+import { bS as useLocale, bs as localeValues, R as React, u as RefIcon, bw as pickAttrs, by as reactExports, a5 as _toConsumableArray, bl as initMotion, n as Keyframe, bM as useComposeRef, a0 as _objectSpread2, a8 as classNames, a6 as _typeof, Z as _extends, a3 as _slicedToArray, a as CSSMotion, bP as useId, ac as contains, K as KeyCode, q as Portal, a7 as canUseDom, bN as useEvent, B as Button, ad as convertLegacyProps, bc as getConfirmLocale, h as DisabledContextProvider, b6 as genStyleHooks, bm as initZoomMotion, bt as merge, bH as unit, bz as resetComponent, b5 as genFocusStyle, d as ConfigContext, bJ as useCSSVarCls, ab as composeRef, bZ as useZIndex, g as ContextIsolator, c1 as zIndexContext, bi as getTransitionName, b7 as genSubStyleComponent, a9 as clearFix, e as ConfigProvider, bX as useToken, C as CONTAINER_MAX_OFFSET, v as RefIcon$1, w as RefIcon$2, x as RefIcon$3, y as RefIcon$4, bI as unstableSetRender, bj as globalConfig, bC as staticMethods, bq as jsxRuntimeExports, i as FontAwesomeIcon, aO as faPenToSquare, a2 as _pg, E as Tooltip, ar as faCopy, b0 as faTrash, H as Header, aR as faPlus, aI as faMagnifyingGlass, aU as faRotateRight, ax as faFileLines, a_ as faStar, ae as createRoot } from "./chunks/Header-DYLbO79M.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
 import { i as getFormStats, j as getForms, a as deleteForm, b as duplicateForm, l as updateFormStatus, c as createForm } from "./chunks/api-CP2qo9fl.js";
-import { S as Switch } from "./chunks/index-CEQ7Ze7V.js";
-import { A as ActionButton, S as Skeleton, a as Space, P as Popconfirm } from "./chunks/index-CUXdzAmn.js";
-import { w as withPureRenderTheme, I as Input } from "./chunks/index-Bl_Ufa6r.js";
-import { m as mergeProps, F as ForwardTable } from "./chunks/Table-c7q0RDp_.js";
-import { g as getMediaSize, R as Row, C as Col } from "./chunks/row-CLIUIIt4.js";
-import "./chunks/EllipsisOutlined-CnfOx_s2.js";
-import "./chunks/useForm-vh1xMpYg.js";
+import { S as Switch } from "./chunks/index-SfeydlGU.js";
+import { A as ActionButton, S as Skeleton, a as Space, P as Popconfirm } from "./chunks/index-Bjk4uZF0.js";
+import { w as withPureRenderTheme, I as Input } from "./chunks/index-8--dsiAZ.js";
+import { m as mergeProps, F as ForwardTable } from "./chunks/Table-BQktBLfE.js";
+import { g as getMediaSize, R as Row, C as Col } from "./chunks/row-BCBYPKFq.js";
+import "./chunks/EllipsisOutlined-YtwsN71l.js";
+import "./chunks/useForm-DEkgoXEn.js";
 function pickClosable(context) {
   if (!context) {
     return void 0;
@@ -1478,7 +1478,7 @@ var __rest$1 = function(s, e) {
   }
   return t;
 };
-const HookModal$1 = (_a, ref) => {
+const HookModal = (_a, ref) => {
   var _b;
   var {
     afterClose: hookAfterClose,
@@ -1530,7 +1530,7 @@ const HookModal$1 = (_a, ref) => {
     cancelText: innerConfig.cancelText || (contextLocale === null || contextLocale === void 0 ? void 0 : contextLocale.cancelText)
   }, restProps));
 };
-const HookModal = /* @__PURE__ */ reactExports.forwardRef(HookModal$1);
+const HookModal$1 = /* @__PURE__ */ reactExports.forwardRef(HookModal);
 let uuid = 0;
 const ElementsHolder = /* @__PURE__ */ reactExports.memo(/* @__PURE__ */ reactExports.forwardRef((_props, ref) => {
   const [elements, patchElement] = usePatchElement();
@@ -1561,7 +1561,7 @@ function useModal() {
     });
     let silent = false;
     let closeFunc;
-    const modal = /* @__PURE__ */ reactExports.createElement(HookModal, {
+    const modal = /* @__PURE__ */ reactExports.createElement(HookModal$1, {
       key: `modal-${uuid}`,
       config: withFunc(config),
       ref: modalRef,
@@ -1627,7 +1627,7 @@ var __rest = function(s, e) {
   }
   return t;
 };
-const PurePanel$1 = (props) => {
+const PurePanel = (props) => {
   const {
     prefixCls: customizePrefixCls,
     className,
@@ -1675,7 +1675,7 @@ const PurePanel$1 = (props) => {
     closable
   }, additionalProps)));
 };
-const PurePanel = withPureRenderTheme(PurePanel$1);
+const PurePanel$1 = withPureRenderTheme(PurePanel);
 function modalWarn(props) {
   return confirm(withWarn(props));
 }
@@ -1704,7 +1704,7 @@ Modal.destroyAll = function destroyAllFn() {
   }
 };
 Modal.config = modalGlobalConfig;
-Modal._InternalPanelDoNotUseOrYouWillBeFired = PurePanel;
+Modal._InternalPanelDoNotUseOrYouWillBeFired = PurePanel$1;
 staticMethods.config({
   duration: 3,
   maxCount: 3,

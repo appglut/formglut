@@ -349,6 +349,30 @@ class FormGlut_Shortcode {
 
 		$s = $this->build_field_styles( $field );
 
+		// Mask input settings
+		$enable_mask = ! empty( $field['enable_mask'] );
+		$mask_pattern = isset( $field['mask_pattern'] ) ? esc_attr( $field['mask_pattern'] ) : '';
+		$custom_mask = isset( $field['custom_mask'] ) ? esc_attr( $field['custom_mask'] ) : '';
+		$mask_placeholder = isset( $field['mask_placeholder'] ) ? esc_attr( $field['mask_placeholder'] ) : '_';
+		$reversible_mask = ! empty( $field['reversible_mask'] );
+		$clear_on_invalid = ! empty( $field['clear_on_invalid'] );
+
+		// Determine the actual mask to use
+		$mask_to_use = $custom_mask ?: $mask_pattern;
+
+		// Build mask data attributes
+		$mask_attrs = '';
+		if ( $enable_mask && $mask_to_use ) {
+			$mask_attrs = ' data-mask="' . $mask_to_use . '"';
+			$mask_attrs .= ' data-mask-placeholder="' . $mask_placeholder . '"';
+			if ( $reversible_mask ) {
+				$mask_attrs .= ' data-mask-reversible="1"';
+			}
+			if ( $clear_on_invalid ) {
+				$mask_attrs .= ' data-mask-clear-invalid="1"';
+			}
+		}
+
 		$help_html = $help_text ? '<span class="formglut-help-tip"><span class="formglut-help-icon"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.75" fill="currentColor"/></svg></span><span class="formglut-help-tooltip">' . $help_text . '</span></span>' : '';
 
 		ob_start();
@@ -474,6 +498,44 @@ class FormGlut_Shortcode {
 					<?php
 					break;
 
+			// Unimplemented field types - show Pro/Coming Soon message
+			case 'multiselect':
+			case 'country_select':
+			case 'currency':
+			case 'percentage':
+			case 'spinner':
+			case 'masked_input':
+			case 'time':
+			case 'date_range':
+			case 'address':
+			case 'name':
+			case 'password':
+			case 'file':
+			case 'html':
+			case 'heading':
+			case 'divider':
+			case 'section_break':
+			case 'terms_conditions':
+			case 'gdpr_agreement':
+			case 'shortcode':
+			?>
+			<div class="formglut-field formglut-field-<?php echo esc_attr( $type ); ?> formglut-field-pro">
+				<?php if ( $label ) : ?>
+				<label class="formglut-label"><?php echo esc_html( $label ); // phpcs:ignore ?><?php echo $req_mark; // phpcs:ignore ?></label>
+				<?php endif; ?>
+				<div class="formglut-pro-notice" style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 12px 16px; display: flex; align-items: center; gap: 12px;">
+					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; color: #f59e0b;">
+						<circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+						<path d="M10 5v5M10 13h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+					</svg>
+					<span style="color: #92400e; font-size: 14px; font-weight: 500;">
+						<?php esc_html_e( 'This field is coming soon. Pro version will include this feature.', 'formglut' ); ?>
+					</span>
+				</div>
+			</div>
+			<?php
+			break;
+
 			default: // text, email
 				$input_type = 'email' === $type ? 'email' : 'text';
 
@@ -485,7 +547,7 @@ class FormGlut_Shortcode {
 					<?php endif; ?>
 					<div class="formglut-input-group">
 						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
-						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $mask_attrs . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
 					</div>
 					<?php if ( 'right' === $s['label_placement'] && $label ) : ?>
@@ -499,7 +561,7 @@ class FormGlut_Shortcode {
 					<?php endif; ?>
 					<div class="formglut-input-group">
 						<?php if ( $prefix ) : ?><span class="formglut-input-prefix"><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
-						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+						<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" placeholder="<?php echo $ph; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" value="<?php echo $default_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" class="formglut-input"<?php echo $req_attr . $minlength . $maxlength . $val_msg . $mask_attrs . $s['input_style_str']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 						<?php if ( $suffix ) : ?><span class="formglut-input-suffix"><?php echo $suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user-defined HTML allowed ?></span><?php endif; ?>
 					</div>
 					</div>

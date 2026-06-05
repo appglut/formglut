@@ -100,6 +100,39 @@ body { background: #f0f2f5; height: 100vh; overflow: hidden; }
   z-index: 1;
 }
 
+/* Coming soon field styles - exact copy of pro styles */
+.fg-field-btn.fg-field-coming-soon {
+  background: #d97a80;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+.fg-field-btn.fg-field-coming-soon:hover {
+  background: #d97a80;
+  transform: none;
+}
+.fg-coming-soon-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fbbf24;
+  border-radius: 50%;
+  font-size: 9px;
+  color: #92400e;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  z-index: 1;
+}
+.fg-coming-soon-badge svg {
+  color: #92400e;
+  width: 9px;
+  height: 9px;
+}
+
 /* Canvas */
 .fg-canvas-area { flex: 1; background: #f0f2f5; display: flex; flex-direction: column; overflow: hidden; }
 .fg-canvas-toolbar { background: #fff; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb; }

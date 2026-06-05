@@ -1,9 +1,9 @@
-import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, c9 as toArray, cn as useMergedState, cu as warningOnce, b$ as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, c1 as reactExports, d as ConfigContext, bB as genStyleHooks, bY as merge, ca as unit, c2 as resetComponent, bA as genFocusStyle, c3 as resetIcon, ce as useComponentConfig, cp as useSize, aa as cloneElement, bP as initCollapseMotion, bZ as omit, I as Icon, cv as wrapperRaf, ck as useLayoutUpdateEffect, cg as useEvent, A as RefResizeObserver, cf as useComposeRef, bT as isMobile, bN as getTransitionName, c8 as textEllipsis, bz as genFocusOutline, cc as useCSSVarCls, u as RefIcon$2, bV as jsxRuntimeExports, i as FontAwesomeIcon, bh as faSliders, ao as faCalculator, ar as faCertificate, be as faShield, as as faCheckDouble, aA as faCreditCard, aw as faClone, aR as faHeart, br as faTruck, a$ as faMoneyBill, b7 as faReceipt, aP as faHashtag, bn as faTags, b9 as faRotate, aS as faHourglassHalf, an as faBarsProgress, bm as faTableList, ay as faCompress, bl as faTableColumns, ai as faArrowDownShortWide, aV as faList, b0 as faPalette, aY as faMapLocation, bo as faThumbsUp, b1 as faPaperPlane, au as faCircleInfo, aW as faLock, aD as faEnvelope, bu as faUserTag, aT as faImage, aJ as faFileLines, bt as faUser, bk as faStar, aq as faCamera, a_ as faMicrophone, aB as faCropSimple, bs as faUpload, bw as faWandSparkles, ag as faAlignLeft, b8 as faRepeat, bd as faShareNodes, bc as faSave, bb as faRotateRight, ak as faArrowRightToBracket, aI as faFileAudio, bv as faVideo, bg as faSignature, bp as faToggleOn, am as faBarcode, aO as faHandshake, aF as faExpand, aH as faEyeSlash, aZ as faMask, ap as faCalendar, av as faClock, b3 as faPercent, bi as faSpinner, aN as faGlobe, aQ as faHeading, aL as faFont, b4 as faPhone, aU as faLink, bj as faSquareCheck, at as faCircleDot, b2 as faPenToSquare, E as Tooltip, B as Button, bq as faTrash, b5 as faPlus, c5 as staticMethods, a2 as _pg, aj as faArrowLeft, ba as faRotateLeft, aG as faEye, ax as faCode, aK as faFloppyDisk, al as faArrowUp, ah as faArrowDown, aM as faGear, az as faCopy, aC as faCrown, ae as createRoot } from "./chunks/Header-B0wts1cq.js";
+import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, bG as toArray, bU as useMergedState, b$ as warningOnce, bw as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, by as reactExports, d as ConfigContext, b6 as genStyleHooks, bt as merge, bH as unit, bz as resetComponent, b5 as genFocusStyle, bA as resetIcon, bL as useComponentConfig, bW as useSize, aa as cloneElement, bk as initCollapseMotion, bu as omit, I as Icon, c0 as wrapperRaf, bR as useLayoutUpdateEffect, bN as useEvent, A as RefResizeObserver, bM as useComposeRef, bo as isMobile, bi as getTransitionName, bF as textEllipsis, b4 as genFocusOutline, bJ as useCSSVarCls, u as RefIcon$2, bq as jsxRuntimeExports, i as FontAwesomeIcon, al as faCertificate, aV as faShield, am as faCheckDouble, a$ as faTableColumns, aN as faPaperPlane, aM as faPalette, aX as faSliders, aj as faBarcode, aC as faHandshake, au as faExpand, aw as faEyeSlash, aH as faLock, aK as faMask, aJ as faMapLocation, ak as faCalendar, ap as faClock, aP as faPercent, aL as faMoneyBill, aY as faSpinner, aB as faGlobe, aE as faHeading, b1 as faUser, az as faFont, aQ as faPhone, aF as faLink, aZ as faSquareCheck, an as faCircleDot, aD as faHashtag, aG as faList, ax as faFileLines, as as faEnvelope, aO as faPenToSquare, E as Tooltip, ao as faCircleInfo, B as Button, b0 as faTrash, aR as faPlus, bC as staticMethods, a2 as _pg, ah as faArrowLeft, aT as faRotateLeft, aU as faRotateRight, av as faEye, aq as faCode, ay as faFloppyDisk, ai as faArrowUp, ag as faArrowDown, aA as faGear, ar as faCopy, ae as createRoot } from "./chunks/Header-DYLbO79M.js";
 import { h as getForm, k as updateForm, c as createForm } from "./chunks/api-CP2qo9fl.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { S as Switch } from "./chunks/index-CEQ7Ze7V.js";
-import { e as genCollapseMotion, m as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-Bl_Ufa6r.js";
-import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-CnfOx_s2.js";
+import { S as Switch } from "./chunks/index-SfeydlGU.js";
+import { e as genCollapseMotion, m as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-8--dsiAZ.js";
+import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-YtwsN71l.js";
 var PanelContent = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, forceRender = props.forceRender, className = props.className, style = props.style, children = props.children, isActive = props.isActive, role = props.role, customizeClassNames = props.classNames, styles = props.styles;
   var _React$useState = React.useState(isActive || forceRender), _React$useState2 = _slicedToArray(_React$useState, 2), rendered = _React$useState2[0], setRendered = _React$useState2[1];
@@ -176,7 +176,7 @@ function getActiveKeysArray(activeKey) {
     return String(key);
   });
 }
-var Collapse$3 = /* @__PURE__ */ React.forwardRef(function(props, ref) {
+var Collapse$2 = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-collapse" : _props$prefixCls, _props$destroyInactiv = props.destroyInactivePanel, destroyInactivePanel = _props$destroyInactiv === void 0 ? false : _props$destroyInactiv, style = props.style, accordion = props.accordion, className = props.className, children = props.children, collapsible = props.collapsible, openMotion = props.openMotion, expandIcon = props.expandIcon, rawActiveKey = props.activeKey, defaultActiveKey = props.defaultActiveKey, _onChange = props.onChange, items = props.items;
   var collapseClassName = classNames(prefixCls, className);
   var _useMergedState = useMergedState([], {
@@ -223,13 +223,13 @@ var Collapse$3 = /* @__PURE__ */ React.forwardRef(function(props, ref) {
     data: true
   })), mergedChildren);
 });
-const Collapse$2 = Object.assign(Collapse$3, {
+const Collapse$3 = Object.assign(Collapse$2, {
   /**
    * @deprecated use `items` instead, will be removed in `v4.0.0`
    */
   Panel: CollapsePanel$1
 });
-Collapse$2.Panel;
+Collapse$3.Panel;
 const CollapsePanel = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     getPrefixCls
@@ -243,7 +243,7 @@ const CollapsePanel = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const collapsePanelClassName = classNames({
     [`${prefixCls}-no-arrow`]: !showArrow
   }, className);
-  return /* @__PURE__ */ reactExports.createElement(Collapse$2.Panel, Object.assign({
+  return /* @__PURE__ */ reactExports.createElement(Collapse$3.Panel, Object.assign({
     ref
   }, props, {
     prefixCls,
@@ -516,7 +516,7 @@ const useStyle$1 = genStyleHooks("Collapse", (token) => {
   });
   return [genBaseStyle(collapseToken), genBorderlessStyle(collapseToken), genGhostStyle(collapseToken), genArrowStyle(collapseToken), genCollapseMotion(collapseToken)];
 }, prepareComponentToken$1);
-const Collapse$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
+const Collapse = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     getPrefixCls,
     direction,
@@ -594,7 +594,7 @@ const Collapse$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   }, [children]);
   return wrapCSSVar(
     // @ts-ignore
-    /* @__PURE__ */ reactExports.createElement(Collapse$2, Object.assign({
+    /* @__PURE__ */ reactExports.createElement(Collapse$3, Object.assign({
       ref,
       openMotion
     }, omit(props, ["rootClassName"]), {
@@ -607,7 +607,7 @@ const Collapse$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     }), items)
   );
 });
-const Collapse = Object.assign(Collapse$1, {
+const Collapse$1 = Object.assign(Collapse, {
   Panel: CollapsePanel
 });
 var PlusOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z" } }, { "tag": "path", "attrs": { "d": "M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8z" } }] }, "name": "plus", "theme": "outlined" };
@@ -994,7 +994,7 @@ var ExtraContent = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) 
     ref
   }, content) : null;
 });
-var OperationNode$1 = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
+var OperationNode = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, id = props.id, tabs = props.tabs, locale = props.locale, mobile = props.mobile, _props$more = props.more, moreProps = _props$more === void 0 ? {} : _props$more, style = props.style, className = props.className, editable = props.editable, tabBarGutter = props.tabBarGutter, rtl = props.rtl, removeAriaLabel = props.removeAriaLabel, onTabClick = props.onTabClick, getPopupContainer = props.getPopupContainer, popupClassName = props.popupClassName;
   var _useState = reactExports.useState(false), _useState2 = _slicedToArray(_useState, 2), open = _useState2[0], setOpen = _useState2[1];
   var _useState3 = reactExports.useState(null), _useState4 = _slicedToArray(_useState3, 2), selectedKey = _useState4[0], setSelectedKey = _useState4[1];
@@ -1136,7 +1136,7 @@ var OperationNode$1 = /* @__PURE__ */ reactExports.forwardRef(function(props, re
     editable
   }));
 });
-const OperationNode = /* @__PURE__ */ reactExports.memo(OperationNode$1, function(_, next) {
+const OperationNode$1 = /* @__PURE__ */ reactExports.memo(OperationNode, function(_, next) {
   return (
     // https://github.com/ant-design/ant-design/issues/32544
     // We'd better remove syntactic sugar in `rc-menu` since this has perf issue
@@ -1648,7 +1648,7 @@ var TabNavList = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
   }), /* @__PURE__ */ reactExports.createElement("div", {
     className: classNames("".concat(prefixCls, "-ink-bar"), _defineProperty({}, "".concat(prefixCls, "-ink-bar-animated"), animated.inkBar)),
     style: indicatorStyle
-  }))))), /* @__PURE__ */ reactExports.createElement(OperationNode, _extends({}, props, {
+  }))))), /* @__PURE__ */ reactExports.createElement(OperationNode$1, _extends({}, props, {
     removeAriaLabel: locale === null || locale === void 0 ? void 0 : locale.removeAriaLabel,
     ref: operationsRef,
     prefixCls,
@@ -2937,71 +2937,37 @@ const FIELD_TYPES = {
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPenToSquare }),
     category: "general",
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: "Text Input",
-      label_placement: "default",
-      // default, top, bottom, left, right, hidden
       admin_label: "",
-      // Admin-only label
-      // === Input Options ===
       placeholder: "Enter text here...",
       default_value: "",
-      // Supports smart codes
-      character_limit: "",
-      // Max length (0 = unlimited)
-      // === Input Formatting ===
-      prefix_label: "",
-      // Text/HTML before input
-      suffix_label: "",
-      // Text/HTML after input
-      // === Validation ===
       required: false,
-      validation_type: "none",
-      // none, required, email, url, numeric, pattern
-      validation_pattern: "",
-      // Regex pattern
-      validation_message: "Please enter a valid value",
-      unique_value: false,
-      // Check for duplicates
-      unique_error_message: "This value has already been submitted",
-      // === Input Mask ===
+      help_text: "",
+      help_text_position: "below",
+      prefix_label: "",
+      suffix_label: "",
+      mobile_keyboard_type: "default",
       enable_mask: false,
       mask_pattern: "",
-      // e.g., (999) 999-9999
+      custom_mask: "",
       mask_placeholder: "_",
-      // Character for unfilled mask
-      reversible_mask: false,
-      // Allow reverse mask
-      clear_on_invalid: false,
-      // Clear if doesn't match
-      // === Mobile ===
-      keyboard_type: "default",
-      // default, numeric, decimal, tel, email, url
-      // === Styling ===
-      container_class: "",
-      // CSS class for wrapper
+      // === Validation Section ===
+      validation_message: "Please enter a valid value",
+      character_limit: "",
+      validate_unique: false,
+      unique_error_message: "This value has already been submitted",
+      // === Style Section ===
       element_class: "",
-      // CSS class for input
-      input_width: "",
-      // e.g., 100%, 300px
-      // === Help & Tools ===
-      help_text: "",
-      // Tooltip/help message
-      help_text_position: "below",
-      // below, above, tooltip
+      container_class: "",
+      // === Advanced Section ===
+      name_attribute: "",
+      reversible_mask: false,
+      clear_on_invalid: false,
       // === Conditional Logic ===
       conditional_logic: false,
       condition_match: "any",
-      // any, all
-      conditions: [],
-      // Conditional logic rules
-      // === Advanced ===
-      name_attribute: "",
-      // Custom name attribute
-      autocomplete_attribute: "text",
-      // HTML autocomplete
-      read_only: false,
-      disabled: false
+      conditions: []
     }
   },
   /**
@@ -3013,39 +2979,31 @@ const FIELD_TYPES = {
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEnvelope }),
     category: "general",
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: "Email Address",
-      label_placement: "default",
       admin_label: "",
-      // === Input Options ===
       placeholder: "email@example.com",
       default_value: "",
-      // Supports smart codes like {user_email}
-      // === Validation ===
       required: true,
+      help_text: "",
+      help_text_position: "below",
+      // === Validation Section ===
+      validation_message: "Please enter a valid email address",
       confirm_email: false,
-      // Require confirmation
       confirm_label: "Confirm Email Address",
       confirm_placeholder: "Re-enter email",
       confirm_error_message: "Email addresses do not match",
-      unique_value: false,
-      // Check for existing emails
+      validate_unique: false,
       unique_error_message: "This email has already been registered",
-      // === Styling ===
-      container_class: "",
+      // === Style Section ===
       element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      help_text_position: "below",
+      container_class: "",
+      // === Advanced Section ===
+      name_attribute: "",
       // === Conditional Logic ===
       conditional_logic: false,
       condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      autocomplete_attribute: "email",
-      read_only: false
+      conditions: []
     }
   },
   /**
@@ -3057,40 +3015,31 @@ const FIELD_TYPES = {
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFileLines }),
     category: "general",
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: "Message",
-      label_placement: "default",
       admin_label: "",
-      // === Input Options ===
       placeholder: "Type your message here...",
       default_value: "",
-      rows: 4,
-      // Visible rows
-      cols: "",
-      // Visible columns (empty = 100%)
-      resize: "vertical",
-      // vertical, horizontal, both, none
-      // === Validation ===
       required: false,
-      min_length: "",
-      max_length: "",
-      validation_message: "Please enter at least {min} characters",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
       help_text: "",
       help_text_position: "below",
+      rows: 4,
+      cols: "",
+      resize: "vertical",
+      // === Validation Section ===
+      validation_message: "Please enter at least {min} characters",
+      max_length: "",
+      min_length: "",
+      // === Style Section ===
+      element_class: "",
+      container_class: "",
+      // === Advanced Section ===
+      name_attribute: "",
+      enable_rtl: false,
       // === Conditional Logic ===
       conditional_logic: false,
       condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      read_only: false,
-      enable_rtl: false
-      // Right-to-left text
+      conditions: []
     }
   },
   /**
@@ -3102,64 +3051,34 @@ const FIELD_TYPES = {
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faList }),
     category: "general",
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: "Dropdown",
-      label_placement: "default",
       admin_label: "",
-      // === Dropdown Options ===
       placeholder: "Choose an option...",
+      default_value: "",
+      required: false,
+      help_text: "",
+      help_text_position: "below",
+      disable_first_option: true,
+      shuffle_options: false,
+      enable_search: false,
+      min_search_chars: 1,
       options: [
         { label: "Option 1", value: "option1", image: "", disabled: false, calc_value: "" },
         { label: "Option 2", value: "option2", image: "", disabled: false, calc_value: "" },
         { label: "Option 3", value: "option3", image: "", disabled: false, calc_value: "" }
       ],
-      default_value: "",
-      // Supports smart codes
-      // === Option Settings ===
-      disable_first_option: true,
-      // First option is placeholder
-      shuffle_options: false,
-      // Randomize order
-      enable_search: false,
-      // Searchable dropdown
-      min_search_chars: 1,
-      // Minimum characters to search
-      // === Selection ===
-      max_selections: 1,
-      // 1 = single select
-      selection_limit_message: "You can only select {max} options",
-      // === Visual Options ===
-      show_option_images: false,
-      dropdown_style: "modern",
-      // modern, classic, minimal
-      option_direction: "vertical",
-      // vertical, horizontal
-      // === Grouping ===
-      group_options: false,
-      option_groups: [
-        { label: "Group 1", options: [] },
-        { label: "Group 2", options: [] }
-      ],
-      // === AJAX/Data Source ===
-      ajax_source: false,
-      ajax_endpoint: "",
-      ajax_method: "GET",
-      ajax_params: {},
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
+      // === Validation Section ===
+      validation_message: "Please select an option",
+      // === Style Section ===
       element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      help_text_position: "below",
+      container_class: "",
+      // === Advanced Section ===
+      name_attribute: "",
       // === Conditional Logic ===
       conditional_logic: false,
       condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
+      conditions: []
     }
   },
   /**
@@ -3171,44 +3090,36 @@ const FIELD_TYPES = {
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faList }),
     category: "general",
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: "Multiple Select",
-      label_placement: "default",
       admin_label: "",
-      // === Dropdown Options ===
       placeholder: "Choose options...",
+      default_value: [],
+      required: false,
+      help_text: "",
+      help_text_position: "below",
+      shuffle_options: false,
+      enable_search: true,
+      select_all_button: true,
+      display_format: "tags",
       options: [
         { label: "Option 1", value: "option1" },
         { label: "Option 2", value: "option2" },
         { label: "Option 3", value: "option3" }
       ],
-      default_value: [],
-      // === Selection Settings ===
-      max_selections: 0,
-      // 0 = unlimited
+      // === Validation Section ===
+      validation_message: "Please select at least one option",
       min_selections: 0,
-      selection_limit_message: "Select between {min} and {max} options",
-      // === Visual ===
-      enable_search: true,
-      searchable_threshold: 10,
-      // Enable search after this many options
-      select_all_button: true,
-      display_format: "tags",
-      // tags, text, count
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
+      max_selections: 0,
+      // === Style Section ===
       element_class: "",
-      // === Help & Tools ===
-      help_text: "",
+      container_class: "",
+      // === Advanced Section ===
+      name_attribute: "",
       // === Conditional Logic ===
       conditional_logic: false,
       condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
+      conditions: []
     }
   },
   /**
@@ -3219,6 +3130,7 @@ const FIELD_TYPES = {
     label: "Numeric Field",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHashtag }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Number",
@@ -3282,6 +3194,7 @@ const FIELD_TYPES = {
     label: "Radio Buttons",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleDot }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Radio Buttons",
@@ -3332,6 +3245,7 @@ const FIELD_TYPES = {
     label: "Checkbox",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSquareCheck }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Checkbox",
@@ -3383,6 +3297,7 @@ const FIELD_TYPES = {
     label: "Website URL",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faLink }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Website",
@@ -3432,6 +3347,7 @@ const FIELD_TYPES = {
     label: "Phone Number",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPhone }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Phone Number",
@@ -3482,6 +3398,7 @@ const FIELD_TYPES = {
     label: "Date & Time",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalendar }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Date",
@@ -3553,6 +3470,7 @@ const FIELD_TYPES = {
     label: "Custom HTML",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFont }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       label: "HTML Content",
@@ -3582,6 +3500,7 @@ const FIELD_TYPES = {
     label: "Name Fields",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faUser }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Full Name",
@@ -3635,6 +3554,7 @@ const FIELD_TYPES = {
     label: "Heading",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHeading }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       text: "Section Heading",
@@ -3675,6 +3595,7 @@ const FIELD_TYPES = {
     label: "Country",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faGlobe }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Country",
@@ -3725,6 +3646,7 @@ const FIELD_TYPES = {
     label: "Spinner",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSpinner }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Quantity",
@@ -3776,6 +3698,7 @@ const FIELD_TYPES = {
     label: "Currency",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMoneyBill }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Amount",
@@ -3821,6 +3744,7 @@ const FIELD_TYPES = {
     label: "Percentage",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPercent }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Percentage",
@@ -3863,6 +3787,7 @@ const FIELD_TYPES = {
     label: "Time",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faClock }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Time",
@@ -3909,6 +3834,7 @@ const FIELD_TYPES = {
     label: "Date Range",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalendar }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Date Range",
@@ -3956,6 +3882,7 @@ const FIELD_TYPES = {
     label: "Address",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMapLocation }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Address",
@@ -4020,6 +3947,7 @@ const FIELD_TYPES = {
     label: "Mask Input",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMask }),
     category: "general",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Masked Input",
@@ -4069,6 +3997,7 @@ const FIELD_TYPES = {
     label: "Password",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faLock }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Password",
@@ -4126,6 +4055,7 @@ const FIELD_TYPES = {
     label: "Hidden Field",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEyeSlash }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Hidden Field",
@@ -4147,6 +4077,7 @@ const FIELD_TYPES = {
     label: "Section Break",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faExpand }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       title: "Section Title",
@@ -4190,6 +4121,7 @@ const FIELD_TYPES = {
     label: "Terms & Conditions",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHandshake }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       label: "I agree to the Terms & Conditions",
@@ -4231,6 +4163,7 @@ const FIELD_TYPES = {
     label: "GDPR Agreement",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShield }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       label: "I consent to the processing of my personal data",
@@ -4272,6 +4205,7 @@ const FIELD_TYPES = {
     label: "Shortcode",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faBarcode }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       label: "",
@@ -4304,6 +4238,7 @@ const FIELD_TYPES = {
     label: "Action Hook",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPaperPlane }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Content ===
       label: "",
@@ -4331,45 +4266,6 @@ const FIELD_TYPES = {
    * TOGGLE SWITCH
    * On/off toggle switch
    */
-  toggle: {
-    label: "Toggle Switch",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faToggleOn }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Enable Feature",
-      label_placement: "default",
-      admin_label: "",
-      // === Toggle Options ===
-      default_checked: false,
-      on_label: "ON",
-      off_label: "OFF",
-      on_value: "1",
-      off_value: "0",
-      // === Appearance ===
-      toggle_style: "modern",
-      // modern, classic, flat, ios
-      toggle_size: "medium",
-      // small, medium, large
-      toggle_color: "success",
-      // primary, success, warning, danger
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * RANGE SLIDER
    * Numeric range slider (FREE in FluentForm)
@@ -4378,6 +4274,7 @@ const FIELD_TYPES = {
     label: "Range Slider",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSliders }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Range",
@@ -4433,6 +4330,7 @@ const FIELD_TYPES = {
     label: "Color Picker",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "Choose Color",
@@ -4475,694 +4373,48 @@ const FIELD_TYPES = {
    * STAR RATING
    * Visual star rating (PRO in FluentForm)
    */
-  rating: {
-    label: "Star Rating",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faStar }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Rating",
-      label_placement: "default",
-      admin_label: "",
-      // === Rating Options ===
-      max_stars: 5,
-      default_value: 0,
-      allow_half: false,
-      // Half-star ratings
-      // === Appearance ===
-      icon_type: "star",
-      // star, heart, thumb, smiley, custom
-      custom_icon: "",
-      // SVG or icon class
-      inactive_color: "#d1d5db",
-      active_color: "#fbbf24",
-      // === Labels ===
-      show_labels: true,
-      labels: ["Poor", "Fair", "Good", "Very Good", "Excellent"],
-      // === Behavior ===
-      hover_effect: true,
-      click_to_clear: true,
-      // === Validation ===
-      required: false,
-      required_message: "Please select a rating",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      icon_size: "medium",
-      // small, medium, large, xl
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SIGNATURE
    * Digital signature canvas (PRO in FluentForm)
    */
-  signature: {
-    label: "Signature",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSignature }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Signature",
-      label_placement: "default",
-      admin_label: "",
-      // === Canvas Options ===
-      width: 300,
-      height: 150,
-      pen_color: "#000000",
-      pen_width: 2,
-      bg_color: "#ffffff",
-      bg_image: "",
-      // Background image URL
-      // === Buttons ===
-      clear_button: true,
-      clear_button_text: "Clear",
-      undo_button: false,
-      undo_button_text: "Undo",
-      // === Output ===
-      output_format: "png",
-      // png, svg, jpg
-      output_quality: 0.9,
-      // For jpg
-      // === Validation ===
-      required: false,
-      required_message: "Please sign above",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      border_style: "solid",
-      // solid, dashed, dotted
-      border_width: 1,
-      // === Help & Tools ===
-      help_text: "Sign in the box above",
-      placeholder_text: "Sign here",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      touch_only: false,
-      // Only allow touch input
-      smooth_lines: true
-    }
-  },
   /**
    * VIDEO EMBED
    */
-  video_embed: {
-    label: "Video Embed",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faVideo }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Video",
-      admin_label: "",
-      // === Video Source ===
-      video_type: "youtube",
-      // youtube, vimeo, self_hosted, embed_code
-      video_url: "https://www.youtube.com/watch?v=...",
-      embed_code: "",
-      // Custom embed code
-      video_file: "",
-      // Self-hosted file URL
-      // === YouTube Options ===
-      youtube_autoplay: false,
-      youtube_controls: true,
-      youtube_rel: false,
-      // Show related videos
-      youtube_mute: false,
-      // === Vimeo Options ===
-      vimeo_autoplay: false,
-      vimeo_title: true,
-      vimeo_byline: true,
-      vimeo_portrait: true,
-      // === Size ===
-      width: 560,
-      height: 315,
-      responsive: true,
-      max_width: "",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      lazy_load: false
-    }
-  },
   /**
    * AUDIO UPLOAD
    */
-  audio_upload: {
-    label: "Audio Upload",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFileAudio }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Upload Audio",
-      admin_label: "",
-      // === Upload Options ===
-      button_text: "Choose Audio",
-      max_size: 10,
-      // MB
-      allowed_types: ".mp3,.wav,.ogg,.m4a",
-      max_duration: 300,
-      // seconds
-      // === Player Options ===
-      show_player: true,
-      autoplay: false,
-      loop: false,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * IMAGE SELECT
    */
-  image_select: {
-    label: "Image Select",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCamera }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Image",
-      label_placement: "default",
-      admin_label: "",
-      // === Selection Type ===
-      selection_type: "single",
-      // single, multiple
-      min_selections: 0,
-      max_selections: 0,
-      // === Images ===
-      images: [
-        { url: "", label: "Option 1", value: "opt1" },
-        { url: "", label: "Option 2", value: "opt2" },
-        { url: "", label: "Option 3", value: "opt3" }
-      ],
-      default_value: "",
-      // === Display ===
-      image_width: 150,
-      image_height: 150,
-      image_fit: "cover",
-      // cover, contain, fill
-      layout: "grid",
-      // grid, flex, carousel
-      columns: 3,
-      gap: "medium",
-      // small, medium, large
-      // === Visual ===
-      show_labels: true,
-      label_position: "below",
-      // above, below, overlay, tooltip
-      hover_effect: true,
-      selected_border: true,
-      border_color: "",
-      selected_overlay: true,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * FORM STEP
    * Multi-step form break (PRO in FluentForm)
    */
-  form_step: {
-    label: "Form Step",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowRightToBracket }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Content ===
-      step_title: "Step 1",
-      step_description: "Enter your information",
-      step_number: 1,
-      // === Buttons ===
-      next_button_text: "Next",
-      next_button_icon: "",
-      prev_button_text: "Previous",
-      prev_button_icon: "",
-      // === Button Style ===
-      button_style: "primary",
-      // primary, secondary, success
-      button_size: "medium",
-      button_alignment: "right",
-      // left, center, right, space_between
-      // === Navigation ===
-      enable_previous: true,
-      save_progress: false,
-      // === Progress ===
-      show_progress: true,
-      progress_type: "steps",
-      // steps, percentage, bar
-      // === Validation ===
-      validate_before_next: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: "",
-      allow_navigation: true
-      // Allow jumping between steps
-    }
-  },
   /**
    * NET PROMOTER SCORE
    * NPS survey field (PRO in FluentForm)
    */
-  nps_score: {
-    label: "Net Promoter Score",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faThumbsUp }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "How likely are you to recommend us?",
-      label_placement: "default",
-      admin_label: "",
-      // === Scale ===
-      scale: 10,
-      // 0-10 or 1-10
-      start_from_zero: true,
-      // 0-10 vs 1-10
-      // === Labels ===
-      low_label: "Not at all likely",
-      mid_label: "Neutral",
-      high_label: "Extremely likely",
-      show_labels: true,
-      // === Categories ===
-      show_categories: true,
-      detractor_label: "Detractor",
-      passive_label: "Passive",
-      promoter_label: "Promoter",
-      // === Appearance ===
-      display_style: "buttons",
-      // buttons, slider, dropdown
-      button_layout: "horizontal",
-      // horizontal, vertical
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      color_scheme: "default",
-      // default, green, blue, custom
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * LIKERT SCALE
    */
-  likert_scale: {
-    label: "Likert Scale",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSliders }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Rate your agreement",
-      label_placement: "default",
-      admin_label: "",
-      // === Questions ===
-      questions: [
-        "Statement 1",
-        "Statement 2",
-        "Statement 3"
-      ],
-      // === Scale ===
-      scale_points: 5,
-      // 3, 5, 7
-      min_label: "Strongly Disagree",
-      max_label: "Strongly Agree",
-      center_label: "Neutral",
-      // For odd scales
-      // === Appearance ===
-      layout: "vertical",
-      // vertical, horizontal, matrix
-      show_question_numbers: true,
-      highlight_extremes: true,
-      // === Validation ===
-      required: false,
-      require_all: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * EMOJI RATING
    */
-  emoji_rating: {
-    label: "Emoji Rating",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faThumbsUp }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "How was your experience?",
-      label_placement: "default",
-      admin_label: "",
-      // === Emoji Options ===
-      emoji_type: "standard",
-      // standard, custom
-      emojis: ["😞", "😐", "🙂", "😃", "🤩"],
-      custom_emojis: [],
-      // Array of custom emoji URLs
-      // === Labels ===
-      show_labels: true,
-      labels: ["Poor", "Fair", "Good", "Very Good", "Excellent"],
-      label_position: "below",
-      // below, above
-      // === Appearance ===
-      size: "medium",
-      // small, medium, large, xl
-      layout: "horizontal",
-      // horizontal, vertical
-      animate_on_hover: true,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CALCULATED FIELD
    */
-  calculated_field: {
-    label: "Calculated Field",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalculator }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Calculated Result",
-      label_placement: "default",
-      admin_label: "",
-      // === Formula ===
-      formula: "{field1} + {field2}",
-      formula_description: "",
-      // Describe the calculation
-      // === Number Format ===
-      number_format: "number",
-      // number, currency, percentage
-      currency_symbol: "$",
-      currency_position: "before",
-      decimal_places: 2,
-      thousands_separator: true,
-      // === Display ===
-      read_only: true,
-      show_formula: false,
-      // Show formula to users
-      placeholder: "0",
-      // === Conditional Calculation ===
-      conditional_formula: false,
-      formula_conditions: [],
-      // Different formulas based on conditions
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      live_update: true
-      // Update as user types
-    }
-  },
   /**
    * LOOKUP FIELD
    */
-  lookup_field: {
-    label: "Lookup Field",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faWandSparkles }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Lookup",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Search...",
-      min_search_chars: 2,
-      // === Lookup Source ===
-      lookup_type: "posts",
-      // posts, users, taxonomies, custom
-      post_type: "post",
-      // Post type to search
-      query_args: {},
-      // WP_Query args
-      // === Search Fields ===
-      search_fields: ["post_title"],
-      display_field: "post_title",
-      value_field: "ID",
-      // === Selection ===
-      allow_multiple: false,
-      max_selections: 0,
-      selection_format: "count",
-      // count, list, tags
-      // === Filters ===
-      filters: [],
-      // Taxonomy filters, date filters, etc.
-      // === AJAX ===
-      enable_ajax: true,
-      cache_results: true,
-      cache_duration: 300,
-      // seconds
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * RESET BUTTON
    */
-  reset_button: {
-    label: "Reset Button",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateRight }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Button Options ===
-      label: "",
-      button_text: "Reset Form",
-      button_icon: "",
-      // === Confirmation ===
-      confirm_reset: true,
-      confirm_message: "Are you sure you want to reset the form?",
-      confirm_button_text: "Yes, Reset",
-      cancel_button_text: "Cancel",
-      // === Button Style ===
-      button_style: "secondary",
-      // primary, secondary, danger
-      button_size: "medium",
-      button_alignment: "left",
-      // left, center, right
-      // === Reset Behavior ===
-      reset_hidden_fields: true,
-      reset_to_defaults: true,
-      // Or clear all
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SAVE & RESUME
    */
-  save_resume: {
-    label: "Save & Resume",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSave }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Button Options ===
-      label: "",
-      button_text: "Save Progress",
-      button_position: "bottom",
-      // top, bottom, both
-      button_style: "secondary",
-      button_icon: "",
-      // === Save Method ===
-      save_method: "link",
-      // link, email, auto
-      save_button_label: "Save & Continue Later",
-      // === Link Method ===
-      link_label: "Your resume link:",
-      link_copy_text: "Copy Link",
-      link_copied_text: "Copied!",
-      // === Email Method ===
-      email_field: "",
-      // Field containing email
-      email_subject: "Continue your form submission",
-      email_template: "",
-      // === Auto Method ===
-      auto_save: false,
-      auto_save_interval: 30,
-      // seconds
-      // === Expiration ===
-      expiry_days: 30,
-      expiry_type: "days",
-      // days, hours
-      // === Storage ===
-      storage_location: "database",
-      // database, transient, cookie
-      require_email: false,
-      // === Resume ===
-      resume_message: "You have a saved form submission.",
-      resume_button_text: "Resume",
-      delete_button_text: "Delete Saved Data",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SOCIAL MEDIA PROFILES
    */
-  social_profiles: {
-    label: "Social Profiles",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShareNodes }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Social Media Profiles",
-      label_placement: "default",
-      admin_label: "",
-      // === Platforms ===
-      platforms: [
-        { name: "facebook", label: "Facebook", icon: "", placeholder: "Facebook profile URL" },
-        { name: "twitter", label: "Twitter/X", icon: "", placeholder: "Twitter username" },
-        { name: "linkedin", label: "LinkedIn", icon: "", placeholder: "LinkedIn profile URL" },
-        { name: "instagram", label: "Instagram", icon: "", placeholder: "Instagram username" }
-      ],
-      // === Input Options ===
-      allow_multiple: false,
-      // Multiple profiles per platform
-      url_validation: true,
-      // === Display ===
-      show_icons: true,
-      icon_size: "small",
-      layout: "vertical",
-      // vertical, horizontal, grid
-      // === Validation ===
-      required: false,
-      required_platforms: [],
-      // Which platforms are required
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      PRO FIELDS (Additional)
      ═════════════════════════════════════════════════════════════════════ */
@@ -5170,1377 +4422,90 @@ const FIELD_TYPES = {
    * CHAINED SELECT
    * Hierarchical dropdowns (PRO in FluentForm)
    */
-  chained_select: {
-    label: "Chained Select",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowDownShortWide }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Chained Dropdown",
-      label_placement: "default",
-      admin_label: "",
-      // === Chain Levels ===
-      levels: [
-        {
-          label: "Category",
-          options: [
-            { label: "Option 1", value: "opt1", children: ["opt1_child1", "opt1_child2"] },
-            { label: "Option 2", value: "opt2", children: ["opt2_child1", "opt2_child2"] }
-          ],
-          placeholder: "Select category..."
-        },
-        {
-          label: "Subcategory",
-          options: {},
-          // Will be populated dynamically
-          placeholder: "Select subcategory..."
-        },
-        {
-          label: "Item",
-          options: {},
-          placeholder: "Select item..."
-        }
-      ],
-      // === Chain Data ===
-      chain_data: {},
-      // Full hierarchy data
-      data_source: "manual",
-      // manual, json, ajax
-      json_url: "",
-      ajax_endpoint: "",
-      // === Display ===
-      display_type: "select",
-      // select, radio, button
-      enable_search: true,
-      searchable_threshold: 10,
-      // === Reset Behavior ===
-      reset_children: true,
-      // Clear child selects when parent changes
-      // === Validation ===
-      required: false,
-      require_all_levels: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * REPEAT FIELD
    * Repeatable field group (PRO in FluentForm)
    */
-  repeat_field: {
-    label: "Repeat Field",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRepeat }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Repeatable Items",
-      admin_label: "",
-      // === Child Fields ===
-      child_fields: [],
-      // Array of field definitions
-      field_template: "text",
-      // Template for new fields
-      // === Repeat Limits ===
-      min_repeats: 1,
-      max_repeats: 0,
-      // 0 = unlimited
-      default_repeats: 1,
-      // === Buttons ===
-      add_button_text: "Add More",
-      add_button_icon: "+",
-      remove_button_text: "Remove",
-      remove_button_icon: "×",
-      button_position: "bottom",
-      // top, bottom, both
-      // === Layout ===
-      repeat_layout: "vertical",
-      // vertical, horizontal, grid
-      item_spacing: "medium",
-      // small, medium, large
-      show_item_numbers: true,
-      // === Collapsible Items ===
-      collapsible_items: false,
-      default_collapsed: false,
-      // === Reordering ===
-      allow_reorder: true,
-      reorder_handle: "drag",
-      // drag, button, both
-      // === Validation ===
-      required: false,
-      require_min: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      item_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * RICH TEXT INPUT
    * WYSIWYG editor (PRO in FluentForm)
    */
-  rich_text: {
-    label: "Rich Text",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faAlignLeft }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Rich Text Content",
-      label_placement: "default",
-      admin_label: "",
-      // === Editor Options ===
-      placeholder: "Enter formatted text...",
-      default_value: "",
-      // === Toolbar ===
-      toolbar: "full",
-      // full, simple, minimal, custom
-      custom_toolbar: [],
-      // Array of toolbar buttons
-      // === Features ===
-      allow_media: true,
-      // Image/video uploads
-      allow_links: true,
-      allow_tables: true,
-      allow_lists: true,
-      allow_headings: true,
-      allow_colors: true,
-      allow_fonts: false,
-      allow_font_size: false,
-      allow_alignments: true,
-      // === Media Options ===
-      media_upload_url: "",
-      max_image_size: 5,
-      // MB
-      // === Editor Settings ===
-      editor_height: 200,
-      editor_theme: "default",
-      // default, dark, light
-      clean_paste: true,
-      // Remove formatting on paste
-      auto_link: true,
-      // Auto-detect links
-      // === Validation ===
-      required: false,
-      min_length: "",
-      max_length: "",
-      word_count: false,
-      // Enable word count
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      character_count: false,
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      readonly: false
-    }
-  },
   /**
    * TAG INPUT
    */
-  tag_input: {
-    label: "Tag Input",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTags }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Tags",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Add tags...",
-      default_value: [],
-      // === Tag Options ===
-      allow_custom: true,
-      available_tags: [],
-      // Predefined tags
-      tag_suggestions: true,
-      min_chars_for_suggestions: 1,
-      // === Constraints ===
-      max_tags: 10,
-      min_tags: 0,
-      tag_separator: ",",
-      // Comma, space, or enter
-      // === Tag Display ===
-      tag_color: "default",
-      // default, primary, success, warning, danger
-      tag_size: "medium",
-      // small, medium, large
-      removable: true,
-      // === Validation ===
-      required: false,
-      duplicate_tags: false,
-      // Allow duplicates
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      tag_transform: "lowercase"
-      // lowercase, uppercase, preserve
-    }
-  },
   /**
    * SEARCHABLE DROPDOWN
    */
-  searchable_dropdown: {
-    label: "Searchable Dropdown",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faWandSparkles }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Search & Select",
-      label_placement: "default",
-      admin_label: "",
-      // === Dropdown Options ===
-      placeholder: "Type to search...",
-      options: [
-        { label: "Option 1", value: "option1" },
-        { label: "Option 2", value: "option2" },
-        { label: "Option 3", value: "option3" }
-      ],
-      default_value: "",
-      // === Search Options ===
-      min_search_chars: 1,
-      search_delay: 300,
-      // ms before searching
-      search_fields: ["label"],
-      // Which fields to search
-      fuzzy_search: true,
-      // === Data Source ===
-      data_source: "local",
-      // local, ajax, json
-      ajax_url: "",
-      ajax_method: "GET",
-      ajax_params: {},
-      // === Selection ===
-      selection_limit: 1,
-      // 1 = single select
-      allow_new_option: false,
-      // Allow typing custom value
-      // === Display ===
-      show_option_count: true,
-      highlight_matches: true,
-      group_results: false,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      dropdown_max_height: 200,
-      // === Help & Tools ===
-      help_text: "",
-      no_results_text: "No results found",
-      searching_text: "Searching...",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      UPLOAD FIELDS
      ═════════════════════════════════════════════════════════════════════ */
   /**
    * FILE UPLOAD
    */
-  file_upload: {
-    label: "File Upload",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faUpload }),
-    category: "upload",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Upload File",
-      label_placement: "default",
-      admin_label: "",
-      // === Upload Options ===
-      button_text: "Choose File",
-      upload_interface: "button",
-      // button, dropzone
-      dropzone_text: "Drag & drop files here or click to browse",
-      // === Constraints ===
-      max_size: 5,
-      // MB
-      max_files: 1,
-      allowed_types: ".pdf,.doc,.docx,.txt,.xls,.xlsx",
-      allowed_extensions: [],
-      // Alternative to types
-      // === Multiple Files ===
-      allow_multiple: false,
-      show_file_count: true,
-      // === Preview ===
-      show_preview: false,
-      preview_type: "icon",
-      // icon, list, thumbnail
-      // === Progress ===
-      show_progress: true,
-      progress_bar_color: "",
-      // === File Actions ===
-      allow_delete: true,
-      allow_replace: false,
-      // === Storage ===
-      storage_location: "default",
-      // default, custom
-      custom_path: "",
-      // === Validation ===
-      required: false,
-      validation_messages: {
-        size: "File is too large",
-        type: "File type not allowed",
-        count: "Too many files"
-      },
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      size_limit_text: "Max file size: {max}MB",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      auto_upload: true,
-      chunk_upload: false,
-      chunk_size: 1e6
-      // bytes
-    }
-  },
   /**
    * IMAGE UPLOAD
    */
-  image_upload: {
-    label: "Image Upload",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faImage }),
-    category: "upload",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Upload Image",
-      label_placement: "default",
-      admin_label: "",
-      // === Upload Options ===
-      button_text: "Choose Image",
-      upload_interface: "button",
-      // button, dropzone, gallery
-      dropzone_text: "Drag & drop image here",
-      // === Constraints ===
-      max_size: 5,
-      // MB
-      max_files: 5,
-      min_width: 0,
-      // px
-      max_width: 0,
-      // 0 = unlimited
-      min_height: 0,
-      max_height: 0,
-      min_aspect_ratio: "",
-      max_aspect_ratio: "",
-      allowed_types: ".jpg,.jpeg,.png,.gif,.webp,.svg",
-      // === Cropping ===
-      enable_crop: false,
-      crop_type: "ratio",
-      // ratio, width, free
-      crop_ratio: "1:1",
-      // 1:1, 4:3, 16:9, free
-      crop_width: 300,
-      crop_height: 300,
-      force_crop: false,
-      // Require cropping before upload
-      // === Preview ===
-      show_preview: true,
-      preview_size: "medium",
-      // thumbnail, medium, large
-      thumbnail_width: 150,
-      thumbnail_height: 150,
-      // === Multiple Files ===
-      allow_multiple: true,
-      gallery_view: true,
-      // === Validation ===
-      required: false,
-      // === Storage ===
-      storage_location: "default",
-      custom_path: "",
-      generate_thumbnails: true,
-      thumbnail_sizes: [150, 300, 600],
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      image_quality: 90,
-      // For compression
-      auto_upload: true
-    }
-  },
   /**
    * MULTI-FILE UPLOAD
    */
-  multifile_upload: {
-    label: "Multi-file Upload",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faUpload }),
-    category: "upload",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Upload Files",
-      label_placement: "default",
-      admin_label: "",
-      // === Upload Options ===
-      button_text: "Choose Files",
-      upload_interface: "dropzone",
-      dropzone_text: "Drag & drop files here",
-      // === Constraints ===
-      max_size: 10,
-      // MB per file
-      max_files: 20,
-      max_total_size: 100,
-      // Total MB
-      allowed_types: ".pdf,.doc,.docx,.jpg,.png,.gif",
-      // === Progress ===
-      show_progress: true,
-      progress_per_file: true,
-      progress_bar_color: "#3b82f6",
-      // === Queue ===
-      simultaneous_uploads: 3,
-      auto_start_upload: true,
-      // === File List ===
-      file_list_position: "below",
-      // below, above, inline
-      show_file_size: true,
-      show_file_type: true,
-      // === Actions ===
-      allow_delete: true,
-      allow_reorder: true,
-      // === Validation ===
-      required: false,
-      // === Storage ===
-      storage_location: "default",
-      custom_path: "",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CROPPED IMAGE UPLOAD
    */
-  cropped_image_upload: {
-    label: "Cropped Image Upload",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCropSimple }),
-    category: "upload",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Upload & Crop Image",
-      label_placement: "default",
-      admin_label: "",
-      // === Upload Options ===
-      button_text: "Choose Image",
-      max_size: 5,
-      // MB
-      allowed_types: ".jpg,.jpeg,.png,.webp",
-      // === Crop Options ===
-      crop_width: 300,
-      crop_height: 300,
-      aspect_ratio: "1:1",
-      // 1:1, 4:3, 16:9, free
-      lock_aspect_ratio: true,
-      force_crop: true,
-      // Require cropping
-      // === Crop Tool Options ===
-      allow_rotate: true,
-      allow_flip: false,
-      zoom_slider: true,
-      crop_box_movable: true,
-      crop_box_resizable: true,
-      // === Output ===
-      output_format: "png",
-      // png, jpg, webp
-      output_quality: 90,
-      generate_thumbnail: false,
-      thumbnail_size: 150,
-      // === Preview ===
-      show_preview: true,
-      preview_before_crop: true,
-      preview_after_crop: true,
-      // === Validation ===
-      required: false,
-      // === Storage ===
-      storage_location: "default",
-      custom_path: "",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      crop_instructions: "Drag to adjust the crop area",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * WEBCAM CAPTURE
    */
-  webcam_capture: {
-    label: "Webcam Capture",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCamera }),
-    category: "upload",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Capture Photo",
-      label_placement: "default",
-      admin_label: "",
-      // === Capture Options ===
-      capture_width: 640,
-      capture_height: 480,
-      camera_facing: "user",
-      // user, environment
-      default_camera: "",
-      // Leave empty for system default
-      // === Button Options ===
-      capture_button_text: "Capture",
-      retake_button_text: "Retake",
-      upload_fallback_text: "Or upload an image",
-      // === Fallback ===
-      allow_upload_fallback: true,
-      upload_fallback_types: ".jpg,.jpeg,.png",
-      // === Preview ===
-      show_live_preview: true,
-      mirror_preview: true,
-      // Mirror for user-facing camera
-      mirror_output: false,
-      // === Output ===
-      output_format: "png",
-      output_quality: 90,
-      // === Validation ===
-      required: false,
-      // === Storage ===
-      storage_location: "default",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      permission_error: "Camera access denied. Please allow camera access.",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * VOICE RECORDING
    */
-  voice_recording: {
-    label: "Voice Recording",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMicrophone }),
-    category: "upload",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Record Voice",
-      label_placement: "default",
-      admin_label: "",
-      // === Recording Options ===
-      max_duration: 60,
-      // seconds
-      allowed_formats: ["mp3", "wav"],
-      // mp3, wav, ogg
-      audio_quality: "medium",
-      // low, medium, high
-      sample_rate: 44100,
-      // === Button Options ===
-      record_button_text: "Start Recording",
-      stop_button_text: "Stop",
-      play_button_text: "Play",
-      pause_button_text: "Pause",
-      retake_button_text: "Record Again",
-      // === Visual Feedback ===
-      show_waveform: true,
-      show_timer: true,
-      recording_indicator: true,
-      // === Auto Options ===
-      auto_start: false,
-      auto_stop: false,
-      // === Preview ===
-      allow_playback: true,
-      allow_download: false,
-      // === Output ===
-      output_format: "mp3",
-      output_bitrate: 128,
-      // kbps
-      // === Validation ===
-      required: false,
-      min_duration: 0,
-      // seconds
-      // === Storage ===
-      storage_location: "default",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      permission_error: "Microphone access denied. Please allow microphone access."
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      SURVEY & QUIZ FIELDS
      ═════════════════════════════════════════════════════════════════════ */
   /**
    * MATRIX QUESTION
    */
-  matrix_question: {
-    label: "Matrix Question",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableList }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Matrix Question",
-      label_placement: "default",
-      admin_label: "",
-      // === Matrix Content ===
-      rows: ["Row 1", "Row 2", "Row 3"],
-      columns: ["Column 1", "Column 2", "Column 3"],
-      // === Input Type ===
-      input_type: "radio",
-      // radio, checkbox, text, dropdown
-      // === Column Options (for radio/checkbox) ===
-      column_options: [
-        { label: "Option 1", value: "opt1" },
-        { label: "Option 2", value: "opt2" },
-        { label: "Option 3", value: "opt3" }
-      ],
-      // === Text Input Options (for text type) ===
-      placeholder: "Enter response...",
-      character_limit: "",
-      // === Layout ===
-      layout: "standard",
-      // standard, condensed, expanded
-      show_row_numbers: false,
-      transpose: false,
-      // Swap rows and columns
-      // === Validation ===
-      required: false,
-      require_all_rows: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      highlight_hover: true,
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CHECKABLE GRID
    * Grid-based selection (PRO in FluentForm)
    */
-  checkable_grid: {
-    label: "Checkable Grid",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableList }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Options from Grid",
-      label_placement: "default",
-      admin_label: "",
-      // === Grid Content ===
-      rows: ["Row 1", "Row 2", "Row 3"],
-      columns: ["Column 1", "Column 2", "Column 3"],
-      // === Input Type ===
-      input_type: "checkbox",
-      // checkbox, radio
-      // === Layout ===
-      layout: "standard",
-      // standard, compact, spacious
-      show_row_labels: true,
-      show_column_labels: true,
-      // === Selection ===
-      allow_multiple_per_row: true,
-      // For checkbox type
-      require_all_rows: false,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      cell_size: "medium",
-      // small, medium, large
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * MULTIPLE CHOICE GRID
    */
-  multiple_choice_grid: {
-    label: "Multiple Choice Grid",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableList }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select One Option Per Row",
-      label_placement: "default",
-      admin_label: "",
-      // === Grid Content ===
-      rows: ["Question 1", "Question 2", "Question 3"],
-      columns: ["Option 1", "Option 2", "Option 3"],
-      // === Layout ===
-      layout: "standard",
-      show_row_numbers: false,
-      // === Validation ===
-      required: false,
-      require_all_rows: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SEMANTIC DIFFERENTIAL
    */
-  semantic_differential: {
-    label: "Semantic Differential",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSliders }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Rate the Concept",
-      label_placement: "default",
-      admin_label: "",
-      // === Scale Pairs ===
-      pairs: [
-        { left: "Bad", right: "Good" },
-        { left: "Weak", right: "Strong" },
-        { left: "Complex", right: "Simple" },
-        { left: "Boring", right: "Interesting" }
-      ],
-      // === Scale Options ===
-      scale_points: 7,
-      // Usually 5 or 7
-      show_neutral: true,
-      // === Layout ===
-      layout: "vertical",
-      // vertical, horizontal
-      show_pair_labels: true,
-      // === Validation ===
-      required: false,
-      require_all_pairs: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      color_scale: false,
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * IMAGE COMPARISON
    */
-  image_comparison: {
-    label: "Image Comparison",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCamera }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Which Do You Prefer?",
-      label_placement: "default",
-      admin_label: "",
-      // === Images ===
-      images: [
-        { url: "", label: "Option A", alt: "" },
-        { url: "", label: "Option B", alt: "" }
-      ],
-      // === Selection Type ===
-      selection_type: "single",
-      // single, multiple, ranking
-      // === Display ===
-      image_width: 300,
-      image_height: 300,
-      image_fit: "cover",
-      layout: "side_by_side",
-      // side_by_side, stacked, carousel
-      // === Comparison Slider (for single selection) ===
-      enable_slider: false,
-      slider_start_position: 50,
-      slider_color: "#3b82f6",
-      // === Hover Effects ===
-      hover_effect: true,
-      hover_scale: 1.05,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * LABELED SLIDER
    */
-  slider_with_labels: {
-    label: "Labeled Slider",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSliders }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Rate Your Experience",
-      label_placement: "default",
-      admin_label: "",
-      // === Range Options ===
-      min: 0,
-      max: 10,
-      step: 1,
-      default_value: 5,
-      // === Labels ===
-      min_label: "Poor",
-      max_label: "Excellent",
-      show_value: true,
-      value_position: "above",
-      // === Ticks ===
-      show_ticks: true,
-      tick_interval: 1,
-      tick_labels: {},
-      // === Appearance ===
-      slider_style: "modern",
-      fill_track: true,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      track_color: "",
-      handle_color: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      tooltip: "always"
-    }
-  },
   /**
    * QUIZ SCORE
    */
-  quiz_score: {
-    label: "Quiz Score",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faStar }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "",
-      admin_label: "Quiz Score",
-      // === Scoring ===
-      score_type: "points",
-      // points, percentage
-      passing_score: 70,
-      max_score: 100,
-      // === Display ===
-      show_score: true,
-      show_percentage: true,
-      show_correct_answers: true,
-      show_explanations: false,
-      // === Options ===
-      randomize_order: false,
-      allow_review: true,
-      // === Messages ===
-      pass_message: "Congratulations! You passed.",
-      fail_message: "You did not pass. Please try again.",
-      score_message: "Your score: {score}%",
-      // Supports {score}, {percentage}, {correct}, {total}
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * RANKING / ORDERING
    */
-  ranking: {
-    label: "Ranking",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowDownShortWide }),
-    category: "survey",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Rank the Following Items",
-      label_placement: "default",
-      admin_label: "",
-      // === Items ===
-      items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-      // === Ranking Method ===
-      ranking_type: "drag",
-      // drag, click, dropdown
-      // === Options ===
-      allow_ties: false,
-      require_all: true,
-      shuffle_items: false,
-      // === Display ===
-      item_layout: "vertical",
-      // vertical, horizontal, grid
-      show_rank_numbers: true,
-      max_rank: "",
-      // Limit top N ranks
-      // === Labels ===
-      rank_label: "Rank #{n}",
-      unranked_label: "Unranked",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      WORDPRESS SPECIFIC FIELDS
      ═════════════════════════════════════════════════════════════════════ */
   /**
    * USER REGISTRATION
    */
-  user_registration: {
-    label: "User Registration",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faUser }),
-    category: "wordpress",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Create Account",
-      admin_label: "",
-      // === Fields ===
-      include_username: true,
-      include_email: true,
-      include_password: true,
-      include_first_name: false,
-      include_last_name: false,
-      include_website: false,
-      include_bio: false,
-      // === Field Labels ===
-      username_label: "Username",
-      email_label: "Email Address",
-      password_label: "Password",
-      first_name_label: "First Name",
-      last_name_label: "Last Name",
-      // === User Role ===
-      user_role: "subscriber",
-      // subscriber, contributor, author, editor, custom
-      custom_role: "",
-      // === Email Options ===
-      email_verification: false,
-      // Send verification email
-      verification_email_subject: "Verify your email address",
-      verification_email_template: "",
-      // === Password Options ===
-      auto_generate_password: false,
-      password_strength_meter: true,
-      // === Validation ===
-      username_check: true,
-      // Check if username exists
-      email_check: true,
-      // Check if email exists
-      // === Redirect ===
-      redirect_after_registration: "",
-      login_after_registration: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * POST SUBMISSION
    */
-  post_submission: {
-    label: "Post Submission",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFileLines }),
-    category: "wordpress",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Submit Post",
-      admin_label: "",
-      // === Post Type ===
-      post_type: "post",
-      // post, page, or custom post type
-      custom_post_type: "",
-      // === Fields ===
-      include_title: true,
-      title_label: "Post Title",
-      title_required: true,
-      include_content: true,
-      content_label: "Post Content",
-      content_type: "textarea",
-      // textarea, rich_text
-      content_required: true,
-      include_excerpt: false,
-      excerpt_label: "Excerpt",
-      excerpt_required: false,
-      include_featured_image: false,
-      featured_image_label: "Featured Image",
-      // === Post Settings ===
-      post_status: "pending",
-      // draft, pending, publish
-      post_author: "current_user",
-      // current_user, specific_user
-      specific_author_id: "",
-      // === Categories & Tags ===
-      include_category: false,
-      category_label: "Category",
-      category_selection: "dropdown",
-      // dropdown, checkbox, radio
-      default_category: "",
-      include_tags: false,
-      tags_label: "Tags",
-      allow_new_tags: true,
-      // === Taxonomies ===
-      custom_taxonomies: [],
-      // Array of taxonomy settings
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      require_login: false,
-      login_message: "Please log in to submit a post.",
-      redirect_after_submission: ""
-    }
-  },
   /**
    * FEATURED IMAGE UPLOAD
    */
-  featured_image: {
-    label: "Featured Image",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faImage }),
-    category: "wordpress",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Featured Image",
-      label_placement: "default",
-      admin_label: "",
-      // === Upload Options ===
-      button_text: "Upload Featured Image",
-      max_size: 5,
-      // MB
-      min_width: 0,
-      min_height: 0,
-      max_width: 0,
-      max_height: 0,
-      allowed_types: ".jpg,.jpeg,.png,.webp",
-      // === Preview ===
-      show_preview: true,
-      preview_size: "medium",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CATEGORY SELECTION
    */
-  category_selection: {
-    label: "Category Selection",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTags }),
-    category: "wordpress",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Category",
-      label_placement: "default",
-      admin_label: "",
-      // === Taxonomy ===
-      taxonomy: "category",
-      // WordPress taxonomy
-      custom_taxonomy: "",
-      // === Selection Type ===
-      selection_type: "dropdown",
-      // dropdown, checkbox, radio, multiselect
-      allow_multiple: false,
-      hierarchy: true,
-      // Show parent-child relationships
-      // === Categories ===
-      include_categories: [],
-      // Specific categories to include
-      exclude_categories: [],
-      // Categories to exclude
-      show_empty: false,
-      // Show empty categories
-      hide_empty: true,
-      // Hide categories with no posts
-      // === Display ===
-      show_count: false,
-      // Post count
-      show_description: false,
-      depth: 0,
-      // Hierarchy depth (0 = unlimited)
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * TAG SELECTION
    */
-  tag_selection: {
-    label: "Tag Selection",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTags }),
-    category: "wordpress",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Tags",
-      label_placement: "default",
-      admin_label: "",
-      // === Taxonomy ===
-      taxonomy: "post_tag",
-      // WordPress taxonomy
-      custom_taxonomy: "",
-      // === Input Type ===
-      input_type: "text",
-      // text, autocomplete, checkbox, dropdown
-      allow_custom: true,
-      max_tags: 10,
-      // === Tags ===
-      popular_tags: [],
-      // Show popular tags
-      min_popularity: 5,
-      // Minimum usage count
-      // === Display ===
-      show_count: false,
-      tag_cloud: false,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      tag_separator: ","
-    }
-  },
   /**
    * USER ROLE SELECTION
    */
-  user_role_selection: {
-    label: "User Role Selection",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faUserTag }),
-    category: "wordpress",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select User Role",
-      label_placement: "default",
-      admin_label: "",
-      // === Role Options ===
-      allowed_roles: ["subscriber", "contributor", "author"],
-      default_role: "subscriber",
-      custom_roles: [],
-      // Additional custom roles
-      // === Display ===
-      display_type: "dropdown",
-      // dropdown, radio, button
-      // === Descriptions ===
-      show_descriptions: false,
-      role_descriptions: {
-        subscriber: "Can read and comment",
-        contributor: "Can write and manage their own posts",
-        author: "Can publish and manage their own posts"
-      },
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      DYNAMIC & INTERACTIVE FIELDS
      ═════════════════════════════════════════════════════════════════════ */
@@ -6548,247 +4513,18 @@ const FIELD_TYPES = {
    * DYNAMIC LIST / TABLE
    * Dynamic table rows (PRO in FluentForm)
    */
-  dynamic_list: {
-    label: "Dynamic List",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableList }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Add Items",
-      admin_label: "",
-      // === Columns ===
-      columns: [
-        { label: "Name", type: "text", width: 50, placeholder: "Enter name" },
-        { label: "Quantity", type: "number", width: 25, placeholder: "0" },
-        { label: "Price", type: "number", width: 25, placeholder: "0.00" }
-      ],
-      // === Row Options ===
-      min_rows: 1,
-      max_rows: 50,
-      default_rows: 3,
-      allow_reorder: true,
-      // === Buttons ===
-      add_button_text: "Add Row",
-      add_button_icon: "+",
-      remove_button_text: "Remove",
-      remove_button_icon: "×",
-      // === Display ===
-      table_style: "striped",
-      // striped, bordered, simple
-      responsive: true,
-      show_row_numbers: true,
-      // === Column Types ===
-      column_types: {
-        text: { placeholder: "Enter text" },
-        number: { placeholder: "0", decimal: 2 },
-        select: { options: [] },
-        date: { format: "Y-m-d" },
-        checkbox: { default: false },
-        calculation: { formula: "" }
-      },
-      // === Calculations ===
-      enable_totals: false,
-      total_row_position: "bottom",
-      // bottom, top, both
-      total_label: "Total",
-      // === Validation ===
-      required: false,
-      require_min_rows: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * EMAIL CONFIRMATION
    */
-  email_confirmation: {
-    label: "Email Confirmation",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEnvelope }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Confirm Email",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Confirm email address",
-      default_value: "",
-      // === Matching ===
-      match_field: "email",
-      // Field to match against
-      error_message: "Email addresses do not match",
-      match_case_sensitive: false,
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "Please re-enter your email address",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      autocomplete_attribute: "email"
-    }
-  },
   /**
    * PASSWORD CONFIRMATION
    */
-  password_confirmation: {
-    label: "Password Confirmation",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faLock }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Confirm Password",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Confirm password",
-      default_value: "",
-      // === Matching ===
-      match_field: "password",
-      // Field to match against
-      error_message: "Passwords do not match",
-      match_case_sensitive: true,
-      // === Validation ===
-      required: true,
-      // === Visibility ===
-      show_toggle: true,
-      show_text: "Show",
-      hide_text: "Hide",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "Please re-enter your password",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      autocomplete_attribute: "new-password"
-    }
-  },
   /**
    * TOOLTIP FIELD
    */
-  tooltip_field: {
-    label: "Tooltip Field",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleInfo }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Text Input with Tooltip",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Enter text...",
-      default_value: "",
-      field_type: "text",
-      // text, textarea, number, email, etc.
-      // === Tooltip ===
-      tooltip_text: "Helpful tooltip text",
-      tooltip_position: "top",
-      // top, bottom, left, right
-      tooltip_icon: "info",
-      // info, question, help, custom
-      custom_icon: "",
-      // === Tooltip Behavior ===
-      tooltip_trigger: "hover",
-      // hover, click, focus
-      tooltip_animation: "fade",
-      // fade, slide, grow
-      tooltip_theme: "default",
-      // default, dark, light, custom
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * ADDRESS AUTOCOMPLETE
    */
-  address_autocomplete: {
-    label: "Address Autocomplete",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMapLocation }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Address",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Start typing address...",
-      // === Autocomplete ===
-      provider: "google",
-      // google, mapbox, here
-      api_key: "",
-      api_region: "us",
-      // === Components ===
-      include_components: ["street", "city", "state", "zip", "country"],
-      component_fields: {
-        street: { label: "Street", required: true },
-        city: { label: "City", required: true },
-        state: { label: "State", required: false },
-        zip: { label: "Zip Code", required: false },
-        country: { label: "Country", required: false }
-      },
-      // === Display ===
-      separate_components: true,
-      // Split into separate fields
-      layout: "vertical",
-      // === Constraints ===
-      country_restriction: "",
-      // Limit to country
-      bounds: "",
-      // Limit to geographic area
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CUSTOM SUBMIT BUTTON
    * (FREE in FluentForm)
@@ -6797,6 +4533,7 @@ const FIELD_TYPES = {
     label: "Custom Submit Button",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPaperPlane }),
     category: "advanced",
+    coming_soon: true,
     defaultProps: {
       // === Button Options ===
       label: "",
@@ -6845,301 +4582,21 @@ const FIELD_TYPES = {
   /**
    * LIKE / DISLIKE
    */
-  like_dislike: {
-    label: "Like / Dislike",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faThumbsUp }),
-    category: "general",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Do you like this?",
-      label_placement: "default",
-      admin_label: "",
-      // === Options ===
-      allow_neutral: true,
-      neutral_label: "Neutral",
-      like_label: "Like",
-      dislike_label: "Dislike",
-      // === Icons ===
-      icon_type: "thumbs",
-      // thumbs, smiley, star, heart, custom
-      custom_icons: {
-        like: "",
-        dislike: "",
-        neutral: ""
-      },
-      // === Layout ===
-      layout: "horizontal",
-      // horizontal, vertical
-      show_labels: true,
-      label_position: "below",
-      // below, above, hide
-      // === Behavior ===
-      allow_change: true,
-      // Allow changing selection
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      icon_size: "medium",
-      // small, medium, large
-      active_color: "",
-      inactive_color: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * FACEBOOK LIKE
    */
-  facebook_like: {
-    label: "Facebook Like",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faThumbsUp }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "",
-      admin_label: "",
-      // === URL ===
-      url_type: "current",
-      // current, custom
-      custom_url: "",
-      // === Button Options ===
-      layout: "standard",
-      // standard, button_count, box_count, button
-      width: "",
-      share: true,
-      show_faces: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      align: "left",
-      // left, center, right
-      // === Advanced ===
-      name_attribute: "",
-      kid_directed_site: false,
-      referral_code: ""
-    }
-  },
   /**
    * MARK ON MAP
    */
-  mark_on_map: {
-    label: "Mark on Map",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMapLocation }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Location on Map",
-      label_placement: "default",
-      admin_label: "",
-      // === Map Provider ===
-      map_provider: "google",
-      // google, mapbox, leaflet, openstreetmap
-      api_key: "",
-      map_style: "roadmap",
-      // roadmap, satellite, hybrid, terrain
-      // === Default Location ===
-      default_location: { lat: 40.7128, lng: -74.006 },
-      // NYC
-      zoom_level: 10,
-      fit_bounds: true,
-      // === Interaction ===
-      allow_drag: true,
-      allow_click: true,
-      single_marker: true,
-      // === Marker ===
-      marker_icon: "",
-      marker_color: "#e94560",
-      marker_draggable: true,
-      // === Display ===
-      map_width: "100%",
-      map_height: 400,
-      map_type_control: true,
-      zoom_control: true,
-      street_view_control: false,
-      fullscreen_control: false,
-      // === Geolocation ===
-      enable_geolocation: false,
-      geolocation_button_text: "Use My Location",
-      // === Output ===
-      output_format: "lat_lng",
-      // lat_lng, address, both
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * COLOR SWATCH
    */
-  color_swatch: {
-    label: "Color Swatch",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Choose Color",
-      label_placement: "default",
-      admin_label: "",
-      // === Swatches ===
-      swatches: ["#e94560", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"],
-      allow_custom: true,
-      // === Display ===
-      display_type: "swatches",
-      // swatches, picker, both
-      swatch_size: "medium",
-      // small, medium, large
-      swatch_shape: "square",
-      // square, circle
-      layout: "grid",
-      // grid, flex
-      // === Picker Options (when custom allowed) ===
-      picker_type: "default",
-      // default, chrome, sketch, photoshop
-      color_format: "hex",
-      // hex, rgb, hsl
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * DUAL LISTBOX
    */
-  dual_listbox: {
-    label: "Dual List Box",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faList }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Items",
-      label_placement: "default",
-      admin_label: "",
-      // === Options ===
-      available_items: ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"],
-      selected_items: [],
-      // === Layout ===
-      list_height: 200,
-      list_width: "equal",
-      // equal, custom
-      left_list_width: "",
-      right_list_width: "",
-      // === Labels ===
-      available_label: "Available",
-      selected_label: "Selected",
-      // === Buttons ===
-      move_all_button: true,
-      move_button_style: "icon",
-      // icon, text, both
-      // === Search ===
-      allow_search: true,
-      search_placeholder: "Search...",
-      // === Filter ===
-      allow_filter: false,
-      filter_placeholder: "Filter...",
-      // === Sorting ===
-      sort_items: false,
-      sort_selected: false,
-      sort_order: "asc",
-      // asc, desc
-      // === Display ===
-      show_item_count: true,
-      show_tooltips: true,
-      // === Validation ===
-      required: false,
-      min_selections: 0,
-      max_selections: 0,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CHAINED FIELDS
    */
-  chained_fields: {
-    label: "Chained Fields",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowDownShortWide }),
-    category: "advanced",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Dependent Fields",
-      admin_label: "",
-      // === Chain Configuration ===
-      parent_field: "",
-      // Field to watch
-      chain_type: "show",
-      // show, hide, enable, disable
-      chain_rules: [
-        { parent_value: "option1", action: "show", target_fields: ["field1", "field2"] },
-        { parent_value: "option2", action: "show", target_fields: ["field3"] }
-      ],
-      // === Display ===
-      animation: "fade",
-      // fade, slide, none
-      animation_duration: 300,
-      // === Validation ===
-      validate_hidden: false,
-      // Validate fields that are hidden
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      CONTAINER LAYOUTS
      ═════════════════════════════════════════════════════════════════════ */
@@ -7151,6 +4608,7 @@ const FIELD_TYPES = {
     label: "One Column",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
     category: "layout",
+    coming_soon: true,
     defaultProps: {
       label: "",
       columns: [{ width: 100, fields: [] }],
@@ -7168,6 +4626,7 @@ const FIELD_TYPES = {
     label: "Two Column",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
     category: "layout",
+    coming_soon: true,
     defaultProps: {
       label: "",
       columns: [
@@ -7192,6 +4651,7 @@ const FIELD_TYPES = {
     label: "Three Column",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
     category: "layout",
+    coming_soon: true,
     defaultProps: {
       label: "",
       columns: [
@@ -7215,6 +4675,7 @@ const FIELD_TYPES = {
     label: "Four Column",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
     category: "layout",
+    coming_soon: true,
     defaultProps: {
       label: "",
       columns: [
@@ -7239,6 +4700,7 @@ const FIELD_TYPES = {
     label: "Five Column",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
     category: "layout",
+    coming_soon: true,
     defaultProps: {
       label: "",
       columns: [
@@ -7264,6 +4726,7 @@ const FIELD_TYPES = {
     label: "Six Column",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
     category: "layout",
+    coming_soon: true,
     defaultProps: {
       label: "",
       columns: [
@@ -7285,725 +4748,60 @@ const FIELD_TYPES = {
   /**
    * ACCORDION SECTION
    */
-  accordion: {
-    label: "Accordion",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCompress }),
-    category: "layout",
-    pro: true,
-    defaultProps: {
-      label: "Accordion",
-      title: "Section Title",
-      description: "",
-      collapsible: true,
-      default_open: false,
-      icon_position: "left",
-      // left, right, none
-      icon: "",
-      // === Style ===
-      border_style: "solid",
-      // solid, dashed, none
-      border_width: 1,
-      border_color: "",
-      // === Animation ===
-      animation: "smooth",
-      // smooth, instant, none
-      animation_duration: 300,
-      // === Multiple Open ===
-      allow_multiple_open: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * TABS CONTAINER
    */
-  tabs: {
-    label: "Tabs",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableList }),
-    category: "layout",
-    pro: true,
-    defaultProps: {
-      label: "",
-      tabs: [
-        { title: "Tab 1", icon: "", fields: [] },
-        { title: "Tab 2", icon: "", fields: [] }
-      ],
-      // === Position ===
-      tab_position: "top",
-      // top, left, right, bottom
-      // === Style ===
-      tab_style: "default",
-      // default, pills, underline, card
-      tab_size: "medium",
-      // small, medium, large
-      // === Behavior ===
-      remember_selection: false,
-      // Remember on page load
-      auto_rotate: false,
-      rotate_interval: 5e3,
-      // ms
-      // === Animation ===
-      animation: "fade",
-      // fade, slide, none
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * PROGRESS BAR
    */
-  progress_bar: {
-    label: "Progress Bar",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faBarsProgress }),
-    category: "layout",
-    pro: true,
-    defaultProps: {
-      label: "",
-      // === Bar Type ===
-      bar_type: "percentage",
-      // percentage, steps, animated
-      bar_color: "#e94560",
-      bar_height: 10,
-      bar_style: "solid",
-      // solid, striped, animated
-      // === Display ===
-      show_percentage: true,
-      show_steps: true,
-      show_label: true,
-      label_text: "Form Progress",
-      // === Steps ===
-      steps: [],
-      // Array of step labels
-      // === Animation ===
-      animate_on_load: true,
-      animation_duration: 1e3,
-      // === Position ===
-      position: "top",
-      // top, bottom, both
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      background_color: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * COUNTDOWN TIMER
    */
-  countdown_timer: {
-    label: "Countdown Timer",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHourglassHalf }),
-    category: "layout",
-    pro: true,
-    defaultProps: {
-      label: "",
-      // === Time ===
-      end_date: "",
-      end_time: "23:59",
-      duration: "",
-      // Alternative: duration in minutes
-      // === Format ===
-      timer_format: "DHMS",
-      // D, H, M, S combination
-      separator: ":",
-      // === Labels ===
-      labels: {
-        days: "Days",
-        hours: "Hours",
-        minutes: "Minutes",
-        seconds: "Seconds"
-      },
-      // === Expiration ===
-      message: "Time has expired!",
-      redirect_url: "",
-      hide_form_on_expire: false,
-      disable_submit_on_expire: true,
-      // === Display ===
-      show_labels: true,
-      show_separator: true,
-      leading_zeros: true,
-      // === Style ===
-      style: "default",
-      // default, modern, circular, flip
-      theme_color: "#e94560",
-      // === Animation ===
-      tick_animation: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: "",
-      auto_restart: false
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      PAYMENT FIELDS (PRO in FluentForm)
      ═════════════════════════════════════════════════════════════════════ */
   /**
    * PAYMENT ITEM
    */
-  payment_item: {
-    label: "Payment Item",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faReceipt }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Item Name",
-      admin_label: "",
-      // === Item Details ===
-      item_type: "single",
-      // single, subscription, donation
-      description: "",
-      // === Pricing ===
-      price: 0,
-      price_type: "fixed",
-      // fixed, user_entered
-      min_price: 0,
-      max_price: 0,
-      // === Quantity ===
-      quantity_enabled: true,
-      default_quantity: 1,
-      min_quantity: 1,
-      max_quantity: 100,
-      quantity_step: 1,
-      // === Tax ===
-      taxable: false,
-      tax_rate: 0,
-      tax_included: false,
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SUBSCRIPTION ITEM
    */
-  subscription: {
-    label: "Subscription",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotate }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Subscription Plan",
-      admin_label: "",
-      // === Plans ===
-      plans: [
-        { label: "Monthly", value: "monthly", price: 10, interval: "month", interval_count: 1 },
-        { label: "Yearly", value: "yearly", price: 100, interval: "year", interval_count: 1 }
-      ],
-      default_plan: "monthly",
-      // === Trial ===
-      trial_period: 0,
-      // days
-      trial_amount: 0,
-      // === Setup Fee ===
-      setup_fee: 0,
-      setup_fee_label: "One-time setup fee",
-      // === Billing Cycle ===
-      billing_cycle_label: "Billed {interval}",
-      show_renewal_date: true,
-      // === Options ===
-      allow_plan_change: true,
-      prorate_on_change: false,
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      plan_display: "radio",
-      // radio, button, card
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * COUPON
    */
-  coupon: {
-    label: "Coupon Code",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTags }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Coupon Code",
-      admin_label: "",
-      // === Input ===
-      placeholder: "Enter coupon code",
-      apply_button_text: "Apply",
-      // === Coupons ===
-      allowed_coupons: [],
-      // Specific allowed codes
-      coupon_source: "database",
-      // database, manual, api
-      // === Display ===
-      show_discount_amount: true,
-      show_remove_button: true,
-      remove_button_text: "Remove",
-      // === Messages ===
-      success_message: "Coupon applied successfully!",
-      invalid_message: "Invalid coupon code",
-      expired_message: "Coupon has expired",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      apply_on_load: false,
-      default_coupon: ""
-    }
-  },
   /**
    * ITEM QUANTITY
    */
-  item_quantity: {
-    label: "Quantity",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHashtag }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Quantity",
-      label_placement: "default",
-      admin_label: "",
-      // === Quantity Options ===
-      min: 1,
-      max: 100,
-      step: 1,
-      default: 1,
-      // === Price ===
-      price_per_unit: 0,
-      calculate_total: true,
-      // === Display ===
-      show_buttons: true,
-      increment_label: "+",
-      decrement_label: "-",
-      show_total: true,
-      total_label: "Total: {amount}",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * PAYMENT SUMMARY
    */
-  payment_summary: {
-    label: "Payment Summary",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faReceipt }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Order Summary",
-      admin_label: "",
-      // === Display Options ===
-      show_subtotal: true,
-      subtotal_label: "Subtotal",
-      show_tax: true,
-      tax_label: "Tax",
-      show_shipping: false,
-      shipping_label: "Shipping",
-      show_discount: true,
-      discount_label: "Discount",
-      show_total: true,
-      total_label: "Total",
-      // === Currency ===
-      currency: "USD",
-      currency_symbol: "$",
-      currency_position: "before",
-      decimal_places: 2,
-      // === Layout ===
-      layout: "list",
-      // list, table, compact
-      align_right: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      highlight_total: true,
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CUSTOM PAYMENT AMOUNT
    */
-  payment_amount: {
-    label: "Custom Amount",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMoneyBill }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Payment Amount",
-      label_placement: "default",
-      admin_label: "",
-      // === Amount Options ===
-      placeholder: "Enter amount",
-      min: 0,
-      max: 1e3,
-      default: 10,
-      step: 1,
-      // === Preset Amounts ===
-      show_presets: true,
-      preset_amounts: [10, 25, 50, 100],
-      preset_layout: "buttons",
-      // buttons, dropdown
-      allow_custom: true,
-      // === Currency ===
-      currency: "USD",
-      currency_symbol: "$",
-      symbol_position: "before",
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * PAYMENT METHOD
    */
-  payment_method: {
-    label: "Payment Method",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCreditCard }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Payment Method",
-      label_placement: "default",
-      admin_label: "",
-      // === Methods ===
-      methods: ["paypal", "stripe", "bank_transfer"],
-      available_methods: {
-        paypal: { label: "PayPal", icon: "", enabled: true },
-        stripe: { label: "Credit Card", icon: "", enabled: true },
-        bank_transfer: { label: "Bank Transfer", icon: "", enabled: true }
-      },
-      default_method: "paypal",
-      // === Display ===
-      display_type: "radio",
-      // radio, button, dropdown
-      show_icons: true,
-      show_descriptions: false,
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SHIPPING ADDRESS
    */
-  shipping_address: {
-    label: "Shipping Address",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTruck }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Shipping Address",
-      label_placement: "default",
-      admin_label: "",
-      // === Address Components ===
-      include_street1: true,
-      include_street2: true,
-      include_city: true,
-      include_state: true,
-      include_zip: true,
-      include_country: true,
-      // === Copy from Billing ===
-      same_as_billing_option: true,
-      same_as_billing_label: "Same as billing address",
-      default_same_as_billing: false,
-      // === Phone ===
-      require_phone: false,
-      phone_label: "Phone Number",
-      // === Validation ===
-      required: false,
-      required_fields: [],
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * DONATION
    */
-  donation: {
-    label: "Donation",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHeart }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Donation Amount",
-      label_placement: "default",
-      admin_label: "",
-      // === Preset Amounts ===
-      preset_amounts: [10, 25, 50, 100],
-      allow_custom: true,
-      default_amount: 25,
-      // === Recurring ===
-      recurring_option: false,
-      recurring_label: "Make this a monthly donation",
-      recurring_intervals: ["monthly"],
-      // === Display ===
-      preset_layout: "buttons",
-      // buttons, grid, dropdown
-      highlight_popular: true,
-      popular_amount: 50,
-      // === Currency ===
-      currency: "USD",
-      currency_symbol: "$",
-      // === Messages ===
-      thank_you_message: "Thank you for your donation!",
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * PRODUCT VARIATIONS
    */
-  product_variations: {
-    label: "Product Variations",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faClone }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Select Options",
-      label_placement: "default",
-      admin_label: "",
-      // === Variations ===
-      variations: [
-        { name: "Size", options: ["Small", "Medium", "Large"], required: true },
-        { name: "Color", options: ["Red", "Blue", "Green"], required: true }
-      ],
-      // === Price Adjustments ===
-      price_adjustments: {
-        // Format: 'Size-Medium': +5, 'Color-Red': -2
-      },
-      // === Display ===
-      variation_type: "radio",
-      // radio, button, dropdown, color_swatch, image
-      show_prices: true,
-      show_stock: false,
-      // === Validation ===
-      required: true,
-      require_all_variations: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * TAX CALCULATION
    */
-  tax_calculation: {
-    label: "Tax Calculation",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalculator }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      label: "",
-      // === Tax Rate ===
-      tax_rate: 0,
-      tax_type: "percentage",
-      // percentage, fixed
-      tax_label: "Tax",
-      // === Options ===
-      tax_included: false,
-      // Price includes tax
-      apply_to_shipping: false,
-      compound_tax: false,
-      // Tax on tax
-      // === By Region ===
-      regional_tax: false,
-      tax_rates: {
-        // Format: 'US': 10, 'CA': 5
-      },
-      // === Display ===
-      show_tax_breakdown: false,
-      breakdown_label: "Tax Details",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * CREDIT CARD
    */
-  credit_card: {
-    label: "Credit Card",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCreditCard }),
-    category: "payment",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Card Details",
-      label_placement: "default",
-      admin_label: "",
-      // === Card Fields ===
-      show_card_number: true,
-      card_number_label: "Card Number",
-      card_number_placeholder: "1234 5678 9012 3456",
-      show_expiry: true,
-      expiry_label: "Expiration Date",
-      expiry_placeholder: "MM / YY",
-      show_cvc: true,
-      cvc_label: "CVC",
-      cvc_placeholder: "123",
-      show_cardholder_name: false,
-      cardholder_label: "Cardholder Name",
-      // === Card Icons ===
-      show_card_icons: true,
-      accepted_cards: ["visa", "mastercard", "amex", "discover"],
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      input_style: "modern",
-      // modern, classic, minimal
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      postal_code: false,
-      postal_label: "Postal Code"
-    }
-  },
   /* ═════════════════════════════════════════════════════════════════════
      SECURITY FIELDS
      ═════════════════════════════════════════════════════════════════════ */
   /**
    * HONEYPOT
    */
-  honeypot: {
-    label: "Honeypot",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShield }),
-    category: "security",
-    pro: true,
-    defaultProps: {
-      label: "",
-      field_name: "website_url",
-      // Realistic field name
-      validation_method: "empty",
-      // empty, specific_value
-      specific_value: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * RECAPTCHA
    * (FREE in FluentForm - essential security)
@@ -8012,6 +4810,7 @@ const FIELD_TYPES = {
     label: "reCAPTCHA",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCheckDouble }),
     category: "security",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "",
@@ -8050,6 +4849,7 @@ const FIELD_TYPES = {
     label: "hCaptcha",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShield }),
     category: "security",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "",
@@ -8081,6 +4881,7 @@ const FIELD_TYPES = {
     label: "Turnstile",
     icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCertificate }),
     category: "security",
+    coming_soon: true,
     defaultProps: {
       // === Label Options ===
       label: "",
@@ -8103,80 +4904,24 @@ const FIELD_TYPES = {
       // === Advanced ===
       name_attribute: ""
     }
-  },
+  }
   /**
    * MATH CAPTCHA
    */
-  math_captcha: {
-    label: "Math Captcha",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalculator }),
-    category: "security",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "",
-      admin_label: "",
-      // === Question ===
-      difficulty: "medium",
-      // easy, medium, hard
-      operation: "addition",
-      // addition, subtraction, multiplication, mixed
-      // === Display ===
-      question_template: "{num1} {operator} {num2} =",
-      placeholder: "Answer",
-      // === Options ===
-      num1_range: [1, 10],
-      // For easy
-      num2_range: [1, 10],
-      negative_answers: false,
-      // === Validation ===
-      required: true,
-      error_message: "Incorrect answer. Please try again.",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "Solve the math problem to continue",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
   /**
    * SLIDER CAPTCHA
    */
-  slider_captcha: {
-    label: "Slider Captcha",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSliders }),
-    category: "security",
-    pro: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Slide to verify",
-      admin_label: "",
-      // === Puzzle Type ===
-      puzzle_type: "slide",
-      // slide, rotate
-      // === Display ===
-      slider_text: "Slide right to verify",
-      verified_text: "Verified!",
-      failed_text: "Please try again",
-      // === Options ===
-      refresh_button: true,
-      retry_limit: 3,
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      theme: "light",
-      // light, dark
-      // === Advanced ===
-      name_attribute: ""
-    }
-  }
 };
+function getAllFieldTypes() {
+  const allFields = { ...FIELD_TYPES };
+  if (typeof window !== "undefined" && window.formglut_pro_fields) {
+    Object.assign(allFields, window.formglut_pro_fields);
+  }
+  return allFields;
+}
 function createField(type) {
-  const fieldType = FIELD_TYPES[type];
+  const allFields = getAllFieldTypes();
+  const fieldType = allFields[type];
   if (!fieldType) {
     return { id: "", type: "text", label: "", required: false };
   }
@@ -8187,81 +4932,258 @@ function createField(type) {
   };
 }
 const COMMON_OPTION_VALUES = {
-  labelPlacement: [
-    { value: "top", label: "Above Field" },
-    { value: "left", label: "Left of Field" },
-    { value: "right", label: "Right of Field" },
-    { value: "hidden", label: "Hidden" }
+  keyboardTypes: [
+    { value: "default", label: "Standard Keyboard" },
+    { value: "numeric", label: "Numeric (0-9)" },
+    { value: "decimal", label: "Decimal (0-9 with .)" },
+    { value: "tel", label: "Telephone Keypad" },
+    { value: "email", label: "Email Keyboard" },
+    { value: "url", label: "URL Keyboard" }
   ],
   resize: [
     { value: "vertical", label: "Vertical Only" },
     { value: "horizontal", label: "Horizontal Only" },
     { value: "both", label: "Both Directions" },
     { value: "none", label: "None" }
+  ],
+  maskPatterns: [
+    { value: "", label: "None" },
+    { value: "(999) 999-9999", label: "Phone: (###) ###-####" },
+    { value: "999-99-9999", label: "SSN: ###-##-####" },
+    { value: "9999 9999 9999 9999", label: "Credit Card: #### #### #### ####" },
+    { value: "99/99/9999", label: "Date: ##/##/####" },
+    { value: "aaaaaaaaaa", label: "Letters Only (10)" },
+    { value: "**********", label: "Alphanumeric (10)" }
   ]
 };
 const SECTION_ORDER = [
   "general",
-  "validation"
+  "validation",
+  "style",
+  "advanced",
+  "conditional"
 ];
 const SECTION_TITLES = {
   general: "Field Options",
-  validation: "Validation"
+  validation: "Validation",
+  style: "Style Options",
+  advanced: "Advanced",
+  conditional: "Conditional Logic"
 };
 const UNIVERSAL_OPTIONS = {
   // === Field Options (General) ===
+  // Label and related options
   label: {
     type: "text",
-    label: "Field Label",
+    label: "Element Label",
     section: "general",
-    icon: "fa-tag",
     description: "The label displayed above or beside the field"
   },
-  label_placement: {
-    type: "select",
-    label: "Label Placement",
+  admin_label: {
+    type: "text",
+    label: "Admin Field Label",
     section: "general",
-    description: "Where to position the label relative to the field",
-    options: COMMON_OPTION_VALUES.labelPlacement
+    description: "Label shown only in admin entries view (useful for short/technical labels)"
   },
+  // Input options
   placeholder: {
     type: "text",
     label: "Placeholder",
     section: "general",
-    placeholder: "Text shown in empty field",
     description: "Helpful hint shown inside the field when empty"
   },
   default_value: {
     type: "text",
     label: "Default Value",
     section: "general",
-    placeholder: "Pre-populated value",
-    description: "Field is pre-filled with this value"
+    description: "Field is pre-filled with this value. Supports SmartCodes like {user_email}"
   },
-  character_limit: {
-    type: "number",
-    label: "Character Limit",
-    section: "general",
-    min: 0,
-    placeholder: "No limit",
-    description: "Maximum number of characters allowed. Leave empty for unlimited."
-  },
-  // === Validation ===
   required: {
     type: "switch",
     label: "Required",
-    section: "validation",
+    section: "general",
     description: "User must fill this field before submitting the form"
+  },
+  // Help options (grouped together)
+  help_text: {
+    type: "textarea",
+    label: "Help Message",
+    section: "general",
+    description: "Additional help text shown below or above the field",
+    rows: 2
+  },
+  help_text_position: {
+    type: "select",
+    label: "Help Message Position",
+    section: "general",
+    description: "Where to show the help message",
+    options: [
+      { value: "tooltip", label: "Tooltip on Hover" },
+      { value: "below", label: "Below Field" },
+      { value: "above", label: "Above Field" }
+    ]
+  },
+  // Prefix/Suffix (grouped together)
+  prefix_label: {
+    type: "text",
+    label: "Prefix Label",
+    section: "general",
+    description: "Text or HTML shown before the input (e.g., $, https://)"
+  },
+  suffix_label: {
+    type: "text",
+    label: "Suffix Label",
+    section: "general",
+    description: "Text or HTML shown after the input (e.g., %, .com)"
+  },
+  // === Validation ===
+  validation_message: {
+    type: "text",
+    label: "Validation Message",
+    section: "validation",
+    description: "Custom error message shown when validation fails"
+  },
+  // === Style Options ===
+  element_class: {
+    type: "text",
+    label: "Element Class",
+    section: "style",
+    description: "CSS class for the input element"
+  },
+  container_class: {
+    type: "text",
+    label: "Container Class",
+    section: "style",
+    description: "CSS class for the wrapper container"
+  },
+  name_attribute: {
+    type: "text",
+    label: "Name Attribute",
+    section: "advanced",
+    description: "Custom name attribute for the field (useful for integrations)"
+  }
+};
+const TEXT_INPUT_OPTIONS = {
+  ...UNIVERSAL_OPTIONS,
+  // === General Options ===
+  mobile_keyboard_type: {
+    type: "select",
+    label: "Mobile Keyboard Type",
+    section: "general",
+    description: "Keyboard type shown on mobile devices",
+    options: COMMON_OPTION_VALUES.keyboardTypes
+  },
+  // === Input Mask ===
+  enable_mask: {
+    type: "switch",
+    label: "Enable Mask Input",
+    section: "general",
+    description: "Force input to match a specific pattern (e.g., phone number)"
+  },
+  mask_pattern: {
+    type: "select",
+    label: "Mask Pattern",
+    section: "general",
+    description: "Predefined mask patterns",
+    options: COMMON_OPTION_VALUES.maskPatterns
+  },
+  custom_mask: {
+    type: "text",
+    label: "Custom Mask",
+    section: "general",
+    description: "Custom mask pattern: 9=digit, a=letter, *=alphanumeric (e.g., (999) 999-9999)"
+  },
+  mask_placeholder: {
+    type: "text",
+    label: "Mask Placeholder",
+    section: "general",
+    description: "Character shown for unfilled mask positions (default: _)"
+  },
+  // === Validation ===
+  character_limit: {
+    type: "number",
+    label: "Max Text Length",
+    section: "validation",
+    min: 0,
+    description: "Maximum number of characters allowed (0 = unlimited)"
+  },
+  validate_unique: {
+    type: "switch",
+    label: "Validate as Unique",
+    section: "validation",
+    description: "Check for duplicate values in previous submissions"
+  },
+  unique_error_message: {
+    type: "text",
+    label: "Duplicate Error Message",
+    section: "validation",
+    description: "Error message shown when value already exists"
+  },
+  // === Advanced ===
+  reversible_mask: {
+    type: "switch",
+    label: "Reversible Mask",
+    section: "advanced",
+    description: "Allow the mask to work in reverse when deleting"
+  },
+  clear_on_invalid: {
+    type: "switch",
+    label: "Clear if Not Match",
+    section: "advanced",
+    description: "Clear the field if input doesn't match the mask"
+  }
+};
+const EMAIL_OPTIONS = {
+  ...UNIVERSAL_OPTIONS,
+  // === Field Options ===
+  confirm_email: {
+    type: "switch",
+    label: "Require Email Confirmation",
+    section: "validation",
+    description: "User must enter the same email twice"
+  },
+  confirm_label: {
+    type: "text",
+    label: "Confirmation Field Label",
+    section: "validation",
+    description: "Label for the confirmation email field"
+  },
+  confirm_placeholder: {
+    type: "text",
+    label: "Confirmation Placeholder",
+    section: "validation",
+    description: "Placeholder for the confirmation field"
+  },
+  confirm_error_message: {
+    type: "text",
+    label: "Mismatch Error Message",
+    section: "validation",
+    description: "Error shown when emails don't match"
+  },
+  // === Validation ===
+  validate_unique: {
+    type: "switch",
+    label: "Validate as Unique",
+    section: "validation",
+    description: "Check if this email has already been submitted"
+  },
+  unique_error_message: {
+    type: "text",
+    label: "Validation Message for Duplicate",
+    section: "validation",
+    description: "Error message when email already exists"
   }
 };
 const TEXTAREA_OPTIONS = {
+  ...UNIVERSAL_OPTIONS,
+  // === Field Options ===
   rows: {
     type: "number",
     label: "Rows",
     section: "general",
     min: 1,
     max: 50,
-    description: "Number of rows for textarea"
+    description: "Number of visible text lines"
   },
   cols: {
     type: "number",
@@ -8269,26 +5191,20 @@ const TEXTAREA_OPTIONS = {
     section: "general",
     min: 1,
     max: 100,
-    description: "Width of textarea in average character widths"
+    description: "Width in average character widths (leave empty for 100%)"
   },
   resize: {
     type: "select",
     label: "Resize Handle",
     section: "general",
     description: "Allow users to resize the textarea",
-    options: COMMON_OPTION_VALUES.resize || [
-      { value: "vertical", label: "Vertical Only" },
-      { value: "horizontal", label: "Horizontal Only" },
-      { value: "both", label: "Both Directions" },
-      { value: "none", label: "None" }
-    ]
+    options: COMMON_OPTION_VALUES.resize
   },
   max_length: {
     type: "number",
-    label: "Max Length",
+    label: "Max Text Length",
     section: "validation",
-    min: 1,
-    placeholder: "No limit",
+    min: 0,
     description: "Maximum number of characters allowed"
   },
   min_length: {
@@ -8296,32 +5212,118 @@ const TEXTAREA_OPTIONS = {
     label: "Min Length",
     section: "validation",
     min: 0,
-    placeholder: "No minimum",
     description: "Minimum number of characters required"
+  },
+  enable_rtl: {
+    type: "switch",
+    label: "Enable RTL",
+    section: "advanced",
+    description: "Enable right-to-left text direction"
+  }
+};
+const SELECT_OPTIONS = {
+  ...UNIVERSAL_OPTIONS,
+  // === Field Options ===
+  disable_first_option: {
+    type: "switch",
+    label: "Disable First Option",
+    section: "general",
+    description: "First option (usually placeholder) cannot be selected"
+  },
+  shuffle_options: {
+    type: "switch",
+    label: "Shuffle Options",
+    section: "general",
+    description: "Randomize option order each time the form loads"
+  },
+  enable_search: {
+    type: "switch",
+    label: "Enable Search",
+    section: "general",
+    description: "Add search functionality to dropdown (useful for many options)"
+  },
+  min_search_chars: {
+    type: "number",
+    label: "Min Search Characters",
+    section: "general",
+    min: 1,
+    description: "Minimum characters before search starts"
+  }
+};
+const MULTISELECT_OPTIONS = {
+  ...UNIVERSAL_OPTIONS,
+  // === Field Options ===
+  shuffle_options: {
+    type: "switch",
+    label: "Shuffle Options",
+    section: "general",
+    description: "Randomize option order each time the form loads"
+  },
+  enable_search: {
+    type: "switch",
+    label: "Enable Search",
+    section: "general",
+    description: "Add search functionality to dropdown (useful for many options)"
+  },
+  select_all_button: {
+    type: "switch",
+    label: "Show Select All Button",
+    section: "general",
+    description: "Add a button to select all options"
+  },
+  display_format: {
+    type: "select",
+    label: "Display Format",
+    section: "general",
+    description: "How selected options are displayed",
+    options: [
+      { value: "tags", label: "Tags (Chips)" },
+      { value: "text", label: "Text (Comma Separated)" },
+      { value: "count", label: 'Count Only (e.g., "3 selected")' }
+    ]
+  },
+  // === Selection Limits ===
+  min_selections: {
+    type: "number",
+    label: "Min Selections Required",
+    section: "validation",
+    min: 0,
+    description: "Minimum number of options user must select (0 = no minimum)"
+  },
+  max_selections: {
+    type: "number",
+    label: "Max Selections Allowed",
+    section: "validation",
+    min: 1,
+    description: "Maximum number of options user can select"
   }
 };
 const FIELD_TYPE_OPTIONS_MAP = {
-  // === Text-based fields ===
-  text: { ...UNIVERSAL_OPTIONS },
-  email: { ...UNIVERSAL_OPTIONS },
-  textarea: { ...UNIVERSAL_OPTIONS, ...TEXTAREA_OPTIONS },
-  url: { ...UNIVERSAL_OPTIONS },
-  phone: { ...UNIVERSAL_OPTIONS },
-  hidden: { ...UNIVERSAL_OPTIONS },
-  password: { ...UNIVERSAL_OPTIONS },
-  // === Number-based fields ===
-  number: { ...UNIVERSAL_OPTIONS },
-  // === Select-based fields ===
-  select: { ...UNIVERSAL_OPTIONS },
-  multiselect: { ...UNIVERSAL_OPTIONS },
-  radio: { ...UNIVERSAL_OPTIONS },
-  checkbox: { ...UNIVERSAL_OPTIONS },
-  // === Date/Time fields ===
-  date: { ...UNIVERSAL_OPTIONS },
-  time: { ...UNIVERSAL_OPTIONS },
-  // === Other fields ===
-  color_picker: { ...UNIVERSAL_OPTIONS },
-  file_upload: { ...UNIVERSAL_OPTIONS }
+  // === Implemented Fields ===
+  text: TEXT_INPUT_OPTIONS,
+  email: EMAIL_OPTIONS,
+  textarea: TEXTAREA_OPTIONS,
+  select: SELECT_OPTIONS,
+  multiselect: MULTISELECT_OPTIONS,
+  // === Future Fields (will have their own option sets) ===
+  url: TEXT_INPUT_OPTIONS,
+  // Reuse text input options for now
+  phone: TEXT_INPUT_OPTIONS,
+  // Reuse text input options for now
+  hidden: UNIVERSAL_OPTIONS,
+  // Minimal options for hidden fields
+  password: TEXT_INPUT_OPTIONS,
+  // Reuse text input options for now
+  number: TEXT_INPUT_OPTIONS,
+  // Reuse text input options for now
+  radio: SELECT_OPTIONS,
+  // Similar to select
+  checkbox: SELECT_OPTIONS,
+  // Similar to select
+  date: UNIVERSAL_OPTIONS,
+  time: UNIVERSAL_OPTIONS,
+  color_picker: UNIVERSAL_OPTIONS,
+  file_upload: UNIVERSAL_OPTIONS
 };
 function getOptionsForFieldType(fieldType) {
   return FIELD_TYPE_OPTIONS_MAP[fieldType] || UNIVERSAL_OPTIONS;
@@ -8530,29 +5532,11 @@ function ConditionalLogicOptions({ field, allFields = [], onUpdate }) {
   ] });
 }
 const FIELD_SPECIFIC_OPTIONS = {
-  // === Length Validation ===
-  min_length: { type: "number", label: "Min Length", section: "validation", min: 0, description: "Minimum number of characters required" },
-  max_length: { type: "number", label: "Max Length", section: "validation", min: 1, description: "Maximum number of characters allowed" },
   // === Size/Dimensions ===
-  rows: { type: "number", label: "Rows", section: "general", min: 1, max: 50, description: "Number of visible text lines for textarea" },
-  cols: { type: "number", label: "Columns", section: "general", min: 1, max: 100, description: "Width of textarea in average character widths" },
   width: { type: "text", label: "Width", section: "style", placeholder: "e.g., 100%, 300px", description: "Custom width for the element" },
   height: { type: "text", label: "Height", section: "style", placeholder: "e.g., 200px", description: "Custom height for the element" },
   // === CSS Class ===
   css_class: { type: "text", label: "CSS Class", section: "style", placeholder: "Add CSS class", description: "Custom CSS class for styling" },
-  // === Textarea Specific ===
-  resize: {
-    type: "select",
-    label: "Resize Handle",
-    section: "general",
-    description: "Allow users to resize the textarea",
-    options: [
-      { value: "vertical", label: "Vertical Only" },
-      { value: "horizontal", label: "Horizontal Only" },
-      { value: "both", label: "Both Directions" },
-      { value: "none", label: "None" }
-    ]
-  },
   // === URL Options ===
   url_scheme: {
     type: "select",
@@ -8625,9 +5609,7 @@ function getApplicableOptions(fieldType, field = {}) {
     "tax_rates",
     "accepted_cards",
     "validation_messages",
-    "option_groups",
-    "label_placement"
-    // In Style Options panel
+    "option_groups"
   ];
   return applicableKeys.filter((key) => !excludeKeys.includes(key));
 }
@@ -8779,10 +5761,34 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
   const applicableKeys = reactExports.useMemo(() => {
     return getApplicableOptions(field.type, field);
   }, [field.type]);
+  const MASK_OPTION_KEYS = [
+    "mask_pattern",
+    "custom_mask",
+    "mask_placeholder",
+    "reversible_mask",
+    "clear_on_invalid"
+  ];
+  const EMAIL_CONFIRMATION_KEYS = [
+    "confirm_label",
+    "confirm_placeholder",
+    "confirm_error_message"
+  ];
+  const UNIQUE_ERROR_KEYS = [
+    "unique_error_message"
+  ];
   const optionsBySection = reactExports.useMemo(() => {
     const sections = {};
     const optionDefinitions = getOptionDefinitions(field.type);
     applicableKeys.forEach((key) => {
+      if (MASK_OPTION_KEYS.includes(key) && !field.enable_mask) {
+        return;
+      }
+      if (EMAIL_CONFIRMATION_KEYS.includes(key) && !field.confirm_email) {
+        return;
+      }
+      if (UNIQUE_ERROR_KEYS.includes(key) && !field.validate_unique) {
+        return;
+      }
       const definition = optionDefinitions[key] || {
         type: typeof field[key] === "boolean" ? "switch" : "text",
         label: key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
@@ -8941,27 +5947,151 @@ function genId() {
   uid += 1;
   return "f" + Date.now() + "_" + uid;
 }
+function parseCss(cssString) {
+  if (!cssString || typeof cssString !== "string") return {};
+  const styles = {};
+  cssString.split(";").forEach((rule) => {
+    const [property, ...valueParts] = rule.split(":");
+    const value = valueParts.join(":").trim();
+    const prop = property == null ? void 0 : property.trim();
+    if (prop && value) {
+      const jsProp = prop.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+      styles[jsProp] = value;
+    }
+  });
+  return styles;
+}
+function getInputMode(keyboardType) {
+  const modeMap = {
+    numeric: "numeric",
+    decimal: "decimal",
+    tel: "tel",
+    email: "email",
+    url: "url"
+  };
+  return modeMap[keyboardType] || void 0;
+}
+function PlaceholderStylesInjector({ fieldId, placeholderStyle }) {
+  reactExports.useEffect(() => {
+    if (!placeholderStyle) return;
+    const styleId = `fg-placeholder-styles-${fieldId}`;
+    const styleElement = document.createElement("style");
+    styleElement.id = styleId;
+    styleElement.textContent = `
+      .fg-field-${fieldId}::placeholder,
+      .fg-field-${fieldId} ::placeholder {
+        ${placeholderStyle}
+      }
+    `;
+    document.head.appendChild(styleElement);
+    return () => {
+      const existing = document.getElementById(styleId);
+      if (existing) existing.remove();
+    };
+  }, [fieldId, placeholderStyle]);
+  return null;
+}
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+function applyInputMask(value, mask) {
+  if (!mask || !value) return value;
+  const maskChars = mask.split("");
+  const valueChars = value.toString().split("");
+  let result = "";
+  let valueIndex = 0;
+  for (let i = 0; i < maskChars.length && valueIndex < valueChars.length; i++) {
+    const maskChar = maskChars[i];
+    const valueChar = valueChars[valueIndex];
+    if (maskChar === "9") {
+      if (/\d/.test(valueChar)) {
+        result += valueChar;
+        valueIndex++;
+      }
+    } else if (maskChar === "a") {
+      if (/[a-zA-Z]/.test(valueChar)) {
+        result += valueChar;
+        valueIndex++;
+      }
+    } else if (maskChar === "*") {
+      if (/[a-zA-Z0-9]/.test(valueChar)) {
+        result += valueChar;
+        valueIndex++;
+      }
+    } else {
+      result += maskChar;
+      if (valueChar === maskChar) {
+        valueIndex++;
+      }
+    }
+  }
+  return result;
+}
+const pad = (val, fallback) => val != null && val !== "" ? val + "px" : fallback + "px";
 function FieldTemplate({ field: f }) {
-  const pad = (v, d) => (v ?? d) + "px";
-  const pt = pad(f.padding_top, 10), pr = pad(f.padding_right, 14), pb = pad(f.padding_bottom, 10), pl = pad(f.padding_left, 14);
-  const mt = pad(f.margin_top, 0), mr = pad(f.margin_right, 0), mb = pad(f.margin_bottom, 0), ml = pad(f.margin_left, 0);
+  const [validationErrors, setValidationErrors] = React.useState({});
+  const [multiSelectValues, setMultiSelectValues] = React.useState(f.default_value || []);
+  const labelCustomStyle = parseCss(f.label_style);
+  const inputCustomStyle = parseCss(f.input_style || f.textarea_style || f.dropdown_style);
+  const helpTextCustomStyle = parseCss(f.help_text_style);
+  const errorCustomStyle = parseCss(f.error_message_style);
+  const containerCustomStyle = parseCss(f.container_style);
+  const prefixSuffixCustomStyle = parseCss(f.prefix_suffix_style);
   const inputStyle = {
     background: f.bg_color || "#fafbfc",
     color: f.text_color || "#94a3b8",
     borderColor: f.border_color || "#e2e8f0",
     borderRadius: (f.border_radius ?? 8) + "px",
-    padding: `${pt} ${pr} ${pb} ${pl}`,
-    margin: `${mt} ${mr} ${mb} ${ml}`
+    padding: `${pad(f.padding_top, 10)} ${pad(f.padding_right, 14)} ${pad(f.padding_bottom, 10)} ${pad(f.padding_left, 14)}`,
+    margin: `${pad(f.margin_top, 0)} ${pad(f.margin_right, 0)} ${pad(f.margin_bottom, 0)} ${pad(f.margin_left, 0)}`,
+    ...inputCustomStyle
   };
   const fieldWidthVal = f.field_width === "custom" && f.field_width_custom ? f.field_width_custom + "px" : f.field_width;
   const wrapperStyle = {
-    ...fieldWidthVal && fieldWidthVal !== "100%" ? { maxWidth: fieldWidthVal } : {}
+    ...fieldWidthVal && fieldWidthVal !== "100%" ? { maxWidth: fieldWidthVal } : {},
+    ...containerCustomStyle
   };
-  const hasWrapper = Object.keys(wrapperStyle).length > 0;
-  const wrapper = hasWrapper ? wrapperStyle : void 0;
   const labelPlacement = f.label_placement || "top";
   const labelWidthVal = f.label_width === "custom" && f.label_width_custom ? f.label_width_custom + "px" : f.label_width;
-  const labelStyle = labelPlacement === "left" || labelPlacement === "right" ? { flex: "0 0 auto", width: labelWidthVal && labelWidthVal !== "auto" && labelWidthVal !== "100%" ? labelWidthVal : void 0, whiteSpace: "nowrap", marginBottom: 0 } : labelPlacement === "hidden" ? { display: "none" } : {};
+  const labelStyle = labelPlacement === "left" || labelPlacement === "right" ? { flex: "0 0 auto", width: labelWidthVal && labelWidthVal !== "auto" && labelWidthVal !== "100%" ? labelWidthVal : void 0, whiteSpace: "nowrap", marginBottom: 0, ...labelCustomStyle } : labelPlacement === "hidden" ? { display: "none", ...labelCustomStyle } : { ...labelCustomStyle };
+  const showHelpTip = f.help_text && f.help_text_position === "tooltip";
+  const showHelpAbove = f.help_text && f.help_text_position === "above";
+  const showHelpBelow = f.help_text && (!f.help_text_position || f.help_text_position === "below");
+  const getDisplayOptions = () => {
+    const opts = f.options || [];
+    if (f.shuffle_options) {
+      return shuffleArray(opts);
+    }
+    return opts;
+  };
+  const getMaskedValue = (value) => {
+    if (f.enable_mask && (f.custom_mask || f.mask_pattern)) {
+      const mask = f.custom_mask || f.mask_pattern;
+      return applyInputMask(value, mask);
+    }
+    return value;
+  };
+  const getErrorMessage = () => {
+    if (f.required && validationErrors.required) {
+      return f.validation_message || "This field is required";
+    }
+    if (f.validate_unique && validationErrors.unique) {
+      return f.unique_error_message || "This value already exists";
+    }
+    if (validationErrors.pattern) {
+      return f.validation_message || "Invalid format";
+    }
+    if (f.type === "email" && f.confirm_email && validationErrors.confirm) {
+      return f.confirm_error_message || "Emails do not match";
+    }
+    return null;
+  };
+  const errorMessage = getErrorMessage();
   const label = /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-form-field-label", style: labelStyle, children: [
     f.admin_label || f.label || /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { color: "#94a3b8", fontStyle: "italic" }, children: [
       f.type,
@@ -8969,42 +6099,206 @@ function FieldTemplate({ field: f }) {
       __("field", "formglut")
     ] }),
     f.required && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "required", children: "*" }),
-    f.help_text && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-help-tip", title: f.help_text, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "14", height: "14", viewBox: "0 0 20 20", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: [
+    showHelpTip && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-help-tip", title: f.help_text, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "14", height: "14", viewBox: "0 0 20 20", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "10", cy: "10", r: "9", stroke: "currentColor", strokeWidth: "1.5" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M10 9v5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "10", cy: "6.5", r: "0.75", fill: "currentColor" })
     ] }) })
   ] });
   function renderInput() {
+    const fieldName = f.name_attribute || f.id;
+    const inputMode = getInputMode(f.mobile_keyboard_type);
+    const charLimit = f.character_limit || f.max_length ? Number(f.character_limit || f.max_length) : 0;
+    const maxLength = charLimit > 0 ? charLimit : void 0;
+    const displayOptions = getDisplayOptions();
     if (f.type === "textarea") {
-      const charLimit2 = f.max_length ? Number(f.max_length) : 0;
-      const maxLength2 = charLimit2 > 0 ? charLimit2 : void 0;
       const resizeValue = f.resize || "vertical";
       const resizeStyle = resizeValue === "both" ? {} : { resize: resizeValue };
+      const minLength = f.min_length ? Number(f.min_length) : void 0;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
-        f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", dangerouslySetInnerHTML: { __html: f.prefix_label } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { className: "fg-form-field-input", rows: f.rows || 4, placeholder: f.placeholder, defaultValue: f.default_value, maxLength: maxLength2, readOnly: true, style: { ...resizeStyle, ...inputStyle } }, `textarea-${f.id}-${f.default_value || ""}-${f.max_length || ""}`),
-        f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", dangerouslySetInnerHTML: { __html: f.suffix_label } })
+        f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "textarea",
+          {
+            className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
+            name: fieldName,
+            rows: f.rows || 4,
+            placeholder: f.placeholder,
+            defaultValue: f.default_value,
+            maxLength,
+            minLength,
+            readOnly: true,
+            dir: f.enable_rtl ? "rtl" : void 0,
+            style: { ...resizeStyle, ...inputStyle }
+          },
+          `textarea-${f.id}-${f.default_value || ""}-${f.max_length || ""}`
+        ),
+        f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.suffix_label } })
       ] });
+    }
+    if (f.type === "email") {
+      const maskedValue2 = getMaskedValue(f.default_value);
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: f.confirm_email ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", style: { marginBottom: 8 }, children: [
+          f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
+              type: "email",
+              name: `${fieldName}_primary`,
+              placeholder: f.placeholder || "Email Address",
+              defaultValue: maskedValue2,
+              maxLength,
+              inputMode,
+              readOnly: true,
+              style: inputStyle
+            },
+            `email-${f.id}-primary`
+          ),
+          f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.suffix_label } })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { style: { fontSize: 12, color: "#64748b", marginBottom: 4, display: "block" }, children: f.confirm_label || "Confirm Email Address" }),
+          f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              className: `fg-form-field-input ${f.element_class || ""}`,
+              type: "email",
+              name: `${fieldName}_confirm`,
+              placeholder: f.confirm_placeholder || "Re-enter email",
+              defaultValue: "",
+              inputMode,
+              readOnly: true,
+              style: inputStyle
+            },
+            `email-${f.id}-confirm`
+          ),
+          f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.suffix_label } })
+        ] }),
+        validationErrors.confirm && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-error-message", style: { color: "#ef4444", fontSize: 12, marginTop: 4, ...errorCustomStyle }, children: f.confirm_error_message || "Emails do not match" })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
+        f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
+            type: "email",
+            name: fieldName,
+            placeholder: f.placeholder || "email@example.com",
+            defaultValue: maskedValue2,
+            maxLength,
+            inputMode,
+            readOnly: true,
+            style: inputStyle
+          },
+          `email-${f.id}`
+        ),
+        f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.suffix_label } })
+      ] }) });
     }
     if (f.type === "select") {
       const firstOptionDisabled = f.disable_first_option !== false;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "fg-form-field-input", defaultValue: f.default_value, disabled: true, style: inputStyle, children: [
-        f.placeholder && /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", disabled: firstOptionDisabled, children: f.placeholder }),
-        (f.options || []).map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, disabled: firstOptionDisabled && i === 0, children: opt.label || `Option ${i + 1}` }, i))
-      ] }, `select-${f.id}-${f.default_value || ""}`);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "select",
+        {
+          className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
+          name: fieldName,
+          defaultValue: f.default_value,
+          disabled: true,
+          style: inputStyle,
+          children: [
+            f.placeholder && /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", disabled: firstOptionDisabled, children: f.placeholder }),
+            displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, disabled: firstOptionDisabled && i === 0, children: opt.label || `Option ${i + 1}` }, i))
+          ]
+        },
+        `select-${f.id}-${f.default_value || ""}`
+      );
+    }
+    if (f.type === "multiselect") {
+      const getDisplayContent = () => {
+        const selectedCount = multiSelectValues.length;
+        const selectedOptions = displayOptions.filter(
+          (opt) => multiSelectValues.includes(opt.value || opt.label)
+        );
+        switch (f.display_format) {
+          case "count":
+            return selectedCount > 0 ? `${selectedCount} selected` : f.placeholder || "Select options...";
+          case "text":
+            return selectedOptions.map((opt) => opt.label).join(", ") || f.placeholder || "Select options...";
+          case "tags":
+          default:
+            return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", flexWrap: "wrap", gap: 4 }, children: [
+              selectedOptions.map((opt, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
+                background: "#e2e8f0",
+                padding: "2px 8px",
+                borderRadius: 4,
+                fontSize: 12
+              }, children: opt.label }, idx)),
+              selectedCount === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#94a3b8" }, children: f.placeholder || "Select options..." })
+            ] });
+        }
+      };
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-multiselect-wrapper fg-field-${f.id} ${f.element_class || ""}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "fg-form-field-input",
+            style: {
+              ...inputStyle,
+              minHeight: 38,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              padding: "8px 12px"
+            },
+            children: [
+              getDisplayContent(),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginLeft: "auto", fontSize: 12 }, children: "▼" })
+            ]
+          }
+        ),
+        f.select_all_button && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            className: "fg-select-all-btn",
+            style: {
+              marginTop: 4,
+              padding: "4px 8px",
+              fontSize: 12,
+              background: "#f8fafc",
+              border: "1px solid #e2e8f0",
+              borderRadius: 4,
+              cursor: "pointer"
+            },
+            onClick: () => {
+              const allValues = displayOptions.map((opt) => opt.value || opt.label);
+              setMultiSelectValues(allValues);
+            },
+            children: "Select All"
+          }
+        ),
+        (f.min_selections > 0 || f.max_selections > 0) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontSize: 11, color: "#64748b", marginTop: 4 }, children: [
+          f.min_selections > 0 && `Min: ${f.min_selections}`,
+          f.min_selections > 0 && f.max_selections > 0 && " | ",
+          f.max_selections > 0 && `Max: ${f.max_selections}`
+        ] }),
+        multiSelectValues.length > 0 && f.selection_message && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#10b981", marginTop: 4 }, children: f.selection_message })
+      ] });
     }
     if (f.type === "radio") {
-      const isInline = f.inline;
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: isInline ? "flex" : "block", gap: isInline ? "16px" : "8px" }, children: (f.options || []).map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "radio", name: f.id, disabled: true, style: { margin: 0 } }),
+      const isInline = f.layout === "inline" || f.inline;
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: isInline ? "flex" : "block", gap: isInline ? "16px" : "8px" }, children: displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "radio", name: fieldName, disabled: true, style: { margin: 0 } }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
       ] }, i)) });
     }
     if (f.type === "checkbox") {
-      const isInline = f.inline;
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: isInline ? "flex" : "block", gap: isInline ? "16px" : "8px" }, children: (f.options || []).map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", disabled: true, style: { margin: 0 } }),
+      const isInline = f.layout === "inline" || f.inline;
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: isInline ? "flex" : "block", gap: isInline ? "16px" : "8px" }, children: displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", name: fieldName, disabled: true, style: { margin: 0 } }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
       ] }, i)) });
     }
@@ -9013,24 +6307,53 @@ function FieldTemplate({ field: f }) {
       if (proPreview) return proPreview;
     }
     const typeAttr = f.type === "number" ? "number" : f.type === "email" ? "email" : "text";
-    const charLimit = f.max_length ? Number(f.max_length) : 0;
-    const maxLength = charLimit > 0 ? charLimit : void 0;
+    const maskedValue = getMaskedValue(f.default_value);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
-      f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", dangerouslySetInnerHTML: { __html: f.prefix_label } }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "fg-form-field-input", type: typeAttr, placeholder: f.placeholder, defaultValue: f.default_value, maxLength, readOnly: true, style: inputStyle }, `input-${f.id}-${f.default_value || ""}-${f.max_length || ""}`),
-      f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", dangerouslySetInnerHTML: { __html: f.suffix_label } })
+      f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
+          type: typeAttr,
+          name: fieldName,
+          placeholder: f.placeholder,
+          defaultValue: maskedValue,
+          maxLength,
+          inputMode,
+          readOnly: true,
+          style: inputStyle
+        },
+        `input-${f.id}-${f.default_value || ""}-${f.max_length || ""}`
+      ),
+      f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.suffix_label } })
     ] });
   }
+  const helpTextContent = (showHelpAbove || showHelpBelow) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-help-text", style: helpTextCustomStyle, children: f.help_text });
+  const containerClasses = `fg-field-wrapper ${f.container_class || ""}`.trim();
   if (labelPlacement === "left" || labelPlacement === "right") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 8, ...wrapper }, children: [
-      labelPlacement === "left" ? label : null,
-      renderInput(),
-      labelPlacement === "right" ? label : null
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PlaceholderStylesInjector, { fieldId: f.id, placeholderStyle: f.placeholder_style }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: containerClasses, style: { display: "flex", alignItems: "center", gap: 8, ...wrapper }, children: [
+        labelPlacement === "left" ? label : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1 }, children: [
+          showHelpAbove && helpTextContent,
+          renderInput(),
+          showHelpBelow && helpTextContent,
+          errorMessage && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-error-message", style: { color: "#ef4444", fontSize: 12, marginTop: 4, ...errorCustomStyle }, children: errorMessage })
+        ] }),
+        labelPlacement === "right" ? label : null
+      ] })
     ] });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: wrapper, children: [
-    label,
-    renderInput()
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(PlaceholderStylesInjector, { fieldId: f.id, placeholderStyle: f.placeholder_style }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: containerClasses, style: wrapperStyle, children: [
+      label,
+      showHelpAbove && helpTextContent,
+      renderInput(),
+      showHelpBelow && helpTextContent,
+      errorMessage && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-error-message", style: { color: "#ef4444", fontSize: 12, marginTop: 4, ...errorCustomStyle }, children: errorMessage })
+    ] })
   ] });
 }
 function AddFieldsTab({ onAddField: addFieldFn }) {
@@ -9045,37 +6368,34 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
     e.dataTransfer.setData("fgFieldType", fieldType);
     e.dataTransfer.effectAllowed = "copy";
   }
-  function handleProFieldClick(e) {
+  function handleComingSoonClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (proEnabled) {
-      const fieldType = e.currentTarget.dataset.fieldType;
-      if (fieldType && addFieldFn) {
-        addFieldFn(fieldType);
-      }
-    } else {
-      staticMethods.info(__("This field is available in Pro version.", "formglut"));
-    }
+    staticMethods.info(__("This field is not implemented yet", "formglut"));
   }
   const groupedFields = React.useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     const groups = {};
-    Object.entries(FIELD_TYPES).forEach(([key, cfg]) => {
+    const allFields = getAllFieldTypes();
+    Object.entries(allFields).forEach(([key, cfg]) => {
       if (query && !cfg.label.toLowerCase().includes(query)) {
         return;
       }
       const category = cfg.category || "general";
+      const isPro = cfg.pro || false;
+      if (isPro && !proEnabled) {
+        return;
+      }
       if (!groups[category]) {
         groups[category] = [];
       }
-      const isPro = cfg.pro || false;
-      const isProEnabledAndActive = isPro && proEnabled;
       groups[category].push({
         key,
         label: cfg.label,
         icon: cfg.icon,
         pro: isPro,
-        enabled: !isPro || isProEnabledAndActive
+        enabled: true,
+        coming_soon: cfg.coming_soon || false
       });
     });
     const categoryOrder = ["general", "advanced", "layout", "payment", "security", "upload", "survey", "wordpress"];
@@ -9108,7 +6428,7 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Collapse,
+      Collapse$1,
       {
         defaultActiveKey: ["general"],
         bordered: false,
@@ -9129,15 +6449,15 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
           children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-field-grid", children: fields.map((ft) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "div",
             {
-              className: "fg-field-btn" + (ft.pro && !ft.enabled ? " fg-field-pro" : ""),
-              draggable: ft.enabled,
+              className: "fg-field-btn" + (ft.coming_soon ? " fg-field-coming-soon" : ""),
+              draggable: !ft.coming_soon,
               "data-field-type": ft.key,
-              onDragStart: ft.enabled ? (e) => handleDragStart(e, ft.key) : void 0,
-              onClick: ft.enabled ? () => addFieldFn(ft.key) : handleProFieldClick,
+              onDragStart: !ft.coming_soon ? (e) => handleDragStart(e, ft.key) : void 0,
+              onClick: !ft.coming_soon ? () => addFieldFn(ft.key) : handleComingSoonClick,
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-field-btn-icon", children: ft.icon }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-field-btn-label", children: ft.label }),
-                ft.pro && !ft.enabled && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-pro-badge", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCrown }) })
+                ft.coming_soon && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-pro-badge fg-coming-soon-badge", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faClock }) })
               ]
             },
             ft.key
@@ -9736,11 +7056,52 @@ function FormEditor() {
               /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "12", y1: "18", x2: "12", y2: "18.01" })
             ] }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-undo-hint", children: [
-            fields.length,
-            " ",
-            fields.length !== 1 ? __("fields", "formglut") : __("field", "formglut"),
-            isDirty ? " — " + __("unsaved", "formglut") : ""
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-undo-hint", style: { display: "flex", alignItems: "center", gap: "12px" }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+              fields.length,
+              " ",
+              fields.length !== 1 ? __("fields", "formglut") : __("field", "formglut"),
+              isDirty ? " — " + __("unsaved", "formglut") : ""
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                onClick: () => {
+                  var _a;
+                  return window.open(((_a = formglut_admin == null ? void 0 : formglut_admin.pages) == null ? void 0 : _a.pro_features) || "https://formglut.com/pro", "_blank");
+                },
+                style: {
+                  background: "linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1))",
+                  border: "1px solid rgba(251, 191, 36, 0.4)",
+                  borderRadius: "6px",
+                  padding: "6px 12px",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  color: "#fbbf24",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  transition: "all 0.2s ease",
+                  boxShadow: "0 2px 8px rgba(251, 191, 36, 0.15)"
+                },
+                onMouseEnter: (e) => {
+                  e.target.style.background = "linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.2))";
+                  e.target.style.transform = "translateY(-1px)";
+                  e.target.style.boxShadow = "0 4px 12px rgba(251, 191, 36, 0.25)";
+                },
+                onMouseLeave: (e) => {
+                  e.target.style.background = "linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1))";
+                  e.target.style.transform = "translateY(0)";
+                  e.target.style.boxShadow = "0 2px 8px rgba(251, 191, 36, 0.15)";
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "currentColor", style: { color: "#fbbf24" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Check Pro Fields", "formglut") }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", style: { marginLeft: "2px", color: "#fbbf24" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M5 12h14M12 5l7 7-7 7" }) })
+                ]
+              }
+            )
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-canvas", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-canvas-form", style: { maxWidth: deviceWidth === "100%" ? "900px" : deviceWidth, transition: "max-width 0.3s ease" }, onClick: () => {

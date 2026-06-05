@@ -24,32 +24,12 @@ import ConditionalLogicOptions from './ConditionalLogicOptions';
  * moved to SharedOptions.jsx yet. Over time, these should be migrated.
  */
 const FIELD_SPECIFIC_OPTIONS = {
-  // === Length Validation ===
-  min_length: { type: 'number', label: 'Min Length', section: 'validation', min: 0, description: 'Minimum number of characters required' },
-  max_length: { type: 'number', label: 'Max Length', section: 'validation', min: 1, description: 'Maximum number of characters allowed' },
-
   // === Size/Dimensions ===
-  rows: { type: 'number', label: 'Rows', section: 'general', min: 1, max: 50, description: 'Number of visible text lines for textarea' },
-  cols: { type: 'number', label: 'Columns', section: 'general', min: 1, max: 100, description: 'Width of textarea in average character widths' },
   width: { type: 'text', label: 'Width', section: 'style', placeholder: 'e.g., 100%, 300px', description: 'Custom width for the element' },
   height: { type: 'text', label: 'Height', section: 'style', placeholder: 'e.g., 200px', description: 'Custom height for the element' },
 
   // === CSS Class ===
   css_class: { type: 'text', label: 'CSS Class', section: 'style', placeholder: 'Add CSS class', description: 'Custom CSS class for styling' },
-
-  // === Textarea Specific ===
-  resize: {
-    type: 'select',
-    label: 'Resize Handle',
-    section: 'general',
-    description: 'Allow users to resize the textarea',
-    options: [
-      { value: 'vertical', label: 'Vertical Only' },
-      { value: 'horizontal', label: 'Horizontal Only' },
-      { value: 'both', label: 'Both Directions' },
-      { value: 'none', label: 'None' }
-    ]
-  },
 
   // === URL Options ===
   url_scheme: {
@@ -126,7 +106,6 @@ function getApplicableOptions(fieldType, field = {}) {
     'filter_fields', 'column_types', 'role_descriptions', 'custom_roles',
     'custom_icons', 'allowed_methods', 'available_methods', 'tax_rates',
     'accepted_cards', 'validation_messages', 'option_groups',
-    'label_placement', // In Style Options panel
   ];
 
   return applicableKeys.filter(key => !excludeKeys.includes(key));
@@ -333,6 +312,27 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
     return getApplicableOptions(field.type, field);
   }, [field.type]);
 
+  // Mask-related option keys that should only show when enable_mask is true
+  const MASK_OPTION_KEYS = [
+    'mask_pattern',
+    'custom_mask',
+    'mask_placeholder',
+    'reversible_mask',
+    'clear_on_invalid',
+  ];
+
+  // Email confirmation option keys that should only show when confirm_email is true
+  const EMAIL_CONFIRMATION_KEYS = [
+    'confirm_label',
+    'confirm_placeholder',
+    'confirm_error_message',
+  ];
+
+  // Unique error message option key that should only show when validate_unique is true
+  const UNIQUE_ERROR_KEYS = [
+    'unique_error_message',
+  ];
+
   // Group options by section
   const optionsBySection = useMemo(() => {
     const sections = {};
@@ -341,6 +341,21 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
     const optionDefinitions = getOptionDefinitions(field.type);
 
     applicableKeys.forEach(key => {
+      // Skip mask options if enable_mask is not enabled
+      if (MASK_OPTION_KEYS.includes(key) && !field.enable_mask) {
+        return;
+      }
+
+      // Skip email confirmation options if confirm_email is not enabled
+      if (EMAIL_CONFIRMATION_KEYS.includes(key) && !field.confirm_email) {
+        return;
+      }
+
+      // Skip unique error message if validate_unique is not enabled
+      if (UNIQUE_ERROR_KEYS.includes(key) && !field.validate_unique) {
+        return;
+      }
+
       const definition = optionDefinitions[key] || {
         type: typeof field[key] === 'boolean' ? 'switch' : 'text',
         label: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),

@@ -7,8 +7,12 @@
 
 import { __ } from '@wordpress/i18n';
 import './formglut-frontend.css';
+import { initInputMasks } from './input-mask.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize input masks for all masked fields
+  initInputMasks();
+
   document.querySelectorAll('.formglut-form').forEach(form => {
     form.addEventListener('submit', handleSubmit);
     initCharacterCount(form);
