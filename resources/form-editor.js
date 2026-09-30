@@ -3693,6 +3693,7 @@ const CAPTCHA_NAMES = { recaptcha: "reCAPTCHA", hcaptcha: "hCaptcha", turnstile:
 function FieldTemplate({ field: f, captcha = {} }) {
   const [validationErrors, setValidationErrors] = React.useState({});
   const [multiSelectValues, setMultiSelectValues] = React.useState(f.default_value || []);
+  const [pwShown, setPwShown] = React.useState(false);
   const labelCustomStyle = parseCss(f.label_style);
   const inputCustomStyle = parseCss(f.input_style || f.textarea_style || f.dropdown_style);
   const helpTextCustomStyle = parseCss(f.help_text_style);
@@ -3801,7 +3802,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-placeholder-box"), children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCode }),
       " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: code }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: f.element_class || "", children: code }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-placeholder-note", children: f.type === "shortcode" && f.run_shortcode === false ? __("Shortcode disabled", "formglut") : __("Output appears on the live form and in Preview", "formglut") })
     ] });
   }
@@ -3811,6 +3812,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
   if (CAPTCHA_NAMES[f.type]) {
     const cfg = captcha[f.type] || {};
     const invisible = f.type === "recaptcha" && cfg.version !== "v2";
+    const turnstileQuiet = f.type === "turnstile" && f.appearance === "interaction-only";
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-captcha-mock"), children: [
       cfg.ready === false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-captcha-warning", children: [
         CAPTCHA_NAMES[f.type],
@@ -3820,7 +3822,11 @@ function FieldTemplate({ field: f, captcha = {} }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: _pg.settings, target: "_blank", rel: "noopener noreferrer", children: __("Settings", "formglut") }),
         "."
       ] }),
-      invisible ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-captcha-box fg-captcha-invisible", children: [
+      turnstileQuiet ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-captcha-box fg-captcha-invisible", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShieldHalved }),
+        " ",
+        __("Turnstile — shown only when Cloudflare needs an interaction", "formglut")
+      ] }) : invisible ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-captcha-box fg-captcha-invisible", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShieldHalved }),
         " ",
         __("reCAPTCHA v3 — runs invisibly when the form is submitted", "formglut")
@@ -3837,7 +3843,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
     const mode = f.display_type === "checkbox" || !f.display_type ? "box" : f.display_type;
     const linkText = isGdpr ? f.policy_url ? __("Privacy Policy", "formglut") : "" : mode === "modal" || mode === "link" && f.link_url ? f.link_text || __("View Terms", "formglut") : "";
     const agree = /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: `fg-consent ${!isGdpr && f.checkbox_position === "right" ? "fg-consent-right" : ""}`, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", disabled: true, checked: isGdpr && !!f.default_checked, readOnly: true }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: f.element_class || "", disabled: true, checked: isGdpr && !!f.default_checked, readOnly: true }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
         f.label,
         linkText && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -3894,6 +3900,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
             className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
             name: fieldName,
             rows: f.rows || 4,
+            cols: f.cols ? Number(f.cols) : void 0,
             placeholder: getDisplayPlaceholder(),
             defaultValue: f.default_value,
             maxLength,
@@ -4084,8 +4091,11 @@ function FieldTemplate({ field: f, captcha = {} }) {
     }
     if (f.type === "password") {
       const pw = (ph, key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-password-wrap", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "password", placeholder: ph, readOnly: true, style: inputStyle }),
-        f.show_toggle !== false && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-password-toggle", children: f.show_text || __("Show", "formglut") })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: pwShown ? "text" : "password", placeholder: ph, readOnly: true, style: inputStyle }),
+        f.show_toggle !== false && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-password-toggle", onClick: (e) => {
+          e.stopPropagation();
+          setPwShown((v) => !v);
+        }, children: pwShown ? f.hide_text || __("Hide", "formglut") : f.show_text || __("Show", "formglut") })
       ] }, key);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
         pw(f.placeholder, "main"),
@@ -4847,7 +4857,7 @@ function FormEditor() {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
-        className: "fg-form-field" + (container ? " fg-container-field" : "") + (selectedId === f.id ? " selected" : ""),
+        className: "fg-form-field" + (container ? " fg-container-field" : "") + (container && f.container_class ? " " + f.container_class : "") + (selectedId === f.id ? " selected" : ""),
         onClick: (e) => {
           e.stopPropagation();
           selectField(f.id);

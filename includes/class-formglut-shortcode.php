@@ -964,10 +964,11 @@ class FormGlut_Shortcode {
 		}
 
 		$checked = $is_gdpr && ! empty( $field['default_checked'] ) ? ' checked' : '';
+		$el_cls  = ! empty( $field['element_class'] ) ? ' ' . implode( ' ', array_filter( array_map( 'sanitize_html_class', explode( ' ', $field['element_class'] ) ) ) ) : '';
 		$right   = ! $is_gdpr && isset( $field['checkbox_position'] ) && 'right' === $field['checkbox_position'] ? ' formglut-consent-right' : '';
 		$val_msg = ! empty( $field['validation_message'] ) ? ' data-validation-message="' . esc_attr( $field['validation_message'] ) . '"' : '';
 		$html   .= '<label class="formglut-consent' . $right . '" for="' . esc_attr( $id ) . '">'
-			. '<input type="checkbox" class="formglut-consent-input" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr__( 'Accepted', 'formglut' ) . '"' . ( $required ? ' required' : '' ) . $checked . ( $scroll ? ' disabled data-scroll-lock="1"' : '' ) . $val_msg . ' />'
+			. '<input type="checkbox" class="formglut-consent-input' . esc_attr( $el_cls ) . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr__( 'Accepted', 'formglut' ) . '"' . ( $required ? ' required' : '' ) . $checked . ( $scroll ? ' disabled data-scroll-lock="1"' : '' ) . $val_msg . ' />'
 			. '<span>' . $label . $link . ( $required ? ' <span class="formglut-required">*</span>' : '' ) . '</span></label>';
 
 		if ( $is_gdpr ) {

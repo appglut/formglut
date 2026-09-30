@@ -308,6 +308,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
   // State for validation errors and multi-select
   const [validationErrors, setValidationErrors] = React.useState({});
   const [multiSelectValues, setMultiSelectValues] = React.useState(f.default_value || []);
+  const [pwShown, setPwShown] = React.useState(false);
 
   // Parse custom style options
   const labelCustomStyle = parseCss(f.label_style);
@@ -447,7 +448,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
     const code = f.type === 'shortcode' ? f.shortcode_content : `do_action( '${f.hook_name || ''}' )`;
     return (
       <div className={wrapCls('fg-placeholder-box')}>
-        <FontAwesomeIcon icon={faCode} /> <code>{code}</code>
+        <FontAwesomeIcon icon={faCode} /> <code className={f.element_class || ''}>{code}</code>
         <span className="fg-placeholder-note">{f.type === 'shortcode' && f.run_shortcode === false ? __( 'Shortcode disabled', 'formglut' ) : __( 'Output appears on the live form and in Preview', 'formglut' )}</span>
       </div>
     );
@@ -462,6 +463,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
   if (CAPTCHA_NAMES[f.type]) {
     const cfg = captcha[f.type] || {};
     const invisible = f.type === 'recaptcha' && cfg.version !== 'v2';
+    const turnstileQuiet = f.type === 'turnstile' && f.appearance === 'interaction-only';
     return (
       <div className={wrapCls('fg-captcha-mock')}>
         {cfg.ready === false && (
@@ -469,7 +471,9 @@ function FieldTemplate({ field: f, captcha = {} }) {
             {CAPTCHA_NAMES[f.type]} {__( 'keys are not set — the check will be skipped until you add them in', 'formglut' )} <a href={_pg.settings} target="_blank" rel="noopener noreferrer">{__( 'Settings', 'formglut' )}</a>.
           </div>
         )}
-        {invisible ? (
+        {turnstileQuiet ? (
+          <div className="fg-captcha-box fg-captcha-invisible"><FontAwesomeIcon icon={faShieldHalved} /> {__( 'Turnstile — shown only when Cloudflare needs an interaction', 'formglut' )}</div>
+        ) : invisible ? (
           <div className="fg-captcha-box fg-captcha-invisible"><FontAwesomeIcon icon={faShieldHalved} /> {__( 'reCAPTCHA v3 — runs invisibly when the form is submitted', 'formglut' )}</div>
         ) : (
           <div className={`fg-captcha-box fg-captcha-${f.theme === 'dark' ? 'dark' : 'light'} ${f.size === 'compact' ? 'fg-captcha-compact' : ''} ${f.size === 'flexible' ? 'fg-captcha-flexible' : ''}`}>
@@ -486,7 +490,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
     const linkText = isGdpr ? (f.policy_url ? __( 'Privacy Policy', 'formglut' ) : '') : ((mode === 'modal' || (mode === 'link' && f.link_url)) ? (f.link_text || __( 'View Terms', 'formglut' )) : '');
     const agree = (
       <label className={`fg-consent ${!isGdpr && f.checkbox_position === 'right' ? 'fg-consent-right' : ''}`}>
-        <input type="checkbox" disabled checked={isGdpr && !!f.default_checked} readOnly />
+        <input type="checkbox" className={f.element_class || ''} disabled checked={isGdpr && !!f.default_checked} readOnly />
         <span>{f.label}{linkText && <> <a href="#" onClick={(e) => e.preventDefault()}>{linkText}</a></>}{f.required && <span className="required"> *</span>}</span>
       </label>
     );
@@ -544,6 +548,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
             className={`fg-form-field-input fg-field-${f.id} ${f.element_class || ''}`}
             name={fieldName}
             rows={f.rows || 4}
+            cols={f.cols ? Number(f.cols) : undefined}
             placeholder={getDisplayPlaceholder()}
             defaultValue={f.default_value}
             maxLength={maxLength}
@@ -788,8 +793,8 @@ function FieldTemplate({ field: f, captcha = {} }) {
     if (f.type === 'password') {
       const pw = (ph, key) => (
         <div className="fg-password-wrap" key={key}>
-          <input className={cls} type="password" placeholder={ph} readOnly style={inputStyle} />
-          {f.show_toggle !== false && <button type="button" className="fg-password-toggle">{f.show_text || __( 'Show', 'formglut' )}</button>}
+          <input className={cls} type={pwShown ? 'text' : 'password'} placeholder={ph} readOnly style={inputStyle} />
+          {f.show_toggle !== false && <button type="button" className="fg-password-toggle" onClick={(e) => { e.stopPropagation(); setPwShown(v => !v); }}>{pwShown ? (f.hide_text || __( 'Hide', 'formglut' )) : (f.show_text || __( 'Show', 'formglut' ))}</button>}
         </div>
       );
       return (
@@ -1554,7 +1559,7 @@ export default function FormEditor() {
     const container = isContainerField(f);
     return (
       <div
-        className={'fg-form-field' + (container ? ' fg-container-field' : '') + (selectedId === f.id ? ' selected' : '')}
+        className={'fg-form-field' + (container ? ' fg-container-field' : '') + (container && f.container_class ? ' ' + f.container_class : '') + (selectedId === f.id ? ' selected' : '')}
         onClick={(e) => { e.stopPropagation(); selectField(f.id); }}
         draggable onDragStart={(e) => handleFieldDragStart(e, f.id)}
         onDragOver={(e) => handleFieldDragOver(e, ctx, idx)} onDragEnd={handleFieldDragEnd}
