@@ -330,7 +330,7 @@ export default function AllForms() {
           <div className="fg-row-actions">
             <a href={_pg.editor + '&form_id=' + r.id}><FontAwesomeIcon icon={faPenToSquare} /> {__( 'Edit', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
-            <a href={_pg.settings}><FontAwesomeIcon icon={faGear} /> {__( 'Settings', 'formglut' )}</a>
+            <a href={_pg.settings}><FontAwesomeIcon icon={faGear} /> {__( 'Global Settings', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
             <a href={_pg.preview + '&form_id=' + r.id} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faEye} /> {__( 'Preview', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>

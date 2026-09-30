@@ -3,7 +3,7 @@ import { Button, Spin, message, Tooltip, Popover } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGear, faCircleCheck, faEnvelope, faLock, faShieldHalved, faPalette, faChartLine,
-  faFloppyDisk, faCode, faEye, faCopy, faCheck, faCircleInfo,
+  faFloppyDisk, faCode, faEye, faCopy, faCheck, faTags, faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { __ } from '@wordpress/i18n';
 import { _pg } from '../components/Header';
@@ -97,9 +97,11 @@ function TagPopover({ fields, mode, value, onInsert }) {
 
   return (
     <Popover open={open} onOpenChange={setOpen} trigger="click" placement="bottomLeft" content={content} arrow={false} overlayClassName="fg-tag-popover">
-      <Tooltip title={__( 'Insert a value from the form, such as the visitor’s name or email', 'formglut' )}>
-        <button type="button" className="fg-tag-btn" aria-label={__( 'Insert a value from the form', 'formglut' )}><FontAwesomeIcon icon={faCircleInfo} /></button>
-      </Tooltip>
+      <button type="button" className="fg-tag-btn" title={__( 'Insert a value from the form, such as the visitor’s name or email', 'formglut' )}>
+        <FontAwesomeIcon icon={faTags} />
+        <strong>{__( 'Smart tags', 'formglut' )}</strong>
+        <FontAwesomeIcon icon={faChevronDown} className="chev" />
+      </button>
     </Popover>
   );
 }
@@ -187,7 +189,7 @@ export default function FormSettingsPage() {
               <div className="fg-page-title">{__( 'Form settings', 'formglut' )}</div>
             </div>
           </div>
-          <div className="fg-fs-note">{__( 'These settings apply to this form only. Site-wide options are under FormGlut → Settings.', 'formglut' )}</div>
+          <div className="fg-fs-note">{__( 'These settings apply to this form only. Site-wide options are under FormGlut → Global Settings.', 'formglut' )}</div>
         </div>
 
         <div className="fg-fs-layout">

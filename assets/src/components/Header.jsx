@@ -15,7 +15,7 @@ export default function Header({ nav, activePage }) {
   const items = [
     { label: __( 'Forms', 'formglut' ), href: _pg.all_forms },
     { label: __( 'Entries', 'formglut' ), href: _pg.entries },
-    { label: __( 'Settings', 'formglut' ), href: _pg.settings },
+    { label: __( 'Global Settings', 'formglut' ), href: _pg.settings },
   ].map((n) => {
     if (n.label === activePage) n.active = true;
     return n;

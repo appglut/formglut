@@ -24,3 +24,78 @@
 }
 .fg-nav-list a.active .ic { background: #e94560; color: #fff; }
 .fg-nav-foot { margin: 10px 12px 0; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+
+/* ── Links inside FormGlut screens ───────────────────────────────────
+   WordPress paints links blue (hover / focus / press) and purple (visited) and adds a blue ring
+   around the link until the next page loads. Replace that with this plugin's colours. */
+#formglut-root a,
+.fg-nav-drawer a {
+  outline: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+#formglut-root a:focus,
+#formglut-root a:active,
+.fg-nav-drawer a:focus,
+.fg-nav-drawer a:active {
+  outline: none;
+  box-shadow: none;
+}
+/* Keyboard users still get a visible ring, in the plugin colour. */
+#formglut-root a:focus-visible,
+.fg-nav-drawer a:focus-visible {
+  outline: 2px solid rgba(233, 69, 96, 0.6);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Links without a class: keep the surrounding colour, brand colour on hover / press. */
+#formglut-root a:where(:not([class])) { color: inherit; }
+#formglut-root a:where(:not([class])):hover,
+#formglut-root a:where(:not([class])):active { color: #e94560; }
+
+/* Dark header: tabs, back links */
+#formglut-root .fg-header-nav a,
+#formglut-root .fg-editor-tab,
+#formglut-root .fg-editor-back,
+#formglut-root .fg-header-back { color: rgba(255, 255, 255, 0.7); }
+#formglut-root .fg-header-nav a:hover,
+#formglut-root .fg-header-nav a:focus,
+#formglut-root .fg-header-nav a:active,
+#formglut-root .fg-header-nav a:visited:hover,
+#formglut-root .fg-editor-tab:hover,
+#formglut-root .fg-editor-tab:focus,
+#formglut-root .fg-editor-tab:active,
+#formglut-root .fg-editor-back:hover,
+#formglut-root .fg-editor-back:focus,
+#formglut-root .fg-editor-back:active,
+#formglut-root .fg-header-back:hover,
+#formglut-root .fg-header-back:focus,
+#formglut-root .fg-header-back:active { color: #fff; }
+#formglut-root .fg-header-nav a.active,
+#formglut-root .fg-editor-tab.active { color: #fff; background: #e94560; }
+
+/* Side menu */
+.fg-nav-drawer .fg-nav-list a,
+.fg-nav-drawer .fg-nav-foot a { color: #334155; }
+.fg-nav-drawer .fg-nav-list a:hover,
+.fg-nav-drawer .fg-nav-list a:focus,
+.fg-nav-drawer .fg-nav-list a:active,
+.fg-nav-drawer .fg-nav-foot a:hover,
+.fg-nav-drawer .fg-nav-foot a:focus,
+.fg-nav-drawer .fg-nav-foot a:active { color: #0f172a; }
+.fg-nav-drawer .fg-nav-list a.active,
+.fg-nav-drawer .fg-nav-list a.active:hover,
+.fg-nav-drawer .fg-nav-list a.active:focus,
+.fg-nav-drawer .fg-nav-list a.active:active { color: #e94560; }
+
+/* Row actions and other text links in tables / cards: brand colour on hover and press */
+#formglut-root .fg-row-actions a:hover,
+#formglut-root .fg-row-actions a:focus,
+#formglut-root .fg-row-actions a:active,
+#formglut-root .fg-table-wrap a:hover,
+#formglut-root .fg-table-wrap a:focus,
+#formglut-root .fg-table-wrap a:active { color: #e94560; }
+#formglut-root .fg-row-actions a.fg-action-delete:hover,
+#formglut-root .fg-row-actions a.fg-action-delete:focus,
+#formglut-root .fg-row-actions a.fg-action-delete:active { color: #dc2626; }

@@ -1,5 +1,5 @@
-import { bP as reactExports, I as Icon$1, a0 as _extends, cj as wrapperRaf, K as KeyCode, af as composeRef, bs as getNodeRef, R as React, bV as supportRef, a3 as _objectWithoutProperties, a6 as _slicedToArray, ab as classNames, J as Trigger, $ as _defineProperty, c9 as useMemo, bB as isEqual, a2 as _objectSpread2, a8 as _toConsumableArray, bD as isVisible, ca as useMergedState, ci as warningOnce, c2 as useComposeRef, bK as omit, a1 as _inherits, Y as _createSuper, U as _classCallCheck, X as _createClass, bX as toArray, a as CSSMotion, a9 as _typeof, bO as reactDomExports } from "./NavMenu-D0YBC0d1.js";
-import { F as ForwardOverflow } from "./index-CEbUDJaq.js";
+import { bB as reactExports, I as Icon$1, z as _extends, c2 as wrapperRaf, K as KeyCode, a1 as composeRef, bf as getNodeRef, R as React, bG as supportRef, H as _objectWithoutProperties, M as _slicedToArray, Y as classNames, s as Trigger, y as _defineProperty, bV as useMemo, bm as isEqual, G as _objectSpread2, Q as _toConsumableArray, bp as isVisible, bW as useMergedState, c1 as warningOnce, bP as useComposeRef, bw as omit, E as _inherits, w as _createSuper, u as _classCallCheck, v as _createClass, bI as toArray, a as CSSMotion, U as _typeof, bA as reactDomExports } from "./NavMenu-DTs5z4CX.js";
+import { F as ForwardOverflow } from "./index-BLXOj64T.js";
 var RightOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.4z" } }] }, "name": "right", "theme": "outlined" };
 var RightOutlined = function RightOutlined2(props, ref) {
   return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
@@ -8,6 +8,23 @@ var RightOutlined = function RightOutlined2(props, ref) {
   }));
 };
 var RefIcon$1 = /* @__PURE__ */ reactExports.forwardRef(RightOutlined);
+const genCollapseMotion = (token) => ({
+  [token.componentCls]: {
+    // For common/openAnimation
+    [`${token.antCls}-motion-collapse-legacy`]: {
+      overflow: "hidden",
+      "&-active": {
+        transition: `height ${token.motionDurationMid} ${token.motionEaseInOut},
+        opacity ${token.motionDurationMid} ${token.motionEaseInOut} !important`
+      }
+    },
+    [`${token.antCls}-motion-collapse`]: {
+      overflow: "hidden",
+      transition: `height ${token.motionDurationMid} ${token.motionEaseInOut},
+        opacity ${token.motionDurationMid} ${token.motionEaseInOut} !important`
+    }
+  }
+});
 var ESC$1 = KeyCode.ESC, TAB = KeyCode.TAB;
 function useAccessibility$1(_ref) {
   var visible = _ref.visible, triggerRef = _ref.triggerRef, onVisibleChange = _ref.onVisibleChange, autoFocus = _ref.autoFocus, overlayRef = _ref.overlayRef;
@@ -1591,6 +1608,7 @@ export {
   Dropdown$1 as a,
   MenuItemGroup as b,
   RefIcon$1 as c,
+  genCollapseMotion as g,
   useFullPath as u
 };
-//# sourceMappingURL=EllipsisOutlined-Cbet2jbC.js.map
+//# sourceMappingURL=EllipsisOutlined-lUE_jWZL.js.map

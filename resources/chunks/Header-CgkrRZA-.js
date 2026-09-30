@@ -1,10 +1,10 @@
-import { a4 as _pg, bE as jsxRuntimeExports, N as NavMenu, Z as _dashboard, i as FontAwesomeIcon, au as faChevronLeft, aO as faHouse, a5 as _pluginUrl } from "./NavMenu-D0YBC0d1.js";
+import { J as _pg, bq as jsxRuntimeExports, N as NavMenu, x as _dashboard, g as FontAwesomeIcon, ah as faChevronLeft, aD as faHouse, L as _pluginUrl } from "./NavMenu-DTs5z4CX.js";
 import { _ as __ } from "./default-i18n-Bi0ZJkXv.js";
 function Header({ nav, activePage }) {
   const items = [
     { label: __("Forms", "formglut"), href: _pg.all_forms },
     { label: __("Entries", "formglut"), href: _pg.entries },
-    { label: __("Settings", "formglut"), href: _pg.settings }
+    { label: __("Global Settings", "formglut"), href: _pg.settings }
   ].map((n) => {
     if (n.label === activePage) n.active = true;
     return n;
@@ -25,4 +25,4 @@ function Header({ nav, activePage }) {
 export {
   Header as H
 };
-//# sourceMappingURL=Header-BoZ45_PN.js.map
+//# sourceMappingURL=Header-CgkrRZA-.js.map

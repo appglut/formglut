@@ -1,16 +1,13 @@
-import { a8 as _toConsumableArray, bP as reactExports, ab as classNames, bz as initMotion, n as Keyframe, R as React, c2 as useComposeRef, a2 as _objectSpread2, a9 as _typeof, bM as pickAttrs, a0 as _extends, a6 as _slicedToArray, a as CSSMotion, c5 as useId, ag as contains, K as KeyCode, r as Portal, aa as canUseDom, B as Button, ah as convertLegacyProps, c8 as useLocale$1, bp as getConfirmLocale, h as DisabledContextProvider, v as RefIcon$3, bj as genStyleHooks, bA as initZoomMotion, bI as merge, bY as unit, bQ as resetComponent, bh as genFocusStyle, d as ConfigContext, b_ as useCSSVarCls, b$ as useClosable, bN as pickClosable, cb as usePanelRef, af as composeRef, cg as useZIndex, g as ContextIsolator, ck as zIndexContext, bw as getTransitionName, G as Skeleton, bk as genSubStyleComponent, ac as clearFix, e as ConfigProvider, ce as useToken, C as CONTAINER_MAX_OFFSET, w as RefIcon$4, x as RefIcon$5, y as RefIcon$6, z as RefIcon$7, bZ as unstableSetRender, bx as globalConfig, bH as localeValues, ae as commonjsGlobal, br as getDefaultExportFromCjs, J as Trigger, $ as _defineProperty, c3 as useEvent, ca as useMergedState, cj as wrapperRaf, ci as warningOnce, c7 as useLayoutUpdateEffect, c6 as useLayoutEffect, bD as isVisible, E as RefResizeObserver, a3 as _objectWithoutProperties, X as _createClass, U as _classCallCheck, bK as omit, F as FastColor, bo as getArrowToken, bf as genCompactItemStyle, bW as textEllipsis, bi as genRoundedArrow, I as Icon$1, c1 as useComponentConfig, c0 as useCompactItemContext, cd as useSize, D as DisabledContext, k as FormItemInputContext, bF as locale, bT as staticMethods, bE as jsxRuntimeExports, a4 as _pg, i as FontAwesomeIcon, aY as faPenToSquare, aJ as faGear, aE as faEye, H as Tooltip, aA as faCopy, ba as faTrash, a$ as faPlus, av as faCircleCheck, bb as faTrashCan, bd as faXmark, aS as faMagnifyingGlass, ap as faCalendarDays, b2 as faRotateRight, aG as faFileLines, b8 as faStar, ai as createRoot } from "./chunks/NavMenu-D0YBC0d1.js";
+import { Q as _toConsumableArray, bB as reactExports, Y as classNames, bl as initMotion, i as Keyframe, R as React, bP as useComposeRef, G as _objectSpread2, U as _typeof, by as pickAttrs, z as _extends, M as _slicedToArray, a as CSSMotion, bR as useId, a2 as contains, K as KeyCode, P as Portal, X as canUseDom, B as Button, a3 as convertLegacyProps, bU as useLocale$1, bc as getConfirmLocale, f as DisabledContextProvider, l as RefIcon$3, b9 as genStyleHooks, bu as merge, bJ as unit, bC as resetComponent, b8 as genFocusStyle, c as ConfigContext, bL as useCSSVarCls, bM as useClosable, bz as pickClosable, bX as usePanelRef, a1 as composeRef, b$ as useZIndex, e as ContextIsolator, c3 as zIndexContext, bi as getTransitionName, S as Skeleton, ba as genSubStyleComponent, Z as clearFix, d as ConfigProvider, b_ as useToken, C as CONTAINER_MAX_OFFSET, m as RefIcon$4, n as RefIcon$5, o as RefIcon$6, p as RefIcon$7, bK as unstableSetRender, bj as globalConfig, bt as localeValues, a0 as commonjsGlobal, be as getDefaultExportFromCjs, s as Trigger, y as _defineProperty, bQ as useEvent, bW as useMergedState, c2 as wrapperRaf, c1 as warningOnce, bT as useLayoutUpdateEffect, bS as useLayoutEffect, bp as isVisible, r as RefResizeObserver, H as _objectWithoutProperties, v as _createClass, u as _classCallCheck, bw as omit, F as FastColor, b6 as genCompactItemStyle, bH as textEllipsis, I as Icon$1, bO as useComponentConfig, bN as useCompactItemContext, bZ as useSize, D as DisabledContext, h as FormItemInputContext, br as locale, bE as staticMethods, bq as jsxRuntimeExports, J as _pg, g as FontAwesomeIcon, aN as faPenToSquare, ay as faGear, at as faEye, ap as faCopy, b0 as faTrash, aQ as faPlus, ai as faCircleCheck, b1 as faTrashCan, b4 as faXmark, aH as faMagnifyingGlass, ab as faCalendarDays, aT as faRotateRight, av as faFileLines, aZ as faStar, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { H as Header } from "./chunks/Header-BoZ45_PN.js";
-import { i as getFormStats, j as getForms, a as deleteForm, b as duplicateForm, m as updateFormStatus, c as createForm } from "./chunks/api-CyfhXhZs.js";
-import { S as Switch } from "./chunks/index-C0Htsu4a.js";
-import { A as ActionButton, S as Space, P as Popconfirm } from "./chunks/index-CpZl-a5U.js";
-import { F as ForwardOverflow, n as genOverflowStyle, s as getMultipleSelectorUnit, u as initComponentToken, m as genOutlinedStyle, q as genUnderlinedStyle, i as genFilledStyle, e as genBorderlessStyle, v as initInputToken, C as slideUpOut, z as slideDownOut, A as slideUpIn, y as slideDownIn, o as genPlaceholderStyle, x as initSlideMotion, w as initMoveMotion, H as useIcons$1, J as useVariant, t as getStatusClassNames, r as getMergedStatus, p as genPurePanel, K as withPureRenderTheme, I as Input$1, S as Select } from "./chunks/index-CEbUDJaq.js";
-import { F as ForwardTable } from "./chunks/Table-DSNMf6bZ.js";
-import { g as getMediaSize, R as Row, C as Col } from "./chunks/row-B3Lz9em4.js";
-import "./chunks/index-DXRCHqrQ.js";
-import "./chunks/EllipsisOutlined-Cbet2jbC.js";
-import "./chunks/collapse-DdhdDMvL.js";
-import "./chunks/useForm-BgzEbaR7.js";
+import { H as Header } from "./chunks/Header-CgkrRZA-.js";
+import { q as initZoomMotion, h as getArrowToken, g as genRoundedArrow, m as getFormStats, n as getForms, T as Tooltip, a as deleteForm, b as duplicateForm, s as updateFormStatus, c as createForm } from "./chunks/api-V7Uk2s4S.js";
+import { S as Switch } from "./chunks/index-ryNm28KF.js";
+import { A as ActionButton, S as Space, P as Popconfirm } from "./chunks/index-BHAdwT1Y.js";
+import { F as ForwardOverflow, n as genOverflowStyle, s as getMultipleSelectorUnit, u as initComponentToken, m as genOutlinedStyle, q as genUnderlinedStyle, i as genFilledStyle, e as genBorderlessStyle, v as initInputToken, C as slideUpOut, z as slideDownOut, A as slideUpIn, y as slideDownIn, o as genPlaceholderStyle, x as initSlideMotion, w as initMoveMotion, H as useIcons$1, J as useVariant, t as getStatusClassNames, r as getMergedStatus, p as genPurePanel, K as withPureRenderTheme, I as Input$1, S as Select } from "./chunks/index-BLXOj64T.js";
+import { r as responsiveArray, u as useBreakpoint, F as ForwardTable } from "./chunks/Table-fv5X7Bx6.js";
+import "./chunks/index-cX7NXTCE.js";
+import "./chunks/EllipsisOutlined-lUE_jWZL.js";
 function mergeClassNames(schema, ...classNames$1) {
   const mergedSchema = schema || {};
   return classNames$1.reduce((acc, cur) => {
@@ -592,6 +589,163 @@ const Footer$1 = (props) => {
     disabled: false
   }, footerNode);
 };
+const genGridRowStyle = (token) => {
+  const {
+    componentCls
+  } = token;
+  return {
+    // Grid system
+    [componentCls]: {
+      display: "flex",
+      flexFlow: "row wrap",
+      minWidth: 0,
+      "&::before, &::after": {
+        display: "flex"
+      },
+      "&-no-wrap": {
+        flexWrap: "nowrap"
+      },
+      // The origin of the X-axis
+      "&-start": {
+        justifyContent: "flex-start"
+      },
+      // The center of the X-axis
+      "&-center": {
+        justifyContent: "center"
+      },
+      // The opposite of the X-axis
+      "&-end": {
+        justifyContent: "flex-end"
+      },
+      "&-space-between": {
+        justifyContent: "space-between"
+      },
+      "&-space-around": {
+        justifyContent: "space-around"
+      },
+      "&-space-evenly": {
+        justifyContent: "space-evenly"
+      },
+      // Align at the top
+      "&-top": {
+        alignItems: "flex-start"
+      },
+      // Align at the center
+      "&-middle": {
+        alignItems: "center"
+      },
+      "&-bottom": {
+        alignItems: "flex-end"
+      }
+    }
+  };
+};
+const genGridColStyle = (token) => {
+  const {
+    componentCls
+  } = token;
+  return {
+    // Grid system
+    [componentCls]: {
+      position: "relative",
+      maxWidth: "100%",
+      // Prevent columns from collapsing when empty
+      minHeight: 1
+    }
+  };
+};
+const genLoopGridColumnsStyle = (token, sizeCls) => {
+  const {
+    prefixCls,
+    componentCls,
+    gridColumns
+  } = token;
+  const gridColumnsStyle = {};
+  for (let i = gridColumns; i >= 0; i--) {
+    if (i === 0) {
+      gridColumnsStyle[`${componentCls}${sizeCls}-${i}`] = {
+        display: "none"
+      };
+      gridColumnsStyle[`${componentCls}-push-${i}`] = {
+        insetInlineStart: "auto"
+      };
+      gridColumnsStyle[`${componentCls}-pull-${i}`] = {
+        insetInlineEnd: "auto"
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-push-${i}`] = {
+        insetInlineStart: "auto"
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-pull-${i}`] = {
+        insetInlineEnd: "auto"
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-offset-${i}`] = {
+        marginInlineStart: 0
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-order-${i}`] = {
+        order: 0
+      };
+    } else {
+      gridColumnsStyle[`${componentCls}${sizeCls}-${i}`] = [
+        // https://github.com/ant-design/ant-design/issues/44456
+        // Form set `display: flex` on Col which will override `display: block`.
+        // Let's get it from css variable to support override.
+        {
+          ["--ant-display"]: "block",
+          // Fallback to display if variable not support
+          display: "block"
+        },
+        {
+          display: "var(--ant-display)",
+          flex: `0 0 ${i / gridColumns * 100}%`,
+          maxWidth: `${i / gridColumns * 100}%`
+        }
+      ];
+      gridColumnsStyle[`${componentCls}${sizeCls}-push-${i}`] = {
+        insetInlineStart: `${i / gridColumns * 100}%`
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-pull-${i}`] = {
+        insetInlineEnd: `${i / gridColumns * 100}%`
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-offset-${i}`] = {
+        marginInlineStart: `${i / gridColumns * 100}%`
+      };
+      gridColumnsStyle[`${componentCls}${sizeCls}-order-${i}`] = {
+        order: i
+      };
+    }
+  }
+  gridColumnsStyle[`${componentCls}${sizeCls}-flex`] = {
+    flex: `var(--${prefixCls}${sizeCls}-flex)`
+  };
+  return gridColumnsStyle;
+};
+const genGridStyle = (token, sizeCls) => genLoopGridColumnsStyle(token, sizeCls);
+const genGridMediaStyle = (token, screenSize, sizeCls) => ({
+  [`@media (min-width: ${unit(screenSize)})`]: Object.assign({}, genGridStyle(token, sizeCls))
+});
+const prepareRowComponentToken = () => ({});
+const prepareColComponentToken = () => ({});
+const useRowStyle = genStyleHooks("Grid", genGridRowStyle, prepareRowComponentToken);
+const getMediaSize = (token) => {
+  const mediaSizesMap = {
+    xs: token.screenXSMin,
+    sm: token.screenSMMin,
+    md: token.screenMDMin,
+    lg: token.screenLGMin,
+    xl: token.screenXLMin,
+    xxl: token.screenXXLMin
+  };
+  return mediaSizesMap;
+};
+const useColStyle = genStyleHooks("Grid", (token) => {
+  const gridToken = merge(token, {
+    gridColumns: 24
+    // Row is divided into 24 parts in Grid
+  });
+  const gridMediaSizesMap = getMediaSize(gridToken);
+  delete gridMediaSizesMap.xs;
+  return [genGridColStyle(gridToken), genGridStyle(gridToken, ""), genGridStyle(gridToken, "-xs"), Object.keys(gridMediaSizesMap).map((key) => genGridMediaStyle(gridToken, gridMediaSizesMap[key], `-${key}`)).reduce((pre, cur) => Object.assign(Object.assign({}, pre), cur), {})];
+}, prepareColComponentToken);
 function box(position) {
   return {
     position,
@@ -892,7 +1046,7 @@ const useStyle$1 = genStyleHooks("Modal", (token) => {
     titleLineHeight: true
   }
 });
-var __rest$5 = function(s, e) {
+var __rest$7 = function(s, e) {
   var t = {};
   for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
@@ -941,7 +1095,7 @@ const Modal$1 = (props) => {
     destroyOnClose,
     panelRef = null,
     modalRender
-  } = props, restProps = __rest$5(props, ["prefixCls", "className", "rootClassName", "open", "wrapClassName", "centered", "getContainer", "focusTriggerAfterClose", "style", "visible", "width", "footer", "classNames", "styles", "children", "loading", "confirmLoading", "zIndex", "mousePosition", "onOk", "onCancel", "destroyOnHidden", "destroyOnClose", "panelRef", "modalRender"]);
+  } = props, restProps = __rest$7(props, ["prefixCls", "className", "rootClassName", "open", "wrapClassName", "centered", "getContainer", "focusTriggerAfterClose", "style", "visible", "width", "footer", "classNames", "styles", "children", "loading", "confirmLoading", "zIndex", "mousePosition", "onOk", "onCancel", "destroyOnHidden", "destroyOnClose", "panelRef", "modalRender"]);
   const {
     getPopupContainer: getContextPopupContainer,
     getPrefixCls,
@@ -1139,7 +1293,7 @@ const Confirm = genSubStyleComponent(["Modal", "confirm"], (token) => {
   // confirm is weak than modal since no conflict here
   order: -1e3
 });
-var __rest$4 = function(s, e) {
+var __rest$6 = function(s, e) {
   var t = {};
   for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
@@ -1159,7 +1313,7 @@ const ConfirmContent = (props) => {
     footer,
     // Legacy for static function usage
     locale: staticLocale
-  } = props, resetProps = __rest$4(props, ["prefixCls", "icon", "okText", "cancelText", "confirmPrefixCls", "type", "okCancel", "footer", "locale"]);
+  } = props, resetProps = __rest$6(props, ["prefixCls", "icon", "okText", "cancelText", "confirmPrefixCls", "type", "okCancel", "footer", "locale"]);
   let mergedIcon = icon;
   if (!icon && icon !== null) {
     switch (type) {
@@ -1420,7 +1574,7 @@ function modalGlobalConfig({
 }) {
   defaultRootPrefixCls = rootPrefixCls;
 }
-var __rest$3 = function(s, e) {
+var __rest$5 = function(s, e) {
   var t = {};
   for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
@@ -1433,7 +1587,7 @@ const HookModal = (_a, ref) => {
   var {
     afterClose: hookAfterClose,
     config
-  } = _a, restProps = __rest$3(_a, ["afterClose", "config"]);
+  } = _a, restProps = __rest$5(_a, ["afterClose", "config"]);
   const [open, setOpen] = reactExports.useState(true);
   const [innerConfig, setInnerConfig] = reactExports.useState(config);
   const {
@@ -7699,6 +7853,207 @@ const useStyle = genStyleHooks("DatePicker", (token) => {
     })
   ];
 }, prepareComponentToken);
+const RowContext = /* @__PURE__ */ reactExports.createContext({});
+var __rest$4 = function(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+function parseFlex(flex) {
+  if (flex === "auto") {
+    return "1 1 auto";
+  }
+  if (typeof flex === "number") {
+    return `${flex} ${flex} auto`;
+  }
+  if (/^\d+(\.\d+)?(px|em|rem|%)$/.test(flex)) {
+    return `0 0 ${flex}`;
+  }
+  return flex;
+}
+const sizes = ["xs", "sm", "md", "lg", "xl", "xxl"];
+const Col = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
+  const {
+    getPrefixCls,
+    direction
+  } = reactExports.useContext(ConfigContext);
+  const {
+    gutter,
+    wrap
+  } = reactExports.useContext(RowContext);
+  const {
+    prefixCls: customizePrefixCls,
+    span,
+    order,
+    offset: offset2,
+    push,
+    pull,
+    className,
+    children,
+    flex,
+    style
+  } = props, others = __rest$4(props, ["prefixCls", "span", "order", "offset", "push", "pull", "className", "children", "flex", "style"]);
+  const prefixCls = getPrefixCls("col", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useColStyle(prefixCls);
+  const sizeStyle = {};
+  let sizeClassObj = {};
+  sizes.forEach((size) => {
+    let sizeProps = {};
+    const propSize = props[size];
+    if (typeof propSize === "number") {
+      sizeProps.span = propSize;
+    } else if (typeof propSize === "object") {
+      sizeProps = propSize || {};
+    }
+    delete others[size];
+    sizeClassObj = Object.assign(Object.assign({}, sizeClassObj), {
+      [`${prefixCls}-${size}-${sizeProps.span}`]: sizeProps.span !== void 0,
+      [`${prefixCls}-${size}-order-${sizeProps.order}`]: sizeProps.order || sizeProps.order === 0,
+      [`${prefixCls}-${size}-offset-${sizeProps.offset}`]: sizeProps.offset || sizeProps.offset === 0,
+      [`${prefixCls}-${size}-push-${sizeProps.push}`]: sizeProps.push || sizeProps.push === 0,
+      [`${prefixCls}-${size}-pull-${sizeProps.pull}`]: sizeProps.pull || sizeProps.pull === 0,
+      [`${prefixCls}-rtl`]: direction === "rtl"
+    });
+    if (sizeProps.flex) {
+      sizeClassObj[`${prefixCls}-${size}-flex`] = true;
+      sizeStyle[`--${prefixCls}-${size}-flex`] = parseFlex(sizeProps.flex);
+    }
+  });
+  const classes = classNames(prefixCls, {
+    [`${prefixCls}-${span}`]: span !== void 0,
+    [`${prefixCls}-order-${order}`]: order,
+    [`${prefixCls}-offset-${offset2}`]: offset2,
+    [`${prefixCls}-push-${push}`]: push,
+    [`${prefixCls}-pull-${pull}`]: pull
+  }, className, sizeClassObj, hashId, cssVarCls);
+  const mergedStyle = {};
+  if (gutter === null || gutter === void 0 ? void 0 : gutter[0]) {
+    const horizontalGutter = typeof gutter[0] === "number" ? `${gutter[0] / 2}px` : `calc(${gutter[0]} / 2)`;
+    mergedStyle.paddingLeft = horizontalGutter;
+    mergedStyle.paddingRight = horizontalGutter;
+  }
+  if (flex) {
+    mergedStyle.flex = parseFlex(flex);
+    if (wrap === false && !mergedStyle.minWidth) {
+      mergedStyle.minWidth = 0;
+    }
+  }
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", Object.assign({}, others, {
+    style: Object.assign(Object.assign(Object.assign({}, mergedStyle), style), sizeStyle),
+    className: classes,
+    ref
+  }), children));
+});
+function useGutter(gutter, screens) {
+  const results = [void 0, void 0];
+  const normalizedGutter = Array.isArray(gutter) ? gutter : [gutter, void 0];
+  const mergedScreens = screens || {
+    xs: true,
+    sm: true,
+    md: true,
+    lg: true,
+    xl: true,
+    xxl: true
+  };
+  normalizedGutter.forEach((g, index) => {
+    if (typeof g === "object" && g !== null) {
+      for (let i = 0; i < responsiveArray.length; i++) {
+        const breakpoint = responsiveArray[i];
+        if (mergedScreens[breakpoint] && g[breakpoint] !== void 0) {
+          results[index] = g[breakpoint];
+          break;
+        }
+      }
+    } else {
+      results[index] = g;
+    }
+  });
+  return results;
+}
+var __rest$3 = function(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+function useMergedPropByScreen(oriProp, screen) {
+  const [prop, setProp] = reactExports.useState(typeof oriProp === "string" ? oriProp : "");
+  const calcMergedAlignOrJustify = () => {
+    if (typeof oriProp === "string") {
+      setProp(oriProp);
+    }
+    if (typeof oriProp !== "object") {
+      return;
+    }
+    for (let i = 0; i < responsiveArray.length; i++) {
+      const breakpoint = responsiveArray[i];
+      if (!screen || !screen[breakpoint]) {
+        continue;
+      }
+      const curVal = oriProp[breakpoint];
+      if (curVal !== void 0) {
+        setProp(curVal);
+        return;
+      }
+    }
+  };
+  reactExports.useEffect(() => {
+    calcMergedAlignOrJustify();
+  }, [JSON.stringify(oriProp), screen]);
+  return prop;
+}
+const Row = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
+  const {
+    prefixCls: customizePrefixCls,
+    justify,
+    align,
+    className,
+    style,
+    children,
+    gutter = 0,
+    wrap
+  } = props, others = __rest$3(props, ["prefixCls", "justify", "align", "className", "style", "children", "gutter", "wrap"]);
+  const {
+    getPrefixCls,
+    direction
+  } = reactExports.useContext(ConfigContext);
+  const screens = useBreakpoint(true, null);
+  const mergedAlign = useMergedPropByScreen(align, screens);
+  const mergedJustify = useMergedPropByScreen(justify, screens);
+  const prefixCls = getPrefixCls("row", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useRowStyle(prefixCls);
+  const gutters = useGutter(gutter, screens);
+  const classes = classNames(prefixCls, {
+    [`${prefixCls}-no-wrap`]: wrap === false,
+    [`${prefixCls}-${mergedJustify}`]: mergedJustify,
+    [`${prefixCls}-${mergedAlign}`]: mergedAlign,
+    [`${prefixCls}-rtl`]: direction === "rtl"
+  }, className, hashId, cssVarCls);
+  const rowStyle = {};
+  if (gutters === null || gutters === void 0 ? void 0 : gutters[0]) {
+    const horizontalGutter = typeof gutters[0] === "number" ? `${gutters[0] / -2}px` : `calc(${gutters[0]} / -2)`;
+    rowStyle.marginLeft = horizontalGutter;
+    rowStyle.marginRight = horizontalGutter;
+  }
+  const [gutterH, gutterV] = gutters;
+  rowStyle.rowGap = gutterV;
+  const rowContext = reactExports.useMemo(() => ({
+    gutter: [gutterH, gutterV],
+    wrap
+  }), [gutterH, gutterV, wrap]);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement(RowContext.Provider, {
+    value: rowContext
+  }, /* @__PURE__ */ reactExports.createElement("div", Object.assign({}, others, {
+    className: classes,
+    style: Object.assign(Object.assign({}, rowStyle), style),
+    ref
+  }), children)));
+});
 var SwapRightOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M873.1 596.2l-164-208A32 32 0 00684 376h-64.8c-6.7 0-10.4 7.7-6.3 13l144.3 183H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h695.9c26.8 0 41.7-30.8 25.2-51.8z" } }] }, "name": "swap-right", "theme": "outlined" };
 var SwapRightOutlined = function SwapRightOutlined2(props, ref) {
   return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
@@ -8518,7 +8873,7 @@ function AllForms() {
           /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: _pg.settings, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faGear }),
             " ",
-            __("Settings", "formglut")
+            __("Global Settings", "formglut")
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-action-sep", children: "|" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: _pg.preview + "&form_id=" + r.id, target: "_blank", rel: "noopener noreferrer", children: [

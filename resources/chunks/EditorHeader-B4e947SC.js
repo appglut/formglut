@@ -1,4 +1,4 @@
-import { bE as jsxRuntimeExports, N as NavMenu, a4 as _pg, i as FontAwesomeIcon, al as faArrowLeft } from "./NavMenu-D0YBC0d1.js";
+import { bq as jsxRuntimeExports, N as NavMenu, J as _pg, g as FontAwesomeIcon, a7 as faArrowLeft } from "./NavMenu-DTs5z4CX.js";
 import { _ as __ } from "./default-i18n-Bi0ZJkXv.js";
 function EditorHeader({ formId, title, onTitleChange, active = "editor", children }) {
   const withId = (url) => formId ? `${url}&form_id=${formId}` : url;
@@ -33,4 +33,4 @@ function EditorHeader({ formId, title, onTitleChange, active = "editor", childre
 export {
   EditorHeader as E
 };
-//# sourceMappingURL=EditorHeader-DE2K_3W-.js.map
+//# sourceMappingURL=EditorHeader-B4e947SC.js.map

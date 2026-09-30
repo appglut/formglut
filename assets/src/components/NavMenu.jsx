@@ -31,7 +31,7 @@ export default function NavMenu() {
     { key: 'forms', label: __( 'All Forms', 'formglut' ), icon: faFileLines, href: _pg.all_forms },
     { key: 'new', label: __( 'Add New Form', 'formglut' ), icon: faPlus, href: _pg.editor },
     { key: 'entries', label: __( 'Entries', 'formglut' ), icon: faInbox, href: _pg.entries },
-    { key: 'settings', label: __( 'Settings', 'formglut' ), icon: faGear, href: _pg.settings },
+    { key: 'settings', label: __( 'Global Settings', 'formglut' ), icon: faGear, href: _pg.settings },
     { key: 'pro', label: __( 'Pro Features', 'formglut' ), icon: faStar, href: _pg.pro_features },
   ].filter((i) => i.href);
 

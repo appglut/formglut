@@ -1,12 +1,12 @@
-import { bE as jsxRuntimeExports, bT as staticMethods, bP as reactExports, a4 as _pg, B as Button, ar as faChartLine, aW as faPalette, b4 as faShieldHalved, aR as faLock, aB as faEnvelope, av as faCircleCheck, aJ as faGear, i as FontAwesomeIcon, aE as faEye, H as Tooltip, az as faCode, aH as faFloppyDisk, ax as faCircleInfo, as as faCheck, aA as faCopy, ai as createRoot } from "./chunks/NavMenu-D0YBC0d1.js";
+import { bq as jsxRuntimeExports, bE as staticMethods, bB as reactExports, J as _pg, B as Button, ad as faChartLine, aL as faPalette, aV as faShieldHalved, aG as faLock, aq as faEnvelope, ai as faCircleCheck, ay as faGear, g as FontAwesomeIcon, at as faEye, an as faCode, aw as faFloppyDisk, a$ as faTags, ag as faChevronDown, ae as faCheck, ap as faCopy, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { E as EditorHeader } from "./chunks/EditorHeader-DE2K_3W-.js";
-import { h as getForm, l as updateForm } from "./chunks/api-CyfhXhZs.js";
-import { g as flattenFields } from "./chunks/fieldTypes-BVTzv2gA.js";
-import { I as Input, S as Select, c as Spin } from "./chunks/index-CEbUDJaq.js";
-import { T as TypedInputNumber } from "./chunks/index-C-rCU2IL.js";
-import { S as Switch } from "./chunks/index-C0Htsu4a.js";
-import { P as Popover } from "./chunks/index-DXRCHqrQ.js";
+import { E as EditorHeader } from "./chunks/EditorHeader-B4e947SC.js";
+import { l as getForm, T as Tooltip, r as updateForm } from "./chunks/api-V7Uk2s4S.js";
+import { g as flattenFields } from "./chunks/fieldTypes-BMVR92Df.js";
+import { I as Input, S as Select, c as Spin } from "./chunks/index-BLXOj64T.js";
+import { T as TypedInputNumber } from "./chunks/index-aGc0xIpX.js";
+import { S as Switch } from "./chunks/index-ryNm28KF.js";
+import { P as Popover } from "./chunks/index-cX7NXTCE.js";
 const DEFAULT_FORM_SETTINGS = {
   general: { show_title: false, form_class: "", submit_processing: "" },
   confirmation: { type: "message", message: "", redirect_url: "", after_submit: "reset", scroll: true, autoclose: 0, error_message: "" },
@@ -244,7 +244,11 @@ function TagPopover({ fields, mode, value, onInsert }) {
     perField.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-tag-group", children: __("Field values", "formglut") }),
     list(perField)
   ] });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { open, onOpenChange: setOpen, trigger: "click", placement: "bottomLeft", content, arrow: false, overlayClassName: "fg-tag-popover", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Insert a value from the form, such as the visitor’s name or email", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-tag-btn", "aria-label": __("Insert a value from the form", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleInfo }) }) }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { open, onOpenChange: setOpen, trigger: "click", placement: "bottomLeft", content, arrow: false, overlayClassName: "fg-tag-popover", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "fg-tag-btn", title: __("Insert a value from the form, such as the visitor’s name or email", "formglut"), children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTags }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: __("Smart tags", "formglut") }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faChevronDown, className: "chev" })
+  ] }) });
 }
 function FormSettingsPage() {
   const formId = parseInt(new URLSearchParams(window.location.search).get("form_id") || "0", 10) || 0;
@@ -313,7 +317,7 @@ function FormSettingsPage() {
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-body", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-top", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-titlebar", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-page-title", children: __("Form settings", "formglut") }) }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-note", children: __("These settings apply to this form only. Site-wide options are under FormGlut → Settings.", "formglut") })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-note", children: __("These settings apply to this form only. Site-wide options are under FormGlut → Global Settings.", "formglut") })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-layout", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "fg-fs-nav", children: schema.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: s.key === section.key ? "active" : "", onClick: () => setActive(s.key), children: [

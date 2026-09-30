@@ -1,9 +1,8 @@
-import { cj as wrapperRaf, bP as reactExports, aa as canUseDom, I as Icon, a0 as _extends, d as ConfigContext, ab as classNames, bX as toArray$1, bK as omit, ad as cloneElement, H as Tooltip, bU as supportNodeRef, c2 as useComposeRef, bs as getNodeRef, g as ContextIsolator, bY as unit, bg as genFocusOutline, bW as textEllipsis, bj as genStyleHooks, bI as merge, bA as initZoomMotion, ac as clearFix, bQ as resetComponent, F as FastColor, bR as resetIcon, cg as useZIndex, c3 as useEvent, b_ as useCSSVarCls, by as initCollapseMotion, bn as getArrowStyle, bh as genFocusStyle, bm as getArrowOffsetToken, bo as getArrowToken, aj as devUseWarning, ce as useToken, ca as useMergedState, bt as getPlacements, ck as zIndexContext, a3 as _objectWithoutProperties, a6 as _slicedToArray, $ as _defineProperty, a2 as _objectSpread2, R as React, af as composeRef, k as FormItemInputContext, D as DisabledContext, W as Wave, T as TARGET_CLS, c5 as useId, cd as useSize, bM as pickAttrs, a9 as _typeof, ci as warningOnce, a8 as _toConsumableArray, c0 as useCompactItemContext, B as Button$1, t as ReactDOM, K as KeyCode, bk as genSubStyleComponent, c1 as useComponentConfig, c8 as useLocale, bG as locale$1, c6 as useLayoutEffect, bB as isEqual, bO as reactDomExports, bV as supportRef, c9 as useMemo, bl as get, E as RefResizeObserver, bD as isVisible, be as fillRef, bq as getDOM, bu as getScrollBarSize, bv as getTargetScrollBarSize, a as CSSMotion, a1 as _inherits, Y as _createSuper, U as _classCallCheck, _ as _assertThisInitialized, X as _createClass, n as Keyframe, A as RefIcon$g, bJ as mergeProps, bL as operationUnit, bH as localeValues, e as ConfigProvider } from "./NavMenu-D0YBC0d1.js";
-import { x as initSlideMotion, z as slideDownOut, C as slideUpOut, y as slideDownIn, A as slideUpIn, w as initMoveMotion, p as genPurePanel, v as initInputToken, u as initComponentToken$1, d as genBasicInputStyle, g as genBaseOutlinedStyle, f as genDisabledStyle, k as genInputSmallStyle, S as Select, L as List, R as RefIcon$f, a as Input, b as RefIcon$h, E as Empty, D as DefaultRenderEmpty, c as Spin } from "./index-CEbUDJaq.js";
-import { D as Divider, M as MenuItem$1, u as useFullPath, S as SubMenu$1, E as ExportMenu, R as RefIcon$d, b as MenuItemGroup, a as Dropdown$2, c as RefIcon$e } from "./EllipsisOutlined-Cbet2jbC.js";
-import { g as genCollapseMotion } from "./collapse-DdhdDMvL.js";
-import { S as Space } from "./index-CpZl-a5U.js";
-import { c as useForceUpdate, b as toNamePathStr, u as useBreakpoint } from "./useForm-BgzEbaR7.js";
+import { c2 as wrapperRaf, R as React, bB as reactExports, X as canUseDom, b_ as useToken, bS as useLayoutEffect, I as Icon, z as _extends, c as ConfigContext, Y as classNames, bI as toArray$2, bw as omit, $ as cloneElement, bF as supportNodeRef, bP as useComposeRef, bf as getNodeRef, e as ContextIsolator, bJ as unit, b7 as genFocusOutline, bH as textEllipsis, b9 as genStyleHooks, bu as merge, Z as clearFix, bC as resetComponent, F as FastColor, bD as resetIcon, b$ as useZIndex, bQ as useEvent, bL as useCSSVarCls, bk as initCollapseMotion, b8 as genFocusStyle, a5 as devUseWarning, bW as useMergedState, c3 as zIndexContext, H as _objectWithoutProperties, M as _slicedToArray, y as _defineProperty, G as _objectSpread2, a1 as composeRef, h as FormItemInputContext, D as DisabledContext, W as Wave, T as TARGET_CLS, bR as useId, bZ as useSize, by as pickAttrs, U as _typeof, c1 as warningOnce, Q as _toConsumableArray, bN as useCompactItemContext, B as Button$1, k as ReactDOM, K as KeyCode, ba as genSubStyleComponent, bO as useComponentConfig, bU as useLocale, bs as locale$1, bm as isEqual, bA as reactDomExports, bG as supportRef, bV as useMemo, bb as get, r as RefResizeObserver, bp as isVisible, b5 as fillRef, bd as getDOM, bg as getScrollBarSize, bh as getTargetScrollBarSize, a as CSSMotion, E as _inherits, w as _createSuper, u as _classCallCheck, _ as _assertThisInitialized, v as _createClass, i as Keyframe, q as RefIcon$g, bv as mergeProps, bx as operationUnit, bt as localeValues, d as ConfigProvider } from "./NavMenu-DTs5z4CX.js";
+import { x as initSlideMotion, z as slideDownOut, C as slideUpOut, y as slideDownIn, A as slideUpIn, w as initMoveMotion, p as genPurePanel, v as initInputToken, u as initComponentToken$1, d as genBasicInputStyle, g as genBaseOutlinedStyle, f as genDisabledStyle, k as genInputSmallStyle, S as Select, L as List, R as RefIcon$f, a as Input, b as RefIcon$h, E as Empty, D as DefaultRenderEmpty, c as Spin } from "./index-BLXOj64T.js";
+import { D as Divider, M as MenuItem$1, g as genCollapseMotion, u as useFullPath, S as SubMenu$1, E as ExportMenu, R as RefIcon$d, b as MenuItemGroup, a as Dropdown$2, c as RefIcon$e } from "./EllipsisOutlined-lUE_jWZL.js";
+import { T as Tooltip, q as initZoomMotion, f as getArrowStyle, e as getArrowOffsetToken, h as getArrowToken, o as getPlacements } from "./api-V7Uk2s4S.js";
+import { S as Space } from "./index-BHAdwT1Y.js";
 function isWindow(obj) {
   return obj !== null && obj !== void 0 && obj === obj.window;
 }
@@ -63,6 +62,9 @@ function scrollTo(y, options = {}) {
   };
   wrapperRaf(frameFunc);
 }
+const useForceUpdate = () => {
+  return React.useReducer((ori) => ori + 1, 0);
+};
 const useMultipleSelect = (getKey2) => {
   const [prevSelectedIndex, setPrevSelectedIndex] = reactExports.useState(null);
   const multipleSelect = reactExports.useCallback((currentSelectedIndex, data, selectedKeys) => {
@@ -150,6 +152,126 @@ function isStyleSupport(styleName, styleValue) {
     return isStyleValueSupport(styleName, styleValue);
   }
   return isStyleNameSupport(styleName);
+}
+const addMediaQueryListener = (mql, handler) => {
+  if (typeof (mql === null || mql === void 0 ? void 0 : mql.addEventListener) !== "undefined") {
+    mql.addEventListener("change", handler);
+  } else if (typeof (mql === null || mql === void 0 ? void 0 : mql.addListener) !== "undefined") {
+    mql.addListener(handler);
+  }
+};
+const removeMediaQueryListener = (mql, handler) => {
+  if (typeof (mql === null || mql === void 0 ? void 0 : mql.removeEventListener) !== "undefined") {
+    mql.removeEventListener("change", handler);
+  } else if (typeof (mql === null || mql === void 0 ? void 0 : mql.removeListener) !== "undefined") {
+    mql.removeListener(handler);
+  }
+};
+const responsiveArray = ["xxl", "xl", "lg", "md", "sm", "xs"];
+const getResponsiveMap = (token) => ({
+  xs: `(max-width: ${token.screenXSMax}px)`,
+  sm: `(min-width: ${token.screenSM}px)`,
+  md: `(min-width: ${token.screenMD}px)`,
+  lg: `(min-width: ${token.screenLG}px)`,
+  xl: `(min-width: ${token.screenXL}px)`,
+  xxl: `(min-width: ${token.screenXXL}px)`
+});
+const validateBreakpoints = (token) => {
+  const indexableToken = token;
+  const revBreakpoints = [].concat(responsiveArray).reverse();
+  revBreakpoints.forEach((breakpoint, i) => {
+    const breakpointUpper = breakpoint.toUpperCase();
+    const screenMin = `screen${breakpointUpper}Min`;
+    const screen = `screen${breakpointUpper}`;
+    if (!(indexableToken[screenMin] <= indexableToken[screen])) {
+      throw new Error(`${screenMin}<=${screen} fails : !(${indexableToken[screenMin]}<=${indexableToken[screen]})`);
+    }
+    if (i < revBreakpoints.length - 1) {
+      const screenMax = `screen${breakpointUpper}Max`;
+      if (!(indexableToken[screen] <= indexableToken[screenMax])) {
+        throw new Error(`${screen}<=${screenMax} fails : !(${indexableToken[screen]}<=${indexableToken[screenMax]})`);
+      }
+      const nextBreakpointUpperMin = revBreakpoints[i + 1].toUpperCase();
+      const nextScreenMin = `screen${nextBreakpointUpperMin}Min`;
+      if (!(indexableToken[screenMax] <= indexableToken[nextScreenMin])) {
+        throw new Error(`${screenMax}<=${nextScreenMin} fails : !(${indexableToken[screenMax]}<=${indexableToken[nextScreenMin]})`);
+      }
+    }
+  });
+  return token;
+};
+const useResponsiveObserver = () => {
+  const [, token] = useToken();
+  const responsiveMap = getResponsiveMap(validateBreakpoints(token));
+  return React.useMemo(() => {
+    const subscribers = /* @__PURE__ */ new Map();
+    let subUid = -1;
+    let screens = {};
+    return {
+      responsiveMap,
+      matchHandlers: {},
+      dispatch(pointMap) {
+        screens = pointMap;
+        subscribers.forEach((func) => func(screens));
+        return subscribers.size >= 1;
+      },
+      subscribe(func) {
+        if (!subscribers.size) {
+          this.register();
+        }
+        subUid += 1;
+        subscribers.set(subUid, func);
+        func(screens);
+        return subUid;
+      },
+      unsubscribe(paramToken) {
+        subscribers.delete(paramToken);
+        if (!subscribers.size) {
+          this.unregister();
+        }
+      },
+      register() {
+        Object.entries(responsiveMap).forEach(([screen, mediaQuery]) => {
+          const listener = ({
+            matches
+          }) => {
+            this.dispatch(Object.assign(Object.assign({}, screens), {
+              [screen]: matches
+            }));
+          };
+          const mql = window.matchMedia(mediaQuery);
+          addMediaQueryListener(mql, listener);
+          this.matchHandlers[mediaQuery] = {
+            mql,
+            listener
+          };
+          listener(mql);
+        });
+      },
+      unregister() {
+        Object.values(responsiveMap).forEach((mediaQuery) => {
+          const handler = this.matchHandlers[mediaQuery];
+          removeMediaQueryListener(handler === null || handler === void 0 ? void 0 : handler.mql, handler === null || handler === void 0 ? void 0 : handler.listener);
+        });
+        subscribers.clear();
+      }
+    };
+  }, [responsiveMap]);
+};
+function useBreakpoint(refreshOnChange = true, defaultScreens = {}) {
+  const screensRef = reactExports.useRef(defaultScreens);
+  const [, forceUpdate] = useForceUpdate();
+  const responsiveObserver = useResponsiveObserver();
+  useLayoutEffect(() => {
+    const token = responsiveObserver.subscribe((supportScreens) => {
+      screensRef.current = supportScreens;
+      if (refreshOnChange) {
+        forceUpdate();
+      }
+    });
+    return () => responsiveObserver.unsubscribe(token);
+  }, []);
+  return screensRef.current;
 }
 var LeftOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z" } }] }, "name": "left", "theme": "outlined" };
 var LeftOutlined = function LeftOutlined2(props, ref) {
@@ -240,7 +362,7 @@ const MenuItem = (props) => {
     tooltipProps.title = null;
     tooltipProps.open = false;
   }
-  const childrenLength = toArray$1(children).length;
+  const childrenLength = toArray$2(children).length;
   let returnNode = /* @__PURE__ */ reactExports.createElement(MenuItem$1, Object.assign({}, omit(props, ["title", "icon", "danger"]), {
     className: classNames({
       [`${prefixCls}-item-danger`]: danger,
@@ -2565,6 +2687,24 @@ const InternalRadio = (props, ref) => {
   }, children) : null)));
 };
 const Radio$1 = /* @__PURE__ */ reactExports.forwardRef(InternalRadio);
+function toArray$1(candidate) {
+  if (candidate === void 0 || candidate === false) {
+    return [];
+  }
+  return Array.isArray(candidate) ? candidate : [candidate];
+}
+(function(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+});
+function toNamePathStr(name) {
+  const namePath = toArray$1(name);
+  return namePath.join("_");
+}
 const RadioGroup = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     getPrefixCls,
@@ -2728,7 +2868,7 @@ function fillFieldNames(fieldNames) {
 }
 function convertTreeToData(rootNodes) {
   function dig(node) {
-    var treeNodes = toArray$1(node);
+    var treeNodes = toArray$2(node);
     return treeNodes.map(function(treeNode) {
       if (!isTreeNode(treeNode)) {
         warningOnce(!treeNode, "Tree/TreeNode can only accept TreeNode as children.");
@@ -6018,7 +6158,7 @@ function useWidthColumns(flattenColumns, scrollWidth, clientWidth) {
 }
 var _excluded$4 = ["children"], _excluded2 = ["fixed"];
 function convertChildrenToColumns(children) {
-  return toArray$1(children).filter(function(node) {
+  return toArray$2(children).filter(function(node) {
     return /* @__PURE__ */ reactExports.isValidElement(node);
   }).map(function(_ref) {
     var key = _ref.key, props = _ref.props;
@@ -13467,6 +13607,8 @@ ForwardTable.Column = Column;
 ForwardTable.ColumnGroup = ColumnGroup;
 ForwardTable.Summary = FooterComponents;
 export {
-  ForwardTable as F
+  ForwardTable as F,
+  responsiveArray as r,
+  useBreakpoint as u
 };
-//# sourceMappingURL=Table-DSNMf6bZ.js.map
+//# sourceMappingURL=Table-fv5X7Bx6.js.map

@@ -63,7 +63,7 @@ class FormGlut_Admin {
 			'formglut-entries'      => __( 'Entries', 'formglut' ),
 			'formglut-entry-detail' => __( 'Entry Detail', 'formglut' ),
 			'formglut-form-settings' => __( 'Form Settings', 'formglut' ),
-			'formglut-settings'     => __( 'Settings', 'formglut' ),
+			'formglut-settings'     => __( 'Global Settings', 'formglut' ),
 			'formglut-pro-features' => __( 'Pro Features', 'formglut' ),
 			'formglut-preview'      => __( 'Form Preview', 'formglut' ),
 		);
@@ -123,8 +123,8 @@ class FormGlut_Admin {
 		// Submenu — Settings.
 		add_submenu_page(
 			'formglut-all-forms',
-			__( 'Settings', 'formglut' ),
-			__( 'Settings', 'formglut' ),
+			__( 'Global Settings', 'formglut' ),
+			__( 'Global Settings', 'formglut' ),
 			'manage_options',
 			'formglut-settings',
 			array( $this, 'render_settings_page' )
