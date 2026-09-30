@@ -103,14 +103,6 @@ class FormGlut_Ajax {
 	 * @return array Sanitized fields.
 	 */
 	private function sanitize_form_fields( $fields ) {
-		$allowed_types = array(
-			'text', 'email', 'textarea', 'number', 'select',
-			'multiselect', 'radio', 'checkbox', 'date', 'file', 'hidden',
-			'url', 'phone', 'name', 'address', 'html', 'heading', 'divider',
-			'password', 'time', 'country_select', 'currency', 'percentage',
-			'masked_input', 'spinner', 'section_break', 'terms_conditions',
-		);
-
 		$clean = array();
 
 		foreach ( $fields as $field ) {
@@ -119,7 +111,28 @@ class FormGlut_Ajax {
 			}
 
 			$type = isset( $field['type'] ) ? sanitize_key( $field['type'] ) : 'text';
-			if ( ! in_array( $type, $allowed_types, true ) ) {
+			if ( '' === $type ) {
+				continue;
+			}
+
+			// Column containers: keep only layout props and recurse into each column.
+			if ( FormGlut_Form::is_container( $field ) ) {
+				$columns = array();
+				foreach ( $field['columns'] as $column ) {
+					$columns[] = array(
+						'width'  => isset( $column['width'] ) ? max( 1, min( 100, (float) $column['width'] ) ) : 1,
+						'fields' => isset( $column['fields'] ) && is_array( $column['fields'] ) ? $this->sanitize_form_fields( $column['fields'] ) : array(),
+					);
+				}
+				$clean[] = array(
+					'id'               => isset( $field['id'] ) ? sanitize_text_field( $field['id'] ) : uniqid( 'field_' ),
+					'type'             => $type,
+					'columns'          => $columns,
+					'gap'              => isset( $field['gap'] ) ? sanitize_key( $field['gap'] ) : 'medium',
+					'responsive_stack' => ! isset( $field['responsive_stack'] ) || ! empty( $field['responsive_stack'] ),
+					'container_class'  => isset( $field['container_class'] ) ? sanitize_text_field( $field['container_class'] ) : '',
+					'admin_label'      => isset( $field['admin_label'] ) ? sanitize_text_field( $field['admin_label'] ) : '',
+				);
 				continue;
 			}
 
@@ -130,10 +143,16 @@ class FormGlut_Ajax {
 				'required' => ! empty( $field['required'] ),
 			);
 
-			$optional_string_keys = array( 'placeholder', 'validation_message', 'css_class', 'default_value', 'help_text', 'html_content', 'tag', 'style', 'allowed_types', 'resize' );
+			$optional_string_keys = array( 'placeholder', 'validation_message', 'css_class', 'default_value', 'help_text', 'tag', 'style', 'allowed_types', 'resize', 'name_attribute', 'element_class', 'container_class', 'prefix_label', 'suffix_label', 'label', 'admin_label', 'label_placement', 'field_width', 'label_width', 'unique_error_message', 'mask_pattern', 'mask_placeholder' );
 			foreach ( $optional_string_keys as $key ) {
 				if ( isset( $field[ $key ] ) ) {
-					$clean_field[ $key ] = sanitize_text_field( $field[ $key ] );
+					$clean_field[ $key ] = is_array( $field[ $key ] ) ? $this->sanitize_deep( $field[ $key ] ) : sanitize_text_field( $field[ $key ] );
+				}
+			}
+
+			foreach ( array( 'html_content', 'terms_content' ) as $html_key ) {
+				if ( isset( $field[ $html_key ] ) && is_string( $field[ $html_key ] ) ) {
+					$clean_field[ $html_key ] = wp_kses_post( $field[ $html_key ] );
 				}
 			}
 
@@ -144,15 +163,15 @@ class FormGlut_Ajax {
 						$clean_field['options'][] = array(
 							'label' => isset( $option['label'] ) ? sanitize_text_field( $option['label'] ) : '',
 							'value' => isset( $option['value'] ) ? sanitize_text_field( $option['value'] ) : '',
-						);
+						) + ( ! empty( $option['disabled'] ) ? array( 'disabled' => true ) : array() );
 					}
 				}
 			}
 
-			$optional_int_keys = array( 'rows', 'cols', 'maxlength', 'character_limit', 'min_length', 'max_length', 'min', 'max', 'step', 'min_selection', 'max_selection', 'max_size' );
+			$optional_int_keys = array( 'rows', 'cols', 'maxlength', 'character_limit', 'min_length', 'max_length', 'min', 'max', 'step', 'min_selection', 'max_selection', 'max_size', 'field_width_custom', 'label_width_custom' );
 			foreach ( $optional_int_keys as $key ) {
 				if ( isset( $field[ $key ] ) ) {
-					$clean_field[ $key ] = absint( $field[ $key ] );
+					$clean_field[ $key ] = 'step' === $key ? abs( (float) $field[ $key ] ) : absint( $field[ $key ] );
 				}
 			}
 
@@ -160,10 +179,64 @@ class FormGlut_Ajax {
 				$clean_field['hidden'] = ! empty( $field['hidden'] );
 			}
 
+			// Conditional Logic - preserve conditions array
+			if ( isset( $field['conditional_logic'] ) ) {
+				$clean_field['conditional_logic'] = ! empty( $field['conditional_logic'] );
+			}
+			if ( isset( $field['condition_match'] ) ) {
+				$clean_field['condition_match'] = in_array( $field['condition_match'], array( 'any', 'all' ), true )
+					? $field['condition_match']
+					: 'any';
+			}
+
+			// Validate as Unique option
+			if ( isset( $field['validate_unique'] ) ) {
+				$clean_field['validate_unique'] = ! empty( $field['validate_unique'] );
+			}
+
+			// Mask options
+			if ( isset( $field['enable_mask'] ) ) {
+				$clean_field['enable_mask'] = ! empty( $field['enable_mask'] );
+			}
+			if ( isset( $field['reversible_mask'] ) ) {
+				$clean_field['reversible_mask'] = ! empty( $field['reversible_mask'] );
+			}
+			if ( isset( $field['clear_on_invalid'] ) ) {
+				$clean_field['clear_on_invalid'] = ! empty( $field['clear_on_invalid'] );
+			}
+
+			// Other boolean options
+			if ( isset( $field['inline'] ) ) {
+				$clean_field['inline'] = ! empty( $field['inline'] );
+			}
+			if ( isset( $field['disable_first_option'] ) ) {
+				$clean_field['disable_first_option'] = ! empty( $field['disable_first_option'] );
+			}
+			if ( isset( $field['conditions'] ) && is_array( $field['conditions'] ) ) {
+				$clean_field['conditions'] = array();
+				foreach ( $field['conditions'] as $condition ) {
+					if ( is_array( $condition ) && isset( $condition['field_id'] ) ) {
+						$clean_field['conditions'][] = array(
+							'field_id' => sanitize_text_field( $condition['field_id'] ),
+							'operator' => isset( $condition['operator'] ) ? sanitize_text_field( $condition['operator'] ) : 'is',
+							'value'    => isset( $condition['value'] ) ? sanitize_text_field( $condition['value'] ) : '',
+						);
+					}
+				}
+			}
+
 			// Preserve any extra keys not explicitly handled (pass-through sanitized).
 			foreach ( $field as $key => $value ) {
-				if ( ! isset( $clean_field[ $key ] ) && is_string( $value ) ) {
-					$clean_field[ $key ] = sanitize_text_field( $value );
+				if ( ! isset( $clean_field[ $key ] ) ) {
+					if ( is_bool( $value ) ) {
+						$clean_field[ $key ] = $value;
+					} elseif ( is_string( $value ) ) {
+						$clean_field[ $key ] = sanitize_text_field( $value );
+					} elseif ( is_int( $value ) || is_float( $value ) ) {
+						$clean_field[ $key ] = $value;
+					} elseif ( is_array( $value ) ) {
+						$clean_field[ $key ] = $this->sanitize_deep( $value );
+					}
 				}
 			}
 
@@ -171,6 +244,33 @@ class FormGlut_Ajax {
 		}
 
 		return $clean;
+	}
+
+	/**
+	 * Field types that collect no value (display, layout, security widgets).
+	 *
+	 * @var string[]
+	 */
+	const NON_INPUT_TYPES = array( 'html', 'heading', 'section_break', 'shortcode', 'action_hook', 'custom_submit_button', 'recaptcha', 'hcaptcha', 'turnstile', 'divider' );
+
+	/**
+	 * Recursively sanitize an arbitrary field option value (strings, numbers, bools, arrays).
+	 *
+	 * @param mixed $value Raw value.
+	 * @return mixed
+	 */
+	private function sanitize_deep( $value ) {
+		if ( is_array( $value ) ) {
+			$out = array();
+			foreach ( $value as $k => $v ) {
+				$out[ is_int( $k ) ? $k : sanitize_text_field( $k ) ] = $this->sanitize_deep( $v );
+			}
+			return $out;
+		}
+		if ( is_bool( $value ) || is_int( $value ) || is_float( $value ) || null === $value ) {
+			return $value;
+		}
+		return sanitize_text_field( (string) $value );
 	}
 
 	/**
@@ -219,11 +319,15 @@ class FormGlut_Ajax {
 		$status   = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$orderby  = isset( $_GET['orderby'] ) ? sanitize_key( $_GET['orderby'] ) : 'created_at'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$order    = isset( $_GET['order'] ) ? sanitize_key( $_GET['order'] ) : 'DESC'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$date_from = isset( $_GET['date_from'] ) ? sanitize_text_field( wp_unslash( $_GET['date_from'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$date_to   = isset( $_GET['date_to'] ) ? sanitize_text_field( wp_unslash( $_GET['date_to'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		$offset = max( 0, ( $page - 1 ) * $per_page );
 
 		$result = FormGlut_Form::get_all( array(
 			'search'   => $search,
+			'date_from' => $date_from,
+			'date_to'   => $date_to,
 			'status'   => $status,
 			'orderby'  => $orderby,
 			'order'    => $order,
@@ -872,30 +976,12 @@ class FormGlut_Ajax {
 			return;
 		}
 
-		// reCAPTCHA v3 verification — only if enabled and configured.
-		$recaptcha_enabled = FormGlut_Settings::get( 'formglut_recaptcha_enabled', false );
-		if ( $recaptcha_enabled ) {
-			$recaptcha_secret = FormGlut_Settings::get( 'formglut_recaptcha_secret_key', '' );
-			$recaptcha_token  = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : '';
-
-			if ( $recaptcha_secret && $recaptcha_token ) {
-				$verify = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', array(
-					'body' => array(
-						'secret'   => $recaptcha_secret,
-						'response' => $recaptcha_token,
-						'remoteip' => $this->get_client_ip(),
-					),
-					'timeout' => 10,
-				) );
-
-				if ( ! is_wp_error( $verify ) ) {
-					$body = json_decode( wp_remote_retrieve_body( $verify ), true );
-					if ( empty( $body['success'] ) || ( isset( $body['score'] ) && $body['score'] < 0.5 ) ) {
-						wp_send_json_error( array( 'message' => $error_msg ) );
-						return;
-					}
-				}
-			}
+		// Captcha verification: fields on the form, plus the optional "protect every form" reCAPTCHA v3.
+		$error_msg     = FormGlut_Settings::get( 'formglut_error_message', __( 'Something went wrong. Please try again.', 'formglut' ) );
+		$captcha_error = $this->verify_captchas( $form, $error_msg );
+		if ( '' !== $captcha_error ) {
+			wp_send_json_error( array( 'message' => $captcha_error ) );
+			return;
 		}
 
 		// Validate and sanitize submitted fields against form definition.
@@ -903,15 +989,42 @@ class FormGlut_Ajax {
 		$errors      = array();
 
 		if ( is_array( $form->fields ) ) {
-			foreach ( $form->fields as $field ) {
+			foreach ( FormGlut_Form::flatten_fields( $form->fields ) as $field ) {
 				$field_id   = isset( $field['id'] ) ? $field['id'] : '';
 				$field_type = isset( $field['type'] ) ? $field['type'] : 'text';
-				$field_label = isset( $field['label'] ) ? $field['label'] : $field_id;
+				$field_label = ! empty( $field['admin_label'] ) ? $field['admin_label'] : ( isset( $field['label'] ) ? $field['label'] : $field_id );
 				$required   = ! empty( $field['required'] );
-				$value      = isset( $_POST[ $field_id ] ) ? wp_unslash( $_POST[ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized in sanitize_field_value() below.
 
-				// Required check.
-				if ( $required && '' === $value ) {
+				if ( in_array( $field_type, self::NON_INPUT_TYPES, true ) ) {
+					continue;
+				}
+
+				// Use custom name attribute if set, otherwise fall back to field ID
+				$field_name = isset( $field['name_attribute'] ) && '' !== $field['name_attribute']
+					? $field['name_attribute']
+					: $field_id;
+
+				$value      = isset( $_POST[ $field_name ] ) ? wp_unslash( $_POST[ $field_name ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized in sanitize_field_value() below.
+
+				// Multi-part fields post an array: check required parts, then store one readable value.
+				if ( in_array( $field_type, array( 'name', 'address', 'date_range' ), true ) ) {
+					$posted = is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : array();
+					$error  = $this->validate_multipart( $field, $field_type, $posted, $field_label );
+					if ( '' !== $error && ! ( ! empty( $field['conditional_logic'] ) && ! array_filter( $posted, 'strlen' ) ) ) {
+						$errors[ $field_id ] = $error;
+						continue;
+					}
+					$value = $this->collapse_multipart( $field, $field_type, $posted );
+				}
+
+				// Check if field was conditionally hidden (frontend passes this info)
+				// The frontend clears values from hidden fields, so if conditional logic is enabled
+				// and the value is empty, we skip validation
+				$is_conditional = ! empty( $field['conditional_logic'] );
+				$was_hidden = $is_conditional && '' === $value;
+
+				// Required check - skip for conditionally hidden fields
+				if ( $required && ! $was_hidden && '' === $value ) {
 					$errors[ $field_id ] = isset( $field['validation_message'] ) && '' !== $field['validation_message']
 						? $field['validation_message']
 						: sprintf( /* translators: %s: field label */ __( '%s is required.', 'formglut' ), $field_label );
@@ -932,35 +1045,39 @@ class FormGlut_Ajax {
 					continue;
 				}
 
-				// Max length validation.
-				if ( ! empty( $field['maxlength'] ) && mb_strlen( $value ) > absint( $field['maxlength'] ) ) {
-					$errors[ $field_id ] = sprintf(
-						/* translators: 1: field label, 2: max length */
-						__( '%1$s must not exceed %2$d characters.', 'formglut' ),
-						$field_label,
-						absint( $field['maxlength'] )
-					);
+				// Type-specific validation (length, range, format, allowed options, selection limits).
+				$type_error = $this->validate_field_value( $field, $field_type, $value, $field_label, $field_name );
+				if ( '' !== $type_error ) {
+					$errors[ $field_id ] = $type_error;
 					continue;
 				}
 
-				// Number range validation.
-				if ( 'number' === $field_type && is_numeric( $value ) ) {
-					if ( '' !== $field['min'] && $value < $field['min'] ) {
-						$errors[ $field_id ] = sprintf(
-							/* translators: 1: field label, 2: minimum value */
-							__( '%1$s must be at least %2$s.', 'formglut' ),
-							$field_label,
-							$field['min']
-						);
-						continue;
-					}
-					if ( '' !== $field['max'] && $value > $field['max'] ) {
-						$errors[ $field_id ] = sprintf(
-							/* translators: 1: field label, 2: maximum value */
-							__( '%1$s must not exceed %2$s.', 'formglut' ),
-							$field_label,
-							$field['max']
-						);
+				// Unique value validation.
+				if ( ! empty( $field['validate_unique'] ) ) {
+					// Check if this value already exists in previous entries for this form
+					global $wpdb;
+					$entries_table = $wpdb->prefix . 'formglut_entries';
+
+					// Sanitize the value for safe comparison
+					$sanitized_value = $this->sanitize_field_value( $value, $field_type, $field );
+
+					// Query for existing entries with this field value
+					$existing = $wpdb->get_var( $wpdb->prepare(
+						"SELECT COUNT(*) FROM {$entries_table}
+						WHERE form_id = %d
+						AND fields_data LIKE %s",
+						$form_id,
+						'%"' . $wpdb->esc_like( $field_id ) . '":"' . $wpdb->esc_like( $sanitized_value ) . '"}%'
+					) );
+
+					if ( $existing > 0 ) {
+						$errors[ $field_id ] = isset( $field['unique_error_message'] ) && '' !== $field['unique_error_message']
+							? $field['unique_error_message']
+							: sprintf(
+								/* translators: %s: field label */
+								__( 'This %s has already been submitted.', 'formglut' ),
+								strtolower( $field_label )
+							);
 						continue;
 					}
 				}
@@ -1044,10 +1161,14 @@ class FormGlut_Ajax {
 		);
 
 		if ( is_array( $form->fields ) ) {
-			foreach ( $form->fields as $field ) {
+			foreach ( FormGlut_Form::flatten_fields( $form->fields ) as $field ) {
 				$field_id    = isset( $field['id'] ) ? $field['id'] : '';
-				$field_label = isset( $field['label'] ) ? $field['label'] : $field_id;
+				$field_label = ! empty( $field['admin_label'] ) ? $field['admin_label'] : ( isset( $field['label'] ) ? $field['label'] : $field_id );
 				$value       = isset( $fields_data[ $field_id ] ) ? $fields_data[ $field_id ] : '';
+
+				if ( ! array_key_exists( $field_id, $fields_data ) ) {
+					continue;
+				}
 
 				if ( is_array( $value ) ) {
 					$value = implode( ', ', $value );
@@ -1079,6 +1200,10 @@ class FormGlut_Ajax {
 			case 'email':
 				return sanitize_email( $value );
 
+			case 'password':
+				// Never store or email the real password.
+				return '********';
+
 			case 'number':
 				return is_numeric( $value ) ? $value : 0;
 
@@ -1099,6 +1224,7 @@ class FormGlut_Ajax {
 				return sanitize_text_field( $value );
 
 			case 'checkbox':
+			case 'multiselect':
 				if ( is_array( $value ) ) {
 					return array_map( 'sanitize_text_field', $value );
 				}
@@ -1109,7 +1235,7 @@ class FormGlut_Ajax {
 				return sanitize_text_field( $value );
 
 			case 'date':
-				return preg_replace( '/[^0-9\-]/', '', $value );
+				return preg_replace( '/[^0-9\-:T]/', '', $value );
 
 			case 'hidden':
 				return sanitize_text_field( $value );
@@ -1117,6 +1243,353 @@ class FormGlut_Ajax {
 			default:
 				return sanitize_text_field( $value );
 		}
+	}
+
+	/**
+	 * Verify every captcha that applies to this form.
+	 *
+	 * @param object $form      Form object.
+	 * @param string $error_msg Generic error message.
+	 * @return string Error message, or '' when all checks pass (or none apply).
+	 */
+	private function verify_captchas( $form, $error_msg ) {
+		$checks = array();
+		foreach ( FormGlut_Form::flatten_fields( is_array( $form->fields ) ? $form->fields : array() ) as $field ) {
+			$type = isset( $field['type'] ) ? $field['type'] : '';
+			if ( in_array( $type, array( 'recaptcha', 'hcaptcha', 'turnstile' ), true ) ) {
+				$checks[ $type ] = ! empty( $field['validation_message'] ) ? $field['validation_message'] : $error_msg;
+			}
+		}
+		if ( ! isset( $checks['recaptcha'] ) && FormGlut_Settings::get( 'formglut_recaptcha_enabled', false ) && 'v2' !== FormGlut_Settings::get( 'formglut_recaptcha_version', 'v3' ) ) {
+			$checks['recaptcha'] = $error_msg;
+		}
+
+		$endpoints = array(
+			'recaptcha' => array( 'https://www.google.com/recaptcha/api/siteverify', 'g-recaptcha-response' ),
+			'hcaptcha'  => array( 'https://api.hcaptcha.com/siteverify', 'h-captcha-response' ),
+			'turnstile' => array( 'https://challenges.cloudflare.com/turnstile/v0/siteverify', 'cf-turnstile-response' ),
+		);
+
+		foreach ( $checks as $provider => $message ) {
+			$cfg = FormGlut_Settings::captcha( $provider );
+			if ( ! $cfg['ready'] ) {
+				continue; // Not configured: the widget is not rendered either.
+			}
+			$token = isset( $_POST[ $endpoints[ $provider ][1] ] ) ? sanitize_text_field( wp_unslash( $_POST[ $endpoints[ $provider ][1] ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified in submit_form().
+			if ( '' === $token ) {
+				return $message;
+			}
+			$response = wp_remote_post( $endpoints[ $provider ][0], array(
+				'body'    => array(
+					'secret'   => $cfg['secret'],
+					'response' => $token,
+					'remoteip' => $this->get_client_ip(),
+				),
+				'timeout' => 10,
+			) );
+			if ( is_wp_error( $response ) ) {
+				return $message;
+			}
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( empty( $body['success'] ) ) {
+				return $message;
+			}
+			if ( 'recaptcha' === $provider && isset( $body['score'] ) && (float) $body['score'] < (float) FormGlut_Settings::get( 'formglut_recaptcha_score', 0.5 ) ) {
+				return $message;
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * Check the sub-inputs of a name, address or date range field.
+	 *
+	 * @param array  $field  Field config.
+	 * @param string $type   Field type.
+	 * @param array  $posted Sanitized sub-values keyed by part.
+	 * @param string $label  Field label.
+	 * @return string Error message, or ''.
+	 */
+	private function validate_multipart( $field, $type, $posted, $label ) {
+		$custom = isset( $field['validation_message'] ) && '' !== $field['validation_message'] ? $field['validation_message'] : '';
+		foreach ( FormGlut_Shortcode::multipart_parts( $field, $type ) as $key => $part ) {
+			if ( $part[2] && $part[3] && ( ! isset( $posted[ $key ] ) || '' === $posted[ $key ] ) ) {
+				/* translators: 1: field label, 2: sub-field label */
+				return $custom ? $custom : sprintf( __( '%1$s: %2$s is required.', 'formglut' ), $label, $part[0] ? $part[0] : $key );
+			}
+		}
+
+		if ( 'date_range' === $type ) {
+			foreach ( array( 'start', 'end' ) as $key ) {
+				if ( ! empty( $posted[ $key ] ) ) {
+					$error = $this->validate_field_value( $field, 'date', $posted[ $key ], $label, '' );
+					if ( '' !== $error ) {
+						return $error;
+					}
+				}
+			}
+			if ( ! empty( $posted['start'] ) && ! empty( $posted['end'] ) && $posted['end'] < $posted['start'] ) {
+				/* translators: %s: field label */
+				return sprintf( __( '%s: the end date must be after the start date.', 'formglut' ), $label );
+			}
+		}
+
+		if ( 'address' === $type && ! empty( $posted['country'] ) ) {
+			$countries = include FORMGLUT_PLUGIN_DIR . 'includes/data/countries.php';
+			if ( ! isset( $countries[ $posted['country'] ] ) ) {
+				/* translators: %s: field label */
+				return sprintf( __( 'Please choose a valid country for %s.', 'formglut' ), $label );
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * Join the sub-values of a multi-part field into one stored string.
+	 *
+	 * @param array  $field  Field config.
+	 * @param string $type   Field type.
+	 * @param array  $posted Sanitized sub-values keyed by part.
+	 * @return string
+	 */
+	private function collapse_multipart( $field, $type, $posted ) {
+		$values = array();
+		foreach ( array_keys( FormGlut_Shortcode::multipart_parts( $field, $type ) ) as $key ) {
+			if ( isset( $posted[ $key ] ) && '' !== $posted[ $key ] ) {
+				$values[] = $posted[ $key ];
+			}
+		}
+		$glue = array( 'name' => ' ', 'address' => ', ', 'date_range' => isset( $field['range_separator'] ) && '' !== $field['range_separator'] ? $field['range_separator'] : ' - ' );
+		return implode( $glue[ $type ], $values );
+	}
+
+	/**
+	 * Validate a submitted value against its field settings.
+	 *
+	 * @param array  $field      Field config.
+	 * @param string $type       Field type.
+	 * @param mixed  $value      Submitted (unslashed) value, non-empty.
+	 * @param string $label      Field label for messages.
+	 * @param string $field_name Posted field name.
+	 * @return string Error message, or '' when valid.
+	 */
+	private function validate_field_value( $field, $type, $value, $label, $field_name ) {
+		$custom = isset( $field['validation_message'] ) && '' !== $field['validation_message'] ? $field['validation_message'] : '';
+
+		if ( is_array( $value ) && ! in_array( $type, array( 'checkbox', 'multiselect' ), true ) ) {
+			return $custom ? $custom : sprintf( /* translators: %s: field label */ __( '%s is invalid.', 'formglut' ), $label );
+		}
+
+		switch ( $type ) {
+			case 'text':
+			case 'textarea':
+				$max = ! empty( $field['max_length'] ) ? absint( $field['max_length'] ) : ( ! empty( $field['character_limit'] ) ? absint( $field['character_limit'] ) : 0 );
+				$min = 'textarea' === $type && ! empty( $field['min_length'] ) ? absint( $field['min_length'] ) : 0;
+				if ( $max && mb_strlen( $value ) > $max ) {
+					/* translators: 1: field label, 2: max length */
+					return sprintf( __( '%1$s must not exceed %2$d characters.', 'formglut' ), $label, $max );
+				}
+				if ( $min && mb_strlen( $value ) < $min ) {
+					/* translators: 1: field label, 2: min length */
+					return sprintf( __( '%1$s must be at least %2$d characters.', 'formglut' ), $label, $min );
+				}
+				break;
+
+			case 'email':
+				if ( ! empty( $field['confirm_email'] ) ) {
+					$confirm = isset( $_POST[ $field_name . '_confirm' ] ) ? sanitize_text_field( wp_unslash( $_POST[ $field_name . '_confirm' ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified in submit_form().
+					if ( $confirm !== $value ) {
+						return isset( $field['confirm_error_message'] ) && '' !== $field['confirm_error_message'] ? $field['confirm_error_message'] : __( 'Email addresses do not match.', 'formglut' );
+					}
+				}
+				break;
+
+			case 'number':
+				if ( ! is_numeric( $value ) ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( '%s must be a number.', 'formglut' ), $label );
+				}
+				$min = isset( $field['min_value'] ) && '' !== $field['min_value'] ? $field['min_value'] : ( isset( $field['min'] ) ? $field['min'] : '' );
+				$max = isset( $field['max_value'] ) && '' !== $field['max_value'] ? $field['max_value'] : ( isset( $field['max'] ) ? $field['max'] : '' );
+				if ( is_numeric( $min ) && (float) $value < (float) $min ) {
+					/* translators: 1: field label, 2: minimum value */
+					return sprintf( __( '%1$s must be at least %2$s.', 'formglut' ), $label, $min );
+				}
+				if ( is_numeric( $max ) && (float) $value > (float) $max ) {
+					/* translators: 1: field label, 2: maximum value */
+					return sprintf( __( '%1$s must not exceed %2$s.', 'formglut' ), $label, $max );
+				}
+				break;
+
+			case 'url':
+				if ( ! isset( $field['validate_url'] ) || ! empty( $field['validate_url'] ) ) {
+					$relative = ! empty( $field['allow_relative'] ) && 0 === strpos( $value, '/' );
+					if ( ! $relative && ! filter_var( $value, FILTER_VALIDATE_URL ) ) {
+						return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please enter a valid URL for %s.', 'formglut' ), $label );
+					}
+					$scheme = isset( $field['url_scheme'] ) ? $field['url_scheme'] : 'any';
+					if ( ! $relative && in_array( $scheme, array( 'http', 'https' ), true ) && strtolower( (string) wp_parse_url( $value, PHP_URL_SCHEME ) ) !== $scheme ) {
+						/* translators: 1: field label, 2: URL scheme */
+						return sprintf( __( '%1$s must start with %2$s://', 'formglut' ), $label, $scheme );
+					}
+				}
+				break;
+
+			case 'phone':
+				if ( ! isset( $field['validate_phone'] ) || ! empty( $field['validate_phone'] ) ) {
+					$digits = strlen( preg_replace( '/\D/', '', $value ) );
+					if ( $digits < 7 || $digits > 15 || preg_match( '/[^0-9+\-\s().]/', $value ) ) {
+						return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please enter a valid phone number for %s.', 'formglut' ), $label );
+					}
+				}
+				break;
+
+			case 'password':
+				$min = ! empty( $field['min_length'] ) ? absint( $field['min_length'] ) : 0;
+				$max = ! empty( $field['max_length'] ) ? absint( $field['max_length'] ) : 0;
+				$bad = ( $min && mb_strlen( $value ) < $min ) || ( $max && mb_strlen( $value ) > $max )
+					|| ( ! empty( $field['require_uppercase'] ) && ! preg_match( '/[A-Z]/', $value ) )
+					|| ( ! empty( $field['require_lowercase'] ) && ! preg_match( '/[a-z]/', $value ) )
+					|| ( ! empty( $field['require_number'] ) && ! preg_match( '/\d/', $value ) )
+					|| ( ! empty( $field['require_special'] ) && ! preg_match( '/[^A-Za-z0-9]/', $value ) );
+				if ( $bad ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( '%s does not meet the requirements.', 'formglut' ), $label );
+				}
+				if ( ! empty( $field['require_confirmation'] ) ) {
+					$confirm = isset( $_POST[ $field_name . '_confirm' ] ) ? wp_unslash( $_POST[ $field_name . '_confirm' ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- compared only.
+					if ( $confirm !== $value ) {
+						return ! empty( $field['confirmation_error'] ) ? $field['confirmation_error'] : __( 'Passwords do not match', 'formglut' );
+					}
+				}
+				break;
+
+			case 'range_slider':
+				$min = isset( $field['min'] ) && is_numeric( $field['min'] ) ? (float) $field['min'] : 0;
+				$max = isset( $field['max'] ) && is_numeric( $field['max'] ) ? (float) $field['max'] : 100;
+				if ( ! is_numeric( $value ) || (float) $value < $min || (float) $value > $max ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please choose a valid value for %s.', 'formglut' ), $label );
+				}
+				break;
+
+			case 'color_picker':
+				$color = sanitize_hex_color( $value );
+				if ( ! $color ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please choose a valid color for %s.', 'formglut' ), $label );
+				}
+				$picker = isset( $field['picker_type'] ) ? $field['picker_type'] : 'swatches';
+				if ( 'swatches' === $picker && isset( $field['allow_custom'] ) && ! $field['allow_custom'] ) {
+					$allowed = array_map( 'strtolower', array_filter( array_map( 'sanitize_hex_color', isset( $field['swatches'] ) ? (array) $field['swatches'] : array() ) ) );
+					if ( ! in_array( strtolower( $color ), $allowed, true ) ) {
+						return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please choose one of the offered colors for %s.', 'formglut' ), $label );
+					}
+				}
+				break;
+
+			case 'currency':
+			case 'percentage':
+			case 'spinner':
+				if ( ! is_numeric( $value ) ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( '%s must be a number.', 'formglut' ), $label );
+				}
+				$min = 'spinner' === $type ? ( isset( $field['min'] ) ? $field['min'] : '' ) : ( isset( $field['min_value'] ) ? $field['min_value'] : '' );
+				$max = 'spinner' === $type ? ( isset( $field['max'] ) ? $field['max'] : '' ) : ( isset( $field['max_value'] ) ? $field['max_value'] : '' );
+				if ( is_numeric( $min ) && (float) $value < (float) $min ) {
+					/* translators: 1: field label, 2: minimum value */
+					return sprintf( __( '%1$s must be at least %2$s.', 'formglut' ), $label, $min );
+				}
+				if ( is_numeric( $max ) && (float) $value > (float) $max ) {
+					/* translators: 1: field label, 2: maximum value */
+					return sprintf( __( '%1$s must not exceed %2$s.', 'formglut' ), $label, $max );
+				}
+				break;
+
+			case 'time':
+				if ( ! preg_match( '/^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/', $value ) ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please enter a valid time for %s.', 'formglut' ), $label );
+				}
+				$hm = substr( $value, 0, 5 );
+				if ( ! empty( $field['min_time'] ) && $hm < $field['min_time'] ) {
+					/* translators: 1: field label, 2: time */
+					return sprintf( __( '%1$s must be at or after %2$s.', 'formglut' ), $label, $field['min_time'] );
+				}
+				if ( ! empty( $field['max_time'] ) && $hm > $field['max_time'] ) {
+					/* translators: 1: field label, 2: time */
+					return sprintf( __( '%1$s must be at or before %2$s.', 'formglut' ), $label, $field['max_time'] );
+				}
+				break;
+
+			case 'country_select':
+				$countries = include FORMGLUT_PLUGIN_DIR . 'includes/data/countries.php';
+				$mode      = isset( $field['country_list'] ) ? $field['country_list'] : 'all';
+				$ok        = isset( $countries[ $value ] )
+					&& ! ( 'include' === $mode && ! empty( $field['included_countries'] ) && ! in_array( $value, (array) $field['included_countries'], true ) )
+					&& ! ( 'exclude' === $mode && in_array( $value, (array) ( isset( $field['excluded_countries'] ) ? $field['excluded_countries'] : array() ), true ) );
+				if ( ! $ok ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please choose a valid country for %s.', 'formglut' ), $label );
+				}
+				break;
+
+			case 'masked_input':
+				$mask = isset( $field['custom_mask'] ) ? (string) $field['custom_mask'] : '';
+				if ( $mask && ( ! isset( $field['validate_mask'] ) || ! empty( $field['validate_mask'] ) ) ) {
+					$regex = '';
+					foreach ( preg_split( '//u', $mask, -1, PREG_SPLIT_NO_EMPTY ) as $ch ) {
+						$regex .= '9' === $ch ? '\d' : ( 'a' === $ch ? '[A-Za-z]' : ( '*' === $ch ? '[A-Za-z0-9]' : preg_quote( $ch, '/' ) ) );
+					}
+					if ( ! preg_match( '/^' . $regex . '$/u', $value ) ) {
+						return $custom ? $custom : sprintf( /* translators: 1: field label, 2: mask */ __( '%1$s must match the format %2$s.', 'formglut' ), $label, $mask );
+					}
+				}
+				break;
+
+			case 'date':
+				$format = isset( $field['date_type'] ) && 'datetime' === $field['date_type'] ? 'Y-m-d\TH:i' : 'Y-m-d';
+				$date   = DateTime::createFromFormat( $format, $value );
+				if ( ! $date || $date->format( $format ) !== $value ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please enter a valid date for %s.', 'formglut' ), $label );
+				}
+				$day = substr( $value, 0, 10 );
+				if ( ! empty( $field['min_date'] ) && $day < $field['min_date'] ) {
+					/* translators: 1: field label, 2: date */
+					return sprintf( __( '%1$s must be on or after %2$s.', 'formglut' ), $label, $field['min_date'] );
+				}
+				if ( ! empty( $field['max_date'] ) && $day > $field['max_date'] ) {
+					/* translators: 1: field label, 2: date */
+					return sprintf( __( '%1$s must be on or before %2$s.', 'formglut' ), $label, $field['max_date'] );
+				}
+				break;
+
+			case 'select':
+			case 'radio':
+			case 'checkbox':
+			case 'multiselect':
+				$allowed = array();
+				foreach ( ( isset( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array() ) as $opt ) {
+					if ( empty( $opt['disabled'] ) ) {
+						$allowed[] = isset( $opt['value'] ) && '' !== $opt['value'] ? (string) $opt['value'] : ( isset( $opt['label'] ) ? (string) $opt['label'] : '' );
+					}
+				}
+				$values = (array) $value;
+				foreach ( $values as $v ) {
+					if ( ! in_array( (string) $v, $allowed, true ) ) {
+						return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please choose a valid option for %s.', 'formglut' ), $label );
+					}
+				}
+				if ( in_array( $type, array( 'checkbox', 'multiselect' ), true ) ) {
+					$min = isset( $field['min_selections'] ) ? absint( $field['min_selections'] ) : 0;
+					$max = isset( $field['max_selections'] ) ? absint( $field['max_selections'] ) : 0;
+					if ( $min && count( $values ) < $min ) {
+						/* translators: 1: field label, 2: minimum */
+						return sprintf( __( 'Please select at least %2$d options for %1$s.', 'formglut' ), $label, $min );
+					}
+					if ( $max && count( $values ) > $max ) {
+						/* translators: 1: field label, 2: maximum */
+						return sprintf( __( 'Please select no more than %2$d options for %1$s.', 'formglut' ), $label, $max );
+					}
+				}
+				break;
+		}
+
+		return '';
 	}
 
 	/**

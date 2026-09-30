@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Table, Button, Input, Space, Tooltip, Switch, Popconfirm, message, Modal, Row, Col, Skeleton, Card } from 'antd';
+import { Table, Button, Input, Space, Tooltip, Switch, Popconfirm, message, Modal, Row, Col, Skeleton, Card, Select, DatePicker } from 'antd';
+import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlus, faMagnifyingGlass, faCopy, faPenToSquare, faTrash,
-  faFileLines, faStar, faRotateRight
+  faFileLines, faStar, faRotateRight, faGear, faEye, faCalendarDays
 } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck as faBulkActive, faPenToSquare as faBulkDraft, faTrashCan as faBulkTrash, faXmark as faBulkClear } from '@fortawesome/free-solid-svg-icons';
 import Header, { _pg } from '../components/Header';
 import * as api from '../services/api';
 
@@ -76,16 +78,29 @@ function CreateFormModal({ open, onClose }) {
 
 function SkeletonLoader() {
   return (
-    <div className="fg-content">
-      <div className="fg-page-header">
-        <div>
-          <Skeleton.Input active style={{ width: 180, height: 32 }} />
-          <Skeleton.Input active style={{ width: 240, height: 18, marginTop: 8 }} />
+    <>
+      {/* Header skeleton */}
+      <header className="fg-header">
+        <div className="fg-header-left">
+          <Skeleton.Button active style={{ width: 80, height: 36 }} />
+          <Skeleton.Input active style={{ width: 120, height: 36, marginLeft: 16 }} />
         </div>
-        <Space>
-          <Skeleton.Button active style={{ width: 150 }} />
-        </Space>
-      </div>
+        <nav className="fg-header-nav">
+          {[1, 2, 3].map((i) => (
+            <Skeleton.Button key={i} active style={{ width: 70, height: 32, margin: '0 4px' }} />
+          ))}
+        </nav>
+      </header>
+      <div className="fg-content">
+        <div className="fg-page-header">
+          <div>
+            <Skeleton.Input active style={{ width: 180, height: 32 }} />
+            <Skeleton.Input active style={{ width: 240, height: 18, marginTop: 8 }} />
+          </div>
+          <Space>
+            <Skeleton.Button active style={{ width: 150 }} />
+          </Space>
+        </div>
 
       <div className="fg-stats-row">
         {[1, 2, 3, 4].map((i) => (
@@ -138,7 +153,8 @@ function SkeletonLoader() {
           <Skeleton.Input active size="small" style={{ width: 200, height: 24 }} />
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -154,6 +170,22 @@ export default function AllForms() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [statusFilter, setStatusFilter] = useState('');
+  const [datePreset, setDatePreset] = useState('');
+  const [customRange, setCustomRange] = useState(null);
+
+  // Resolve the date filter to a [from, to] pair of YYYY-MM-DD strings.
+  const dateRange = (() => {
+    const fmt = (d) => d.format('YYYY-MM-DD');
+    const today = dayjs();
+    switch (datePreset) {
+      case 'today': return [fmt(today), fmt(today)];
+      case 'last_week': return [fmt(today.subtract(6, 'day')), fmt(today)];
+      case 'this_month': return [fmt(today.startOf('month')), fmt(today)];
+      case 'custom': return customRange && customRange[0] && customRange[1] ? [fmt(customRange[0]), fmt(customRange[1])] : ['', ''];
+      default: return ['', ''];
+    }
+  })();
+  const [dateFrom, dateTo] = dateRange;
 
   // Stats from dedicated endpoint.
   const [stats, setStats] = useState({
@@ -183,6 +215,8 @@ export default function AllForms() {
         orderby,
         order,
         status: statusFilter,
+        date_from: dateFrom,
+        date_to: dateTo,
       });
       setForms(result.forms || []);
       setTotal(result.total || 0);
@@ -191,7 +225,7 @@ export default function AllForms() {
     } finally {
       setLoading(false);
     }
-  }, [page, perPage, searchText, orderby, order, statusFilter]);
+  }, [page, perPage, searchText, orderby, order, statusFilter, dateFrom, dateTo]);
 
   useEffect(() => {
     loadStats();
@@ -271,15 +305,19 @@ export default function AllForms() {
 
   const columns = [
     {
+      title: __( 'ID', 'formglut' ),
+      dataIndex: 'id',
+      width: 70,
+      sorter: true,
+      render: (v) => <span style={{ fontWeight: 600, color: '#64748b' }}>#{v}</span>,
+    },
+    {
       title: __( 'Form Name', 'formglut' ),
       dataIndex: 'title',
-      width: 300,
+      width: 380,
       render: (text, r) => (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <a href={_pg.editor + '&form_id=' + r.id} style={{ width: 36, height: 36, borderRadius: 8, background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', textDecoration: 'none' }}>
-              <FontAwesomeIcon icon={faPenToSquare} style={{ color: '#64748b' }} />
-            </a>
             <div>
               <div style={{ fontWeight: 600, fontSize: 14 }}>
                 <a href={_pg.editor + '&form_id=' + r.id} style={{ color: '#1a1a2e' }}>{text}</a>
@@ -290,9 +328,11 @@ export default function AllForms() {
             </div>
           </div>
           <div className="fg-row-actions">
-            <a href={_pg.settings}>{__( 'Settings', 'formglut' )}</a>
+            <a href={_pg.editor + '&form_id=' + r.id}><FontAwesomeIcon icon={faPenToSquare} /> {__( 'Edit', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
-            <a href={_pg.preview + '&form_id=' + r.id} target="_blank" rel="noopener noreferrer">{__( 'Preview', 'formglut' )}</a>
+            <a href={_pg.settings}><FontAwesomeIcon icon={faGear} /> {__( 'Settings', 'formglut' )}</a>
+            <span className="fg-action-sep">|</span>
+            <a href={_pg.preview + '&form_id=' + r.id} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faEye} /> {__( 'Preview', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
             <Switch
               size="small"
@@ -321,7 +361,7 @@ export default function AllForms() {
     {
       title: __( 'Entries', 'formglut' ),
       dataIndex: 'entries',
-      width: 180,
+      width: 100,
       sorter: true,
       render: (v, r) => (
         <div>
@@ -358,11 +398,12 @@ export default function AllForms() {
 
   return (
     <div>
-      <Header activePage="Forms" />
       {loading && forms.length === 0 ? (
         <SkeletonLoader />
       ) : (
-        <div className="fg-content">
+        <>
+          <Header activePage="Forms" />
+          <div className="fg-content">
           <div className="fg-page-header">
             <div>
               <div className="fg-page-title">{__( 'All Forms', 'formglut' )}</div>
@@ -413,19 +454,19 @@ export default function AllForms() {
             {selectedRowKeys.length > 0 && (
               <div className="fg-bulk-bar">
                 <span>{selectedRowKeys.length} {__( 'selected', 'formglut' )}</span>
-                <Button size="small" onClick={() => handleBulkStatus('active')}>{__( 'Set Active', 'formglut' )}</Button>
-                <Button size="small" onClick={() => handleBulkStatus('draft')}>{__( 'Set Draft', 'formglut' )}</Button>
+                <Button size="small" className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faBulkActive} />} onClick={() => handleBulkStatus('active')}>{__( 'Set Active', 'formglut' )}</Button>
+                <Button size="small" className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faBulkDraft} />} onClick={() => handleBulkStatus('draft')}>{__( 'Set Draft', 'formglut' )}</Button>
                 <Popconfirm title={__( 'Delete %s form(s)?', 'formglut' ).replace( '%s', selectedRowKeys.length )} okText={__( 'Delete', 'formglut' )} cancelText={__( 'Cancel', 'formglut' )} okButtonProps={{ danger: true }} onConfirm={handleBulkDelete}>
-                  <Button size="small" danger>{__( 'Delete', 'formglut' )}</Button>
+                  <Button size="small" danger className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faBulkTrash} />}>{__( 'Delete', 'formglut' )}</Button>
                 </Popconfirm>
-                <Button size="small" type="text" onClick={() => setSelectedRowKeys([])}>{__( 'Clear', 'formglut' )}</Button>
+                <Button size="small" type="text" className="fg-bulk-clear" icon={<FontAwesomeIcon icon={faBulkClear} />} onClick={() => setSelectedRowKeys([])}>{__( 'Clear', 'formglut' )}</Button>
               </div>
             )}
             <div className="fg-table-toolbar">
               <div className="fg-table-toolbar-left">
                 <Input
                   placeholder={__( 'Search forms...', 'formglut' )}
-                  prefix={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+                  prefix={<FontAwesomeIcon icon={faMagnifyingGlass} style={{ color: '#94a3b8' }} />}
                   style={{ width: 240 }}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
@@ -433,6 +474,27 @@ export default function AllForms() {
                 />
               </div>
               <div className="fg-table-toolbar-right">
+                <Select
+                  value={datePreset}
+                  style={{ width: 160 }}
+                  suffixIcon={<FontAwesomeIcon icon={faCalendarDays} />}
+                  onChange={(v) => { setDatePreset(v); if (v !== 'custom') setCustomRange(null); setPage(1); }}
+                  options={[
+                    { value: '', label: __( 'All', 'formglut' ) },
+                    { value: 'today', label: __( 'Today', 'formglut' ) },
+                    { value: 'last_week', label: __( 'Last 7 Days', 'formglut' ) },
+                    { value: 'this_month', label: __( 'This Month', 'formglut' ) },
+                    { value: 'custom', label: __( 'Custom Range', 'formglut' ) },
+                  ]}
+                />
+                {datePreset === 'custom' && (
+                  <DatePicker.RangePicker
+                    value={customRange}
+                    onChange={(range) => { setCustomRange(range); setPage(1); }}
+                    disabledDate={(d) => d && d.isAfter(dayjs(), 'day')}
+                    allowClear
+                  />
+                )}
                 <Tooltip title={__( 'Refresh', 'formglut' )}><Button type="text" icon={<FontAwesomeIcon icon={faRotateRight} spin={loading} style={{ color: '#64748b' }} />} onClick={loadForms} /></Tooltip>
               </div>
             </div>
@@ -464,19 +526,20 @@ export default function AllForms() {
                 onChange: (p, ps) => { setPage(p); setPerPage(ps); },
               }}
               locale={{
-                emptyText: !searchText ? (
+                emptyText: !searchText && !dateFrom ? (
                   <div className="fg-empty-state">
                     <div className="fg-empty-icon"><FontAwesomeIcon icon={faFileLines} /></div>
                     <div className="fg-empty-title">{__( 'No forms yet', 'formglut' )}</div>
                     <div className="fg-empty-desc">{__( 'Create your first form and start collecting responses.', 'formglut' )}</div>
                     <Button type="primary" icon={<FontAwesomeIcon icon={faPlus} />} style={{ background: '#e94560', borderColor: '#e94560', marginTop: 12 }} onClick={() => setShowCreateModal(true)}>{__( 'Create a Form', 'formglut' )}</Button>
                   </div>
-                ) : __( 'No forms match your search.', 'formglut' ),
+                ) : __( 'No forms match your filters.', 'formglut' ),
               }}
               style={{ padding: '0 8px' }}
             />
           </div>
         </div>
+        </>
       )}
       <CreateFormModal open={showCreateModal} onClose={() => { setShowCreateModal(false); }} />
     </div>

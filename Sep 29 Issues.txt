@@ -1,0 +1,9 @@
+1. In Form List when choose multiple form the options come 
+
+<div class="fg-bulk-bar"><span>4 selected</span><button type="button" class="ant-btn css-mncuj7 ant-btn-default ant-btn-color-default ant-btn-variant-outlined ant-btn-sm"><span>Set Active</span></button><button type="button" class="ant-btn css-mncuj7 ant-btn-default ant-btn-color-default ant-btn-variant-outlined ant-btn-sm"><span>Set Draft</span></button><button aria-describedby=":r5h:" type="button" class="ant-btn css-mncuj7 ant-btn-default ant-btn-dangerous ant-btn-color-dangerous ant-btn-variant-outlined ant-btn-sm"><span>Delete</span></button><button type="button" class="ant-btn css-mncuj7 ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-sm"><span>Clear</span></button></div>
+
+is not well designed, not professional
+
+2. Change Browser title according to page URL
+
+3. Fields Admin Field Label not working

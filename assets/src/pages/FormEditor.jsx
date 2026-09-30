@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Button, Switch, Input, Select, Tabs, Tooltip, message, Spin, Collapse } from 'antd';
+import { Button, Switch, Input, InputNumber, Select, Tabs, Tooltip, message, Spin, Collapse } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft, faArrowUp, faArrowDown, faFloppyDisk, faEye, faRotateLeft, faRotateRight,
-  faCopy, faTrash, faGear, faPalette, faPlus, faCircleInfo, faCode, faClock,
+  faCopy, faTrash, faGear, faPalette, faPlus, faCircleInfo, faCode, faClock, faEyeSlash, faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons';
 import { _pg } from '../components/Header';
 import * as api from '../services/api';
-import { FIELD_TYPES, createField, getAllFieldTypes, getEnabledFieldTypes } from '../fields/fieldTypes.jsx';
+import { FIELD_TYPES, createField, getAllFieldTypes, getEnabledFieldTypes, isContainerField, flattenFields } from '../fields/fieldTypes.jsx';
 import DynamicFieldOptions from '../fields/DynamicFieldOptions.jsx';
+import { getStyleGroups, STYLE_BLOCKS } from '../fields/SharedOptions.jsx';
 import { __ } from '@wordpress/i18n';
+import { COUNTRIES } from '../fields/countries.js';
 import './form-editor.css';
 
 /**
@@ -35,6 +37,74 @@ function genId() { uid += 1; return 'f' + Date.now() + '_' + uid; }
  * Parse CSS string into style object
  * Handles CSS properties like "color: red; font-size: 14px;"
  */
+/* ── Field tree helpers (column containers hold nested fields) ─────── */
+const CONTAINER_GAPS = { none: 0, small: 8, medium: 16, large: 24 };
+
+// Apply fn(list, idx) to whichever list (top level or a column) holds `id`. Returns the new tree, or null if not found.
+function updateParentList(list, id, fn) {
+  const idx = list.findIndex(f => f.id === id);
+  if (idx !== -1) return fn(list, idx);
+  let found = false;
+  const next = list.map(f => {
+    if (found || !isContainerField(f)) return f;
+    const columns = f.columns.map(col => {
+      if (found) return col;
+      const r = updateParentList(col.fields || [], id, fn);
+      if (!r) return col;
+      found = true;
+      return { ...col, fields: r };
+    });
+    return found ? { ...f, columns } : f;
+  });
+  return found ? next : null;
+}
+
+function findFieldInTree(list, id) {
+  for (const f of list) {
+    if (f.id === id) return f;
+    if (isContainerField(f)) {
+      for (const col of f.columns) {
+        const r = findFieldInTree(col.fields || [], id);
+        if (r) return r;
+      }
+    }
+  }
+  return null;
+}
+
+// Returns { containerId, colIdx, index } describing where `id` lives.
+function locateField(list, id, ctx = { containerId: null, colIdx: 0 }) {
+  const idx = list.findIndex(f => f.id === id);
+  if (idx !== -1) return { ...ctx, index: idx };
+  for (const f of list) {
+    if (!isContainerField(f)) continue;
+    for (let ci = 0; ci < f.columns.length; ci++) {
+      const r = locateField(f.columns[ci].fields || [], id, { containerId: f.id, colIdx: ci });
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+// Insert `field` at target { containerId, colIdx, index }; containerId null = top level.
+function insertIntoTree(list, target, field) {
+  const splice = (l) => { const n = [...l]; n.splice(Math.min(target.index ?? n.length, n.length), 0, field); return n; };
+  if (!target.containerId) return splice(list);
+  return updateParentList(list, target.containerId, (l, i) => l.map((f, j) => j !== i ? f : {
+    ...f,
+    columns: f.columns.map((col, ci) => ci === target.colIdx ? { ...col, fields: splice(col.fields || []) } : col),
+  })) || list;
+}
+
+function cloneWithNewIds(field) {
+  const copy = JSON.parse(JSON.stringify(field));
+  (function reId(f) {
+    f.id = genId();
+    if (isContainerField(f)) f.columns.forEach(col => (col.fields || []).forEach(reId));
+  })(copy);
+  return copy;
+}
+
 function parseCss(cssString) {
   if (!cssString || typeof cssString !== 'string') return {};
   const styles = {};
@@ -177,7 +247,64 @@ function validateAgainstMask(value, mask) {
 // Helper to convert value to px string with fallback
 const pad = (val, fallback) => (val != null && val !== '' ? val + 'px' : fallback + 'px');
 
-function FieldTemplate({ field: f }) {
+// Same wording as the live form (class-formglut-shortcode.php selection_hint()).
+function getSelectionHint(min, max) {
+  min = Number(min) || 0; max = Number(max) || 0;
+  if (min && max) return __( 'Select between %1$d and %2$d options', 'formglut' ).replace('%1$d', min).replace('%2$d', max);
+  if (min) return __( 'Select at least %d options', 'formglut' ).replace('%d', min);
+  if (max) return __( 'Select up to %d options', 'formglut' ).replace('%d', max);
+  return '';
+}
+
+// Same list/order/format as the live form (class-formglut-shortcode.php country_options()).
+function getCountryOptions(f) {
+  let codes = Object.keys(COUNTRIES);
+  if (f.country_list === 'include' && (f.included_countries || []).length) codes = codes.filter(c => f.included_countries.includes(c));
+  else if (f.country_list === 'exclude' && (f.excluded_countries || []).length) codes = codes.filter(c => !f.excluded_countries.includes(c));
+  const text = (c) => {
+    const name = COUNTRIES[c];
+    let t = f.display_format === 'code' ? c : f.display_format === 'both' ? `${name} (${c})` : name;
+    if ((f.flag_type || 'emoji') === 'emoji') t = String.fromCodePoint(...[...c].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65)) + ' ' + t;
+    return t;
+  };
+  const top = (f.top_countries || []).filter(c => codes.includes(c));
+  return { top: top.map(c => ({ value: c, label: text(c) })), all: codes.map(c => ({ value: c, label: text(c) })) };
+}
+
+function renderCountryOptions(f) {
+  const { top, all } = getCountryOptions(f);
+  return (
+    <>
+      {top.map(o => <option key={'t' + o.value} value={o.value}>{o.label}</option>)}
+      {top.length > 0 && <option disabled>──────────</option>}
+      {all.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+    </>
+  );
+}
+
+// Same masks as the live form (class-formglut-shortcode.php phone_mask()).
+function getPhoneMask(f) {
+  if (f.phone_format === 'custom') return f.custom_format || '';
+  return { us: '(999) 999-9999', uk: '9999 999999' }[f.phone_format] || '';
+}
+
+// Same sizing/shape/style rules as the live form (class-formglut-shortcode.php submit_button_style()).
+export function getSubmitButtonStyle(f) {
+  const color = f.button_bg_color || '#e94560';
+  const sizes = { small: ['8px 16px', 13], medium: ['12px 24px', 15], large: ['14px 32px', 17] };
+  const [padding, fontSize] = sizes[f.button_size] || sizes.medium;
+  const radius = { square: 0, rounded: 8, pill: 999 }[f.button_shape] ?? 8;
+  const looks = {
+    primary: { background: color, color: f.button_text_color || '#fff', borderColor: color },
+    outline: { background: 'transparent', color: f.button_text_color || color, borderColor: color },
+    secondary: { background: f.button_bg_color || '#f1f5f9', color: f.button_text_color || '#334155', borderColor: f.button_bg_color || '#e2e8f0' },
+  };
+  return { padding, fontSize, borderRadius: radius, borderWidth: 1, borderStyle: 'solid', fontWeight: 600, cursor: 'pointer', width: f.button_width === 'full' ? '100%' : 'auto', ...(looks[f.button_style] || looks.primary) };
+}
+
+const CAPTCHA_NAMES = { recaptcha: 'reCAPTCHA', hcaptcha: 'hCaptcha', turnstile: 'Cloudflare Turnstile' };
+
+function FieldTemplate({ field: f, captcha = {} }) {
   // State for validation errors and multi-select
   const [validationErrors, setValidationErrors] = React.useState({});
   const [multiSelectValues, setMultiSelectValues] = React.useState(f.default_value || []);
@@ -190,13 +317,15 @@ function FieldTemplate({ field: f }) {
   const containerCustomStyle = parseCss(f.container_style);
   const prefixSuffixCustomStyle = parseCss(f.prefix_suffix_style);
 
+  // Per-field style options are passed as CSS variables; form-editor.css applies them with the same
+  // precedence the live form gets from its !important inline styles (see .fg-form-field-input).
   const inputStyle = {
-    background: f.bg_color || '#fafbfc',
-    color: f.text_color || '#94a3b8',
-    borderColor: f.border_color || '#e2e8f0',
-    borderRadius: (f.border_radius ?? 8) + 'px',
-    padding: `${pad(f.padding_top, 10)} ${pad(f.padding_right, 14)} ${pad(f.padding_bottom, 10)} ${pad(f.padding_left, 14)}`,
-    margin: `${pad(f.margin_top, 0)} ${pad(f.margin_right, 0)} ${pad(f.margin_bottom, 0)} ${pad(f.margin_left, 0)}`,
+    '--fg-bg': f.bg_color || '#f8fafc',
+    '--fg-color': f.text_color || '#1e293b',
+    '--fg-border': f.border_color || '#e2e8f0',
+    '--fg-radius': (f.border_radius ?? 8) + 'px',
+    '--fg-pad': `${pad(f.padding_top, 10)} ${pad(f.padding_right, 14)} ${pad(f.padding_bottom, 10)} ${pad(f.padding_left, 14)}`,
+    '--fg-margin': `${pad(f.margin_top, 0)} ${pad(f.margin_right, 0)} ${pad(f.margin_bottom, 0)} ${pad(f.margin_left, 0)}`,
     ...inputCustomStyle,
   };
 
@@ -206,11 +335,12 @@ function FieldTemplate({ field: f }) {
     ...containerCustomStyle,
   };
 
-  const labelPlacement = f.label_placement || 'top';
+  const labelPlacement = !f.label_placement || f.label_placement === 'default' ? 'top' : f.label_placement;
   const labelWidthVal = f.label_width === 'custom' && f.label_width_custom ? f.label_width_custom + 'px' : f.label_width;
   const labelStyle = labelPlacement === 'left' || labelPlacement === 'right'
     ? { flex: '0 0 auto', width: labelWidthVal && labelWidthVal !== 'auto' && labelWidthVal !== '100%' ? labelWidthVal : undefined, whiteSpace: 'nowrap', marginBottom: 0, ...labelCustomStyle }
-    : labelPlacement === 'hidden' ? { display: 'none', ...labelCustomStyle } : { ...labelCustomStyle };
+    : labelPlacement === 'hidden' ? { display: 'none', ...labelCustomStyle }
+    : labelPlacement === 'bottom' ? { marginTop: 6, marginBottom: 0, ...labelCustomStyle } : { ...labelCustomStyle };
 
   // Help text handling
   const showHelpTip = f.help_text && f.help_text_position === 'tooltip';
@@ -235,6 +365,26 @@ function FieldTemplate({ field: f }) {
     return value;
   };
 
+  // Get placeholder to display (show mask pattern as hint when mask is enabled)
+  const getDisplayPlaceholder = () => {
+    // If user has set a custom placeholder, use that
+    if (f.placeholder && f.placeholder !== 'Enter text here...' && f.placeholder !== 'Type your message here...') {
+      return f.placeholder;
+    }
+    // If mask is enabled, show the mask pattern as a hint
+    if (f.enable_mask && (f.custom_mask || f.mask_pattern)) {
+      const mask = f.custom_mask || f.mask_pattern;
+      // Convert mask to user-friendly placeholder format
+      // 9 -> #, a -> ?, * -> ?
+      return mask
+        .replace(/9/g, '#')
+        .replace(/a/g, '?')
+        .replace(/\*/g, '?');
+    }
+    // Otherwise use the default placeholder
+    return f.placeholder;
+  };
+
   // Error message display
   const getErrorMessage = () => {
     if (f.required && validationErrors.required) {
@@ -254,9 +404,107 @@ function FieldTemplate({ field: f }) {
 
   const errorMessage = getErrorMessage();
 
+  // Display-only fields: same markup as the live form, no label/help wrapper.
+  if (f.type === 'html') {
+    return <div className={`fg-field-wrapper fg-html-content ${f.container_class || ''} ${f.css_class || ''} ${f.element_class || ''}`} dangerouslySetInnerHTML={{ __html: f.html_content || '' }} />;
+  }
+  if (f.type === 'heading') {
+    const Tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(f.heading_level) ? f.heading_level : 'h2';
+    return (
+      <div className={`fg-field-wrapper fg-heading ${f.container_class || ''} ${f.css_class || ''}`} style={{ textAlign: f.alignment || 'left' }}>
+        <Tag className={`fg-heading-text ${f.element_class || ''}`} style={f.custom_color ? { color: f.custom_color } : undefined}>{f.text || f.label}</Tag>
+        {f.description && <p className="fg-heading-desc">{f.description}</p>}
+        {f.show_divider && <hr className="fg-heading-divider" style={{ borderTopStyle: f.divider_style || 'solid', ...(f.divider_color ? { borderTopColor: f.divider_color } : {}) }} />}
+      </div>
+    );
+  }
+  const wrapCls = (extra) => `fg-field-wrapper ${extra} ${f.container_class || ''} ${f.css_class || ''}`;
+  if (f.type === 'section_break') {
+    const textStyle = f.text_color ? { color: f.text_color } : undefined;
+    return (
+      <div className={wrapCls('fg-section-break')} style={{ textAlign: f.alignment || 'left', ...(f.background_color ? { background: f.background_color, padding: '12px 16px', borderRadius: 8 } : {}) }}>
+        <div className="fg-section-head">
+          <div style={{ flex: 1 }}>
+            {f.title && <h3 className={`fg-section-title ${f.element_class || ''}`} style={textStyle}>{f.title}</h3>}
+            {f.description && <p className="fg-section-desc" style={textStyle}>{f.description}</p>}
+          </div>
+          {f.collapsible && <button type="button" className="fg-section-toggle">{f.default_collapsed ? (f.toggle_text_closed || __( 'Show', 'formglut' )) : (f.toggle_text_open || __( 'Hide', 'formglut' ))}</button>}
+        </div>
+        {f.show_divider && <hr className="fg-section-divider" style={{ borderTopStyle: f.divider_style || 'solid', borderTopWidth: (Number(f.divider_thickness) || 1) + 'px', ...(f.divider_color ? { borderTopColor: f.divider_color } : {}) }} />}
+      </div>
+    );
+  }
+  if (f.type === 'hidden') {
+    return (
+      <div className={wrapCls('fg-placeholder-box')}>
+        <FontAwesomeIcon icon={faEyeSlash} /> <strong>{f.label || __( 'Hidden Field', 'formglut' )}</strong>
+        <span className="fg-placeholder-meta">{f.param_populate ? `?${f.param_populate}= → ` : ''}{f.default_value ? `"${f.default_value}"` : __( '(empty)', 'formglut' )}</span>
+        <span className="fg-placeholder-note">{__( 'Not visible on the form', 'formglut' )}</span>
+      </div>
+    );
+  }
+  if (f.type === 'shortcode' || f.type === 'action_hook') {
+    const code = f.type === 'shortcode' ? f.shortcode_content : `do_action( '${f.hook_name || ''}' )`;
+    return (
+      <div className={wrapCls('fg-placeholder-box')}>
+        <FontAwesomeIcon icon={faCode} /> <code>{code}</code>
+        <span className="fg-placeholder-note">{f.type === 'shortcode' && f.run_shortcode === false ? __( 'Shortcode disabled', 'formglut' ) : __( 'Output appears on the live form and in Preview', 'formglut' )}</span>
+      </div>
+    );
+  }
+  if (f.type === 'custom_submit_button') {
+    return (
+      <div className={wrapCls('fg-custom-submit')} style={{ textAlign: f.button_alignment || 'left' }}>
+        <button type="button" className={f.element_class || ''} style={getSubmitButtonStyle(f)}>{f.button_text || __( 'Submit', 'formglut' )}</button>
+      </div>
+    );
+  }
+  if (CAPTCHA_NAMES[f.type]) {
+    const cfg = captcha[f.type] || {};
+    const invisible = f.type === 'recaptcha' && cfg.version !== 'v2';
+    return (
+      <div className={wrapCls('fg-captcha-mock')}>
+        {cfg.ready === false && (
+          <div className="fg-captcha-warning">
+            {CAPTCHA_NAMES[f.type]} {__( 'keys are not set — the check will be skipped until you add them in', 'formglut' )} <a href={_pg.settings} target="_blank" rel="noopener noreferrer">{__( 'Settings', 'formglut' )}</a>.
+          </div>
+        )}
+        {invisible ? (
+          <div className="fg-captcha-box fg-captcha-invisible"><FontAwesomeIcon icon={faShieldHalved} /> {__( 'reCAPTCHA v3 — runs invisibly when the form is submitted', 'formglut' )}</div>
+        ) : (
+          <div className={`fg-captcha-box fg-captcha-${f.theme === 'dark' ? 'dark' : 'light'} ${f.size === 'compact' ? 'fg-captcha-compact' : ''} ${f.size === 'flexible' ? 'fg-captcha-flexible' : ''}`}>
+            <span className="fg-captcha-check" /> {f.type === 'turnstile' ? __( 'Verify you are human', 'formglut' ) : __( "I'm not a robot", 'formglut' )}
+            <span className="fg-captcha-brand">{CAPTCHA_NAMES[f.type]}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (f.type === 'terms_conditions' || f.type === 'gdpr_agreement') {
+    const isGdpr = f.type === 'gdpr_agreement';
+    const mode = f.display_type === 'checkbox' || !f.display_type ? 'box' : f.display_type;
+    const linkText = isGdpr ? (f.policy_url ? __( 'Privacy Policy', 'formglut' ) : '') : ((mode === 'modal' || (mode === 'link' && f.link_url)) ? (f.link_text || __( 'View Terms', 'formglut' )) : '');
+    const agree = (
+      <label className={`fg-consent ${!isGdpr && f.checkbox_position === 'right' ? 'fg-consent-right' : ''}`}>
+        <input type="checkbox" disabled checked={isGdpr && !!f.default_checked} readOnly />
+        <span>{f.label}{linkText && <> <a href="#" onClick={(e) => e.preventDefault()}>{linkText}</a></>}{f.required && <span className="required"> *</span>}</span>
+      </label>
+    );
+    return (
+      <div className={wrapCls('fg-consent-field')}>
+        {!isGdpr && mode === 'box' && f.terms_content && <div className="fg-terms-box" style={{ maxHeight: (Number(f.scroll_height) || 200) + 'px' }} dangerouslySetInnerHTML={{ __html: f.terms_content }} />}
+        {isGdpr && f.policy_text && <p className="fg-choice-hint">{f.policy_text}</p>}
+        {agree}
+        {isGdpr && f.show_storage_info !== false && f.storage_duration_text && <p className="fg-choice-hint">{f.storage_duration_text.replace('{days}', f.storage_days ?? 365)}</p>}
+        {isGdpr && f.show_withdraw_link && f.withdraw_text && <p className="fg-choice-hint">{f.withdraw_text}{f.withdraw_email && <> <a href="#" onClick={(e) => e.preventDefault()}>{f.withdraw_email}</a></>}</p>}
+        {f.help_text && <div className="fg-help-text" style={helpTextCustomStyle}>{f.help_text}</div>}
+      </div>
+    );
+  }
+
   const label = (
     <div className="fg-form-field-label" style={labelStyle}>
-      {f.admin_label || f.label || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>{f.type} {__('field', 'formglut')}</span>}
+      {f.label || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>{f.type} {__('field', 'formglut')}</span>}
       {f.required && <span className="required">*</span>}
       {showHelpTip && (
         <span className="fg-help-tip" title={f.help_text}>
@@ -281,6 +529,7 @@ function FieldTemplate({ field: f }) {
 
     // Get display options (shuffled if enabled)
     const displayOptions = getDisplayOptions();
+    const selectionHint = getSelectionHint(f.min_selections, f.max_selections);
 
     // === TEXTAREA ===
     if (f.type === 'textarea') {
@@ -295,7 +544,7 @@ function FieldTemplate({ field: f }) {
             className={`fg-form-field-input fg-field-${f.id} ${f.element_class || ''}`}
             name={fieldName}
             rows={f.rows || 4}
-            placeholder={f.placeholder}
+            placeholder={getDisplayPlaceholder()}
             defaultValue={f.default_value}
             maxLength={maxLength}
             minLength={minLength}
@@ -322,7 +571,7 @@ function FieldTemplate({ field: f }) {
                   className={`fg-form-field-input fg-field-${f.id} ${f.element_class || ''}`}
                   type="email"
                   name={`${fieldName}_primary`}
-                  placeholder={f.placeholder || 'Email Address'}
+                  placeholder={getDisplayPlaceholder()}
                   defaultValue={maskedValue}
                   maxLength={maxLength}
                   inputMode={inputMode}
@@ -363,7 +612,7 @@ function FieldTemplate({ field: f }) {
                 className={`fg-form-field-input fg-field-${f.id} ${f.element_class || ''}`}
                 type="email"
                 name={fieldName}
-                placeholder={f.placeholder || 'email@example.com'}
+                placeholder={getDisplayPlaceholder()}
                 defaultValue={maskedValue}
                 maxLength={maxLength}
                 inputMode={inputMode}
@@ -393,7 +642,7 @@ function FieldTemplate({ field: f }) {
             <option value="" disabled={firstOptionDisabled}>{f.placeholder}</option>
           )}
           {displayOptions.map((opt, i) => (
-            <option key={i} value={opt.value || opt.label} disabled={firstOptionDisabled && i === 0}>
+            <option key={i} value={opt.value || opt.label} disabled={!!opt.disabled}>
               {opt.label || `Option ${i + 1}`}
             </option>
           ))}
@@ -403,125 +652,198 @@ function FieldTemplate({ field: f }) {
 
     // === MULTI-SELECT ===
     if (f.type === 'multiselect') {
-      // Display format options
-      const getDisplayContent = () => {
-        const selectedCount = multiSelectValues.length;
-        const selectedOptions = displayOptions.filter(opt =>
-          multiSelectValues.includes(opt.value || opt.label)
-        );
-
-        switch (f.display_format) {
-          case 'count':
-            return selectedCount > 0 ? `${selectedCount} selected` : f.placeholder || 'Select options...';
-          case 'text':
-            return selectedOptions.map(opt => opt.label).join(', ') || f.placeholder || 'Select options...';
-          case 'tags':
-          default:
-            return (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                {selectedOptions.map((opt, idx) => (
-                  <span key={idx} style={{
-                    background: '#e2e8f0',
-                    padding: '2px 8px',
-                    borderRadius: 4,
-                    fontSize: 12
-                  }}>
-                    {opt.label}
-                  </span>
-                ))}
-                {selectedCount === 0 && <span style={{ color: '#94a3b8' }}>{f.placeholder || 'Select options...'}</span>}
-              </div>
-            );
-        }
-      };
-
+      const defaults = Array.isArray(f.default_value) ? f.default_value : (f.default_value ? [f.default_value] : []);
       return (
-        <div className={`fg-multiselect-wrapper fg-field-${f.id} ${f.element_class || ''}`}>
-          {/* Multi-select dropdown simulation */}
-          <div
-            className="fg-form-field-input"
-            style={{
-              ...inputStyle,
-              minHeight: 38,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              padding: '8px 12px'
-            }}
+        <div className={`fg-multiselect-wrapper fg-field-${f.id}`}>
+          <select
+            key={`multiselect-${f.id}-${defaults.join('|')}`}
+            className={`fg-form-field-input ${f.element_class || ''}`}
+            name={`${fieldName}[]`}
+            multiple
+            size={Math.min(Math.max(displayOptions.length, 2), 6)}
+            defaultValue={defaults}
+            disabled
+            style={{ ...inputStyle, height: 'auto' }}
           >
-            {getDisplayContent()}
-            <span style={{ marginLeft: 'auto', fontSize: 12 }}>▼</span>
+            {displayOptions.map((opt, i) => (
+              <option key={i} value={opt.value || opt.label}>{opt.label || `Option ${i + 1}`}</option>
+            ))}
+          </select>
+          {f.select_all_button && <button type="button" className="fg-select-all-btn">{__( 'Select All', 'formglut' )}</button>}
+          {selectionHint && <div className="fg-choice-hint">{selectionHint}</div>}
+        </div>
+      );
+    }
+
+    // === RADIO / CHECKBOX ===
+    if (f.type === 'radio' || f.type === 'checkbox') {
+      const isRadio = f.type === 'radio';
+      const layout = f.layout || (f.inline ? 'inline' : 'default');
+      const defaults = Array.isArray(f.default_value) ? f.default_value : (f.default_value ? [f.default_value] : []);
+      return (
+        <>
+          <div className={`fg-choice-group fg-choice-layout-${layout} ${f.element_class || ''}`}>
+            {displayOptions.map((opt, i) => {
+              const val = opt.value || opt.label;
+              return (
+                <label key={i} className="fg-choice">
+                  <input type={isRadio ? 'radio' : 'checkbox'} name={fieldName} disabled checked={defaults.includes(val)} readOnly />
+                  <span>{opt.label || `Option ${i + 1}`}</span>
+                </label>
+              );
+            })}
           </div>
+          {!isRadio && selectionHint && <div className="fg-choice-hint">{selectionHint}</div>}
+        </>
+      );
+    }
 
-          {/* Select All Button */}
-          {f.select_all_button && (
-            <button
-              type="button"
-              className="fg-select-all-btn"
-              style={{
-                marginTop: 4,
-                padding: '4px 8px',
-                fontSize: 12,
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: 4,
-                cursor: 'pointer'
-              }}
-              onClick={() => {
-                const allValues = displayOptions.map(opt => opt.value || opt.label);
-                setMultiSelectValues(allValues);
-              }}
-            >
-              Select All
-            </button>
-          )}
+    const cls = `fg-form-field-input ${f.element_class || ''}`;
+    const sub = (key, subLabel, input) => (
+      <div key={key} className={'fg-subfield' + (key === 'street1' || key === 'street2' ? ' fg-subfield-full' : '')}>
+        {subLabel && <label className="fg-sublabel">{subLabel}</label>}
+        {input}
+      </div>
+    );
 
-          {/* Selection limits message */}
-          {(f.min_selections > 0 || f.max_selections > 0) && (
-            <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>
-              {f.min_selections > 0 && `Min: ${f.min_selections}`}
-              {f.min_selections > 0 && f.max_selections > 0 && ' | '}
-              {f.max_selections > 0 && `Max: ${f.max_selections}`}
-            </div>
-          )}
-
-          {/* Selection message */}
-          {multiSelectValues.length > 0 && f.selection_message && (
-            <div style={{ fontSize: 11, color: '#10b981', marginTop: 4 }}>
-              {f.selection_message}
-            </div>
-          )}
+    // === NAME ===
+    if (f.type === 'name') {
+      const parts = [['first', f.show_first_name !== false], ['middle', !!f.show_middle_name], ['last', f.show_last_name !== false]].filter(p => p[1]);
+      return (
+        <div className={`fg-subfields fg-subfields-${f.name_layout === 'vertical' ? 1 : parts.length}`}>
+          {parts.map(([p]) => sub(p, f[`${p}_name_label`], <input className={cls} type="text" placeholder={f[`${p}_name_placeholder`]} readOnly style={inputStyle} />))}
         </div>
       );
     }
 
-    // === RADIO ===
-    if (f.type === 'radio') {
-      const isInline = f.layout === 'inline' || f.inline;
+    // === COUNTRY ===
+    if (f.type === 'country_select') {
       return (
-        <div style={{ display: isInline ? 'flex' : 'block', gap: isInline ? '16px' : '8px' }}>
-          {displayOptions.map((opt, i) => (
-            <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-              <input type="radio" name={fieldName} disabled style={{ margin: 0 }} />
-              <span>{opt.label || `Option ${i + 1}`}</span>
-            </label>
+        <select key={`country-${f.id}-${f.default_value || ''}`} className={cls} defaultValue={f.default_value || ''} disabled style={inputStyle}>
+          <option value="">{f.placeholder || __( 'Select a country', 'formglut' )}</option>
+          {renderCountryOptions(f)}
+        </select>
+      );
+    }
+
+    // === SPINNER ===
+    if (f.type === 'spinner') {
+      const pos = f.button_position || 'both';
+      const btns = f.show_buttons !== false;
+      return (
+        <div className={`fg-spinner fg-spinner-${pos}`}>
+          {btns && <button type="button" className="fg-spin-btn fg-spin-dec">{f.decrement_label || '-'}</button>}
+          <input className={cls} type="number" placeholder={f.placeholder} defaultValue={f.default_value} key={`spin-${f.id}-${f.default_value}`} readOnly style={inputStyle} />
+          {btns && <button type="button" className="fg-spin-btn fg-spin-inc">{f.increment_label || '+'}</button>}
+        </div>
+      );
+    }
+
+    // === CURRENCY / PERCENTAGE ===
+    if (f.type === 'currency' || f.type === 'percentage') {
+      const symbol = f.type === 'currency' ? (f.currency_symbol ?? '$') : '%';
+      const before = (f.symbol_position || (f.type === 'currency' ? 'before' : 'after')) === 'before';
+      return (
+        <div className="fg-input-group">
+          {before && symbol && <span className="fg-input-prefix">{symbol}</span>}
+          <input className={cls} type="number" placeholder={f.placeholder} defaultValue={f.default_value} key={`num-${f.id}-${f.default_value}`} readOnly style={inputStyle} />
+          {!before && symbol && <span className="fg-input-suffix">{symbol}</span>}
+        </div>
+      );
+    }
+
+    // === TIME ===
+    if (f.type === 'time') {
+      return <input className={cls} type="time" defaultValue={f.default_value} key={`time-${f.id}-${f.default_value}`} readOnly style={inputStyle} />;
+    }
+
+    // === DATE RANGE ===
+    if (f.type === 'date_range') {
+      return (
+        <div className="fg-subfields fg-subfields-2">
+          {sub('start', f.start_label || __( 'Start Date', 'formglut' ), <input className={cls} type="date" readOnly style={inputStyle} />)}
+          {sub('end', f.end_label || __( 'End Date', 'formglut' ), <input className={cls} type="date" readOnly style={inputStyle} />)}
+        </div>
+      );
+    }
+
+    // === ADDRESS ===
+    if (f.type === 'address') {
+      const cols = f.address_layout === 'vertical' ? 1 : Math.min(Math.max(Number(f.grid_columns) || 2, 1), 3);
+      const parts = [
+        ['street1', true], ['street2', f.include_street2 !== false], ['city', f.include_city !== false],
+        ['state', f.include_state !== false], ['zip', f.include_zip !== false],
+      ].filter(p => p[1]);
+      return (
+        <div className={`fg-subfields fg-subfields-${cols}`}>
+          {parts.map(([p]) => sub(p, f[`${p}_label`], <input className={cls} type="text" placeholder={f[`${p}_placeholder`]} readOnly style={inputStyle} />))}
+          {f.include_country && sub('country', f.country_label || __( 'Country', 'formglut' ), (
+            <select className={cls} disabled style={inputStyle}><option>{__( 'Select a country', 'formglut' )}</option>{renderCountryOptions({})}</select>
           ))}
         </div>
       );
     }
 
-    // === CHECKBOX ===
-    if (f.type === 'checkbox') {
-      const isInline = f.layout === 'inline' || f.inline;
-      return (
-        <div style={{ display: isInline ? 'flex' : 'block', gap: isInline ? '16px' : '8px' }}>
-          {displayOptions.map((opt, i) => (
-            <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-              <input type="checkbox" name={fieldName} disabled style={{ margin: 0 }} />
-              <span>{opt.label || `Option ${i + 1}`}</span>
-            </label>
-          ))}
+    // === PASSWORD ===
+    if (f.type === 'password') {
+      const pw = (ph, key) => (
+        <div className="fg-password-wrap" key={key}>
+          <input className={cls} type="password" placeholder={ph} readOnly style={inputStyle} />
+          {f.show_toggle !== false && <button type="button" className="fg-password-toggle">{f.show_text || __( 'Show', 'formglut' )}</button>}
         </div>
+      );
+      return (
+        <>
+          {pw(f.placeholder, 'main')}
+          {f.enable_strength_meter && <div className="fg-strength"><div className="fg-strength-bar" /><span>{__( 'Password strength', 'formglut' )}</span></div>}
+          {f.requirements_hint && <div className="fg-choice-hint">{f.requirements_hint}</div>}
+          {f.require_confirmation && (
+            <div style={{ marginTop: 10 }}>
+              <label className="fg-sublabel">{f.confirmation_label || __( 'Confirm Password', 'formglut' )}</label>
+              {pw(f.confirmation_placeholder, 'confirm')}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    // === RANGE SLIDER ===
+    if (f.type === 'range_slider') {
+      const min = Number(f.min ?? 0), max = Number(f.max ?? 100);
+      const val = f.default_value === '' || f.default_value === undefined ? min : Number(f.default_value);
+      return (
+        <div className="fg-range" style={f.track_color ? { '--fg-range-color': f.track_color } : undefined}>
+          {f.show_value !== false && <div className="fg-range-value">{f.value_prefix}{val}{f.value_suffix}</div>}
+          <input type="range" min={min} max={max} step={f.step || 1} value={val} readOnly disabled className={f.element_class || ''} />
+          <div className="fg-range-ends"><span>{f.min_label || min}</span><span>{f.max_label || max}</span></div>
+        </div>
+      );
+    }
+
+    // === COLOR PICKER ===
+    if (f.type === 'color_picker') {
+      const type = f.picker_type || 'swatches';
+      const swatches = type === 'picker' ? [] : (f.swatches || []);
+      return (
+        <div className={`fg-color-picker fg-swatch-${f.swatch_size || 'medium'} ${f.element_class || ''}`}>
+          {swatches.map((c) => <span key={c} className={'fg-swatch' + (c.toLowerCase() === String(f.default_color || '').toLowerCase() ? ' selected' : '')} style={{ background: c }} />)}
+          {type !== 'swatches' && <input type="color" value={f.default_color || '#000000'} readOnly disabled />}
+        </div>
+      );
+    }
+
+    // === MASK INPUT ===
+    if (f.type === 'masked_input') {
+      const mask = f.custom_mask || '';
+      return (
+        <>
+          <div className="fg-input-group">
+            {f.prefix_label && <span className="fg-input-prefix" style={prefixSuffixCustomStyle} dangerouslySetInnerHTML={{ __html: f.prefix_label }} />}
+            <input className={cls} type="text" placeholder={f.placeholder || mask.replace(/9/g, '#').replace(/[a*]/g, '?')} defaultValue={f.default_value} key={`mask-${f.id}-${f.default_value}`} readOnly style={inputStyle} />
+            {f.suffix_label && <span className="fg-input-suffix" style={prefixSuffixCustomStyle} dangerouslySetInnerHTML={{ __html: f.suffix_label }} />}
+          </div>
+          {f.mask_hint && <div className="fg-choice-hint">{f.mask_hint}</div>}
+        </>
       );
     }
 
@@ -532,8 +854,11 @@ function FieldTemplate({ field: f }) {
     }
 
     // === DEFAULT INPUT (text, number, etc.) ===
-    const typeAttr = f.type === 'number' ? 'number' : f.type === 'email' ? 'email' : 'text';
+    const typeAttr = { number: 'number', email: 'email', url: 'url', phone: 'tel', date: f.date_type === 'datetime' ? 'datetime-local' : 'date' }[f.type] || 'text';
+    const phoneMask = f.type === 'phone' ? getPhoneMask(f) : '';
     const maskedValue = getMaskedValue(f.default_value);
+    const placeholder = f.type === 'date' ? undefined : (phoneMask && !f.placeholder ? phoneMask.replace(/9/g, '#') : getDisplayPlaceholder());
+    const numAttrs = f.type === 'number' ? { min: f.min_value === '' ? undefined : f.min_value, max: f.max_value === '' ? undefined : f.max_value, step: f.step || undefined } : {};
 
     return (
       <div className="fg-input-group">
@@ -543,8 +868,9 @@ function FieldTemplate({ field: f }) {
           className={`fg-form-field-input fg-field-${f.id} ${f.element_class || ''}`}
           type={typeAttr}
           name={fieldName}
-          placeholder={f.placeholder}
+          placeholder={placeholder}
           defaultValue={maskedValue}
+          {...numAttrs}
           maxLength={maxLength}
           inputMode={inputMode}
           readOnly
@@ -563,13 +889,13 @@ function FieldTemplate({ field: f }) {
   );
 
   // Container class with field ID for placeholder targeting
-  const containerClasses = `fg-field-wrapper ${f.container_class || ''}`.trim();
+  const containerClasses = `fg-field-wrapper ${f.container_class || ''} ${f.css_class || ''}`.trim();
 
   if (labelPlacement === 'left' || labelPlacement === 'right') {
     return (
       <>
         <PlaceholderStylesInjector fieldId={f.id} placeholderStyle={f.placeholder_style} />
-        <div className={containerClasses} style={{ display: 'flex', alignItems: 'center', gap: 8, ...wrapper }}>
+        <div className={containerClasses} style={{ display: 'flex', alignItems: 'center', gap: 8, ...wrapperStyle }}>
           {labelPlacement === 'left' ? label : null}
           <div style={{ flex: 1 }}>
             {showHelpAbove && helpTextContent}
@@ -591,10 +917,11 @@ function FieldTemplate({ field: f }) {
     <>
       <PlaceholderStylesInjector fieldId={f.id} placeholderStyle={f.placeholder_style} />
       <div className={containerClasses} style={wrapperStyle}>
-        {label}
+        {labelPlacement !== 'bottom' && label}
         {showHelpAbove && helpTextContent}
         {renderInput()}
         {showHelpBelow && helpTextContent}
+        {labelPlacement === 'bottom' && label}
         {errorMessage && (
           <div className="fg-error-message" style={{ color: '#ef4444', fontSize: 12, marginTop: 4, ...errorCustomStyle }}>
             {errorMessage}
@@ -607,7 +934,7 @@ function FieldTemplate({ field: f }) {
 
 /* ── Add Fields Tab ────────────────────────────────────────────────── */
 
-function AddFieldsTab({ onAddField: addFieldFn }) {
+function AddFieldsTab({ onAddField: addFieldFn, insertTarget, onCancelTarget }) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [proEnabled, setProEnabled] = React.useState(false);
 
@@ -685,6 +1012,12 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
 
   return (
     <div style={{ padding: '0 4px' }}>
+      {insertTarget && (
+        <div className="fg-insert-target-banner">
+          <span>{__( 'Adding to column', 'formglut' )} {insertTarget.colIdx + 1}</span>
+          <button type="button" onClick={onCancelTarget}>{__( 'Cancel', 'formglut' )}</button>
+        </div>
+      )}
       {/* Search Input */}
       <Input
         placeholder={__('Search fields...', 'formglut')}
@@ -738,6 +1071,51 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
   );
 }
 
+/* ── Container Options ─────────────────────────────────────────────── */
+function ContainerOptions({ field, onUpdate }) {
+  const up = (u) => onUpdate(field.id, u);
+  const setWidth = (ci, w) => up({ columns: field.columns.map((c, i) => i === ci ? { ...c, width: Math.max(1, Number(w) || 1) } : c) });
+  const equalize = () => {
+    const n = field.columns.length;
+    const w = Math.floor((100 / n) * 100) / 100;
+    up({ columns: field.columns.map((c, i) => ({ ...c, width: i === n - 1 ? Math.round((100 - w * (n - 1)) * 100) / 100 : w })) });
+  };
+  const total = Math.round(field.columns.reduce((a, c) => a + (Number(c.width) || 0), 0) * 100) / 100;
+  return (
+    <div>
+      <div className="fg-prop-section"><div className="fg-prop-section-title">{__( 'Columns', 'formglut' )}</div>
+        {field.columns.map((col, ci) => (
+          <div className="fg-prop-field" key={ci} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="fg-prop-label" style={{ marginBottom: 0, width: 80 }}>{__( 'Column', 'formglut' )} {ci + 1}</span>
+            <InputNumber min={1} max={100} value={col.width} onChange={(v) => setWidth(ci, v)} addonAfter="%" style={{ flex: 1 }} />
+          </div>
+        ))}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: total === 100 ? '#94a3b8' : '#f59e0b' }}>
+          <span>{__( 'Total', 'formglut' )}: {total}%</span>
+          <Button size="small" onClick={equalize}>{__( 'Equal widths', 'formglut' )}</Button>
+        </div>
+      </div>
+      <div className="fg-prop-section"><div className="fg-prop-section-title">{__( 'Layout', 'formglut' )}</div>
+        <div className="fg-prop-field"><div className="fg-prop-label">{__( 'Column Gap', 'formglut' )}</div>
+          <Select value={field.gap || 'medium'} onChange={(v) => up({ gap: v })} style={{ width: '100%' }} options={[
+            { value: 'none', label: __( 'None', 'formglut' ) },
+            { value: 'small', label: __( 'Small (8px)', 'formglut' ) },
+            { value: 'medium', label: __( 'Medium (16px)', 'formglut' ) },
+            { value: 'large', label: __( 'Large (24px)', 'formglut' ) },
+          ]} />
+        </div>
+        <div className="fg-prop-field" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span className="fg-prop-label" style={{ marginBottom: 0 }}>{__( 'Stack on mobile', 'formglut' )}</span>
+          <Switch size="small" checked={field.responsive_stack !== false} onChange={(v) => up({ responsive_stack: v })} />
+        </div>
+        <div className="fg-prop-field"><div className="fg-prop-label">{__( 'Container CSS Class', 'formglut' )}</div>
+          <Input value={field.container_class || ''} onChange={(e) => up({ container_class: e.target.value })} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Field Options Tab ─────────────────────────────────────────────── */
 
 function FieldOptionsTab({ field, onUpdate, submitBtn, onSubBtnUpdate, selectedSubmit, allFields = [] }) {
@@ -776,6 +1154,8 @@ function FieldOptionsTab({ field, onUpdate, submitBtn, onSubBtnUpdate, selectedS
     );
   }
 
+  if (isContainerField(field)) return <ContainerOptions field={field} onUpdate={onUpdate} />;
+
   // Use dynamic field options renderer
   return <DynamicFieldOptions field={field} onUpdate={onUpdate} allFields={allFields} />;
 }
@@ -783,6 +1163,14 @@ function FieldOptionsTab({ field, onUpdate, submitBtn, onSubBtnUpdate, selectedS
 /* ── Style Options Tab ─────────────────────────────────────────────── */
 
 function StyleOptionsTab({ field, onUpdate }) {
+  if (isContainerField(field)) {
+    return (
+      <div className="fg-prop-no-selection">
+        <div className="fg-prop-no-selection-icon"><FontAwesomeIcon icon={faPalette} /></div>
+        <div className="fg-prop-no-selection-text">{__( 'Containers have no style options.', 'formglut' )}<br/>{__( 'Use Field Options to set column widths and gap.', 'formglut' )}</div>
+      </div>
+    );
+  }
   if (!field) {
     return (
       <div className="fg-prop-no-selection">
@@ -793,6 +1181,8 @@ function StyleOptionsTab({ field, onUpdate }) {
   }
 
   const up = (key, val) => { const u = {}; u[key] = val; onUpdate(field.id, u); };
+  const styleGroups = getStyleGroups(field.type);
+  const has = (group) => styleGroups.includes(group);
 
   // Helper to render label with tooltip
   const renderLabel = (label, tooltip) => (
@@ -806,6 +1196,57 @@ function StyleOptionsTab({ field, onUpdate }) {
     </div>
   );
 
+  const colorSwatchStyle = { width: 36, height: 36, border: '1px solid #e2e8f0', borderRadius: 6, cursor: 'pointer', padding: 2 };
+  const renderStyleControl = (c, i) => {
+    const label = renderLabel(__( c.label, 'formglut' ), c.tip && __( c.tip, 'formglut' ));
+    if (c.type === 'select') {
+      const value = field[c.key] || c.default;
+      return (
+        <React.Fragment key={c.key}>
+          <div className="fg-prop-field">{label}
+            <Select value={value} style={{ width: '100%' }}
+              onChange={(v) => onUpdate(field.id, { [c.key]: v, ...(c.customKey && v !== 'custom' ? { [c.customKey]: '' } : {}) })}
+              options={c.options.map(o => ({ value: o.value, label: __( o.label, 'formglut' ) }))} />
+          </div>
+          {c.customKey && field[c.key] === 'custom' && (
+            <div className="fg-prop-field">{renderLabel(__( c.customLabel, 'formglut' ), __( c.customTip, 'formglut' ))}
+              <Input type="number" value={field[c.customKey] || ''} placeholder={__( c.customPlaceholder, 'formglut' )} onChange={(e) => up(c.customKey, e.target.value)} addonAfter="px" />
+            </div>
+          )}
+        </React.Fragment>
+      );
+    }
+    if (c.type === 'quad') {
+      return (
+        <div className="fg-prop-field" key={c.keys[0]}>{label}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
+            {c.keys.map((k, n) => (
+              <div key={k}>
+                <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( c.sides[n], 'formglut' )}</div>
+                <Input type="number" size="small" value={field[k] ?? c.defaults[n]} onChange={(e) => up(k, parseInt(e.target.value) || 0)} />
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    if (c.type === 'number') {
+      return <div className="fg-prop-field" key={c.key}>{label}<Input type="number" value={field[c.key] ?? c.default} onChange={(e) => up(c.key, parseInt(e.target.value) || 0)} /></div>;
+    }
+    if (c.type === 'color') {
+      const value = field[c.key] || c.default;
+      return (
+        <div className="fg-prop-field" key={c.key}>{label}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input type="color" value={value} onChange={(e) => up(c.key, e.target.value)} style={colorSwatchStyle} />
+            <Input value={value} onChange={(e) => up(c.key, e.target.value)} style={{ flex: 1 }} />
+          </div>
+        </div>
+      );
+    }
+    return <div className="fg-prop-field" key={c.key || i}>{label}<Input value={field[c.key] || ''} placeholder={c.placeholder ? __( c.placeholder, 'formglut' ) : undefined} onChange={(e) => up(c.key, e.target.value)} /></div>;
+  };
+
   return (
     <div>
       {/* Type badge */}
@@ -813,80 +1254,29 @@ function StyleOptionsTab({ field, onUpdate }) {
         {FIELD_TYPES[field.type]?.icon}<span style={{ fontWeight: 600 }}>{FIELD_TYPES[field.type]?.label || field.type}</span>
       </div>
 
-      {/* Label Style */}
-      <div className="fg-prop-section"><div className="fg-prop-section-title">{__( 'Label Style', 'formglut' )}</div>
-        <div className="fg-prop-field">{renderLabel(__( 'Label Placement', 'formglut' ), __( 'Position the label above, below, left, or right of the field input.', 'formglut' ))}
-          <Select value={field.label_placement || 'top'} onChange={(v) => up('label_placement', v)} style={{ width: '100%' }} options={[{ value: 'top', label: __( 'Top', 'formglut' ) }, { value: 'left', label: __( 'Left', 'formglut' ) }, { value: 'right', label: __( 'Right', 'formglut' ) }, { value: 'hidden', label: __( 'Hidden', 'formglut' ) }]} />
+      {STYLE_BLOCKS.filter(block => has(block.group)).map(block => (
+        <div className="fg-prop-section" key={block.group}>
+          <div className="fg-prop-section-title">{__( block.title, 'formglut' )}</div>
+          {block.controls.map((c, i) => renderStyleControl(c, i))}
         </div>
-        <div className="fg-prop-field">{renderLabel(__( 'Label Width', 'formglut' ), __( 'Set the width of the label. Use "Auto" to let the label text determine the width.', 'formglut' ))}
-          <Select value={field.label_width || 'auto'} onChange={(v) => { up('label_width', v); if (v !== 'custom') up('label_width_custom', ''); }} style={{ width: '100%' }} options={[{ value: 'auto', label: __( 'Auto', 'formglut' ) }, { value: '120px', label: __( 'Small (120px)', 'formglut' ) }, { value: '160px', label: __( 'Medium (160px)', 'formglut' ) }, { value: '200px', label: __( 'Large (200px)', 'formglut' ) }, { value: '100%', label: __( 'Full Width', 'formglut' ) }, { value: 'custom', label: __( 'Custom', 'formglut' ) }]} />
-        </div>
-        {field.label_width === 'custom' && (
-          <div className="fg-prop-field">{renderLabel(__( 'Custom Width (px)', 'formglut' ), __( 'Enter a custom width in pixels for the label.', 'formglut' ))}
-            <Input type="number" value={field.label_width_custom || ''} placeholder={__( 'e.g. 180', 'formglut' )} onChange={(e) => up('label_width_custom', e.target.value)} addonAfter="px" />
-          </div>
-        )}
-      </div>
+      ))}
 
-      {/* Field Style */}
-      <div className="fg-prop-section"><div className="fg-prop-section-title">{__( 'Field Style', 'formglut' )}</div>
-        <div className="fg-prop-field">{renderLabel(__( 'Field Width', 'formglut' ), __( 'Set the width of the field input area. Half = 50%, Three Quarter = 75%, Full Width = 100%.', 'formglut' ))}
-          <Select value={field.field_width || '100%'} onChange={(v) => { up('field_width', v); if (v !== 'custom') up('field_width_custom', ''); }} style={{ width: '100%' }} options={[{ value: '50%', label: __( 'Half', 'formglut' ) }, { value: '75%', label: __( 'Three Quarter', 'formglut' ) }, { value: '100%', label: __( 'Full Width', 'formglut' ) }, { value: 'custom', label: __( 'Custom', 'formglut' ) }]} />
-        </div>
-        {field.field_width === 'custom' && (
-          <div className="fg-prop-field">{renderLabel(__( 'Custom Width (px)', 'formglut' ), __( 'Enter a custom width in pixels for the field input.', 'formglut' ))}
-            <Input type="number" value={field.field_width_custom || ''} placeholder={__( 'e.g. 400', 'formglut' )} onChange={(e) => up('field_width_custom', e.target.value)} addonAfter="px" />
-          </div>
-        )}
-        <div className="fg-prop-field">{renderLabel(__( 'Input Padding (px)', 'formglut' ), __( 'Control the spacing inside the field input between the text and the border.', 'formglut' ))}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Top', 'formglut' )}</div><Input type="number" size="small" value={field.padding_top ?? 10} onChange={(e) => up('padding_top', parseInt(e.target.value) || 0)} /></div>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Right', 'formglut' )}</div><Input type="number" size="small" value={field.padding_right ?? 14} onChange={(e) => up('padding_right', parseInt(e.target.value) || 0)} /></div>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Bottom', 'formglut' )}</div><Input type="number" size="small" value={field.padding_bottom ?? 10} onChange={(e) => up('padding_bottom', parseInt(e.target.value) || 0)} /></div>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Left', 'formglut' )}</div><Input type="number" size="small" value={field.padding_left ?? 14} onChange={(e) => up('padding_left', parseInt(e.target.value) || 0)} /></div>
-          </div>
-        </div>
-        <div className="fg-prop-field">{renderLabel(__( 'Input Margin (px)', 'formglut' ), __( 'Control the spacing outside the field input to separate it from other elements.', 'formglut' ))}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Top', 'formglut' )}</div><Input type="number" size="small" value={field.margin_top ?? 0} onChange={(e) => up('margin_top', parseInt(e.target.value) || 0)} /></div>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Right', 'formglut' )}</div><Input type="number" size="small" value={field.margin_right ?? 0} onChange={(e) => up('margin_right', parseInt(e.target.value) || 0)} /></div>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Bottom', 'formglut' )}</div><Input type="number" size="small" value={field.margin_bottom ?? 0} onChange={(e) => up('margin_bottom', parseInt(e.target.value) || 0)} /></div>
-            <div><div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 2 }}>{__( 'Left', 'formglut' )}</div><Input type="number" size="small" value={field.margin_left ?? 0} onChange={(e) => up('margin_left', parseInt(e.target.value) || 0)} /></div>
-          </div>
-        </div>
-        <div className="fg-prop-field">{renderLabel(__( 'Border Radius (px)', 'formglut' ), __( 'Round the corners of the field input. Higher values create more rounded corners.', 'formglut' ))}
-          <Input type="number" value={field.border_radius ?? 8} onChange={(e) => up('border_radius', parseInt(e.target.value) || 0)} />
-        </div>
-      </div>
+      {styleGroups.length === 0 && (
+        <div className="fg-prop-no-selection-text" style={{ padding: '8px 0' }}>{__( 'This field has no style options.', 'formglut' )}</div>
+      )}
 
-      {/* Colors */}
-      <div className="fg-prop-section"><div className="fg-prop-section-title">{__( 'Colors', 'formglut' )}</div>
-        <div className="fg-prop-field">{renderLabel(__( 'Background Color', 'formglut' ), __( 'The background color of the field input area.', 'formglut' ))}
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input type="color" value={field.bg_color || '#ffffff'} onChange={(e) => up('bg_color', e.target.value)} style={{ width: 36, height: 36, border: '1px solid #e2e8f0', borderRadius: 6, cursor: 'pointer', padding: 2 }} />
-            <Input value={field.bg_color || '#ffffff'} onChange={(e) => up('bg_color', e.target.value)} style={{ flex: 1 }} />
-          </div>
-        </div>
-        <div className="fg-prop-field">{renderLabel(__( 'Border Color', 'formglut' ), __( 'The color of the border around the field input.', 'formglut' ))}
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input type="color" value={field.border_color || '#e2e8f0'} onChange={(e) => up('border_color', e.target.value)} style={{ width: 36, height: 36, border: '1px solid #e2e8f0', borderRadius: 6, cursor: 'pointer', padding: 2 }} />
-            <Input value={field.border_color || '#e2e8f0'} onChange={(e) => up('border_color', e.target.value)} style={{ flex: 1 }} />
-          </div>
-        </div>
-        <div className="fg-prop-field">{renderLabel(__( 'Text Color', 'formglut' ), __( 'The color of the text entered by users in the field input.', 'formglut' ))}
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input type="color" value={field.text_color || '#1e293b'} onChange={(e) => up('text_color', e.target.value)} style={{ width: 36, height: 36, border: '1px solid #e2e8f0', borderRadius: 6, cursor: 'pointer', padding: 2 }} />
-            <Input value={field.text_color || '#1e293b'} onChange={(e) => up('text_color', e.target.value)} style={{ flex: 1 }} />
-          </div>
-        </div>
-      </div>
+      {/* Field-specific style options (moved from Field Options) */}
+      <DynamicFieldOptions field={field} onUpdate={onUpdate} styleOnly />
 
       {/* CSS Class */}
+      {has('css_class') && (
       <div className="fg-prop-section"><div className="fg-prop-section-title">{__( 'Custom CSS', 'formglut' )}</div>
         <div className="fg-prop-field">{renderLabel(__( 'CSS Class', 'formglut' ), __( 'Add a custom CSS class to this field for advanced styling. You can then target this class in your custom CSS.', 'formglut' ))}
           <Input value={field.css_class || ''} placeholder={__( 'my-custom-class', 'formglut' )} onChange={(e) => up('css_class', e.target.value)} />
         </div>
       </div>
+      )}
+
     </div>
   );
 }
@@ -942,10 +1332,25 @@ export default function FormEditor() {
   const [fields, setFields] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [activeTab, setActiveTab] = useState('addFields');
-  const dragIdxRef = useRef(null);
+  const dragIdRef = useRef(null);
   const [submitBtn, setSubmitBtn] = useState({ ...DEFAULT_SUBMIT_BTN });
   const [selectedSubmit, setSelectedSubmit] = useState(false);
-  const [dropIdx, setDropIdx] = useState(null);
+  const [dropTarget, setDropTarget] = useState(null);
+  const [insertTarget, setInsertTarget] = useState(null);
+  const [captchaStatus, setCaptchaStatus] = useState({});
+
+  // Captcha key status, so captcha fields can warn when Settings are incomplete.
+  useEffect(() => {
+    api.getSettings().then((d) => {
+      const st = d.settings || {};
+      const ready = (p) => !!(st[`formglut_${p}_site_key`] && st[`formglut_${p}_secret_key`]);
+      setCaptchaStatus({
+        recaptcha: { ready: ready('recaptcha'), version: st.formglut_recaptcha_version || 'v3' },
+        hcaptcha: { ready: ready('hcaptcha') },
+        turnstile: { ready: ready('turnstile') },
+      });
+    }).catch(() => {});
+  }, []);
 
   const [formTitle, setFormTitle] = useState(__( 'Untitled Form', 'formglut' ));
   const [formId, setFormId] = useState(getFormIdFromUrl());
@@ -1032,104 +1437,171 @@ export default function FormEditor() {
   });
 
   /* ── Field ops ───────────────────────────────────────────────────── */
+  function commit(next) { setFields(next); setIsDirty(true); pushHistory(next); }
 
   function addField(type) {
     const f = createField(type);
     if (!f) return;
     f.id = genId();
-    const next = [...fields, f];
-    setFields(next); setIsDirty(true); pushHistory(next);
+    if (insertTarget && !isContainerField(f) && findFieldInTree(fields, insertTarget.containerId)) {
+      commit(insertIntoTree(fields, { ...insertTarget, index: Infinity }, f));
+    } else {
+      commit([...fields, f]);
+    }
+    setInsertTarget(null);
   }
-
   function removeField(id) {
-    const next = fields.filter(f => f.id !== id);
-    setFields(next);
-    if (selectedId === id) { setSelectedId(null); setActiveTab('addFields'); }
-    setIsDirty(true); pushHistory(next);
+    const next = updateParentList(fields, id, (l, i) => l.filter((_, j) => j !== i));
+    if (!next) return;
+    if (selectedId === id || (selectedId && !findFieldInTree(next, selectedId))) { setSelectedId(null); setActiveTab('addFields'); }
+    if (insertTarget && !findFieldInTree(next, insertTarget.containerId)) setInsertTarget(null);
+    commit(next);
   }
-
   function duplicateField(id) {
-    let next;
-    setFields(p => {
-      const idx = p.findIndex(f => f.id === id);
-      if (idx === -1) return p;
-      const copy = Object.assign({}, p[idx], { id: genId(), label: p[idx].label + ' (copy)' });
-      next = [...p]; next.splice(idx + 1, 0, copy);
-      return next;
+    const next = updateParentList(fields, id, (l, i) => {
+      const copy = cloneWithNewIds(l[i]);
+      if (!isContainerField(copy)) copy.label = (l[i].label || '') + ' (copy)';
+      const n = [...l]; n.splice(i + 1, 0, copy); return n;
     });
-    message.success(__( 'Field duplicated', 'formglut' )); setIsDirty(true);
-    if (next) pushHistory(next);
+    if (!next) return;
+    commit(next);
+    message.success(__( 'Field duplicated', 'formglut' ));
   }
-
   function moveField(id, dir) {
-    let next;
-    setFields(p => {
-      const idx = p.findIndex(f => f.id === id);
-      if (idx === -1) return p;
-      const ni = idx + dir;
-      if (ni < 0 || ni >= p.length) return p;
-      next = [...p]; [next[idx], next[ni]] = [next[ni], next[idx]];
-      return next;
+    const next = updateParentList(fields, id, (l, i) => {
+      const ni = i + dir;
+      if (ni < 0 || ni >= l.length) return l;
+      const n = [...l]; [n[i], n[ni]] = [n[ni], n[i]]; return n;
     });
-    setIsDirty(true); if (next) pushHistory(next);
+    if (next) commit(next);
   }
-
   function updateFieldProp(id, updates) {
-    let next;
-    setFields(p => { next = p.map(f => f.id === id ? Object.assign({}, f, updates) : f); return next; });
-    setIsDirty(true); if (next) pushHistory(next);
+    const next = updateParentList(fields, id, (l, i) => l.map((f, j) => j === i ? Object.assign({}, f, updates) : f));
+    if (next) commit(next);
   }
-
   function selectField(id) { setSelectedId(id); setSelectedSubmit(false); setActiveTab('fieldOptions'); }
   function selectSubmitBtn() { setSelectedId(null); setSelectedSubmit(true); setActiveTab('fieldOptions'); }
+  function targetColumn(containerId, colIdx) { setInsertTarget({ containerId, colIdx }); setActiveTab('addFields'); }
 
   /* ── Drag & drop ─────────────────────────────────────────────────── */
+  const sameTarget = (a, b) => !!a && !!b && (a.containerId || null) === (b.containerId || null) && (a.colIdx || 0) === (b.colIdx || 0);
 
-  function handleCanvasDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; }
-  function handleCanvasDrop(e) {
-    e.preventDefault();
+  function performDrop(e, target) {
     const type = e.dataTransfer.getData('fgFieldType');
+    const dragId = dragIdRef.current;
+    dragIdRef.current = null; setDropTarget(null);
+    if (!target) target = { containerId: null, colIdx: 0, index: fields.length };
+
     if (type && FIELD_TYPES[type]) {
-      const insertAt = dropIdx != null ? dropIdx : fields.length;
-      const f = createField(type);
-      if (f) { const next = [...fields]; next.splice(insertAt, 0, f); setFields(next); setIsDirty(true); pushHistory(next); }
+      const f = createField(type); if (!f) return;
+      f.id = genId();
+      if (target.containerId && isContainerField(f)) { message.warning(__( 'Containers cannot be placed inside another container.', 'formglut' )); return; }
+      commit(insertIntoTree(fields, target, f));
+      return;
     }
-    dragIdxRef.current = null; setDropIdx(null);
+    if (!dragId) return;
+    const moving = findFieldInTree(fields, dragId);
+    if (!moving) return;
+    if (target.containerId && isContainerField(moving)) { message.warning(__( 'Containers cannot be placed inside another container.', 'formglut' )); return; }
+    const from = locateField(fields, dragId);
+    const without = updateParentList(fields, dragId, (l, i) => l.filter((_, j) => j !== i));
+    let index = target.index;
+    if (sameTarget(from, target) && from.index < index) index -= 1;
+    commit(insertIntoTree(without, { ...target, index }, moving));
   }
-  function handleCanvasDragLeave(e) { if (!e.currentTarget.contains(e.relatedTarget)) setDropIdx(null); }
-  function handleEmptyDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); setDropIdx(null); }
+
+  function handleCanvasDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = dragIdRef.current ? 'move' : 'copy'; }
+  function handleCanvasDrop(e) { e.preventDefault(); performDrop(e, dropTarget); }
+  function handleCanvasDragLeave(e) { if (!e.currentTarget.contains(e.relatedTarget)) setDropTarget(null); }
+  function handleEmptyDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); setDropTarget(null); }
   function handleEmptyDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
   function handleEmptyDrop(e) {
     e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('drag-over');
-    const type = e.dataTransfer.getData('fgFieldType');
-    if (type && FIELD_TYPES[type]) addField(type);
-    setDropIdx(null);
+    performDrop(e, null);
   }
-  function handleFieldDragStart(e, idx) { dragIdxRef.current = idx; e.dataTransfer.setData('fgReorder', 'true'); e.dataTransfer.effectAllowed = 'move'; }
-  function handleFieldDragOver(e, idx) { e.preventDefault(); e.stopPropagation(); const rect = e.currentTarget.getBoundingClientRect(); setDropIdx(e.clientY < rect.top + rect.height / 2 ? idx : idx + 1); }
-  function handleFieldDrop(e, targetIdx) {
+  function handleFieldDragStart(e, id) { e.stopPropagation(); dragIdRef.current = id; e.dataTransfer.setData('fgReorder', 'true'); e.dataTransfer.effectAllowed = 'move'; }
+  function handleFieldDragOver(e, ctx, idx) {
     e.preventDefault(); e.stopPropagation();
-    const type = e.dataTransfer.getData('fgFieldType');
-    if (type && FIELD_TYPES[type]) {
-      const f = createField(type); if (!f) return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      const ins = e.clientY < rect.top + rect.height / 2 ? targetIdx : targetIdx + 1;
-      const next = [...fields]; next.splice(ins, 0, f);
-      setFields(next); setIsDirty(true); pushHistory(next); setDropIdx(null); return;
-    }
-    const fromIdx = dragIdxRef.current;
-    if (fromIdx === null || fromIdx === targetIdx) { setDropIdx(null); return; }
-    const rect2 = e.currentTarget.getBoundingClientRect();
-    const midY = rect2.top + rect2.height / 2;
-    const next = [...fields];
-    const item = next.splice(fromIdx, 1)[0];
-    let adj = fromIdx < targetIdx ? targetIdx - 1 : targetIdx;
-    if (e.clientY >= midY) adj += 1;
-    next.splice(adj, 0, item);
-    setFields(next); setIsDirty(true); pushHistory(next);
-    dragIdxRef.current = null; setDropIdx(null);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const t = { ...ctx, index: e.clientY < rect.top + rect.height / 2 ? idx : idx + 1 };
+    if (!dropTarget || !sameTarget(dropTarget, t) || dropTarget.index !== t.index) setDropTarget(t);
   }
-  function handleFieldDragEnd() { dragIdxRef.current = null; setDropIdx(null); }
+  function handleColumnDragOver(e, ctx, len) {
+    e.preventDefault(); e.stopPropagation();
+    if (!dropTarget || !sameTarget(dropTarget, ctx) || dropTarget.index !== len) setDropTarget({ ...ctx, index: len });
+  }
+  function handleFieldDragEnd() { dragIdRef.current = null; setDropTarget(null); }
+
+  /* ── Canvas rendering ────────────────────────────────────────────── */
+  const dropIndicator = <div className="fg-drop-indicator visible"><span>{__( 'Drop here', 'formglut' )}</span></div>;
+  const showIndicatorAt = (ctx, idx) => !!dropTarget && sameTarget(dropTarget, ctx) && dropTarget.index === idx;
+
+  function renderFieldList(list, ctx) {
+    return (
+      <>
+        {list.map((f, idx) => (
+          <React.Fragment key={f.id}>
+            {showIndicatorAt(ctx, idx) && dropIndicator}
+            {renderFieldNode(f, idx, list.length, ctx)}
+          </React.Fragment>
+        ))}
+        {showIndicatorAt(ctx, list.length) && dropIndicator}
+      </>
+    );
+  }
+
+  function renderFieldNode(f, idx, count, ctx) {
+    const container = isContainerField(f);
+    return (
+      <div
+        className={'fg-form-field' + (container ? ' fg-container-field' : '') + (selectedId === f.id ? ' selected' : '')}
+        onClick={(e) => { e.stopPropagation(); selectField(f.id); }}
+        draggable onDragStart={(e) => handleFieldDragStart(e, f.id)}
+        onDragOver={(e) => handleFieldDragOver(e, ctx, idx)} onDragEnd={handleFieldDragEnd}
+      >
+        <div className="fg-field-toolbar">
+          <Tooltip title={__( 'Move up', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); moveField(f.id, -1); }} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.3 : 1 }}><FontAwesomeIcon icon={faArrowUp} /></button></Tooltip>
+          <Tooltip title={__( 'Move down', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); moveField(f.id, 1); }} disabled={idx === count - 1} style={{ opacity: idx === count - 1 ? 0.3 : 1 }}><FontAwesomeIcon icon={faArrowDown} /></button></Tooltip>
+          <div className="toolbar-sep"></div>
+          <Tooltip title={__( 'Settings', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); selectField(f.id); }}><FontAwesomeIcon icon={faGear} /></button></Tooltip>
+          {!container && <Tooltip title={__( 'Style', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); setSelectedId(f.id); setActiveTab('styleOptions'); }}><FontAwesomeIcon icon={faPalette} /></button></Tooltip>}
+          <div className="toolbar-sep"></div>
+          <Tooltip title={__( 'Duplicate', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); duplicateField(f.id); }}><FontAwesomeIcon icon={faCopy} /></button></Tooltip>
+          <Tooltip title={__( 'Delete', 'formglut' )} mouseEnterDelay={0.4}><button className="danger" onClick={(e) => { e.stopPropagation(); removeField(f.id); }}><FontAwesomeIcon icon={faTrash} /></button></Tooltip>
+        </div>
+        {container ? (
+          <div className="fg-columns" style={{ gap: CONTAINER_GAPS[f.gap || 'medium'] ?? 16 }}>
+            {f.columns.map((col, ci) => {
+              const colCtx = { containerId: f.id, colIdx: ci };
+              const colFields = col.fields || [];
+              const targeted = insertTarget && insertTarget.containerId === f.id && insertTarget.colIdx === ci;
+              return (
+                <div
+                  key={ci}
+                  className={'fg-column' + (colFields.length ? '' : ' empty') + (targeted ? ' targeted' : '')}
+                  style={{ flex: `${Number(col.width) || 1} 1 0%` }}
+                  onDragOver={(e) => handleColumnDragOver(e, colCtx, colFields.length)}
+                >
+                  {renderFieldList(colFields, colCtx)}
+                  <div className="fg-column-add" onClick={(e) => { e.stopPropagation(); targetColumn(f.id, ci); }}>
+                    <FontAwesomeIcon icon={faPlus} />
+                    {!colFields.length && <span>{targeted ? __( 'Pick a field on the left', 'formglut' ) : __( 'Add or drop a field', 'formglut' )}</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <FieldTemplate field={f} captcha={captchaStatus} />
+        )}
+        {!ctx.containerId && (
+          <div className="fg-add-between">
+            <div className="fg-add-between-btn" onClick={(e) => { e.stopPropagation(); setInsertTarget(null); setActiveTab('addFields'); }}><FontAwesomeIcon icon={faPlus} /></div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   /* ── Save ────────────────────────────────────────────────────────── */
 
@@ -1156,7 +1628,8 @@ export default function FormEditor() {
     } catch (err) { message.error(err.message || __( 'Failed to save form.', 'formglut' )); } finally { setSaving(false); }
   }
 
-  const selectedField = fields.find(f => f.id === selectedId) || null;
+  const selectedField = selectedId ? findFieldInTree(fields, selectedId) : null;
+  const allInputFields = flattenFields(fields);
 
   if (loading) {
     return (<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc' }}><Spin size="large" tip={__( 'Loading form...', 'formglut' )} /></div>);
@@ -1192,8 +1665,8 @@ export default function FormEditor() {
       <div className="fg-editor-body">
         <div className="fg-sidebar">
           <Tabs activeKey={activeTab} onChange={setActiveTab} centered items={[
-            { key: 'addFields', label: __( 'Add Fields', 'formglut' ), children: <AddFieldsTab onAddField={addField} /> },
-            { key: 'fieldOptions', label: __( 'Field Options', 'formglut' ), children: <FieldOptionsTab field={selectedField} onUpdate={updateFieldProp} submitBtn={submitBtn} onSubBtnUpdate={(u) => { const next = { ...submitBtn, ...u }; setSubmitBtn(next); setIsDirty(true); pushHistory(fields, next); }} selectedSubmit={selectedSubmit} allFields={fields} /> },
+            { key: 'addFields', label: __( 'Add Fields', 'formglut' ), children: <AddFieldsTab onAddField={addField} insertTarget={insertTarget} onCancelTarget={() => setInsertTarget(null)} /> },
+            { key: 'fieldOptions', label: __( 'Field Options', 'formglut' ), children: <FieldOptionsTab field={selectedField} onUpdate={updateFieldProp} submitBtn={submitBtn} onSubBtnUpdate={(u) => { const next = { ...submitBtn, ...u }; setSubmitBtn(next); setIsDirty(true); pushHistory(fields, next); }} selectedSubmit={selectedSubmit} allFields={allInputFields} /> },
             { key: 'styleOptions', label: __( 'Style Options', 'formglut' ), children: <StyleOptionsTab field={selectedField} onUpdate={updateFieldProp} /> },
           ]} />
         </div>
@@ -1252,7 +1725,7 @@ export default function FormEditor() {
             </div>
           </div>
           <div className="fg-canvas">
-            <div className="fg-canvas-form" style={{ maxWidth: deviceWidth === '100%' ? '900px' : deviceWidth, transition: 'max-width 0.3s ease' }} onClick={() => { setSelectedId(null); setSelectedSubmit(false); }} onDragOver={handleCanvasDragOver} onDrop={handleCanvasDrop} onDragLeave={handleCanvasDragLeave}>
+            <div className="fg-canvas-form" style={{ maxWidth: deviceWidth === '100%' ? '900px' : deviceWidth, transition: 'max-width 0.3s ease' }} onClick={() => { setSelectedId(null); setSelectedSubmit(false); setInsertTarget(null); }} onDragOver={handleCanvasDragOver} onDrop={handleCanvasDrop} onDragLeave={handleCanvasDragLeave}>
               {fields.length === 0 ? (
                 <div className="fg-empty-state" onDragOver={handleEmptyDragOver} onDragLeave={handleEmptyDragLeave} onDrop={handleEmptyDrop}>
                   <span className="fg-empty-state-icon"><FontAwesomeIcon icon={faPlus} /></span>
@@ -1261,39 +1734,12 @@ export default function FormEditor() {
                 </div>
               ) : (
                 <div>
-                  {fields.map((f, idx) => (
-                    <React.Fragment key={f.id}>
-                      {dropIdx === idx && <div className="fg-drop-indicator visible"><span>{__( 'Drop here', 'formglut' )}</span></div>}
-                      <div
-                        className={"fg-form-field" + (selectedId === f.id ? ' selected' : '')}
-                        onClick={(e) => { e.stopPropagation(); selectField(f.id); }}
-                        draggable onDragStart={(e) => handleFieldDragStart(e, idx)}
-                        onDragOver={(e) => handleFieldDragOver(e, idx)} onDragLeave={() => {}}
-                        onDrop={(e) => handleFieldDrop(e, idx)} onDragEnd={handleFieldDragEnd}
-                      >
-                        <div className="fg-field-toolbar">
-                          <Tooltip title={__( 'Move up', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); moveField(f.id, -1); }} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.3 : 1 }}><FontAwesomeIcon icon={faArrowUp} /></button></Tooltip>
-                          <Tooltip title={__( 'Move down', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); moveField(f.id, 1); }} disabled={idx === fields.length - 1} style={{ opacity: idx === fields.length - 1 ? 0.3 : 1 }}><FontAwesomeIcon icon={faArrowDown} /></button></Tooltip>
-                          <div className="toolbar-sep"></div>
-                          <Tooltip title={__( 'Settings', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); selectField(f.id); }}><FontAwesomeIcon icon={faGear} /></button></Tooltip>
-                          <Tooltip title={__( 'Style', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); setSelectedId(f.id); setActiveTab('styleOptions'); }}><FontAwesomeIcon icon={faPalette} /></button></Tooltip>
-                          <div className="toolbar-sep"></div>
-                          <Tooltip title={__( 'Duplicate', 'formglut' )} mouseEnterDelay={0.4}><button onClick={(e) => { e.stopPropagation(); duplicateField(f.id); }}><FontAwesomeIcon icon={faCopy} /></button></Tooltip>
-                          <Tooltip title={__( 'Delete', 'formglut' )} mouseEnterDelay={0.4}><button className="danger" onClick={(e) => { e.stopPropagation(); removeField(f.id); }}><FontAwesomeIcon icon={faTrash} /></button></Tooltip>
-                        </div>
-                        <FieldTemplate field={f} />
-                        <div className="fg-add-between">
-                          <div className="fg-add-between-btn" onClick={(e) => { e.stopPropagation(); setActiveTab('addFields'); }}><FontAwesomeIcon icon={faPlus} /></div>
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  ))}
-                  {dropIdx === fields.length && <div className="fg-drop-indicator visible"><span>{__( 'Drop here', 'formglut' )}</span></div>}
-                  <div className={"fg-submit-field" + (selectedSubmit ? ' selected' : '')} onClick={(e) => { e.stopPropagation(); selectSubmitBtn(); }}>
+                  {renderFieldList(fields, { containerId: null, colIdx: 0 })}
+                  {!allInputFields.some(x => x.type === 'custom_submit_button') && <div className={"fg-submit-field" + (selectedSubmit ? ' selected' : '')} onClick={(e) => { e.stopPropagation(); selectSubmitBtn(); }}>
                     <div style={submitBtn.alignment !== 'full' ? { textAlign: submitBtn.alignment } : {}}>
                       <Button type="primary" size={submitBtn.size === 'medium' ? 'middle' : submitBtn.size} block={submitBtn.alignment === 'full'} style={{ background: submitBtn.bg_color, borderColor: submitBtn.bg_color, color: submitBtn.text_color, height: submitBtn.height, fontWeight: submitBtn.font_weight, fontSize: submitBtn.font_size, borderRadius: submitBtn.border_radius }}>{submitBtn.text}</Button>
                     </div>
-                  </div>
+                  </div>}
                 </div>
               )}
             </div>

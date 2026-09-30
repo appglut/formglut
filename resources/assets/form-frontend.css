@@ -32,7 +32,8 @@
   margin-bottom: 18px;
 }
 
-.formglut-field.formglut-hidden {
+.formglut-field.formglut-hidden,
+.formglut-field.formglut-conditional-hidden {
   display: none;
 }
 
@@ -57,7 +58,7 @@
   font-size: 15px;
   line-height: 1.5;
   color: #1e293b !important;
-  background: #f8fafc !important;
+  background-color: #f8fafc !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 8px !important;
   outline: none;
@@ -346,3 +347,159 @@
     width: 100%;
   }
 }
+
+/* ── Column containers ────────────────────────────────────────────── */
+
+.formglut-columns {
+  display: flex;
+  align-items: flex-start;
+}
+
+.formglut-column {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .formglut-columns.formglut-columns-stack {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ── Multi-part & special fields ─────────────────────────────────── */
+
+.formglut-subfields { display: grid; gap: 12px; }
+.formglut-subfields-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.formglut-subfields-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.formglut-subfields-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.formglut-subfield-full { grid-column: 1 / -1; }
+.formglut-sublabel { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
+
+@media (max-width: 640px) {
+  .formglut-subfields-2, .formglut-subfields-3, .formglut-subfields-4 { grid-template-columns: 1fr; }
+}
+
+.formglut-field-hint { font-size: 12px; color: #64748b; margin: 6px 0 0; }
+
+.formglut-divider { border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0; }
+
+.formglut-spinner { display: flex; align-items: stretch; gap: 6px; }
+.formglut-spinner .formglut-input { flex: 1; min-width: 0; -moz-appearance: textfield; }
+.formglut-spinner-right .formglut-spin-btn { order: 2; }
+.formglut-spinner-left .formglut-input { order: 2; }
+.formglut-spinner .formglut-input::-webkit-outer-spin-button,
+.formglut-spinner .formglut-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.formglut-spin-btn {
+  min-width: 40px; padding: 0 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+  background: #f8fafc; color: #334155; font-size: 16px; cursor: pointer; transition: all .15s;
+}
+.formglut-spin-btn:hover { border-color: #e94560; color: #e94560; }
+
+.formglut-terms-box {
+  overflow-y: auto; padding: 12px 14px; margin-bottom: 10px;
+  border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;
+  font-size: 13px; color: #475569; line-height: 1.6;
+}
+.formglut-consent { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+.formglut-consent input { margin-top: 3px; }
+
+/* ── General fields: layout shared with the editor canvas ────────── */
+
+.formglut-label-left, .formglut-label-right { display: flex; align-items: center; gap: 8px; }
+.formglut-label-left .formglut-field-body, .formglut-label-right .formglut-field-body { flex: 1; min-width: 0; }
+.formglut-label-bottom > .formglut-label { margin: 6px 0 0; }
+
+.formglut-help-text { font-size: 12px; color: #64748b; margin: 6px 0; }
+
+.formglut-input-group { display: flex; align-items: stretch; }
+.formglut-input-group .formglut-input { flex: 1; min-width: 0; }
+.formglut-input-prefix, .formglut-input-suffix {
+  display: flex; align-items: center; padding: 0 12px; font-size: 14px; color: #64748b;
+  background: #f1f5f9; border: 1px solid #e2e8f0; white-space: nowrap;
+}
+.formglut-input-prefix { border-right: 0; border-radius: 8px 0 0 8px; }
+.formglut-input-suffix { border-left: 0; border-radius: 0 8px 8px 0; }
+.formglut-input-group .formglut-input-prefix + .formglut-input { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+.formglut-input-group .formglut-input:has(+ .formglut-input-suffix) { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+
+.formglut-confirm-field { margin-top: 10px; }
+
+.formglut-choice-group { display: flex; flex-direction: column; gap: 8px; }
+.formglut-choice-layout-inline { flex-direction: row; flex-wrap: wrap; gap: 16px; }
+.formglut-choice-layout-2_column, .formglut-choice-layout-3_column, .formglut-choice-layout-4_column { display: grid; gap: 8px 16px; }
+.formglut-choice-layout-2_column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.formglut-choice-layout-3_column { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.formglut-choice-layout-4_column { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.formglut-choice-layout-button { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+.formglut-choice { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #334155; cursor: pointer; user-select: none; }
+.formglut-choice input { width: 18px; height: 18px; margin: 0; accent-color: #e94560; cursor: pointer; }
+.formglut-choice-layout-button .formglut-choice { position: relative; padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; transition: all .15s; }
+.formglut-choice-layout-button .formglut-choice input { position: absolute; opacity: 0; pointer-events: none; }
+.formglut-choice-layout-button .formglut-choice:has(input:checked) { border-color: #e94560; background: #fef2f2; color: #e94560; }
+.formglut-choice-layout-button .formglut-choice:has(input:focus-visible) { outline: 2px solid #e94560; outline-offset: 2px; }
+.formglut-choice:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+.formglut-choice-hint { font-size: 12px; color: #64748b; margin-top: 6px; }
+
+.formglut-select[multiple] { height: auto; }
+.formglut-select-all-btn { margin-top: 6px; padding: 4px 10px; font-size: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; }
+.formglut-select-all-btn:hover { border-color: #e94560; color: #e94560; }
+
+@media (max-width: 640px) {
+  .formglut-choice-layout-3_column, .formglut-choice-layout-4_column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.formglut-subfields-1 { grid-template-columns: 1fr; }
+
+/* ── Display fields (mirror the editor canvas) ────────────────────── */
+.formglut-heading-text { margin: 0 0 4px; color: #0f172a; line-height: 1.3; }
+.formglut-heading-desc { margin: 4px 0 0; font-size: 14px; color: #64748b; }
+.formglut-heading-divider { border: 0; border-top: 1px solid #e2e8f0; margin: 12px 0 0; }
+.formglut-html-content { font-size: 14px; color: #334155; line-height: 1.6; }
+.formglut-html-content > :first-child { margin-top: 0; }
+.formglut-html-content > :last-child { margin-bottom: 0; }
+
+/* ── Advanced & security fields (mirror the editor canvas) ────────── */
+.formglut-section-head { display: flex; align-items: flex-start; gap: 12px; }
+.formglut-section-text { flex: 1; }
+.formglut-section-title { margin: 0; font-size: 18px; font-weight: 600; color: #0f172a; }
+.formglut-section-desc { margin: 4px 0 0; font-size: 14px; color: #64748b; }
+.formglut-section-divider { border: 0; border-top: 1px solid #e2e8f0; margin: 12px 0 0; }
+.formglut-section-toggle, .formglut-password-toggle { padding: 4px 10px; font-size: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #334155; cursor: pointer; }
+.formglut-section-hidden { display: none !important; }
+
+.formglut-password-wrap { position: relative; }
+.formglut-password-wrap .formglut-input { padding-right: 70px !important; }
+.formglut-password-wrap .formglut-password-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
+.formglut-strength { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 12px; color: #94a3b8; }
+.formglut-strength-bar { flex: 1; height: 4px; border-radius: 4px; background: #e2e8f0; overflow: hidden; }
+.formglut-strength-bar span { display: block; height: 100%; width: 0; transition: width .2s, background .2s; }
+.formglut-strength[data-score="0"] .formglut-strength-bar span { width: 10%; background: #ef4444; }
+.formglut-strength[data-score="1"] .formglut-strength-bar span { width: 25%; background: #f97316; }
+.formglut-strength[data-score="2"] .formglut-strength-bar span { width: 50%; background: #f59e0b; }
+.formglut-strength[data-score="3"] .formglut-strength-bar span { width: 75%; background: #84cc16; }
+.formglut-strength[data-score="4"] .formglut-strength-bar span { width: 100%; background: #10b981; }
+
+.formglut-range { --formglut-range-color: #e94560; }
+.formglut-range input[type="range"] { width: 100%; accent-color: var(--formglut-range-color); }
+.formglut-range-value { font-size: 14px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+.formglut-range-ends { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; }
+
+.formglut-color-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.formglut-swatch { padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #e2e8f0; cursor: pointer; }
+.formglut-swatch.selected { box-shadow: 0 0 0 2px #0f172a; }
+.formglut-swatch-small .formglut-swatch { width: 20px; height: 20px; }
+.formglut-swatch-medium .formglut-swatch { width: 28px; height: 28px; }
+.formglut-swatch-large .formglut-swatch { width: 36px; height: 36px; }
+.formglut-color-input { width: 44px; height: 32px; padding: 2px; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; cursor: pointer; }
+
+.formglut-consent { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #334155; cursor: pointer; }
+.formglut-consent input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: #e94560; flex-shrink: 0; }
+.formglut-consent-right { flex-direction: row-reverse; justify-content: flex-end; }
+.formglut-terms-dialog { max-width: min(600px, 92vw); border: 0; border-radius: 12px; padding: 0; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+.formglut-terms-dialog::backdrop { background: rgba(15, 23, 42, .5); }
+.formglut-terms-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #e2e8f0; }
+.formglut-terms-dialog-body { padding: 16px 18px; max-height: 60vh; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #475569; }
+.formglut-terms-close { background: none; border: 0; font-size: 22px; line-height: 1; cursor: pointer; color: #64748b; }
+
+.formglut-custom-submit:disabled { opacity: .7; cursor: default; }
+.formglut-captcha-notice { padding: 8px 12px; border-radius: 8px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; font-size: 13px; }

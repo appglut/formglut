@@ -10,6 +10,7 @@
  */
 
 import React from 'react';
+import { getCommonDefaults } from './SharedOptions.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPenToSquare, faEnvelope, faFileLines, faHashtag,
@@ -124,19 +125,11 @@ const FIELD_TYPES = {
     defaultProps: {
       // === General Section ===
       label: 'Text Input',
-      admin_label: '',
       placeholder: 'Enter text here...',
-      default_value: '',
-      required: false,
-      help_text: '',
-      help_text_position: 'below',
-      prefix_label: '',
-      suffix_label: '',
       mobile_keyboard_type: 'default',
       enable_mask: false,
       mask_pattern: '',
       custom_mask: '',
-      mask_placeholder: '_',
 
       // === Validation Section ===
       validation_message: 'Please enter a valid value',
@@ -145,18 +138,12 @@ const FIELD_TYPES = {
       unique_error_message: 'This value has already been submitted',
 
       // === Style Section ===
-      element_class: '',
-      container_class: '',
 
       // === Advanced Section ===
-      name_attribute: '',
       reversible_mask: false,
       clear_on_invalid: false,
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any',
-      conditions: [],
     },
   },
 
@@ -171,12 +158,9 @@ const FIELD_TYPES = {
     defaultProps: {
       // === General Section ===
       label: 'Email Address',
-      admin_label: '',
       placeholder: 'email@example.com',
-      default_value: '',
       required: true,
-      help_text: '',
-      help_text_position: 'below',
+      mobile_keyboard_type: 'email',
 
       // === Validation Section ===
       validation_message: 'Please enter a valid email address',
@@ -188,16 +172,10 @@ const FIELD_TYPES = {
       unique_error_message: 'This email has already been registered',
 
       // === Style Section ===
-      element_class: '',
-      container_class: '',
 
       // === Advanced Section ===
-      name_attribute: '',
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any',
-      conditions: [],
     },
   },
 
@@ -212,12 +190,7 @@ const FIELD_TYPES = {
     defaultProps: {
       // === General Section ===
       label: 'Message',
-      admin_label: '',
       placeholder: 'Type your message here...',
-      default_value: '',
-      required: false,
-      help_text: '',
-      help_text_position: 'below',
       rows: 4,
       cols: '',
       resize: 'vertical',
@@ -228,17 +201,11 @@ const FIELD_TYPES = {
       min_length: '',
 
       // === Style Section ===
-      element_class: '',
-      container_class: '',
 
       // === Advanced Section ===
-      name_attribute: '',
       enable_rtl: false,
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any',
-      conditions: [],
     },
   },
 
@@ -253,16 +220,9 @@ const FIELD_TYPES = {
     defaultProps: {
       // === General Section ===
       label: 'Dropdown',
-      admin_label: '',
       placeholder: 'Choose an option...',
-      default_value: '',
-      required: false,
-      help_text: '',
-      help_text_position: 'below',
       disable_first_option: true,
       shuffle_options: false,
-      enable_search: false,
-      min_search_chars: 1,
       options: [
         { label: 'Option 1', value: 'option1', image: '', disabled: false, calc_value: '' },
         { label: 'Option 2', value: 'option2', image: '', disabled: false, calc_value: '' },
@@ -273,16 +233,10 @@ const FIELD_TYPES = {
       validation_message: 'Please select an option',
 
       // === Style Section ===
-      element_class: '',
-      container_class: '',
 
       // === Advanced Section ===
-      name_attribute: '',
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any',
-      conditions: [],
     },
   },
 
@@ -297,16 +251,10 @@ const FIELD_TYPES = {
     defaultProps: {
       // === General Section ===
       label: 'Multiple Select',
-      admin_label: '',
       placeholder: 'Choose options...',
       default_value: [],
-      required: false,
-      help_text: '',
-      help_text_position: 'below',
       shuffle_options: false,
-      enable_search: true,
       select_all_button: true,
-      display_format: 'tags',
       options: [
         { label: 'Option 1', value: 'option1' },
         { label: 'Option 2', value: 'option2' },
@@ -319,16 +267,10 @@ const FIELD_TYPES = {
       max_selections: 0,
 
       // === Style Section ===
-      element_class: '',
-      container_class: '',
 
       // === Advanced Section ===
-      name_attribute: '',
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any',
-      conditions: [],
     },
   },
 
@@ -340,58 +282,29 @@ const FIELD_TYPES = {
     label: 'Numeric Field',
     icon: <FontAwesomeIcon icon={faHashtag} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: 'Number',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
       placeholder: 'Enter a number...',
-      default_value: '',
+      mobile_keyboard_type: 'numeric',
 
       // === Number Formatting ===
-      number_format: 'none', // none, us_decimal, us_no_decimal, eu_decimal, eu_no_decimal, currency, percentage
-      decimal_places: 2, // For formatted numbers
-      thousands_separator: true, // 1,234 vs 1234
-
-      // === Prefix/Suffix ===
-      prefix_label: '', // e.g., $
-      suffix_label: '', // e.g., %
 
       // === Constraints ===
-      min_value: '', // Minimum value
-      max_value: '', // Maximum value
-      step: 1, // Increment/decrement step
+      min_value: '',
+      max_value: '',
+      step: 1,
 
-      // === Validation ===
-      required: false,
-      min_digits: '', // Exact digit count
-      max_digits: '',
+      // === Validation Section ===
+      validation_message: 'Please enter a valid number',
 
-      // === Mobile ===
-      keyboard_type: 'numeric', // numeric, decimal
+      // === Style Section ===
 
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
+      // === Advanced Section ===
+      read_only: false,
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Calculation (Pro Feature in FluentForm) ===
-      enable_calculation: false, // Enable for calculated fields
-      calculation_formula: '', // e.g., {field1} + {field2}
-
-      // === Advanced ===
-      name_attribute: '',
-      read_only: false,
     },
   },
 
@@ -403,12 +316,10 @@ const FIELD_TYPES = {
     label: 'Radio Buttons',
     icon: <FontAwesomeIcon icon={faCircleDot} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: 'Radio Buttons',
-      label_placement: 'default',
-      admin_label: '',
 
       // === Radio Options ===
       options: [
@@ -416,36 +327,21 @@ const FIELD_TYPES = {
         { label: 'Option 2', value: 'option2', image: '', calc_value: '' },
         { label: 'Option 3', value: 'option3', image: '', calc_value: '' },
       ],
-      default_value: '',
 
       // === Layout ===
-      layout: 'default', // default, inline, button, 2_column, 3_column, 4_column, 5_column
-      columns_gap: 'medium', // small, medium, large
-      button_style: 'primary', // For button layout: primary, secondary, success, danger
+      layout: 'default',
 
       // === Visual Options ===
-      show_option_images: false,
-      image_size: 'medium', // small, medium, large
       shuffle_options: false,
 
-      // === Validation ===
-      required: false,
-      unselect_option: false, // Allow deselecting
+      // === Validation Section ===
+      validation_message: 'Please select an option',
 
-      // === Styling ===
-      container_class: '',
-      element_class: '',
+      // === Style Section ===
 
-      // === Help & Tools ===
-      help_text: '',
+      // === Advanced Section ===
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
     },
   },
 
@@ -457,12 +353,11 @@ const FIELD_TYPES = {
     label: 'Checkbox',
     icon: <FontAwesomeIcon icon={faSquareCheck} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: 'Checkbox',
-      label_placement: 'default',
-      admin_label: '',
+      default_value: [],
 
       // === Checkbox Options ===
       options: [
@@ -470,39 +365,25 @@ const FIELD_TYPES = {
         { label: 'Option 2', value: 'option2', image: '', calc_value: '' },
         { label: 'Option 3', value: 'option3', image: '', calc_value: '' },
       ],
-      default_value: [], // Array of selected values
 
       // === Layout ===
-      layout: 'default', // default, inline, button, 2_column, 3_column, 4_column, 5_column
-      button_style: 'primary',
+      layout: 'default',
 
       // === Visual Options ===
-      show_option_images: false,
-      image_size: 'medium',
       shuffle_options: false,
 
       // === Selection ===
-      min_selections: 0, // Minimum selections required
-      max_selections: 0, // 0 = unlimited
-      selection_message: 'Select between {min} and {max} options',
+      min_selections: 0,
+      max_selections: 0,
 
-      // === Validation ===
-      required: false,
+      // === Validation Section ===
+      validation_message: 'Please select at least one option',
 
-      // === Styling ===
-      container_class: '',
-      element_class: '',
+      // === Style Section ===
 
-      // === Help & Tools ===
-      help_text: '',
+      // === Advanced Section ===
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
     },
   },
 
@@ -514,46 +395,27 @@ const FIELD_TYPES = {
     label: 'Website URL',
     icon: <FontAwesomeIcon icon={faLink} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: 'Website',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
       placeholder: 'https://example.com',
-      default_value: '', // Supports smart codes
+      mobile_keyboard_type: 'url',
 
       // === URL Options ===
-      url_scheme: 'any', // any, http, https
-      allow_relative: false, // Allow URLs without domain
-      validate_url: true, // Check if URL is valid
+      url_scheme: 'any',
+      allow_relative: false,
+      validate_url: true,
 
-      // === Link Options ===
-      open_in_new_tab: false, // Add target="_blank"
-      add_nofollow: false, // Add rel="nofollow"
+      // === Validation Section ===
+      validation_message: 'Please enter a valid URL',
 
-      // === Validation ===
-      required: false,
+      // === Style Section ===
 
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      prefix_label: '', // e.g., https://
-      suffix_label: '',
-
-      // === Help & Tools ===
-      help_text: '',
+      // === Advanced Section ===
+      autocomplete_attribute: 'url',
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      autocomplete_attribute: 'url',
     },
   },
 
@@ -565,46 +427,27 @@ const FIELD_TYPES = {
     label: 'Phone Number',
     icon: <FontAwesomeIcon icon={faPhone} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: 'Phone Number',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
       placeholder: '+1 (555) 123-4567',
-      default_value: '',
+      mobile_keyboard_type: 'tel',
 
       // === Phone Format ===
-      phone_format: 'international', // international, us, uk, custom
-      custom_format: '', // Custom mask pattern
-      country_code: 'us', // Default country
-      allow_country_code: true, // Show country dropdown
+      phone_format: 'international',
+      custom_format: '',
+      validate_phone: true,
 
-      // === Validation ===
-      required: false,
-      validate_phone: true, // Validate phone format
-      validation_type: 'format', // format, length, both
+      // === Validation Section ===
+      validation_message: 'Please enter a valid phone number',
 
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      prefix_label: '', // e.g., +1
-      suffix_label: '',
+      // === Style Section ===
 
-      // === Help & Tools ===
-      help_text: '',
+      // === Advanced Section ===
+      autocomplete_attribute: 'tel',
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      autocomplete_attribute: 'tel',
-      keyboard_type: 'tel',
     },
   },
 
@@ -616,62 +459,26 @@ const FIELD_TYPES = {
     label: 'Date & Time',
     icon: <FontAwesomeIcon icon={faCalendar} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
+      // === General Section ===
       label: 'Date',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
-      placeholder: 'Select a date...',
-      default_value: '', // Supports smart codes: {current_date}
 
       // === Date Format ===
-      date_format: 'mm/dd/yyyy', // mm/dd/yyyy, dd/mm/yyyy, yyyy-mm-dd, etc.
-      display_format: 'F j, Y', // Display format: January 1, 2024
-      picker_format: 'm/d/Y', // Flatpickr format
-
-      // === Date Type ===
-      date_type: 'date', // date, time, datetime, date_range
-      time_format: '12h', // 12h, 24h
-      time_increment: 30, // Minutes: 1, 5, 10, 15, 30
+      date_type: 'date',
 
       // === Constraints ===
-      min_date: '', // Earliest selectable date
-      max_date: '', // Latest selectable date
-      disable_dates: [], // Array of disabled dates
-      disable_weekdays: [], // [0, 6] = disable Sunday, Saturday
-      enable_dates: [], // Only these dates available
+      min_date: '',
+      max_date: '',
 
-      // === Range Options (for date_range) ===
-      range_separator: ' to ',
-      start_date_label: 'From',
-      end_date_label: 'To',
+      // === Validation Section ===
+      validation_message: 'Please select a date',
 
-      // === Validation ===
-      required: false,
+      // === Style Section ===
 
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      theme: 'default', // default, dark, light
-
-      // === Help & Tools ===
-      help_text: '',
+      // === Advanced Section ===
 
       // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      enable_timezone: false,
-      default_timezone: 'UTC',
-      inline_picker: false, // Show inline calendar
-      week_numbers: false, // Show week numbers
-      highlight_today: true,
     },
   },
 
@@ -683,27 +490,10 @@ const FIELD_TYPES = {
     label: 'Custom HTML',
     icon: <FontAwesomeIcon icon={faFont} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
-      label: 'HTML Content',
       html_content: '<p>Custom HTML content here...</p>',
-
-      // === Options ===
-      enable_shortcodes: true, // Parse WordPress shortcodes
-      sanitize_html: false, // Sanitize for security
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      enable_shortcodes: true,
     },
   },
 
@@ -715,56 +505,23 @@ const FIELD_TYPES = {
     label: 'Name Fields',
     icon: <FontAwesomeIcon icon={faUser} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Full Name',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Name Format ===
-      name_format: 'first-last', // first, first-last, first-middle-last, last-first
-      placeholder: 'John Doe',
-
-      // === Field Visibility ===
       show_first_name: true,
       show_middle_name: false,
       show_last_name: true,
       require_first_name: true,
       require_middle_name: false,
       require_last_name: true,
-
-      // === Field Labels ===
       first_name_label: 'First Name',
       middle_name_label: 'Middle Name',
       last_name_label: 'Last Name',
-
-      // === Placeholders ===
       first_name_placeholder: 'First name',
       middle_name_placeholder: 'Middle name',
       last_name_placeholder: 'Last name',
-
-      // === Layout ===
-      name_layout: 'horizontal', // horizontal, vertical
-      name_spacing: 'medium', // small, medium, large
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      name_layout: 'horizontal',
+      validation_message: 'Please enter your name',
     },
   },
 
@@ -776,37 +533,16 @@ const FIELD_TYPES = {
     label: 'Heading',
     icon: <FontAwesomeIcon icon={faHeading} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
       text: 'Section Heading',
-      heading_level: 'h2', // h1, h2, h3, h4, h5, h6
-
-      // === Alignment ===
-      alignment: 'left', // left, center, right
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      color_scheme: 'default', // default, primary, secondary, custom
-      custom_color: '',
-
-      // === Divider ===
-      show_divider: false,
-      divider_style: 'solid', // solid, dashed, dotted, double
-      divider_color: '',
-
-      // === Description ===
+      heading_level: 'h2',
+      alignment: 'left',
       description: '',
-      description_position: 'below', // below, above
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      custom_color: '',
+      show_divider: false,
+      divider_style: 'solid',
+      divider_color: '',
     },
   },
 
@@ -818,48 +554,17 @@ const FIELD_TYPES = {
     label: 'Country',
     icon: <FontAwesomeIcon icon={faGlobe} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Country',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Dropdown Options ===
       placeholder: 'Select country...',
-      default_value: '', // e.g., 'US'
-
-      // === Country List ===
-      country_list: 'all', // all, specific, exclude
-      included_countries: [], // List of country codes
-      excluded_countries: [], // List to exclude
-      top_countries: ['US', 'CA', 'GB'], // Show at top
-
-      // === Display Format ===
-      display_format: 'name', // name, code, both
-      flag_type: 'emoji', // emoji, none, image
-
-      // === Search ===
-      enable_search: true,
-      searchable_threshold: 20,
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      country_list: 'all',
+      included_countries: [],
+      excluded_countries: [],
+      top_countries: ['US', 'CA', 'GB'],
+      display_format: 'name',
+      flag_type: 'emoji',
+      validation_message: 'Please select a country',
     },
   },
 
@@ -871,53 +576,20 @@ const FIELD_TYPES = {
     label: 'Spinner',
     icon: <FontAwesomeIcon icon={faSpinner} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Quantity',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
       placeholder: '0',
       default_value: 0,
-
-      // === Constraints ===
       min: 0,
       max: 100,
       step: 1,
-
-      // === Buttons ===
       show_buttons: true,
       increment_label: '+',
       decrement_label: '-',
-      button_position: 'right', // left, right, both
-
-      // === Formatting ===
-      prefix_label: '',
-      suffix_label: '',
-      number_format: 'none',
-      decimal_places: 0,
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      button_style: 'default', // default, primary, secondary
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      wrap_values: false, // Wrap around when reaching min/max
+      button_position: 'both',
+      wrap_values: false,
+      validation_message: 'Please enter a valid number',
     },
   },
 
@@ -929,47 +601,17 @@ const FIELD_TYPES = {
     label: 'Currency',
     icon: <FontAwesomeIcon icon={faMoneyBill} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Amount',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
-      placeholder: '$0.00',
-      default_value: '',
-
-      // === Currency Settings ===
-      currency_code: 'USD', // ISO currency code
+      placeholder: '0.00',
       currency_symbol: '$',
-      symbol_position: 'before', // before, after
-      decimal_places: 2,
-      thousands_separator: true,
-
-      // === Constraints ===
+      symbol_position: 'before',
       min_value: '',
       max_value: '',
       step: 0.01,
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
       read_only: false,
+      validation_message: 'Please enter a valid amount',
     },
   },
 
@@ -981,44 +623,16 @@ const FIELD_TYPES = {
     label: 'Percentage',
     icon: <FontAwesomeIcon icon={faPercent} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Percentage',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
-      placeholder: '0%',
-      default_value: '',
-
-      // === Percentage Settings ===
-      symbol_position: 'after', // before, after, both, none
-      decimal_places: 0, // Usually 0 or 2
-
-      // === Constraints ===
+      placeholder: '0',
+      symbol_position: 'after',
       min_value: 0,
       max_value: 100,
       step: 1,
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
       read_only: false,
+      validation_message: 'Please enter a valid percentage',
     },
   },
 
@@ -1030,44 +644,13 @@ const FIELD_TYPES = {
     label: 'Time',
     icon: <FontAwesomeIcon icon={faClock} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Time',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
-      placeholder: 'Select time...',
-      default_value: '', // e.g., '09:00'
-
-      // === Time Format ===
-      time_format: '12h', // 12h, 24h
-      display_format: 'g:i A', // PHP format
-
-      // === Constraints ===
-      min_time: '', // Earliest time: '09:00'
-      max_time: '', // Latest time: '17:00'
-      time_increment: 30, // Minutes: 1, 5, 10, 15, 30
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      inline_picker: false,
+      min_time: '',
+      max_time: '',
+      time_increment: 30,
+      validation_message: 'Please select a time',
     },
   },
 
@@ -1079,49 +662,15 @@ const FIELD_TYPES = {
     label: 'Date Range',
     icon: <FontAwesomeIcon icon={faCalendar} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Date Range',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
-      placeholder: 'Select date range...',
-      default_value: { start: '', end: '' },
-
-      // === Format ===
-      date_format: 'mm/dd/yyyy',
-      range_separator: ' - ',
-
-      // === Constraints ===
-      min_date: '',
-      max_date: '',
-      min_duration: '', // Minimum days between
-      max_duration: '', // Maximum days between
-
-      // === Labels ===
       start_label: 'Start Date',
       end_label: 'End Date',
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      single_datepicker: true, // Single picker with range
+      min_date: '',
+      max_date: '',
+      range_separator: ' - ',
+      validation_message: 'Please select a date range',
     },
   },
 
@@ -1133,65 +682,28 @@ const FIELD_TYPES = {
     label: 'Address',
     icon: <FontAwesomeIcon icon={faMapLocation} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Address',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Field Components ===
-      include_street1: true,
       include_street2: true,
       include_city: true,
       include_state: true,
       include_zip: true,
       include_country: false,
-
-      // === Component Labels ===
       street1_label: 'Street Address',
       street2_label: 'Address Line 2',
       city_label: 'City',
       state_label: 'State/Province',
       zip_label: 'Postal/Zip Code',
       country_label: 'Country',
-
-      // === Placeholders ===
       street1_placeholder: 'Street address',
       street2_placeholder: 'Apartment, suite, etc.',
       city_placeholder: 'City',
       state_placeholder: 'State',
       zip_placeholder: 'Zip code',
-
-      // === State/Zip Options ===
-      state_dropdown: false, // Dropdown vs text
-      states_list: 'US', // Country for states
-      zip_format: '', // Validation format
-
-      // === Layout ===
-      address_layout: 'vertical', // vertical, horizontal, grid
-      grid_columns: 2, // For horizontal layout
-
-      // === Required ===
-      required_fields: [], // Which fields are required
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      address_layout: 'grid',
+      grid_columns: 2,
+      validation_message: 'Please enter your address',
     },
   },
 
@@ -1203,46 +715,15 @@ const FIELD_TYPES = {
     label: 'Mask Input',
     icon: <FontAwesomeIcon icon={faMask} />,
     category: 'general',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Masked Input',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
-      placeholder: '',
-      default_value: '',
-
-      // === Mask Options ===
-      mask_type: 'custom', // phone-us, phone-uk, date, ssn, credit_card, custom
-      custom_mask: '(999) 999-9999', // 9 = digit, a = letter, * = alphanumeric
-      mask_placeholder: '_', // Character for empty spots
-
-      // === Behavior ===
+      custom_mask: '(999) 999-9999',
+      mask_hint: '',
       reversible_mask: false,
       clear_on_invalid: false,
-      auto_format: true,
-
-      // === Validation ===
-      required: false,
-      validate_mask: true, // Require complete mask
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-      mask_hint: '', // Show expected format
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      validate_mask: true,
+      validation_message: 'Please enter a valid value',
     },
   },
 
@@ -1257,61 +738,27 @@ const FIELD_TYPES = {
     label: 'Password',
     icon: <FontAwesomeIcon icon={faLock} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Password',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Input Options ===
       placeholder: 'Enter password...',
-      default_value: '',
-
-      // === Password Strength ===
-      enable_strength_meter: false,
-      min_strength: 2, // 0-4
-      strength_label: 'Password Strength',
-
-      // === Constraints ===
+      required: true,
+      requirements_hint: 'Must be at least 8 characters',
       min_length: 8,
       max_length: '',
       require_uppercase: false,
       require_lowercase: false,
       require_number: false,
       require_special: false,
-      forbidden_chars: '',
-
-      // === Confirmation ===
+      enable_strength_meter: false,
+      show_toggle: true,
+      show_text: 'Show',
+      hide_text: 'Hide',
       require_confirmation: false,
       confirmation_label: 'Confirm Password',
       confirmation_placeholder: 'Re-enter password',
       confirmation_error: 'Passwords do not match',
-
-      // === Visibility Toggle ===
-      show_toggle: true, // Eye icon to show/hide
-      show_text: 'Show',
-      hide_text: 'Hide',
-
-      // === Validation ===
-      required: true,
       validation_message: 'Password does not meet requirements',
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Help & Tools ===
-      help_text: '',
-      requirements_hint: 'Must be at least 8 characters',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
       autocomplete_attribute: 'new-password',
     },
   },
@@ -1323,18 +770,10 @@ const FIELD_TYPES = {
     label: 'Hidden Field',
     icon: <FontAwesomeIcon icon={faEyeSlash} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Hidden Field',
-      admin_label: '',
-
-      // === Value ===
-      default_value: '', // Supports smart codes
-
-      // === Advanced ===
-      name_attribute: '',
-      param_populate: '', // Populate from URL param
+      param_populate: '',
     },
   },
 
@@ -1346,41 +785,21 @@ const FIELD_TYPES = {
     label: 'Section Break',
     icon: <FontAwesomeIcon icon={faExpand} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
       title: 'Section Title',
       description: 'Optional section description',
-
-      // === Alignment ===
-      alignment: 'left', // left, center, right
-
-      // === Divider ===
+      alignment: 'left',
       show_divider: true,
-      divider_style: 'solid', // solid, dashed, dotted
+      divider_style: 'solid',
       divider_color: '',
-      divider_thickness: 1, // px
-
-      // === Collapsible ===
-      collapsible: false,
-      default_collapsed: false,
-      toggle_text_open: 'Show',
-      toggle_text_closed: 'Hide',
-      toggle_position: 'right', // left, right
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
+      divider_thickness: 1,
       background_color: '',
       text_color: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      collapsible: false,
+      default_collapsed: false,
+      toggle_text_open: 'Hide',
+      toggle_text_closed: 'Show',
     },
   },
 
@@ -1392,39 +811,19 @@ const FIELD_TYPES = {
     label: 'Terms & Conditions',
     icon: <FontAwesomeIcon icon={faHandshake} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
       label: 'I agree to the Terms & Conditions',
+      required: true,
+      display_type: 'box',
       terms_content: '<p>Enter your terms and conditions here...</p>',
-
-      // === Display Type ===
-      display_type: 'checkbox', // checkbox, link, scroll, modal
+      scroll_height: 200,
+      require_scroll: false,
       link_text: 'View Terms',
       link_url: '',
       modal_title: 'Terms & Conditions',
-      modal_width: 600,
-
-      // === Scroll Box ===
-      scroll_height: 200, // For scroll type
-      require_scroll: false, // Must scroll to bottom
-
-      // === Validation ===
-      required: true,
-      required_message: 'You must agree to continue',
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      checkbox_position: 'left', // left, right
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      checkbox_position: 'left',
+      validation_message: 'You must agree to continue',
     },
   },
 
@@ -1436,42 +835,20 @@ const FIELD_TYPES = {
     label: 'GDPR Agreement',
     icon: <FontAwesomeIcon icon={faShield} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
       label: 'I consent to the processing of my personal data',
+      required: true,
       policy_text: 'Your privacy is important to us. Please read our privacy policy.',
       policy_url: '',
-
-      // === Consent Type ===
-      consent_type: 'checkbox', // checkbox, opt-in, opt-out
       default_checked: false,
-
-      // === Storage Info ===
+      show_storage_info: true,
       storage_duration_text: 'Your data will be stored for {days} days.',
       storage_days: 365,
-      show_storage_info: true,
-
-      // === Additional Info ===
       show_withdraw_link: true,
       withdraw_text: 'You can withdraw your consent at any time.',
-      withdraw_email: '', // Email for withdrawal requests
-
-      // === Validation ===
-      required: true,
-      required_message: 'You must consent to continue',
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      withdraw_email: '',
+      validation_message: 'You must consent to continue',
     },
   },
 
@@ -1483,31 +860,13 @@ const FIELD_TYPES = {
     label: 'Shortcode',
     icon: <FontAwesomeIcon icon={faBarcode} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
-      label: '',
       shortcode_content: '[your_shortcode]',
-
-      // === Options ===
       run_shortcode: true,
       cache_output: false,
-      cache_duration: 3600, // seconds
-
-      // === Fallback ===
-      fallback_content: '', // Show if shortcode fails
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
+      cache_duration: 3600,
+      fallback_content: '',
     },
   },
 
@@ -1519,31 +878,10 @@ const FIELD_TYPES = {
     label: 'Action Hook',
     icon: <FontAwesomeIcon icon={faPaperPlane} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Content ===
-      label: '',
       hook_name: 'custom_form_hook',
-
-      // === Hook Options ===
-      priority: 10,
-      arguments: [], // Array of argument names
-
-      // === Output ===
-      echo_output: true,
       fallback_content: '',
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
     },
   },
 
@@ -1560,53 +898,20 @@ const FIELD_TYPES = {
     label: 'Range Slider',
     icon: <FontAwesomeIcon icon={faSliders} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Range',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Range Options ===
       min: 0,
       max: 100,
       step: 1,
       default_value: 50,
-
-      // === Labels ===
       show_value: true,
       value_prefix: '',
       value_suffix: '',
-      min_label: '', // e.g., 'Poor'
-      max_label: '', // e.g., 'Excellent'
-      value_position: 'above', // above, below
-
-      // === Appearance ===
-      slider_style: 'modern', // modern, classic, simple
-      show_ticks: false,
-      tick_interval: 10,
-      fill_track: true, // Fill from min to current value
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
+      min_label: '',
+      max_label: '',
       track_color: '',
-      handle_color: '',
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      tooltip: 'always', // always, on_hover, none
+      validation_message: 'Please select a value',
     },
   },
 
@@ -1618,45 +923,15 @@ const FIELD_TYPES = {
     label: 'Color Picker',
     icon: <FontAwesomeIcon icon={faPalette} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
       label: 'Choose Color',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Color Options ===
       default_color: '#e94560',
-      color_format: 'hex', // hex, rgb, hsl
-
-      // === Display Type ===
-      picker_type: 'swatches', // default, swatches, both
+      picker_type: 'swatches',
       swatches: ['#e94560', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1'],
       allow_custom: true,
-
-      // === Constraints ===
-      allowed_colors: [], // Restrict to these colors
-      exclude_colors: [],
-
-      // === Validation ===
-      required: false,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      swatch_size: 'medium', // small, medium, large
-
-      // === Help & Tools ===
-      help_text: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      opacity: false, // Allow alpha channel
+      swatch_size: 'medium',
+      validation_message: 'Please select a color',
     },
   },
 
@@ -1873,48 +1148,19 @@ const FIELD_TYPES = {
     label: 'Custom Submit Button',
     icon: <FontAwesomeIcon icon={faPaperPlane} />,
     category: 'advanced',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Button Options ===
-      label: '',
       button_text: 'Submit Form',
-      button_icon: '', // Icon class or SVG
-      icon_position: 'left', // left, right
-
-      // === Button Style ===
-      button_style: 'primary', // primary, secondary, success, danger, warning
-      button_size: 'medium', // small, medium, large
-      button_shape: 'rounded', // rounded, square, pill
-      button_width: 'auto', // auto, full, custom
-
-      // === Alignment ===
-      button_alignment: 'left', // left, center, right
-
-      // === Button States ===
       loading_text: 'Submitting...',
-    loading_icon: '', // Spinner icon
-      disabled_while_submitting: true,
-
-      // === Confirmation ===
+      button_style: 'primary',
+      button_size: 'medium',
+      button_shape: 'rounded',
+      button_width: 'auto',
+      button_alignment: 'left',
+      button_bg_color: '',
+      button_text_color: '',
       require_confirmation: false,
       confirm_message: 'Are you sure you want to submit?',
-      confirm_button_text: 'Yes, Submit',
-      cancel_button_text: 'Cancel',
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-      custom_css: '',
-
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: 'any', // any, all
-      conditions: [],
-
-      // === Advanced ===
-      name_attribute: '',
-      button_id: '',
-      tabindex: 0,
     },
   },
 
@@ -1954,14 +1200,9 @@ const FIELD_TYPES = {
     label: 'One Column',
     icon: <FontAwesomeIcon icon={faTableColumns} />,
     category: 'layout',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      label: '',
       columns: [{ width: 100, fields: [] }],
-      container_class: '',
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: '',
     },
   },
 
@@ -1973,19 +1214,14 @@ const FIELD_TYPES = {
     label: 'Two Column',
     icon: <FontAwesomeIcon icon={faTableColumns} />,
     category: 'layout',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      label: '',
       columns: [
         { width: 50, fields: [] },
         { width: 50, fields: [] },
       ],
-      container_class: '',
-      gap: 'medium', // small, medium, large
-      responsive_stack: true, // Stack on mobile
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: '',
+      gap: 'medium',
+      responsive_stack: true,
     },
   },
 
@@ -1997,20 +1233,15 @@ const FIELD_TYPES = {
     label: 'Three Column',
     icon: <FontAwesomeIcon icon={faTableColumns} />,
     category: 'layout',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      label: '',
       columns: [
         { width: 33.33, fields: [] },
         { width: 33.33, fields: [] },
         { width: 33.34, fields: [] },
       ],
-      container_class: '',
       gap: 'medium',
       responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: '',
     },
   },
 
@@ -2022,21 +1253,16 @@ const FIELD_TYPES = {
     label: 'Four Column',
     icon: <FontAwesomeIcon icon={faTableColumns} />,
     category: 'layout',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      label: '',
       columns: [
         { width: 25, fields: [] },
         { width: 25, fields: [] },
         { width: 25, fields: [] },
         { width: 25, fields: [] },
       ],
-      container_class: '',
       gap: 'medium',
       responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: '',
     },
   },
 
@@ -2048,9 +1274,8 @@ const FIELD_TYPES = {
     label: 'Five Column',
     icon: <FontAwesomeIcon icon={faTableColumns} />,
     category: 'layout',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      label: '',
       columns: [
         { width: 20, fields: [] },
         { width: 20, fields: [] },
@@ -2058,12 +1283,8 @@ const FIELD_TYPES = {
         { width: 20, fields: [] },
         { width: 20, fields: [] },
       ],
-      container_class: '',
       gap: 'medium',
       responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: '',
     },
   },
 
@@ -2075,9 +1296,8 @@ const FIELD_TYPES = {
     label: 'Six Column',
     icon: <FontAwesomeIcon icon={faTableColumns} />,
     category: 'layout',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      label: '',
       columns: [
         { width: 16.66, fields: [] },
         { width: 16.66, fields: [] },
@@ -2086,12 +1306,8 @@ const FIELD_TYPES = {
         { width: 16.66, fields: [] },
         { width: 16.7, fields: [] },
       ],
-      container_class: '',
       gap: 'medium',
       responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: '',
     },
   },
 
@@ -2179,37 +1395,11 @@ const FIELD_TYPES = {
     label: 'reCAPTCHA',
     icon: <FontAwesomeIcon icon={faCheckDouble} />,
     category: 'security',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
-      label: '',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Version ===
-      version: 'v3', // v2, v3
-      v2_type: 'checkbox', // checkbox, invisible
-
-      // === Site Key ===
-      site_key: '',
-
-      // === Display ===
-      theme: 'light', // light, dark
-      size: 'normal', // normal, compact
-      language: 'auto', // auto, or specific code
-
-      // === v3 Specific ===
-      score_threshold: 0.5,
-
-      // === Validation ===
-      required: true,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Advanced ===
-      name_attribute: '',
+      theme: 'light',
+      size: 'normal',
+      validation_message: 'Please complete the captcha verification',
     },
   },
 
@@ -2221,30 +1411,11 @@ const FIELD_TYPES = {
     label: 'hCaptcha',
     icon: <FontAwesomeIcon icon={faShield} />,
     category: 'security',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
-      label: '',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Site Key ===
-      site_key: '',
-
-      // === Display ===
-      theme: 'light', // light, dark
-      size: 'normal', // normal, compact
-      sentinel: 'auto', // auto, specific value
-
-      // === Validation ===
-      required: true,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Advanced ===
-      name_attribute: '',
+      theme: 'light',
+      size: 'normal',
+      validation_message: 'Please complete the captcha verification',
     },
   },
 
@@ -2256,30 +1427,12 @@ const FIELD_TYPES = {
     label: 'Turnstile',
     icon: <FontAwesomeIcon icon={faCertificate} />,
     category: 'security',
-    coming_soon: true,
+    coming_soon: false,
     defaultProps: {
-      // === Label Options ===
-      label: '',
-      label_placement: 'default',
-      admin_label: '',
-
-      // === Site Key ===
-      site_key: '',
-
-      // === Display ===
-      theme: 'auto', // auto, light, dark
-      size: 'normal', // normal, compact
-      appearance: 'always', // always, execute, interaction-only
-
-      // === Validation ===
-      required: true,
-
-      // === Styling ===
-      container_class: '',
-      element_class: '',
-
-      // === Advanced ===
-      name_attribute: '',
+      theme: 'auto',
+      size: 'normal',
+      appearance: 'always',
+      validation_message: 'Please complete the captcha verification',
     },
   },
 
@@ -2345,6 +1498,7 @@ export function createField(type) {
   return {
     id: '',
     type,
+    ...getCommonDefaults(type),
     ...JSON.parse(JSON.stringify(fieldType.defaultProps)),
   };
 }
@@ -2352,3 +1506,28 @@ export function createField(type) {
 // Export as both named and default for compatibility
 export { FIELD_TYPES, COMMON_OPTIONS };
 export default FIELD_TYPES;
+
+/* ── Container helpers ─────────────────────────────────────────────── */
+
+/**
+ * Whether a field is a column container (column_1 … column_6).
+ */
+export function isContainerField(field) {
+  return !!field && /^column_\d+$/.test(field.type || '') && Array.isArray(field.columns);
+}
+
+/**
+ * Flatten a field tree into a list of input fields (containers removed,
+ * their column children inlined in order).
+ */
+export function flattenFields(fields = []) {
+  const out = [];
+  (fields || []).forEach((f) => {
+    if (isContainerField(f)) {
+      f.columns.forEach((col) => out.push(...flattenFields(col.fields || [])));
+    } else if (f) {
+      out.push(f);
+    }
+  });
+  return out;
+}

@@ -64,6 +64,38 @@ class FormGlut_Form {
 	}
 
 	/**
+	 * Whether a field is a column container (column_1 … column_6).
+	 *
+	 * @param mixed $field Field definition.
+	 * @return bool
+	 */
+	public static function is_container( $field ) {
+		return is_array( $field ) && isset( $field['type'], $field['columns'] )
+			&& preg_match( '/^column_\d+$/', (string) $field['type'] ) && is_array( $field['columns'] );
+	}
+
+	/**
+	 * Flatten a field tree: column containers are removed and their children inlined.
+	 *
+	 * @param array $fields Field definitions.
+	 * @return array
+	 */
+	public static function flatten_fields( $fields ) {
+		$out = array();
+		foreach ( (array) $fields as $field ) {
+			if ( self::is_container( $field ) ) {
+				foreach ( $field['columns'] as $column ) {
+					$children = isset( $column['fields'] ) ? $column['fields'] : array();
+					$out      = array_merge( $out, self::flatten_fields( $children ) );
+				}
+			} elseif ( is_array( $field ) ) {
+				$out[] = $field;
+			}
+		}
+		return $out;
+	}
+
+	/**
 	 * Get all forms with optional search, filtering, and pagination.
 	 *
 	 * @param array $args Query arguments.
@@ -77,6 +109,8 @@ class FormGlut_Form {
 			'order'    => 'DESC',
 			'status'   => '',
 			'search'   => '',
+			'date_from' => '',
+			'date_to'   => '',
 			'per_page' => 20,
 			'offset'   => 0,
 		);
@@ -101,6 +135,14 @@ class FormGlut_Form {
 		if ( $args['search'] ) {
 			$like    = '%' . $wpdb->esc_like( sanitize_text_field( $args['search'] ) ) . '%';
 			$where[] = $wpdb->prepare( 'title LIKE %s', $like );
+		}
+
+		if ( $args['date_from'] && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $args['date_from'] ) ) {
+			$where[] = $wpdb->prepare( 'created_at >= %s', $args['date_from'] . ' 00:00:00' );
+		}
+
+		if ( $args['date_to'] && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $args['date_to'] ) ) {
+			$where[] = $wpdb->prepare( 'created_at <= %s', $args['date_to'] . ' 23:59:59' );
 		}
 
 		$where_sql = '';

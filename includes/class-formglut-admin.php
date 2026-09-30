@@ -38,10 +38,38 @@ class FormGlut_Admin {
 	 */
 	private function __construct() {
 		add_action( 'admin_menu', array( $this, 'register_menus' ) );
+		add_action( 'admin_init', array( $this, 'maybe_render_preview' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'admin_head', array( $this, 'menu_icon_styles' ) );
+		add_filter( 'admin_title', array( $this, 'filter_admin_title' ), 10, 2 );
 		add_filter( 'admin_body_class', array( $this, 'add_body_class' ) );
 		add_filter( 'script_loader_tag', array( $this, 'add_module_attribute' ), 10, 3 );
+	}
+
+	/**
+	 * Set the browser tab title from the current FormGlut page slug.
+	 *
+	 * @param string $admin_title Full admin title.
+	 * @param string $title       Page title.
+	 * @return string
+	 */
+	public function filter_admin_title( $admin_title, $title ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+		$map  = array(
+			'formglut-all-forms'    => __( 'All Forms', 'formglut' ),
+			'formglut-editor'       => ! empty( $_GET['form_id'] ) || ! empty( $_GET['id'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				? __( 'Edit Form', 'formglut' ) : __( 'Add New Form', 'formglut' ),
+			'formglut-entries'      => __( 'Entries', 'formglut' ),
+			'formglut-entry-detail' => __( 'Entry Detail', 'formglut' ),
+			'formglut-settings'     => __( 'Settings', 'formglut' ),
+			'formglut-pro-features' => __( 'Pro Features', 'formglut' ),
+			'formglut-preview'      => __( 'Form Preview', 'formglut' ),
+		);
+		if ( isset( $map[ $page ] ) ) {
+			return $map[ $page ] . ' ‹ FormGlut ‹ ' . get_bloginfo( 'name' );
+		}
+		return $admin_title;
 	}
 
 	/**
@@ -138,29 +166,40 @@ class FormGlut_Admin {
 	 * @param string $hook The current admin page hook.
 	 * @return void
 	 */
-	public function menu_icon_styles() {
+public function menu_icon_styles() {
+	global $pagenow;
+
+	// Only hide admin elements on FormGlut pages
+	$is_formglut_page = isset( $_GET['page'] ) && strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'formglut' ) === 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	?>
+	<style>
+		#adminmenu .toplevel_page_formglut-all-forms .wp-menu-image img {
+			opacity: 1 !important;
+		}
+		#adminmenu .toplevel_page_formglut-all-forms:hover .wp-menu-image img,
+		#adminmenu .toplevel_page_formglut-all-forms.wp-has-current-submenu .wp-menu-image img {
+			opacity: 1 !important;
+		}
+	</style>
+	<?php
+
+	// Only hide WordPress admin elements on FormGlut pages
+	if ( $is_formglut_page ) {
 		?>
 		<style>
-
-					/* Hide WordPress admin elements for full-width preview */
-					#adminmenumain, #wpadminbar, #wpfooter, .update-nag, .notice { display: none !important; }
-					html.wp-toolbar { padding-top: 0 !important; height: auto !important; overflow: auto !important; }
-					#wpwrap { height: auto !important; min-height: 100vh !important; overflow: visible !important; }
-					#wpcontent { margin-left: 0 !important; padding-left: 0 !important; height: auto !important; overflow: visible !important; }
-					#wpbody { padding-top: 0 !important; height: auto !important; overflow: visible !important; }
-					#wpbody-content { overflow: visible !important; padding-bottom: 0 !important; }
-					.wrap { margin: 0 !important; }
-
-			#adminmenu .toplevel_page_formglut-all-forms .wp-menu-image img {
-				opacity: 1 !important;
-			}
-			#adminmenu .toplevel_page_formglut-all-forms:hover .wp-menu-image img,
-			#adminmenu .toplevel_page_formglut-all-forms.wp-has-current-submenu .wp-menu-image img {
-				opacity: 1 !important;
-			}
+			/* Hide WordPress admin elements for full-width preview */
+			#adminmenumain, #wpadminbar, #wpfooter, .update-nag, .notice { display: none !important; }
+			html.wp-toolbar { padding-top: 0 !important; height: auto !important; overflow: auto !important; }
+			#wpwrap { height: auto !important; min-height: 100vh !important; overflow: visible !important; }
+			#wpcontent { margin-left: 0 !important; padding-left: 0 !important; height: auto !important; overflow: visible !important; }
+			#wpbody { padding-top: 0 !important; height: auto !important; overflow: visible !important; }
+			#wpbody-content { overflow: visible !important; padding-bottom: 0 !important; }
+			.wrap { margin: 0 !important; }
 		</style>
 		<?php
 	}
+}
 
 	public function enqueue_assets( $hook ) {
 		// Don't load admin assets on preview page - it has its own frontend assets.
@@ -1413,411 +1452,168 @@ class FormGlut_Admin {
 	}
 
 	/**
+	 * Output the preview page as a standalone document, before the admin chrome loads.
+	 *
+	 * The shell (header + device switcher) embeds the form in an iframe so that
+	 * responsive CSS reacts to the chosen device width.
+	 *
+	 * @return void
+	 */
+	public function maybe_render_preview() {
+		if ( ! isset( $_GET['page'] ) || 'formglut-preview' !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+		$this->render_preview_page();
+		exit;
+	}
+
+	/**
+	 * Render the form preview (shell or iframe content).
+	 *
+	 * @return void
+	 */
+	public function render_preview_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized access.', 'formglut' ) );
+		}
+
+		$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$form    = $form_id ? FormGlut_Form::get( $form_id ) : null;
+		if ( ! $form ) {
+			wp_die( esc_html__( 'Form not found.', 'formglut' ) );
+		}
+
+		if ( ! empty( $_GET['fg_frame'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$this->render_preview_frame( $form );
+			return;
+		}
+
+		$is_active = in_array( $form->status, array( 'active', 'published' ), true );
+		$frame_url = add_query_arg( array( 'page' => 'formglut-preview', 'form_id' => $form_id, 'fg_frame' => 1 ), admin_url( 'admin.php' ) );
+		$edit_url  = add_query_arg( array( 'page' => 'formglut-editor', 'form_id' => $form_id ), admin_url( 'admin.php' ) );
+		?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title><?php
+	/* translators: %s: form title */
+	printf( esc_html__( 'Preview: %s', 'formglut' ), esc_html( $form->title ) );
+	?></title>
+	<style>
+		* { box-sizing: border-box; }
+		html, body { margin: 0; height: 100%; }
+		body { display: flex; flex-direction: column; background: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1e293b; }
+		.fg-pv-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 20px; background: #fff; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
+		.fg-pv-left, .fg-pv-right { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+		.fg-pv-right { justify-content: flex-end; }
+		.fg-pv-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.fg-pv-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+		.fg-pv-badge.active { background: #ecfdf5; color: #059669; }
+		.fg-pv-badge.draft { background: #fff7ed; color: #c2410c; }
+		.fg-pv-devices { display: flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 8px; }
+		.fg-pv-device { display: flex; align-items: center; justify-content: center; width: 36px; height: 32px; border: 0; border-radius: 6px; background: transparent; color: #64748b; cursor: pointer; transition: all .15s; }
+		.fg-pv-device:hover { color: #1e293b; background: #e2e8f0; }
+		.fg-pv-device.active { background: #fff; color: #e94560; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+		.fg-pv-width { font-size: 12px; color: #94a3b8; min-width: 48px; text-align: center; }
+		.fg-pv-btn { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; color: #334155; font-size: 13px; text-decoration: none; cursor: pointer; transition: all .15s; }
+		.fg-pv-btn:hover { border-color: #e94560; color: #e94560; }
+		.fg-pv-btn.primary { background: #e94560; border-color: #e94560; color: #fff; }
+		.fg-pv-btn.primary:hover { background: #d63853; color: #fff; }
+		.fg-pv-stage { flex: 1; overflow: auto; padding: 24px; display: flex; justify-content: center; }
+		.fg-pv-frame { width: 100%; height: 100%; min-height: 400px; border: 0; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); transition: width .3s ease; }
+		@media (max-width: 700px) { .fg-pv-width, .fg-pv-btn span { display: none; } }
+	</style>
+</head>
+<body>
+	<header class="fg-pv-header">
+		<div class="fg-pv-left">
+			<span class="fg-pv-title"><?php echo esc_html( $form->title ); ?></span>
+			<span class="fg-pv-badge <?php echo $is_active ? 'active' : 'draft'; ?>"><?php echo $is_active ? esc_html__( 'Active', 'formglut' ) : esc_html( ucfirst( $form->status ) ); ?></span>
+		</div>
+		<div class="fg-pv-devices" role="group" aria-label="<?php esc_attr_e( 'Device width', 'formglut' ); ?>">
+			<button type="button" class="fg-pv-device active" data-width="100%" title="<?php esc_attr_e( 'Desktop', 'formglut' ); ?>"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></button>
+			<button type="button" class="fg-pv-device" data-width="768px" title="<?php esc_attr_e( 'Tablet', 'formglut' ); ?>"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg></button>
+			<button type="button" class="fg-pv-device" data-width="375px" title="<?php esc_attr_e( 'Mobile', 'formglut' ); ?>"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg></button>
+			<span class="fg-pv-width" id="fg-pv-width">100%</span>
+		</div>
+		<div class="fg-pv-right">
+			<button type="button" class="fg-pv-btn" id="fg-pv-reload" title="<?php esc_attr_e( 'Reload preview', 'formglut' ); ?>"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg><span><?php esc_html_e( 'Reload', 'formglut' ); ?></span></button>
+			<a class="fg-pv-btn primary" href="<?php echo esc_url( $edit_url ); ?>"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span><?php esc_html_e( 'Edit Form', 'formglut' ); ?></span></a>
+		</div>
+	</header>
+	<main class="fg-pv-stage">
+		<iframe class="fg-pv-frame" id="fg-pv-frame" src="<?php echo esc_url( $frame_url ); ?>" title="<?php esc_attr_e( 'Form preview', 'formglut' ); ?>"></iframe>
+	</main>
+	<script>
+	(function () {
+		var frame = document.getElementById('fg-pv-frame');
+		var label = document.getElementById('fg-pv-width');
+		var btns = document.querySelectorAll('.fg-pv-device');
+		btns.forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				btns.forEach(function (b) { b.classList.remove('active'); });
+				btn.classList.add('active');
+				frame.style.width = btn.dataset.width;
+				label.textContent = btn.dataset.width;
+			});
+		});
+		document.getElementById('fg-pv-reload').addEventListener('click', function () {
+			frame.contentWindow.location.reload();
+		});
+	})();
+	</script>
+</body>
+</html>
+		<?php
+	}
+
+	/**
+	 * Render the form alone, for use inside the preview iframe.
+	 *
+	 * @param object $form Form object.
+	 * @return void
+	 */
+	private function render_preview_frame( $form ) {
+		$form_html = FormGlut_Shortcode::get_instance()->render_preview( $form );
+		$is_active = in_array( $form->status, array( 'active', 'published' ), true );
+		?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<?php wp_print_styles( 'formglut-frontend' ); ?>
+	<style>
+		body { margin: 0; padding: 24px 16px; background: #fff; }
+		.fg-pv-notice { max-width: 640px; margin: 0 auto 16px; padding: 10px 14px; border-radius: 8px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+	</style>
+</head>
+<body>
+	<?php if ( ! $is_active ) : ?>
+		<div class="fg-pv-notice"><?php esc_html_e( 'This form is not active, so it will not display on your site until you activate it.', 'formglut' ); ?></div>
+	<?php endif; ?>
+	<?php echo $form_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped while building. ?>
+	<?php wp_print_scripts( array( 'formglut-frontend', 'formglut-recaptcha', 'formglut-hcaptcha', 'formglut-turnstile' ) ); ?>
+</body>
+</html>
+		<?php
+	}
+
+	/**
 	 * Render a page from formglut_simple/ HTML templates.
 	 *
 	 * @param string $template_file File name (e.g. 'all-forms.html').
 	 * @return void
 	 */
-	public function render_preview_page() {
-		$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! $form_id ) {
-			wp_die( esc_html__( 'Missing form ID.', 'formglut' ) );
-		}
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Unauthorized access.', 'formglut' ) );
-		}
-
-		$form = FormGlut_Form::get( $form_id );
-		$form_title = $form ? $form->title : '';
-
-		$css_url = FORMGLUT_PLUGIN_URL . 'resources/assets/form-frontend.css';
-		$js_url  = FORMGLUT_PLUGIN_URL . 'resources/form-frontend.js';
-
-		wp_register_style( 'formglut-preview', $css_url, array(), FORMGLUT_VERSION );
-		wp_print_styles( 'formglut-preview' );
-		if ( file_exists( FORMGLUT_PLUGIN_DIR . 'resources/form-frontend.js' ) ) {
-			$submit_nonce = wp_create_nonce( 'formglut_submit_nonce' );
-			wp_register_script( 'formglut-preview', $js_url, array(), FORMGLUT_VERSION, false );
-			wp_localize_script( 'formglut-preview', 'formglutFrontend', array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => $submit_nonce,
-			) );
-			wp_print_scripts( 'formglut-preview' );
-		}
-			?>
-			<style>
-
-					/* Hide WordPress admin elements for full-width preview */
-					#adminmenumain, #wpadminbar, #wpfooter, .update-nag, .notice { display: none !important; }
-					html.wp-toolbar { padding-top: 0 !important; height: auto !important; overflow: auto !important; }
-					#wpwrap { height: auto !important; min-height: 100vh !important; overflow: visible !important; }
-					#wpcontent { margin-left: 0 !important; padding-left: 0 !important; height: auto !important; overflow: visible !important; }
-					#wpbody { padding-top: 0 !important; height: auto !important; overflow: visible !important; }
-					#wpbody-content { overflow: visible !important; padding-bottom: 0 !important; }
-					.wrap { margin: 0 !important; }
-
-				* { box-sizing: border-box; }
-				body {
-					margin: 0;
-					padding: 0;
-					background: #f0f0f1;
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
-					color: #1e293b;
-					min-height: 100vh;
-				}
-				
-				.fg-preview-header {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					padding: 16px 20px;
-					background: #fff;
-					border-bottom: 1px solid #e5e7eb;
-					position: sticky;
-					top: 0;
-					z-index: 10;
-				}
-				.fg-preview-title {
-					font-size: 14px;
-					font-weight: 600;
-					color: #1e293b;
-				}
-				.fg-device-switcher {
-					display: flex;
-					gap: 4px;
-					background: #f3f4f6;
-					padding: 4px;
-					border-radius: 8px;
-				}
-				.fg-device-btn {
-					padding: 8px 12px;
-					background: transparent;
-					border: none;
-					color: #64748b;
-					border-radius: 6px;
-					cursor: pointer;
-					transition: all 0.2s;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				}
-				.fg-device-btn:hover {
-					color: #334155;
-					background: #e5e7eb;
-				}
-				.fg-device-btn.active {
-					background: #fff;
-					color: #0f172a;
-					box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-				}
-				.fg-device-btn svg {
-					width: 18px;
-					height: 18px;
-				}
-				#fg-preview-container {
-					margin: 40px auto;
-					padding: 0 20px;
-					max-width: 100%;
-					transition: max-width 0.3s ease;
-				}
-
-				.fg-pro-container {
-					max-width: 1200px;
-					margin: 0 auto;
-					padding: 40px 20px;
-				}
-				.fg-pro-header {
-					text-align: center;
-					padding: 60px 40px;
-					background: rgba(255,255,255,0.03);
-					border: 1px solid rgba(255,255,255,0.08);
-					border-radius: 8px;
-					margin-bottom: 40px;
-				}
-				.fg-pro-badge {
-					display: inline-block;
-					background: rgba(233, 69, 96, 0.15);
-					color: #e94560;
-					padding: 6px 14px;
-					border-radius: 6px;
-					font-size: 12px;
-					font-weight: 600;
-					margin-bottom: 20px;
-					letter-spacing: 0.5px;
-					text-transform: uppercase;
-				}
-				.fg-pro-title {
-					font-size: 38px;
-					font-weight: 700;
-					margin: 0 0 16px 0;
-					color: #fff;
-					letter-spacing: -0.5px;
-				}
-				.fg-pro-subtitle {
-					font-size: 16px;
-					color: rgba(255,255,255,0.6);
-					margin: 0 0 28px 0;
-					max-width: 500px;
-					margin-left: auto;
-					margin-right: auto;
-				}
-				.fg-pro-cta-btn {
-					display: inline-block;
-					background: #e94560;
-					color: #fff;
-					padding: 14px 32px;
-					border-radius: 8px;
-					text-decoration: none;
-					font-size: 14px;
-					font-weight: 600;
-					transition: background 0.2s ease;
-					border: none;
-					cursor: pointer;
-				}
-				.fg-pro-cta-btn:hover {
-					background: #d63853;
-				}
-
-				/* Tabs */
-				.fg-pro-tabs {
-					display: flex;
-					gap: 2px;
-					background: rgba(255,255,255,0.03);
-					padding: 4px;
-					border-radius: 8px;
-					margin-bottom: 32px;
-					border: 1px solid rgba(255,255,255,0.06);
-				}
-				.fg-pro-tab {
-					flex: 1;
-					padding: 12px 20px;
-					background: transparent;
-					border: none;
-					color: rgba(255,255,255,0.5);
-					font-size: 14px;
-					font-weight: 500;
-					cursor: pointer;
-					border-radius: 6px;
-					transition: all 0.2s ease;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					gap: 8px;
-				}
-				.fg-pro-tab:hover {
-					color: rgba(255,255,255,0.8);
-					background: rgba(255,255,255,0.04);
-				}
-				.fg-pro-tab.active {
-					background: rgba(255,255,255,0.08);
-					color: #fff;
-				}
-				.fg-pro-tab svg {
-					width: 16px;
-					height: 16px;
-					opacity: 0.7;
-				}
-				.fg-pro-tab.active svg {
-					opacity: 1;
-				}
-
-				/* Tab Content */
-				.fg-pro-tab-content {
-					display: none;
-				}
-				.fg-pro-tab-content.active {
-					display: block;
-				}
-
-				/* Sections */
-				.fg-pro-section {
-					margin-bottom: 40px;
-				}
-				.fg-pro-section-title {
-					font-size: 15px;
-					font-weight: 600;
-					margin: 0 0 20px 0;
-					color: rgba(255,255,255,0.5);
-					display: flex;
-					align-items: center;
-					gap: 8px;
-					text-transform: uppercase;
-					letter-spacing: 0.5px;
-				}
-				.fg-pro-section-title svg {
-					width: 16px;
-					height: 16px;
-					opacity: 0.5;
-				}
-				.fg-pro-grid {
-					display: grid;
-					grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-					gap: 16px;
-				}
-				.fg-pro-card {
-					background: rgba(255,255,255,0.03);
-					border: 1px solid rgba(255,255,255,0.06);
-					border-radius: 8px;
-					padding: 24px;
-					transition: all 0.2s ease;
-				}
-				.fg-pro-card:hover {
-					background: rgba(255,255,255,0.05);
-					border-color: rgba(255,255,255,0.1);
-				}
-				.fg-pro-card-icon {
-					font-size: 28px;
-					margin-bottom: 16px;
-				}
-				.fg-pro-card-title {
-					font-size: 15px;
-					font-weight: 600;
-					margin: 0 0 8px 0;
-					color: #fff;
-				}
-				.fg-pro-card-desc {
-					font-size: 13px;
-					color: rgba(255,255,255,0.5);
-					margin: 0 0 16px 0;
-					line-height: 1.5;
-				}
-				.fg-pro-card-tag {
-					display: inline-block;
-					background: rgba(255,255,255,0.06);
-					color: rgba(255,255,255,0.5);
-					padding: 4px 10px;
-					border-radius: 4px;
-					font-size: 11px;
-					font-weight: 500;
-					text-transform: uppercase;
-					letter-spacing: 0.3px;
-				}
-
-				/* Integration Cards */
-				.fg-pro-integration-card {
-					background: rgba(255,255,255,0.03);
-					border: 1px solid rgba(255,255,255,0.06);
-					border-radius: 8px;
-					padding: 20px;
-					display: flex;
-					align-items: flex-start;
-					gap: 16px;
-					transition: all 0.2s ease;
-				}
-				.fg-pro-integration-card:hover {
-					background: rgba(255,255,255,0.05);
-					border-color: rgba(255,255,255,0.1);
-				}
-				.fg-pro-integration-icon {
-					width: 44px;
-					height: 44px;
-					background: rgba(255,255,255,0.05);
-					border-radius: 8px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					font-size: 22px;
-					flex-shrink: 0;
-				}
-				.fg-pro-integration-content {
-					flex: 1;
-				}
-				.fg-pro-integration-title {
-					font-size: 15px;
-					font-weight: 600;
-					margin: 0 0 6px 0;
-					color: #fff;
-				}
-				.fg-pro-integration-desc {
-					font-size: 13px;
-					color: rgba(255,255,255,0.5);
-					margin: 0 0 10px 0;
-				}
-				.fg-pro-integration-tag {
-					display: inline-block;
-					background: rgba(255,255,255,0.06);
-					color: rgba(255,255,255,0.5);
-					padding: 3px 8px;
-					border-radius: 4px;
-					font-size: 11px;
-					font-weight: 500;
-					text-transform: uppercase;
-					letter-spacing: 0.3px;
-				}
-
-				/* Bottom CTA */
-				.fg-pro-bottom-cta {
-					text-align: center;
-					padding: 48px;
-					background: rgba(233, 69, 96, 0.08);
-					border: 1px solid rgba(233, 69, 96, 0.15);
-					border-radius: 8px;
-					margin-top: 48px;
-				}
-				.fg-pro-bottom-cta h2 {
-					font-size: 24px;
-					font-weight: 600;
-					margin: 0 0 12px 0;
-					color: #fff;
-				}
-				.fg-pro-bottom-cta p {
-					font-size: 14px;
-					color: rgba(255,255,255,0.5);
-					margin: 0 0 24px 0;
-				}
-
-				@media (max-width: 768px) {
-					.fg-pro-header { padding: 40px 24px; }
-					.fg-pro-title { font-size: 28px; }
-					.fg-pro-subtitle { font-size: 14px; }
-					.fg-pro-tabs { flex-wrap: wrap; }
-					.fg-pro-tab { flex: 1 1 calc(50% - 2px); min-width: 100px; font-size: 13px; }
-					.fg-pro-grid { grid-template-columns: 1fr; }
-					.fg-pro-bottom-cta { padding: 32px 24px; }
-				}
-			</style>
-
-			<div class="fg-preview-header">
-				<span class="fg-preview-title"><?php
-				/* translators: %s: form title */
-				printf( esc_html__( 'Preview: %s', 'formglut' ), esc_html( $form_title ) );
-				?></span>
-				<div class="fg-device-switcher">
-					<button class="fg-device-btn active" onclick="fgSetDevice('100%', this)" title="Desktop">
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-					</button>
-					<button class="fg-device-btn" onclick="fgSetDevice('640px', this)" title="Tablet">
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
-					</button>
-					<button class="fg-device-btn" onclick="fgSetDevice('480px', this)" title="Mobile">
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
-					</button>
-				</div>
-			</div>
-			<div id="fg-preview-container" style="max-width:100%;">
-				<?php echo do_shortcode( '[formglut id="' . $form_id . '"]' ); ?>
-			</div>
-			<script>
-			(function() {
-				window.fgSetDevice = function(w, btn) {
-					var c = document.getElementById('fg-preview-container');
-					if (!c) return;
-					c.style.maxWidth = w === '100%' ? '100%' : w;
-					var btns = document.querySelectorAll('button.fg-device-btn');
-					for (var i = 0; i < btns.length; i++) {
-						btns[i].classList.remove('active');
-					}
-					btn.classList.add('active');
-				};
-			})();
-			</script>
-			<?php
-	}
-
 	private function render_page( $template_file ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Unauthorized access.', 'formglut' ) );
 		}
+
+		$plugin_url = FORMGLUT_PLUGIN_URL;
+		$dashboard_url = admin_url( 'index.php' );
 
 		echo '<style>';
 
@@ -1830,8 +1626,95 @@ class FormGlut_Admin {
 		echo '#wpbody { padding-top: 0 !important; height: auto !important; overflow: visible !important; }';
 		echo '#wpbody-content { overflow: visible !important; padding-bottom: 0 !important; }';
 		echo '.wrap { margin: 0 !important; }';
+		echo '.fg-skeleton-shimmer { animation: fg-shimmer 1.5s infinite; background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 50%, #f2f2f2 75%); background-size: 200% 100%; }';
+		echo '@keyframes fg-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }';
 		echo '</style>';
-		echo '<div id="formglut-root"></div>';
+
+		// Skeleton loader that will be replaced by React
+		echo '<div id="formglut-root">';
+
+		// Header skeleton
+		echo '<header style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 1px solid #f0f0f0; background: #fff;">';
+		echo '<div style="display: flex; align-items: center; gap: 16px;">';
+		echo '<div class="fg-skeleton-shimmer" style="width: 80px; height: 36px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 120px; height: 36px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</div>';
+		echo '<nav style="display: flex; gap: 4px;">';
+		echo '<div class="fg-skeleton-shimmer" style="width: 70px; height: 32px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 70px; height: 32px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 70px; height: 32px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</nav>';
+		echo '</header>';
+
+		// Content skeleton
+		echo '<div style="padding: 24px;">';
+
+		// Page header skeleton
+		echo '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">';
+		echo '<div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 180px; height: 32px; background: #f2f2f2; border-radius: 4px; margin-bottom: 8px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 240px; height: 18px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 150px; height: 32px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</div>';
+
+		// Stats row skeleton
+		echo '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">';
+		for ( $i = 0; $i < 4; $i++ ) {
+			echo '<div style="background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; padding: 16px;">';
+			echo '<div class="fg-skeleton-shimmer" style="width: 90px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 60px; height: 32px; background: #f2f2f2; border-radius: 4px; margin-top: 8px;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 120px; height: 14px; background: #f2f2f2; border-radius: 4px; margin-top: 6px;"></div>';
+			echo '</div>';
+		}
+		echo '</div>';
+
+		// Table skeleton
+		echo '<div style="background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; overflow: hidden;">';
+		echo '<div style="padding: 16px 20px; border-bottom: 1px solid #f0f0f0;">';
+		echo '<div class="fg-skeleton-shimmer" style="width: 240px; height: 32px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</div>';
+
+		// Table header row
+		echo '<div style="display: flex; gap: 16px; padding: 16px 20px; border-bottom: 1px solid #f0f0f0;">';
+		echo '<div class="fg-skeleton-shimmer" style="width: 24px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 200px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 120px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 60px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 80px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 80px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '<div class="fg-skeleton-shimmer" style="width: 60px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</div>';
+
+		// Table data rows
+		for ( $i = 0; $i < 6; $i++ ) {
+			echo '<div style="display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid #fafafa;">';
+			echo '<div class="fg-skeleton-shimmer" style="width: 24px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div style="display: flex; align-items: center; gap: 10px; flex: 1;">';
+			echo '<div class="fg-skeleton-shimmer" style="width: 36px; height: 36px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 160px; height: 16px; background: #f2f2f2; border-radius: 4px; margin-bottom: 4px;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 130px; height: 12px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '</div>';
+			echo '</div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 130px; height: 24px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 40px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 50px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 40px; height: 16px; background: #f2f2f2; border-radius: 4px;"></div>';
+			echo '<div style="display: flex; gap: 4px;">';
+			echo '<div class="fg-skeleton-shimmer" style="width: 28px; height: 28px; background: #f2f2f2; border-radius: 50%;"></div>';
+			echo '<div class="fg-skeleton-shimmer" style="width: 28px; height: 28px; background: #f2f2f2; border-radius: 50%;"></div>';
+			echo '</div>';
+			echo '</div>';
+		}
+
+		// Pagination skeleton
+		echo '<div style="display: flex; justify-content: flex-end; padding: 16px 20px;">';
+		echo '<div class="fg-skeleton-shimmer" style="width: 200px; height: 24px; background: #f2f2f2; border-radius: 4px;"></div>';
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
 	}
 
 	/**

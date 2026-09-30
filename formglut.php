@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: FormGlut — Drag & Drop Form Builder
+ * Plugin Name: FormGlut — Drag & Drop Form Builder O
  * Plugin URI:  https://wordpress.org/plugins/formglut/
  * Description: A lightweight drag-and-drop form builder with a modern React-based editor, entry management, email notifications, and spam protection.
  * Version:     1.2.0

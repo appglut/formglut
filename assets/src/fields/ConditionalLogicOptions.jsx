@@ -44,6 +44,7 @@ export default function ConditionalLogicOptions({ field, allFields = [], onUpdat
   // Get current conditional logic state
   const enabled = field.conditional_logic || false;
   const conditionMatch = field.condition_match || 'any';
+  const logicMatchLabel = conditionMatch === 'all' ? __('AND', 'formglut') : __('OR', 'formglut');
   const conditions = field.conditions || [];
 
   const up = (key, val) => {
@@ -141,7 +142,7 @@ export default function ConditionalLogicOptions({ field, allFields = [], onUpdat
           </div>
 
           {/* Conditions List */}
-          <div className="fg-conditions-list" style={{ marginTop: 12 }}>
+          <div className="fg-conditions-list">
             {conditions.length === 0 ? (
               <div style={{ padding: '20px 0', textAlign: 'center', color: '#94a3b8', fontSize: 13 }}>
                 {__('No conditions added yet. Click "Add Condition" to create one.', 'formglut')}
@@ -156,96 +157,62 @@ export default function ConditionalLogicOptions({ field, allFields = [], onUpdat
                 const noValueNeeded = ['is_empty', 'is_not_empty'].includes(condition.operator);
 
                 return (
-                  <div key={index} className="fg-condition-row" style={{
-                    marginBottom: 8,
-                    padding: '8px',
-                    background: '#f8fafc',
-                    borderRadius: 6,
-                    border: '1px solid #e2e8f0',
-                    overflow: 'hidden'
-                  }}>
-                    {/* First Row: Field and Operator Selectors */}
-                    <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-                      {/* Field Selector */}
-                      <Select
+                  <div key={index} className="fg-condition-row">
+                    <div className="fg-condition-head">
+                      <span className="fg-condition-badge">{index === 0 ? __('IF', 'formglut') : (logicMatchLabel)}</span>
+                      <Button
                         size="small"
+                        type="text"
+                        className="fg-condition-remove"
+                        aria-label={__('Remove condition', 'formglut')}
+                        onClick={() => removeCondition(index)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+
+                    <div className="fg-condition-body">
+                      <Select
                         value={condition.field_id}
                         onChange={(v) => updateCondition(index, 'field_id', v)}
                         placeholder={__('Select field', 'formglut')}
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ width: '100%' }}
                         options={availableFields.map(f => ({
                           value: f.id,
                           label: f.admin_label || f.label || f.type
                         }))}
                       />
 
-                      {/* Operator Selector */}
                       <Select
-                        size="small"
                         value={condition.operator}
                         onChange={(v) => {
                           updateCondition(index, 'operator', v);
-                          // Clear value if switching to no-value operator
                           if (['is_empty', 'is_not_empty'].includes(v)) {
                             updateCondition(index, 'value', '');
                           }
                         }}
                         placeholder={__('Operator', 'formglut')}
-                        style={{ flex: 1, minWidth: 0 }}
+                        style={{ width: '100%' }}
                         options={CONDITION_OPERATORS}
                       />
+
+                      {!noValueNeeded && (isSelectField ? (
+                        <Select
+                          value={condition.value}
+                          onChange={(v) => updateCondition(index, 'value', v)}
+                          placeholder={__('Select value', 'formglut')}
+                          style={{ width: '100%' }}
+                          options={fieldOptions}
+                          allowClear
+                        />
+                      ) : (
+                        <Input
+                          value={condition.value}
+                          onChange={(e) => updateCondition(index, 'value', e.target.value)}
+                          placeholder={__('Enter value', 'formglut')}
+                        />
+                      ))}
                     </div>
-
-                    {/* Second Row: Value Input and Remove Button */}
-                    {!noValueNeeded && (
-                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                        {isSelectField ? (
-                          <Select
-                            size="small"
-                            value={condition.value}
-                            onChange={(v) => updateCondition(index, 'value', v)}
-                            placeholder={__('Select value', 'formglut')}
-                            style={{ flex: 1, minWidth: 0 }}
-                            options={fieldOptions}
-                            allowClear
-                          />
-                        ) : (
-                          <Input
-                            size="small"
-                            value={condition.value}
-                            onChange={(e) => updateCondition(index, 'value', e.target.value)}
-                            placeholder={__('Enter value', 'formglut')}
-                            style={{ flex: 1, minWidth: 0 }}
-                          />
-                        )}
-
-                        {/* Remove Button */}
-                        <Button
-                          size="small"
-                          danger
-                          type="text"
-                          onClick={() => removeCondition(index)}
-                          style={{ minWidth: 32, padding: '0 8px', flexShrink: 0 }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </Button>
-                      </div>
-                    )}
-
-                    {/* Remove button for operators without value */}
-                    {noValueNeeded && (
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button
-                          size="small"
-                          danger
-                          type="text"
-                          onClick={() => removeCondition(index)}
-                          style={{ minWidth: 32, padding: '0 8px' }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </Button>
-                      </div>
-                    )}
                   </div>
                 );
               })
@@ -254,10 +221,9 @@ export default function ConditionalLogicOptions({ field, allFields = [], onUpdat
             {/* Add Condition Button */}
             {availableFields.length > 0 && (
               <Button
-                size="small"
                 type="dashed"
+                className="fg-condition-add"
                 onClick={addCondition}
-                style={{ width: '100%', marginTop: 8 }}
                 icon={<FontAwesomeIcon icon={faPlus} style={{ fontSize: 12 }} />}
               >
                 {__('Add Condition', 'formglut')}

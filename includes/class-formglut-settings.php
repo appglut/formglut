@@ -32,6 +32,12 @@ class FormGlut_Settings {
 			'formglut_recaptcha_enabled'  => false,
 			'formglut_recaptcha_site_key' => '',
 			'formglut_recaptcha_secret_key' => '',
+			'formglut_recaptcha_version'  => 'v3',
+			'formglut_recaptcha_score'    => 0.5,
+			'formglut_hcaptcha_site_key'  => '',
+			'formglut_hcaptcha_secret_key' => '',
+			'formglut_turnstile_site_key' => '',
+			'formglut_turnstile_secret_key' => '',
 			'formglut_success_message'    => __( 'Thank you! Your submission has been received.', 'formglut' ),
 			'formglut_error_message'      => __( 'Something went wrong. Please try again.', 'formglut' ),
 			'formglut_delete_on_uninstall' => false,
@@ -115,7 +121,7 @@ class FormGlut_Settings {
 		}
 
 		// String settings (plain text).
-		$text_keys = array( 'formglut_sender_name', 'formglut_success_message', 'formglut_error_message', 'formglut_recaptcha_site_key' );
+		$text_keys = array( 'formglut_sender_name', 'formglut_success_message', 'formglut_error_message', 'formglut_recaptcha_site_key', 'formglut_hcaptcha_site_key', 'formglut_hcaptcha_secret_key', 'formglut_turnstile_site_key', 'formglut_turnstile_secret_key' );
 		foreach ( $text_keys as $key ) {
 			if ( isset( $settings[ $key ] ) ) {
 				$saved = self::update( $key, sanitize_text_field( $settings[ $key ] ) ) && $saved;
@@ -145,11 +151,34 @@ class FormGlut_Settings {
 			}
 		}
 
+		if ( isset( $settings['formglut_recaptcha_version'] ) && in_array( $settings['formglut_recaptcha_version'], array( 'v2', 'v3' ), true ) ) {
+			$saved = self::update( 'formglut_recaptcha_version', $settings['formglut_recaptcha_version'] ) && $saved;
+		}
+		if ( isset( $settings['formglut_recaptcha_score'] ) ) {
+			$saved = self::update( 'formglut_recaptcha_score', max( 0.0, min( 1.0, (float) $settings['formglut_recaptcha_score'] ) ) ) && $saved;
+		}
+
 		// reCAPTCHA secret key (keep as-is, no heavy sanitization).
 		if ( isset( $settings['formglut_recaptcha_secret_key'] ) ) {
 			$saved = self::update( 'formglut_recaptcha_secret_key', sanitize_text_field( $settings['formglut_recaptcha_secret_key'] ) ) && $saved;
 		}
 
 		return $saved;
+	}
+
+	/**
+	 * Site key, secret and ready state for a captcha provider.
+	 *
+	 * @param string $provider recaptcha | hcaptcha | turnstile.
+	 * @return array { site_key, secret, ready }
+	 */
+	public static function captcha( $provider ) {
+		$site   = (string) self::get( 'formglut_' . $provider . '_site_key', '' );
+		$secret = (string) self::get( 'formglut_' . $provider . '_secret_key', '' );
+		return array(
+			'site_key' => $site,
+			'secret'   => $secret,
+			'ready'    => '' !== $site && '' !== $secret,
+		);
 	}
 }

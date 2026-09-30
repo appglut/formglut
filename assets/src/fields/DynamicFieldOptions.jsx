@@ -14,53 +14,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { __ } from '@wordpress/i18n';
 import { FIELD_TYPES, COMMON_OPTIONS } from './fieldTypes';
-import { getOptionsForFieldType, SECTION_ORDER, SECTION_TITLES } from './SharedOptions';
+import { getOptionsForFieldType, getCommonOptionKeys, COMMON_OPTION_KEYS, FIELD_TYPE_GROUPS, STYLE_GROUPS, getStyleGroups, SECTION_ORDER, SECTION_TITLES } from './SharedOptions';
 import ConditionalLogicOptions from './ConditionalLogicOptions';
-
-/**
- * Field-specific options that aren't in SharedOptions yet
- *
- * These options are unique to specific field types and haven't been
- * moved to SharedOptions.jsx yet. Over time, these should be migrated.
- */
-const FIELD_SPECIFIC_OPTIONS = {
-  // === Size/Dimensions ===
-  width: { type: 'text', label: 'Width', section: 'style', placeholder: 'e.g., 100%, 300px', description: 'Custom width for the element' },
-  height: { type: 'text', label: 'Height', section: 'style', placeholder: 'e.g., 200px', description: 'Custom height for the element' },
-
-  // === CSS Class ===
-  css_class: { type: 'text', label: 'CSS Class', section: 'style', placeholder: 'Add CSS class', description: 'Custom CSS class for styling' },
-
-  // === URL Options ===
-  url_scheme: {
-    type: 'select',
-    label: 'URL Scheme',
-    section: 'validation',
-    description: 'Require a specific URL protocol (http or https)',
-    options: [
-      { value: 'any', label: 'Any' },
-      { value: 'http', label: 'HTTP Only' },
-      { value: 'https', label: 'HTTPS Only' }
-    ]
-  },
-  allow_relative: { type: 'switch', label: 'Allow Relative URLs', section: 'validation', description: 'Allow relative URLs like /path/to/page' },
-  validate_url: { type: 'switch', label: 'Validate URL Format', section: 'validation', description: 'Ensure the input is a valid URL format' },
-
-  // === Phone Options ===
-  phone_format: {
-    type: 'select',
-    label: 'Phone Format',
-    section: 'general',
-    description: 'Expected phone number format for validation',
-    options: [
-      { value: 'international', label: 'International' },
-      { value: 'us', label: 'US (###) ###-####' },
-      { value: 'uk', label: 'UK #### ######' },
-      { value: 'custom', label: 'Custom Format' }
-    ]
-  },
-  custom_format: { type: 'text', label: 'Custom Format', section: 'general', placeholder: '(999) 999-9999', description: 'Custom phone format mask using 9 for digits' },
-};
 
 /**
  * Get option definitions for a specific field type
@@ -72,11 +27,7 @@ const FIELD_SPECIFIC_OPTIONS = {
  * @returns {Object} Option definitions for this field type
  */
 function getOptionDefinitions(fieldType) {
-  // Get shared options for this field type
-  const sharedOptions = getOptionsForFieldType(fieldType);
-
-  // Merge with field-specific options (field-specific take precedence)
-  return { ...sharedOptions, ...FIELD_SPECIFIC_OPTIONS };
+  return getOptionsForFieldType(fieldType);
 }
 
 /**
@@ -93,8 +44,16 @@ function getApplicableOptions(fieldType, field = {}) {
   const fieldTypeConfig = FIELD_TYPES[fieldType];
   if (!fieldTypeConfig) return [];
 
+  // Shared options come from the group registry (SharedOptions.jsx); only options
+  // unique to this field type are read from its defaultProps.
   const defaultProps = fieldTypeConfig.defaultProps || {};
-  const applicableKeys = Object.keys(defaultProps);
+  // Types without a group entry (e.g. pro fields) keep the legacy behaviour: every defaultProps key.
+  const applicableKeys = FIELD_TYPE_GROUPS[fieldType]
+    ? [
+        ...getCommonOptionKeys(fieldType),
+        ...Object.keys(defaultProps).filter(key => !COMMON_OPTION_KEYS.has(key)),
+      ]
+    : Object.keys(defaultProps);
 
   // Filter out special keys that shouldn't be edited in the options panel
   const excludeKeys = [
@@ -162,9 +121,16 @@ function renderOptionInput(key, definition, value, onChange) {
   const { type, label, description, options: selectOptions, placeholder, min, max, rows, icon } = definition;
 
   const inputId = `field-option-${key}`;
+
+  // For select options, use the actual value or the first option's value as fallback
+  // This ensures mobile_keyboard_type shows 'default' instead of empty string
+  const selectValue = type === 'select' && (value === undefined || value === null)
+    ? (selectOptions && selectOptions[0] ? selectOptions[0].value : '')
+    : (value ?? '');
+
   const commonProps = {
     id: inputId,
-    value: value ?? '',
+    value: type === 'select' ? selectValue : (value ?? ''),
     style: { width: '100%' }
   };
 
@@ -188,6 +154,10 @@ function renderOptionInput(key, definition, value, onChange) {
             {...commonProps}
             options={selectOptions || []}
             allowClear={definition.allowClear !== false}
+            mode={definition.mode}
+            showSearch={!!definition.mode}
+            optionFilterProp="label"
+            value={definition.mode ? (Array.isArray(value) ? value : []) : commonProps.value}
             onChange={(v) => onChange(key, v)}
           />
         </div>
@@ -286,7 +256,9 @@ function renderOptionInput(key, definition, value, onChange) {
  * @param {Array} props.allFields - All form fields (for conditional logic)
  * @returns {React.ReactNode} The rendered component
  */
-export default function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
+export default function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = false }) {
+  // Keys the Style Options tab already renders itself for this field type (see STYLE_GROUPS).
+  const STYLE_TAB_HANDLED_KEYS = getStyleGroups(field.type).flatMap(name => STYLE_GROUPS[name]);
   if (!field) {
     return (
       <div className="fg-prop-no-selection">
@@ -316,7 +288,6 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
   const MASK_OPTION_KEYS = [
     'mask_pattern',
     'custom_mask',
-    'mask_placeholder',
     'reversible_mask',
     'clear_on_invalid',
   ];
@@ -342,7 +313,7 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
 
     applicableKeys.forEach(key => {
       // Skip mask options if enable_mask is not enabled
-      if (MASK_OPTION_KEYS.includes(key) && !field.enable_mask) {
+      if (MASK_OPTION_KEYS.includes(key) && !field.enable_mask && field.type !== 'masked_input') {
         return;
       }
 
@@ -375,15 +346,17 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
   return (
     <div>
       {/* Type badge */}
+      {!styleOnly && (
       <div style={{ marginBottom: 12, padding: '6px 10px', background: '#f8fafc', borderRadius: 6, fontSize: 12, color: '#64748b', display: 'flex', alignItems: 'center', gap: 6 }}>
         {FIELD_TYPES[field.type]?.icon}
         <span style={{ fontWeight: 600 }}>
           {FIELD_TYPES[field.type]?.label || field.type}
         </span>
       </div>
+      )}
 
       {/* Special: Options array editor for select/radio/checkbox/multiselect */}
-      {['select', 'radio', 'checkbox', 'multiselect'].includes(field.type) && (
+      {!styleOnly && ['select', 'radio', 'checkbox', 'multiselect'].includes(field.type) && (
         <div className="fg-prop-section">
           <div className="fg-prop-section-title">
             {__('Choice Options', 'formglut')}
@@ -478,7 +451,7 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
       )}
 
       {/* Render sections */}
-      {SECTION_ORDER.filter(section => optionsBySection[section] || section === 'conditional').map(section => {
+      {SECTION_ORDER.filter(section => styleOnly ? section === 'style' : section !== 'style').filter(section => optionsBySection[section] || section === 'conditional').map(section => {
         // Special handling for conditional logic section
         if (section === 'conditional') {
           return (
@@ -497,15 +470,18 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [] })
 
         // Regular sections - skip if no options
         if (!optionsBySection[section]) return null;
+        if (styleOnly && optionsBySection[section].every(({ key }) => STYLE_TAB_HANDLED_KEYS.includes(key))) return null;
 
         return (
           <div key={section} className="fg-prop-section">
             <div className="fg-prop-section-title">
-              {__(SECTION_TITLES[section] || section, 'formglut')}
+              {styleOnly ? __('Additional Style', 'formglut') : __(SECTION_TITLES[section] || section, 'formglut')}
             </div>
-            {optionsBySection[section].map(({ key, definition }) =>
-              renderOptionInput(key, definition, field[key], up)
-            )}
+            {optionsBySection[section]
+              .filter(({ key }) => !(styleOnly && STYLE_TAB_HANDLED_KEYS.includes(key)))
+              .map(({ key, definition }) =>
+                renderOptionInput(key, definition, field[key], up)
+              )}
           </div>
         );
       })}

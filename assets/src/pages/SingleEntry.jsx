@@ -6,6 +6,7 @@ import { faArrowLeft, faPrint, faTrash, faEnvelope, faStar as faStarSolid } from
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import Header, { _pg } from '../components/Header';
 import * as api from '../services/api';
+import { flattenFields } from '../fields/fieldTypes.jsx';
 
 // Configure message placement
 message.config({
@@ -177,7 +178,7 @@ export default function SingleEntry() {
   const nonInputTypes = [];
   let displayFields = [];
   if (form && form.fields) {
-    displayFields = form.fields
+    displayFields = flattenFields(form.fields)
       .filter(f => !nonInputTypes.includes(f.type))
       .map(f => ({
         label: f.admin_label || f.label || f.id,

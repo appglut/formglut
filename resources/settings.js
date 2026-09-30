@@ -1,9 +1,10 @@
-import { b6 as genStyleHooks, bt as merge, bz as resetComponent, bH as unit, bL as useComponentConfig, bW as useSize, by as reactExports, a8 as classNames, c2 as zoomIn, l as FormItemPrefixContext, bJ as useCSSVarCls, bk as initCollapseMotion, a5 as _toConsumableArray, a as CSSMotion, b as CSSMotionList, D as DisabledContext, V as ValidateMessagesContext, J as VariantContext, h as DisabledContextProvider, S as SizeContext, m as FormProvider, j as FormContext, N as NoFormStyle, t as RefForm, bG as toArray, k as FormItemInputContext, c0 as wrapperRaf, be as getNodeRef, ab as composeRef, b7 as genSubStyleComponent, b8 as get, bB as set, bQ as useLayoutEffect, I as Icon, Z as _extends, bS as useLocale, E as Tooltip, bs as localeValues, z as RefIcon$1, w as RefIcon$2, v as RefIcon$3, x as RefIcon$4, bp as isVisible, bu as omit, p as NoStyleItemContext, d as ConfigContext, f as Context, af as devUseWarning, o as ListContext, bV as useSafeState, O as WrapperField, bE as supportRef, aa as cloneElement, L as List, bY as useWatch, bC as staticMethods, R as React, bq as jsxRuntimeExports, H as Header, i as FontAwesomeIcon, aX as faSliders, as as faEnvelope, aW as faShieldHalved, B as Button, ay as faFloppyDisk, ae as createRoot } from "./chunks/Header-DYLbO79M.js";
+import { bc as genStyleHooks, bB as merge, bH as resetComponent, bP as unit, bT as useComponentConfig, c2 as useSize, bG as reactExports, a8 as classNames, ca as zoomIn, l as FormItemPrefixContext, bR as useCSSVarCls, br as initCollapseMotion, a5 as _toConsumableArray, a as CSSMotion, b as CSSMotionList, D as DisabledContext, V as ValidateMessagesContext, J as VariantContext, h as DisabledContextProvider, S as SizeContext, m as FormProvider, j as FormContext, N as NoFormStyle, t as RefForm, bO as toArray, k as FormItemInputContext, c8 as wrapperRaf, bl as getNodeRef, ac as composeRef, bd as genSubStyleComponent, be as get, bJ as set, bY as useLayoutEffect, I as Icon, Z as _extends, b_ as useLocale, E as Tooltip, bA as localeValues, z as RefIcon$1, w as RefIcon$2, v as RefIcon$3, x as RefIcon$4, bw as isVisible, bC as omit, p as NoStyleItemContext, d as ConfigContext, f as Context, ag as devUseWarning, o as ListContext, c1 as useSafeState, O as WrapperField, bM as supportRef, aa as cloneElement, L as List, c4 as useWatch, bK as staticMethods, R as React, bx as jsxRuntimeExports, H as Header, i as FontAwesomeIcon, a_ as faSliders, av as faEnvelope, aZ as faShieldHalved, B as Button, aB as faFloppyDisk, af as createRoot } from "./chunks/Header-DQeOh4jx.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { e as genCollapseMotion, I as Input, c as Spin, S as Select } from "./chunks/index-8--dsiAZ.js";
-import { d as useForm, a as getStatus, t as toArray$1, g as getFieldId } from "./chunks/useForm-DEkgoXEn.js";
-import { C as Col, R as Row } from "./chunks/row-BCBYPKFq.js";
-import { S as Switch } from "./chunks/index-SfeydlGU.js";
+import { f as genCollapseMotion, I as Input, c as Spin, S as Select } from "./chunks/index-DUFQZRHD.js";
+import { d as useForm, a as getStatus, t as toArray$1, g as getFieldId } from "./chunks/useForm-DbJu_6Bo.js";
+import { C as Col, R as Row } from "./chunks/row-tEwXQ9AX.js";
+import { S as Switch } from "./chunks/index-Cg_vhjBG.js";
+import { T as TypedInputNumber } from "./chunks/index-CsH6ZKSA.js";
 const genSizeDividerStyle = (token) => {
   const {
     componentCls
@@ -1813,6 +1814,12 @@ function Settings() {
           recaptchaEnabled: s.formglut_recaptcha_enabled === "1" || s.formglut_recaptcha_enabled === true,
           recaptchaSiteKey: s.formglut_recaptcha_site_key || "",
           recaptchaSecretKey: s.formglut_recaptcha_secret_key || "",
+          recaptchaVersion: s.formglut_recaptcha_version || "v3",
+          recaptchaScore: s.formglut_recaptcha_score !== void 0 && s.formglut_recaptcha_score !== "" ? Number(s.formglut_recaptcha_score) : 0.5,
+          hcaptchaSiteKey: s.formglut_hcaptcha_site_key || "",
+          hcaptchaSecretKey: s.formglut_hcaptcha_secret_key || "",
+          turnstileSiteKey: s.formglut_turnstile_site_key || "",
+          turnstileSecretKey: s.formglut_turnstile_secret_key || "",
           successMessage: s.formglut_success_message || "Thank you! Your submission has been received.",
           errorMessage: s.formglut_error_message || "Something went wrong. Please try again.",
           deleteOnUninstall: s.formglut_delete_on_uninstall === "1" || s.formglut_delete_on_uninstall === true
@@ -1834,6 +1841,12 @@ function Settings() {
       formglut_recaptcha_enabled: values.recaptchaEnabled,
       formglut_recaptcha_site_key: values.recaptchaSiteKey,
       formglut_recaptcha_secret_key: values.recaptchaSecretKey,
+      formglut_recaptcha_version: values.recaptchaVersion,
+      formglut_recaptcha_score: values.recaptchaScore,
+      formglut_hcaptcha_site_key: values.hcaptchaSiteKey,
+      formglut_hcaptcha_secret_key: values.hcaptchaSecretKey,
+      formglut_turnstile_site_key: values.turnstileSiteKey,
+      formglut_turnstile_secret_key: values.turnstileSecretKey,
       formglut_success_message: values.successMessage,
       formglut_error_message: values.errorMessage,
       formglut_delete_on_uninstall: values.deleteOnUninstall
@@ -1868,7 +1881,7 @@ function Settings() {
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-content", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-settings-layout", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-page-header", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-page-title", children: __("Settings", "formglut") }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-page-subtitle", children: __("Configure FormGlut plugin", "formglut") })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-page-subtitle", children: __("Manage submissions, email notifications, spam protection and messages", "formglut") })
       ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         Form,
@@ -1884,6 +1897,12 @@ function Settings() {
             recaptchaEnabled: false,
             recaptchaSiteKey: "",
             recaptchaSecretKey: "",
+            recaptchaVersion: "v3",
+            recaptchaScore: 0.5,
+            hcaptchaSiteKey: "",
+            hcaptchaSecretKey: "",
+            turnstileSiteKey: "",
+            turnstileSecretKey: "",
             senderName: "FormGlut",
             senderEmail: "",
             emailSubject: "New form submission: {form_name}",
@@ -1922,10 +1941,24 @@ function Settings() {
                 __("Spam Protection", "formglut")
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Enable Honeypot", "formglut"), name: "honeypot", valuePropName: "checked", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Switch, { checkedChildren: __("On", "formglut"), unCheckedChildren: __("Off", "formglut") }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Divider, { style: { margin: "12px 0 20px" } }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Enable reCAPTCHA v3", "formglut"), name: "recaptchaEnabled", valuePropName: "checked", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Switch, { checkedChildren: __("On", "formglut"), unCheckedChildren: __("Off", "formglut") }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("reCAPTCHA Site Key", "formglut"), name: "recaptchaSiteKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { placeholder: __("Enter your site key", "formglut"), style: { maxWidth: 480 } }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("reCAPTCHA Secret Key", "formglut"), name: "recaptchaSecretKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input.Password, { placeholder: __("Enter your secret key", "formglut"), style: { maxWidth: 480 } }) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-settings-hint", children: __("Add a reCAPTCHA, hCaptcha or Turnstile field to a form in the editor (Security Fields) to protect it. Enter the keys for the services you use below.", "formglut") }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Divider, { orientation: "left", orientationMargin: 0, style: { margin: "20px 0 16px" }, children: __("Google reCAPTCHA", "formglut") }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Version", "formglut"), name: "recaptchaVersion", extra: __("Keys are tied to a version — use keys created for the version you pick.", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Select, { style: { maxWidth: 480 }, options: [
+                { value: "v3", label: __("reCAPTCHA v3 (invisible, score based)", "formglut") },
+                { value: "v2", label: __(`reCAPTCHA v2 ("I'm not a robot" checkbox)`, "formglut") }
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Site Key", "formglut"), name: "recaptchaSiteKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { placeholder: __("Enter your site key", "formglut"), style: { maxWidth: 480 } }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Secret Key", "formglut"), name: "recaptchaSecretKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input.Password, { placeholder: __("Enter your secret key", "formglut"), style: { maxWidth: 480 } }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { noStyle: true, shouldUpdate: (a, b) => a.recaptchaVersion !== b.recaptchaVersion, children: ({ getFieldValue }) => getFieldValue("recaptchaVersion") !== "v2" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Minimum Score", "formglut"), name: "recaptchaScore", extra: __("0.0 (likely bot) to 1.0 (likely human). Submissions below this score are rejected.", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(TypedInputNumber, { min: 0, max: 1, step: 0.1, style: { width: 120 } }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Protect Every Form", "formglut"), name: "recaptchaEnabled", valuePropName: "checked", extra: __("Run reCAPTCHA v3 on all forms, even those without a reCAPTCHA field.", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Switch, { checkedChildren: __("On", "formglut"), unCheckedChildren: __("Off", "formglut") }) })
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Divider, { orientation: "left", orientationMargin: 0, style: { margin: "20px 0 16px" }, children: __("hCaptcha", "formglut") }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Site Key", "formglut"), name: "hcaptchaSiteKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { placeholder: __("Enter your site key", "formglut"), style: { maxWidth: 480 } }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Secret Key", "formglut"), name: "hcaptchaSecretKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input.Password, { placeholder: __("Enter your secret key", "formglut"), style: { maxWidth: 480 } }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Divider, { orientation: "left", orientationMargin: 0, style: { margin: "20px 0 16px" }, children: __("Cloudflare Turnstile", "formglut") }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Site Key", "formglut"), name: "turnstileSiteKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { placeholder: __("Enter your site key", "formglut"), style: { maxWidth: 480 } }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Form.Item, { label: __("Secret Key", "formglut"), name: "turnstileSecretKey", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input.Password, { placeholder: __("Enter your secret key", "formglut"), style: { maxWidth: 480 } }) })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-card", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-card-title", children: [

@@ -77,6 +77,9 @@ function updateEntryStatus(id, status) {
 function toggleEntryStar(id) {
   return request("formglut_toggle_entry_star", { id }, "POST");
 }
+function getSettings() {
+  return request("formglut_get_settings", {}, "GET");
+}
 export {
   deleteForm as a,
   duplicateForm as b,
@@ -88,9 +91,10 @@ export {
   getForm as h,
   getFormStats as i,
   getForms as j,
-  updateForm as k,
-  updateFormStatus as l,
+  getSettings as k,
+  updateForm as l,
+  updateFormStatus as m,
   toggleEntryStar as t,
   updateEntryStatus as u
 };
-//# sourceMappingURL=api-CP2qo9fl.js.map
+//# sourceMappingURL=api-CyfhXhZs.js.map

@@ -1,9 +1,11 @@
-import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, bG as toArray, bU as useMergedState, b$ as warningOnce, bw as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, by as reactExports, d as ConfigContext, b6 as genStyleHooks, bt as merge, bH as unit, bz as resetComponent, b5 as genFocusStyle, bA as resetIcon, bL as useComponentConfig, bW as useSize, aa as cloneElement, bk as initCollapseMotion, bu as omit, I as Icon, c0 as wrapperRaf, bR as useLayoutUpdateEffect, bN as useEvent, A as RefResizeObserver, bM as useComposeRef, bo as isMobile, bi as getTransitionName, bF as textEllipsis, b4 as genFocusOutline, bJ as useCSSVarCls, u as RefIcon$2, bq as jsxRuntimeExports, i as FontAwesomeIcon, al as faCertificate, aV as faShield, am as faCheckDouble, a$ as faTableColumns, aN as faPaperPlane, aM as faPalette, aX as faSliders, aj as faBarcode, aC as faHandshake, au as faExpand, aw as faEyeSlash, aH as faLock, aK as faMask, aJ as faMapLocation, ak as faCalendar, ap as faClock, aP as faPercent, aL as faMoneyBill, aY as faSpinner, aB as faGlobe, aE as faHeading, b1 as faUser, az as faFont, aQ as faPhone, aF as faLink, aZ as faSquareCheck, an as faCircleDot, aD as faHashtag, aG as faList, ax as faFileLines, as as faEnvelope, aO as faPenToSquare, E as Tooltip, ao as faCircleInfo, B as Button, b0 as faTrash, aR as faPlus, bC as staticMethods, a2 as _pg, ah as faArrowLeft, aT as faRotateLeft, aU as faRotateRight, av as faEye, aq as faCode, ay as faFloppyDisk, ai as faArrowUp, ag as faArrowDown, aA as faGear, ar as faCopy, ae as createRoot } from "./chunks/Header-DYLbO79M.js";
-import { h as getForm, k as updateForm, c as createForm } from "./chunks/api-CP2qo9fl.js";
+import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, bO as toArray, c0 as useMergedState, c7 as warningOnce, bE as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, bG as reactExports, d as ConfigContext, bc as genStyleHooks, bB as merge, bP as unit, bH as resetComponent, ba as genFocusStyle, bI as resetIcon, bT as useComponentConfig, c2 as useSize, aa as cloneElement, br as initCollapseMotion, bC as omit, I as Icon, c8 as wrapperRaf, bZ as useLayoutUpdateEffect, bV as useEvent, A as RefResizeObserver, bU as useComposeRef, bv as isMobile, bp as getTransitionName, bN as textEllipsis, b9 as genFocusOutline, bR as useCSSVarCls, u as RefIcon$2, bx as jsxRuntimeExports, E as Tooltip, i as FontAwesomeIcon, ar as faCircleInfo, B as Button, b3 as faTrash, aU as faPlus, bK as staticMethods, a2 as _pg, ai as faArrowLeft, aW as faRotateLeft, aX as faRotateRight, ay as faEye, at as faCode, aB as faFloppyDisk, aj as faArrowUp, ah as faArrowDown, aD as faGear, aP as faPalette, au as faCopy, as as faClock, az as faEyeSlash, aZ as faShieldHalved, af as createRoot } from "./chunks/Header-DQeOh4jx.js";
+import { k as getSettings, h as getForm, l as updateForm, c as createForm } from "./chunks/api-CyfhXhZs.js";
+import { k as getStyleGroups, e as STYLE_GROUPS, F as FIELD_TYPES, S as SECTION_ORDER, c as SECTION_TITLES, b as FIELD_TYPE_GROUPS, i as getCommonOptionKeys, C as COMMON_OPTION_KEYS, j as getOptionsForFieldType, g as flattenFields, f as createField, l as isContainerField, h as getAllFieldTypes, d as STYLE_BLOCKS, a as COUNTRIES } from "./chunks/fieldTypes-DTO528vk.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { S as Switch } from "./chunks/index-SfeydlGU.js";
-import { e as genCollapseMotion, m as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-8--dsiAZ.js";
-import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-YtwsN71l.js";
+import { S as Switch } from "./chunks/index-Cg_vhjBG.js";
+import { f as genCollapseMotion, y as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-DUFQZRHD.js";
+import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-Bj9WiQlh.js";
+import { T as TypedInputNumber } from "./chunks/index-CsH6ZKSA.js";
 var PanelContent = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, forceRender = props.forceRender, className = props.className, style = props.style, children = props.children, isActive = props.isActive, role = props.role, customizeClassNames = props.classNames, styles = props.styles;
   var _React$useState = React.useState(isActive || forceRender), _React$useState2 = _slicedToArray(_React$useState, 2), rendered = _React$useState2[0], setRendered = _React$useState2[1];
@@ -2924,2410 +2926,6 @@ const InternalTabs = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
 });
 const Tabs = InternalTabs;
 Tabs.TabPane = TabPane;
-const FIELD_TYPES = {
-  /* ═════════════════════════════════════════════════════════════════════
-     GENERAL FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * TEXT INPUT FIELD
-   * Single-line text input with comprehensive options
-   */
-  text: {
-    label: "Text Input",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPenToSquare }),
-    category: "general",
-    defaultProps: {
-      // === General Section ===
-      label: "Text Input",
-      admin_label: "",
-      placeholder: "Enter text here...",
-      default_value: "",
-      required: false,
-      help_text: "",
-      help_text_position: "below",
-      prefix_label: "",
-      suffix_label: "",
-      mobile_keyboard_type: "default",
-      enable_mask: false,
-      mask_pattern: "",
-      custom_mask: "",
-      mask_placeholder: "_",
-      // === Validation Section ===
-      validation_message: "Please enter a valid value",
-      character_limit: "",
-      validate_unique: false,
-      unique_error_message: "This value has already been submitted",
-      // === Style Section ===
-      element_class: "",
-      container_class: "",
-      // === Advanced Section ===
-      name_attribute: "",
-      reversible_mask: false,
-      clear_on_invalid: false,
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      conditions: []
-    }
-  },
-  /**
-   * EMAIL FIELD
-   * Email input with email validation
-   */
-  email: {
-    label: "Email Address",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEnvelope }),
-    category: "general",
-    defaultProps: {
-      // === General Section ===
-      label: "Email Address",
-      admin_label: "",
-      placeholder: "email@example.com",
-      default_value: "",
-      required: true,
-      help_text: "",
-      help_text_position: "below",
-      // === Validation Section ===
-      validation_message: "Please enter a valid email address",
-      confirm_email: false,
-      confirm_label: "Confirm Email Address",
-      confirm_placeholder: "Re-enter email",
-      confirm_error_message: "Email addresses do not match",
-      validate_unique: false,
-      unique_error_message: "This email has already been registered",
-      // === Style Section ===
-      element_class: "",
-      container_class: "",
-      // === Advanced Section ===
-      name_attribute: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      conditions: []
-    }
-  },
-  /**
-   * TEXT AREA FIELD
-   * Multi-line text input
-   */
-  textarea: {
-    label: "Text Area",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFileLines }),
-    category: "general",
-    defaultProps: {
-      // === General Section ===
-      label: "Message",
-      admin_label: "",
-      placeholder: "Type your message here...",
-      default_value: "",
-      required: false,
-      help_text: "",
-      help_text_position: "below",
-      rows: 4,
-      cols: "",
-      resize: "vertical",
-      // === Validation Section ===
-      validation_message: "Please enter at least {min} characters",
-      max_length: "",
-      min_length: "",
-      // === Style Section ===
-      element_class: "",
-      container_class: "",
-      // === Advanced Section ===
-      name_attribute: "",
-      enable_rtl: false,
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      conditions: []
-    }
-  },
-  /**
-   * DROPDOWN / SELECT FIELD
-   * Single choice dropdown
-   */
-  select: {
-    label: "Dropdown",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faList }),
-    category: "general",
-    defaultProps: {
-      // === General Section ===
-      label: "Dropdown",
-      admin_label: "",
-      placeholder: "Choose an option...",
-      default_value: "",
-      required: false,
-      help_text: "",
-      help_text_position: "below",
-      disable_first_option: true,
-      shuffle_options: false,
-      enable_search: false,
-      min_search_chars: 1,
-      options: [
-        { label: "Option 1", value: "option1", image: "", disabled: false, calc_value: "" },
-        { label: "Option 2", value: "option2", image: "", disabled: false, calc_value: "" },
-        { label: "Option 3", value: "option3", image: "", disabled: false, calc_value: "" }
-      ],
-      // === Validation Section ===
-      validation_message: "Please select an option",
-      // === Style Section ===
-      element_class: "",
-      container_class: "",
-      // === Advanced Section ===
-      name_attribute: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      conditions: []
-    }
-  },
-  /**
-   * MULTIPLE SELECT FIELD
-   * Multiple choice dropdown (FREE in FluentForm)
-   */
-  multiselect: {
-    label: "Multiple Select",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faList }),
-    category: "general",
-    defaultProps: {
-      // === General Section ===
-      label: "Multiple Select",
-      admin_label: "",
-      placeholder: "Choose options...",
-      default_value: [],
-      required: false,
-      help_text: "",
-      help_text_position: "below",
-      shuffle_options: false,
-      enable_search: true,
-      select_all_button: true,
-      display_format: "tags",
-      options: [
-        { label: "Option 1", value: "option1" },
-        { label: "Option 2", value: "option2" },
-        { label: "Option 3", value: "option3" }
-      ],
-      // === Validation Section ===
-      validation_message: "Please select at least one option",
-      min_selections: 0,
-      max_selections: 0,
-      // === Style Section ===
-      element_class: "",
-      container_class: "",
-      // === Advanced Section ===
-      name_attribute: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      conditions: []
-    }
-  },
-  /**
-   * NUMERIC FIELD
-   * Number input with formatting options
-   */
-  number: {
-    label: "Numeric Field",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHashtag }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Number",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Enter a number...",
-      default_value: "",
-      // === Number Formatting ===
-      number_format: "none",
-      // none, us_decimal, us_no_decimal, eu_decimal, eu_no_decimal, currency, percentage
-      decimal_places: 2,
-      // For formatted numbers
-      thousands_separator: true,
-      // 1,234 vs 1234
-      // === Prefix/Suffix ===
-      prefix_label: "",
-      // e.g., $
-      suffix_label: "",
-      // e.g., %
-      // === Constraints ===
-      min_value: "",
-      // Minimum value
-      max_value: "",
-      // Maximum value
-      step: 1,
-      // Increment/decrement step
-      // === Validation ===
-      required: false,
-      min_digits: "",
-      // Exact digit count
-      max_digits: "",
-      // === Mobile ===
-      keyboard_type: "numeric",
-      // numeric, decimal
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Calculation (Pro Feature in FluentForm) ===
-      enable_calculation: false,
-      // Enable for calculated fields
-      calculation_formula: "",
-      // e.g., {field1} + {field2}
-      // === Advanced ===
-      name_attribute: "",
-      read_only: false
-    }
-  },
-  /**
-   * RADIO FIELD
-   * Single choice radio buttons
-   */
-  radio: {
-    label: "Radio Buttons",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleDot }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Radio Buttons",
-      label_placement: "default",
-      admin_label: "",
-      // === Radio Options ===
-      options: [
-        { label: "Option 1", value: "option1", image: "", calc_value: "" },
-        { label: "Option 2", value: "option2", image: "", calc_value: "" },
-        { label: "Option 3", value: "option3", image: "", calc_value: "" }
-      ],
-      default_value: "",
-      // === Layout ===
-      layout: "default",
-      // default, inline, button, 2_column, 3_column, 4_column, 5_column
-      columns_gap: "medium",
-      // small, medium, large
-      button_style: "primary",
-      // For button layout: primary, secondary, success, danger
-      // === Visual Options ===
-      show_option_images: false,
-      image_size: "medium",
-      // small, medium, large
-      shuffle_options: false,
-      // === Validation ===
-      required: false,
-      unselect_option: false,
-      // Allow deselecting
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * CHECKBOX FIELD
-   * Multiple choice checkboxes
-   */
-  checkbox: {
-    label: "Checkbox",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSquareCheck }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Checkbox",
-      label_placement: "default",
-      admin_label: "",
-      // === Checkbox Options ===
-      options: [
-        { label: "Option 1", value: "option1", image: "", calc_value: "" },
-        { label: "Option 2", value: "option2", image: "", calc_value: "" },
-        { label: "Option 3", value: "option3", image: "", calc_value: "" }
-      ],
-      default_value: [],
-      // Array of selected values
-      // === Layout ===
-      layout: "default",
-      // default, inline, button, 2_column, 3_column, 4_column, 5_column
-      button_style: "primary",
-      // === Visual Options ===
-      show_option_images: false,
-      image_size: "medium",
-      shuffle_options: false,
-      // === Selection ===
-      min_selections: 0,
-      // Minimum selections required
-      max_selections: 0,
-      // 0 = unlimited
-      selection_message: "Select between {min} and {max} options",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * URL INPUT FIELD
-   * Website URL input (FREE in FluentForm)
-   */
-  url: {
-    label: "Website URL",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faLink }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Website",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "https://example.com",
-      default_value: "",
-      // Supports smart codes
-      // === URL Options ===
-      url_scheme: "any",
-      // any, http, https
-      allow_relative: false,
-      // Allow URLs without domain
-      validate_url: true,
-      // Check if URL is valid
-      // === Link Options ===
-      open_in_new_tab: false,
-      // Add target="_blank"
-      add_nofollow: false,
-      // Add rel="nofollow"
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      prefix_label: "",
-      // e.g., https://
-      suffix_label: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      autocomplete_attribute: "url"
-    }
-  },
-  /**
-   * PHONE FIELD
-   * Phone number input (FREE in FluentForm)
-   */
-  phone: {
-    label: "Phone Number",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPhone }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Phone Number",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "+1 (555) 123-4567",
-      default_value: "",
-      // === Phone Format ===
-      phone_format: "international",
-      // international, us, uk, custom
-      custom_format: "",
-      // Custom mask pattern
-      country_code: "us",
-      // Default country
-      allow_country_code: true,
-      // Show country dropdown
-      // === Validation ===
-      required: false,
-      validate_phone: true,
-      // Validate phone format
-      validation_type: "format",
-      // format, length, both
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      prefix_label: "",
-      // e.g., +1
-      suffix_label: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      autocomplete_attribute: "tel",
-      keyboard_type: "tel"
-    }
-  },
-  /**
-   * DATE & TIME FIELD
-   * Date and/or time picker
-   */
-  date: {
-    label: "Date & Time",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalendar }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Date",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Select a date...",
-      default_value: "",
-      // Supports smart codes: {current_date}
-      // === Date Format ===
-      date_format: "mm/dd/yyyy",
-      // mm/dd/yyyy, dd/mm/yyyy, yyyy-mm-dd, etc.
-      display_format: "F j, Y",
-      // Display format: January 1, 2024
-      picker_format: "m/d/Y",
-      // Flatpickr format
-      // === Date Type ===
-      date_type: "date",
-      // date, time, datetime, date_range
-      time_format: "12h",
-      // 12h, 24h
-      time_increment: 30,
-      // Minutes: 1, 5, 10, 15, 30
-      // === Constraints ===
-      min_date: "",
-      // Earliest selectable date
-      max_date: "",
-      // Latest selectable date
-      disable_dates: [],
-      // Array of disabled dates
-      disable_weekdays: [],
-      // [0, 6] = disable Sunday, Saturday
-      enable_dates: [],
-      // Only these dates available
-      // === Range Options (for date_range) ===
-      range_separator: " to ",
-      start_date_label: "From",
-      end_date_label: "To",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      theme: "default",
-      // default, dark, light
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      enable_timezone: false,
-      default_timezone: "UTC",
-      inline_picker: false,
-      // Show inline calendar
-      week_numbers: false,
-      // Show week numbers
-      highlight_today: true
-    }
-  },
-  /**
-   * CUSTOM HTML FIELD
-   * Display custom HTML content
-   */
-  html: {
-    label: "Custom HTML",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFont }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      label: "HTML Content",
-      html_content: "<p>Custom HTML content here...</p>",
-      // === Options ===
-      enable_shortcodes: true,
-      // Parse WordPress shortcodes
-      sanitize_html: false,
-      // Sanitize for security
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * NAME FIELDS
-   * Compound name input (First, Middle, Last) (FREE in FluentForm)
-   */
-  name: {
-    label: "Name Fields",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faUser }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Full Name",
-      label_placement: "default",
-      admin_label: "",
-      // === Name Format ===
-      name_format: "first-last",
-      // first, first-last, first-middle-last, last-first
-      placeholder: "John Doe",
-      // === Field Visibility ===
-      show_first_name: true,
-      show_middle_name: false,
-      show_last_name: true,
-      require_first_name: true,
-      require_middle_name: false,
-      require_last_name: true,
-      // === Field Labels ===
-      first_name_label: "First Name",
-      middle_name_label: "Middle Name",
-      last_name_label: "Last Name",
-      // === Placeholders ===
-      first_name_placeholder: "First name",
-      middle_name_placeholder: "Middle name",
-      last_name_placeholder: "Last name",
-      // === Layout ===
-      name_layout: "horizontal",
-      // horizontal, vertical
-      name_spacing: "medium",
-      // small, medium, large
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * HEADING FIELD
-   * Section heading/divider (FREE in FluentForm)
-   */
-  heading: {
-    label: "Heading",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHeading }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      text: "Section Heading",
-      heading_level: "h2",
-      // h1, h2, h3, h4, h5, h6
-      // === Alignment ===
-      alignment: "left",
-      // left, center, right
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      color_scheme: "default",
-      // default, primary, secondary, custom
-      custom_color: "",
-      // === Divider ===
-      show_divider: false,
-      divider_style: "solid",
-      // solid, dashed, dotted, double
-      divider_color: "",
-      // === Description ===
-      description: "",
-      description_position: "below",
-      // below, above
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * COUNTRY SELECT
-   * Country dropdown (FREE in FluentForm)
-   */
-  country_select: {
-    label: "Country",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faGlobe }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Country",
-      label_placement: "default",
-      admin_label: "",
-      // === Dropdown Options ===
-      placeholder: "Select country...",
-      default_value: "",
-      // e.g., 'US'
-      // === Country List ===
-      country_list: "all",
-      // all, specific, exclude
-      included_countries: [],
-      // List of country codes
-      excluded_countries: [],
-      // List to exclude
-      top_countries: ["US", "CA", "GB"],
-      // Show at top
-      // === Display Format ===
-      display_format: "name",
-      // name, code, both
-      flag_type: "emoji",
-      // emoji, none, image
-      // === Search ===
-      enable_search: true,
-      searchable_threshold: 20,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * SPINNER FIELD
-   * Number with increment/decrement buttons (FREE in FluentForm)
-   */
-  spinner: {
-    label: "Spinner",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSpinner }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Quantity",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "0",
-      default_value: 0,
-      // === Constraints ===
-      min: 0,
-      max: 100,
-      step: 1,
-      // === Buttons ===
-      show_buttons: true,
-      increment_label: "+",
-      decrement_label: "-",
-      button_position: "right",
-      // left, right, both
-      // === Formatting ===
-      prefix_label: "",
-      suffix_label: "",
-      number_format: "none",
-      decimal_places: 0,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      button_style: "default",
-      // default, primary, secondary
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      wrap_values: false
-      // Wrap around when reaching min/max
-    }
-  },
-  /**
-   * CURRENCY FIELD
-   * Money/currency input (FREE - variant of Numeric)
-   */
-  currency: {
-    label: "Currency",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMoneyBill }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Amount",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "$0.00",
-      default_value: "",
-      // === Currency Settings ===
-      currency_code: "USD",
-      // ISO currency code
-      currency_symbol: "$",
-      symbol_position: "before",
-      // before, after
-      decimal_places: 2,
-      thousands_separator: true,
-      // === Constraints ===
-      min_value: "",
-      max_value: "",
-      step: 0.01,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      read_only: false
-    }
-  },
-  /**
-   * PERCENTAGE FIELD
-   * Percentage input (FREE - variant of Numeric)
-   */
-  percentage: {
-    label: "Percentage",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPercent }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Percentage",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "0%",
-      default_value: "",
-      // === Percentage Settings ===
-      symbol_position: "after",
-      // before, after, both, none
-      decimal_places: 0,
-      // Usually 0 or 2
-      // === Constraints ===
-      min_value: 0,
-      max_value: 100,
-      step: 1,
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      read_only: false
-    }
-  },
-  /**
-   * TIME PICKER
-   * Time-only picker (FREE - part of Date field in FluentForm)
-   */
-  time: {
-    label: "Time",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faClock }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Time",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Select time...",
-      default_value: "",
-      // e.g., '09:00'
-      // === Time Format ===
-      time_format: "12h",
-      // 12h, 24h
-      display_format: "g:i A",
-      // PHP format
-      // === Constraints ===
-      min_time: "",
-      // Earliest time: '09:00'
-      max_time: "",
-      // Latest time: '17:00'
-      time_increment: 30,
-      // Minutes: 1, 5, 10, 15, 30
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      inline_picker: false
-    }
-  },
-  /**
-   * DATE RANGE FIELD
-   * Date range picker (FREE - variant of Date field)
-   */
-  date_range: {
-    label: "Date Range",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCalendar }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Date Range",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Select date range...",
-      default_value: { start: "", end: "" },
-      // === Format ===
-      date_format: "mm/dd/yyyy",
-      range_separator: " - ",
-      // === Constraints ===
-      min_date: "",
-      max_date: "",
-      min_duration: "",
-      // Minimum days between
-      max_duration: "",
-      // Maximum days between
-      // === Labels ===
-      start_label: "Start Date",
-      end_label: "End Date",
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      single_datepicker: true
-      // Single picker with range
-    }
-  },
-  /**
-   * ADDRESS FIELDS
-   * Compound address input (FREE in FluentForm)
-   */
-  address: {
-    label: "Address",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMapLocation }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Address",
-      label_placement: "default",
-      admin_label: "",
-      // === Field Components ===
-      include_street1: true,
-      include_street2: true,
-      include_city: true,
-      include_state: true,
-      include_zip: true,
-      include_country: false,
-      // === Component Labels ===
-      street1_label: "Street Address",
-      street2_label: "Address Line 2",
-      city_label: "City",
-      state_label: "State/Province",
-      zip_label: "Postal/Zip Code",
-      country_label: "Country",
-      // === Placeholders ===
-      street1_placeholder: "Street address",
-      street2_placeholder: "Apartment, suite, etc.",
-      city_placeholder: "City",
-      state_placeholder: "State",
-      zip_placeholder: "Zip code",
-      // === State/Zip Options ===
-      state_dropdown: false,
-      // Dropdown vs text
-      states_list: "US",
-      // Country for states
-      zip_format: "",
-      // Validation format
-      // === Layout ===
-      address_layout: "vertical",
-      // vertical, horizontal, grid
-      grid_columns: 2,
-      // For horizontal layout
-      // === Required ===
-      required_fields: [],
-      // Which fields are required
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * MASK INPUT FIELD
-   * Text with input masking (FREE in FluentForm)
-   */
-  masked_input: {
-    label: "Mask Input",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faMask }),
-    category: "general",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Masked Input",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "",
-      default_value: "",
-      // === Mask Options ===
-      mask_type: "custom",
-      // phone-us, phone-uk, date, ssn, credit_card, custom
-      custom_mask: "(999) 999-9999",
-      // 9 = digit, a = letter, * = alphanumeric
-      mask_placeholder: "_",
-      // Character for empty spots
-      // === Behavior ===
-      reversible_mask: false,
-      clear_on_invalid: false,
-      auto_format: true,
-      // === Validation ===
-      required: false,
-      validate_mask: true,
-      // Require complete mask
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      mask_hint: "",
-      // Show expected format
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /* ═════════════════════════════════════════════════════════════════════
-     ADVANCED FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * PASSWORD FIELD
-   */
-  password: {
-    label: "Password",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faLock }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Password",
-      label_placement: "default",
-      admin_label: "",
-      // === Input Options ===
-      placeholder: "Enter password...",
-      default_value: "",
-      // === Password Strength ===
-      enable_strength_meter: false,
-      min_strength: 2,
-      // 0-4
-      strength_label: "Password Strength",
-      // === Constraints ===
-      min_length: 8,
-      max_length: "",
-      require_uppercase: false,
-      require_lowercase: false,
-      require_number: false,
-      require_special: false,
-      forbidden_chars: "",
-      // === Confirmation ===
-      require_confirmation: false,
-      confirmation_label: "Confirm Password",
-      confirmation_placeholder: "Re-enter password",
-      confirmation_error: "Passwords do not match",
-      // === Visibility Toggle ===
-      show_toggle: true,
-      // Eye icon to show/hide
-      show_text: "Show",
-      hide_text: "Hide",
-      // === Validation ===
-      required: true,
-      validation_message: "Password does not meet requirements",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Help & Tools ===
-      help_text: "",
-      requirements_hint: "Must be at least 8 characters",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      autocomplete_attribute: "new-password"
-    }
-  },
-  /**
-   * HIDDEN FIELD
-   */
-  hidden: {
-    label: "Hidden Field",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEyeSlash }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Hidden Field",
-      admin_label: "",
-      // === Value ===
-      default_value: "",
-      // Supports smart codes
-      // === Advanced ===
-      name_attribute: "",
-      param_populate: ""
-      // Populate from URL param
-    }
-  },
-  /**
-   * SECTION BREAK
-   * Content divider with optional collapsible (FREE in FluentForm)
-   */
-  section_break: {
-    label: "Section Break",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faExpand }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      title: "Section Title",
-      description: "Optional section description",
-      // === Alignment ===
-      alignment: "left",
-      // left, center, right
-      // === Divider ===
-      show_divider: true,
-      divider_style: "solid",
-      // solid, dashed, dotted
-      divider_color: "",
-      divider_thickness: 1,
-      // px
-      // === Collapsible ===
-      collapsible: false,
-      default_collapsed: false,
-      toggle_text_open: "Show",
-      toggle_text_closed: "Hide",
-      toggle_position: "right",
-      // left, right
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      background_color: "",
-      text_color: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * TERMS & CONDITIONS
-   * Terms agreement checkbox (FREE in FluentForm)
-   */
-  terms_conditions: {
-    label: "Terms & Conditions",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHandshake }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      label: "I agree to the Terms & Conditions",
-      terms_content: "<p>Enter your terms and conditions here...</p>",
-      // === Display Type ===
-      display_type: "checkbox",
-      // checkbox, link, scroll, modal
-      link_text: "View Terms",
-      link_url: "",
-      modal_title: "Terms & Conditions",
-      modal_width: 600,
-      // === Scroll Box ===
-      scroll_height: 200,
-      // For scroll type
-      require_scroll: false,
-      // Must scroll to bottom
-      // === Validation ===
-      required: true,
-      required_message: "You must agree to continue",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      checkbox_position: "left",
-      // left, right
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * GDPR AGREEMENT
-   * GDPR consent checkbox (FREE in FluentForm)
-   */
-  gdpr_agreement: {
-    label: "GDPR Agreement",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShield }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      label: "I consent to the processing of my personal data",
-      policy_text: "Your privacy is important to us. Please read our privacy policy.",
-      policy_url: "",
-      // === Consent Type ===
-      consent_type: "checkbox",
-      // checkbox, opt-in, opt-out
-      default_checked: false,
-      // === Storage Info ===
-      storage_duration_text: "Your data will be stored for {days} days.",
-      storage_days: 365,
-      show_storage_info: true,
-      // === Additional Info ===
-      show_withdraw_link: true,
-      withdraw_text: "You can withdraw your consent at any time.",
-      withdraw_email: "",
-      // Email for withdrawal requests
-      // === Validation ===
-      required: true,
-      required_message: "You must consent to continue",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * SHORTCODE
-   * WordPress shortcode output (FREE - WordPress feature)
-   */
-  shortcode: {
-    label: "Shortcode",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faBarcode }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      label: "",
-      shortcode_content: "[your_shortcode]",
-      // === Options ===
-      run_shortcode: true,
-      cache_output: false,
-      cache_duration: 3600,
-      // seconds
-      // === Fallback ===
-      fallback_content: "",
-      // Show if shortcode fails
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * ACTION HOOK
-   * Custom WordPress action hook (FREE - developer feature)
-   */
-  action_hook: {
-    label: "Action Hook",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPaperPlane }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Content ===
-      label: "",
-      hook_name: "custom_form_hook",
-      // === Hook Options ===
-      priority: 10,
-      arguments: [],
-      // Array of argument names
-      // === Output ===
-      echo_output: true,
-      fallback_content: "",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * TOGGLE SWITCH
-   * On/off toggle switch
-   */
-  /**
-   * RANGE SLIDER
-   * Numeric range slider (FREE in FluentForm)
-   */
-  range_slider: {
-    label: "Range Slider",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faSliders }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Range",
-      label_placement: "default",
-      admin_label: "",
-      // === Range Options ===
-      min: 0,
-      max: 100,
-      step: 1,
-      default_value: 50,
-      // === Labels ===
-      show_value: true,
-      value_prefix: "",
-      value_suffix: "",
-      min_label: "",
-      // e.g., 'Poor'
-      max_label: "",
-      // e.g., 'Excellent'
-      value_position: "above",
-      // above, below
-      // === Appearance ===
-      slider_style: "modern",
-      // modern, classic, simple
-      show_ticks: false,
-      tick_interval: 10,
-      fill_track: true,
-      // Fill from min to current value
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      track_color: "",
-      handle_color: "",
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      tooltip: "always"
-      // always, on_hover, none
-    }
-  },
-  /**
-   * COLOR PICKER
-   * Color selection input (FREE in FluentForm)
-   */
-  color_picker: {
-    label: "Color Picker",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "Choose Color",
-      label_placement: "default",
-      admin_label: "",
-      // === Color Options ===
-      default_color: "#e94560",
-      color_format: "hex",
-      // hex, rgb, hsl
-      // === Display Type ===
-      picker_type: "swatches",
-      // default, swatches, both
-      swatches: ["#e94560", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#6366f1"],
-      allow_custom: true,
-      // === Constraints ===
-      allowed_colors: [],
-      // Restrict to these colors
-      exclude_colors: [],
-      // === Validation ===
-      required: false,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      swatch_size: "medium",
-      // small, medium, large
-      // === Help & Tools ===
-      help_text: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      opacity: false
-      // Allow alpha channel
-    }
-  },
-  /**
-   * STAR RATING
-   * Visual star rating (PRO in FluentForm)
-   */
-  /**
-   * SIGNATURE
-   * Digital signature canvas (PRO in FluentForm)
-   */
-  /**
-   * VIDEO EMBED
-   */
-  /**
-   * AUDIO UPLOAD
-   */
-  /**
-   * IMAGE SELECT
-   */
-  /**
-   * FORM STEP
-   * Multi-step form break (PRO in FluentForm)
-   */
-  /**
-   * NET PROMOTER SCORE
-   * NPS survey field (PRO in FluentForm)
-   */
-  /**
-   * LIKERT SCALE
-   */
-  /**
-   * EMOJI RATING
-   */
-  /**
-   * CALCULATED FIELD
-   */
-  /**
-   * LOOKUP FIELD
-   */
-  /**
-   * RESET BUTTON
-   */
-  /**
-   * SAVE & RESUME
-   */
-  /**
-   * SOCIAL MEDIA PROFILES
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     PRO FIELDS (Additional)
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * CHAINED SELECT
-   * Hierarchical dropdowns (PRO in FluentForm)
-   */
-  /**
-   * REPEAT FIELD
-   * Repeatable field group (PRO in FluentForm)
-   */
-  /**
-   * RICH TEXT INPUT
-   * WYSIWYG editor (PRO in FluentForm)
-   */
-  /**
-   * TAG INPUT
-   */
-  /**
-   * SEARCHABLE DROPDOWN
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     UPLOAD FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * FILE UPLOAD
-   */
-  /**
-   * IMAGE UPLOAD
-   */
-  /**
-   * MULTI-FILE UPLOAD
-   */
-  /**
-   * CROPPED IMAGE UPLOAD
-   */
-  /**
-   * WEBCAM CAPTURE
-   */
-  /**
-   * VOICE RECORDING
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     SURVEY & QUIZ FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * MATRIX QUESTION
-   */
-  /**
-   * CHECKABLE GRID
-   * Grid-based selection (PRO in FluentForm)
-   */
-  /**
-   * MULTIPLE CHOICE GRID
-   */
-  /**
-   * SEMANTIC DIFFERENTIAL
-   */
-  /**
-   * IMAGE COMPARISON
-   */
-  /**
-   * LABELED SLIDER
-   */
-  /**
-   * QUIZ SCORE
-   */
-  /**
-   * RANKING / ORDERING
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     WORDPRESS SPECIFIC FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * USER REGISTRATION
-   */
-  /**
-   * POST SUBMISSION
-   */
-  /**
-   * FEATURED IMAGE UPLOAD
-   */
-  /**
-   * CATEGORY SELECTION
-   */
-  /**
-   * TAG SELECTION
-   */
-  /**
-   * USER ROLE SELECTION
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     DYNAMIC & INTERACTIVE FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * DYNAMIC LIST / TABLE
-   * Dynamic table rows (PRO in FluentForm)
-   */
-  /**
-   * EMAIL CONFIRMATION
-   */
-  /**
-   * PASSWORD CONFIRMATION
-   */
-  /**
-   * TOOLTIP FIELD
-   */
-  /**
-   * ADDRESS AUTOCOMPLETE
-   */
-  /**
-   * CUSTOM SUBMIT BUTTON
-   * (FREE in FluentForm)
-   */
-  custom_submit_button: {
-    label: "Custom Submit Button",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPaperPlane }),
-    category: "advanced",
-    coming_soon: true,
-    defaultProps: {
-      // === Button Options ===
-      label: "",
-      button_text: "Submit Form",
-      button_icon: "",
-      // Icon class or SVG
-      icon_position: "left",
-      // left, right
-      // === Button Style ===
-      button_style: "primary",
-      // primary, secondary, success, danger, warning
-      button_size: "medium",
-      // small, medium, large
-      button_shape: "rounded",
-      // rounded, square, pill
-      button_width: "auto",
-      // auto, full, custom
-      // === Alignment ===
-      button_alignment: "left",
-      // left, center, right
-      // === Button States ===
-      loading_text: "Submitting...",
-      loading_icon: "",
-      // Spinner icon
-      disabled_while_submitting: true,
-      // === Confirmation ===
-      require_confirmation: false,
-      confirm_message: "Are you sure you want to submit?",
-      confirm_button_text: "Yes, Submit",
-      cancel_button_text: "Cancel",
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      custom_css: "",
-      // === Conditional Logic ===
-      conditional_logic: false,
-      condition_match: "any",
-      // any, all
-      conditions: [],
-      // === Advanced ===
-      name_attribute: "",
-      button_id: "",
-      tabindex: 0
-    }
-  },
-  /**
-   * LIKE / DISLIKE
-   */
-  /**
-   * FACEBOOK LIKE
-   */
-  /**
-   * MARK ON MAP
-   */
-  /**
-   * COLOR SWATCH
-   */
-  /**
-   * DUAL LISTBOX
-   */
-  /**
-   * CHAINED FIELDS
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     CONTAINER LAYOUTS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * ONE COLUMN CONTAINER
-   * (FREE in FluentForm - basic layout)
-   */
-  column_1: {
-    label: "One Column",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
-    category: "layout",
-    coming_soon: true,
-    defaultProps: {
-      label: "",
-      columns: [{ width: 100, fields: [] }],
-      container_class: "",
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: ""
-    }
-  },
-  /**
-   * TWO COLUMN CONTAINER
-   * (FREE in FluentForm)
-   */
-  column_2: {
-    label: "Two Column",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
-    category: "layout",
-    coming_soon: true,
-    defaultProps: {
-      label: "",
-      columns: [
-        { width: 50, fields: [] },
-        { width: 50, fields: [] }
-      ],
-      container_class: "",
-      gap: "medium",
-      // small, medium, large
-      responsive_stack: true,
-      // Stack on mobile
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: ""
-    }
-  },
-  /**
-   * THREE COLUMN CONTAINER
-   * (FREE in FluentForm)
-   */
-  column_3: {
-    label: "Three Column",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
-    category: "layout",
-    coming_soon: true,
-    defaultProps: {
-      label: "",
-      columns: [
-        { width: 33.33, fields: [] },
-        { width: 33.33, fields: [] },
-        { width: 33.34, fields: [] }
-      ],
-      container_class: "",
-      gap: "medium",
-      responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: ""
-    }
-  },
-  /**
-   * FOUR COLUMN CONTAINER
-   * (FREE in FluentForm)
-   */
-  column_4: {
-    label: "Four Column",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
-    category: "layout",
-    coming_soon: true,
-    defaultProps: {
-      label: "",
-      columns: [
-        { width: 25, fields: [] },
-        { width: 25, fields: [] },
-        { width: 25, fields: [] },
-        { width: 25, fields: [] }
-      ],
-      container_class: "",
-      gap: "medium",
-      responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: ""
-    }
-  },
-  /**
-   * FIVE COLUMN CONTAINER
-   * (FREE in FluentForm)
-   */
-  column_5: {
-    label: "Five Column",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
-    category: "layout",
-    coming_soon: true,
-    defaultProps: {
-      label: "",
-      columns: [
-        { width: 20, fields: [] },
-        { width: 20, fields: [] },
-        { width: 20, fields: [] },
-        { width: 20, fields: [] },
-        { width: 20, fields: [] }
-      ],
-      container_class: "",
-      gap: "medium",
-      responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: ""
-    }
-  },
-  /**
-   * SIX COLUMN CONTAINER
-   * (FREE in FluentForm)
-   */
-  column_6: {
-    label: "Six Column",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTableColumns }),
-    category: "layout",
-    coming_soon: true,
-    defaultProps: {
-      label: "",
-      columns: [
-        { width: 16.66, fields: [] },
-        { width: 16.66, fields: [] },
-        { width: 16.66, fields: [] },
-        { width: 16.66, fields: [] },
-        { width: 16.66, fields: [] },
-        { width: 16.7, fields: [] }
-      ],
-      container_class: "",
-      gap: "medium",
-      responsive_stack: true,
-      conditional_logic: false,
-      conditions: [],
-      name_attribute: ""
-    }
-  },
-  /**
-   * ACCORDION SECTION
-   */
-  /**
-   * TABS CONTAINER
-   */
-  /**
-   * PROGRESS BAR
-   */
-  /**
-   * COUNTDOWN TIMER
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     PAYMENT FIELDS (PRO in FluentForm)
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * PAYMENT ITEM
-   */
-  /**
-   * SUBSCRIPTION ITEM
-   */
-  /**
-   * COUPON
-   */
-  /**
-   * ITEM QUANTITY
-   */
-  /**
-   * PAYMENT SUMMARY
-   */
-  /**
-   * CUSTOM PAYMENT AMOUNT
-   */
-  /**
-   * PAYMENT METHOD
-   */
-  /**
-   * SHIPPING ADDRESS
-   */
-  /**
-   * DONATION
-   */
-  /**
-   * PRODUCT VARIATIONS
-   */
-  /**
-   * TAX CALCULATION
-   */
-  /**
-   * CREDIT CARD
-   */
-  /* ═════════════════════════════════════════════════════════════════════
-     SECURITY FIELDS
-     ═════════════════════════════════════════════════════════════════════ */
-  /**
-   * HONEYPOT
-   */
-  /**
-   * RECAPTCHA
-   * (FREE in FluentForm - essential security)
-   */
-  recaptcha: {
-    label: "reCAPTCHA",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCheckDouble }),
-    category: "security",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "",
-      label_placement: "default",
-      admin_label: "",
-      // === Version ===
-      version: "v3",
-      // v2, v3
-      v2_type: "checkbox",
-      // checkbox, invisible
-      // === Site Key ===
-      site_key: "",
-      // === Display ===
-      theme: "light",
-      // light, dark
-      size: "normal",
-      // normal, compact
-      language: "auto",
-      // auto, or specific code
-      // === v3 Specific ===
-      score_threshold: 0.5,
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * HCAPTCHA
-   * (FREE in FluentForm)
-   */
-  hcaptcha: {
-    label: "hCaptcha",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShield }),
-    category: "security",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "",
-      label_placement: "default",
-      admin_label: "",
-      // === Site Key ===
-      site_key: "",
-      // === Display ===
-      theme: "light",
-      // light, dark
-      size: "normal",
-      // normal, compact
-      sentinel: "auto",
-      // auto, specific value
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  },
-  /**
-   * TURNSTILE
-   * (FREE in FluentForm)
-   */
-  turnstile: {
-    label: "Turnstile",
-    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCertificate }),
-    category: "security",
-    coming_soon: true,
-    defaultProps: {
-      // === Label Options ===
-      label: "",
-      label_placement: "default",
-      admin_label: "",
-      // === Site Key ===
-      site_key: "",
-      // === Display ===
-      theme: "auto",
-      // auto, light, dark
-      size: "normal",
-      // normal, compact
-      appearance: "always",
-      // always, execute, interaction-only
-      // === Validation ===
-      required: true,
-      // === Styling ===
-      container_class: "",
-      element_class: "",
-      // === Advanced ===
-      name_attribute: ""
-    }
-  }
-  /**
-   * MATH CAPTCHA
-   */
-  /**
-   * SLIDER CAPTCHA
-   */
-};
-function getAllFieldTypes() {
-  const allFields = { ...FIELD_TYPES };
-  if (typeof window !== "undefined" && window.formglut_pro_fields) {
-    Object.assign(allFields, window.formglut_pro_fields);
-  }
-  return allFields;
-}
-function createField(type) {
-  const allFields = getAllFieldTypes();
-  const fieldType = allFields[type];
-  if (!fieldType) {
-    return { id: "", type: "text", label: "", required: false };
-  }
-  return {
-    id: "",
-    type,
-    ...JSON.parse(JSON.stringify(fieldType.defaultProps))
-  };
-}
-const COMMON_OPTION_VALUES = {
-  keyboardTypes: [
-    { value: "default", label: "Standard Keyboard" },
-    { value: "numeric", label: "Numeric (0-9)" },
-    { value: "decimal", label: "Decimal (0-9 with .)" },
-    { value: "tel", label: "Telephone Keypad" },
-    { value: "email", label: "Email Keyboard" },
-    { value: "url", label: "URL Keyboard" }
-  ],
-  resize: [
-    { value: "vertical", label: "Vertical Only" },
-    { value: "horizontal", label: "Horizontal Only" },
-    { value: "both", label: "Both Directions" },
-    { value: "none", label: "None" }
-  ],
-  maskPatterns: [
-    { value: "", label: "None" },
-    { value: "(999) 999-9999", label: "Phone: (###) ###-####" },
-    { value: "999-99-9999", label: "SSN: ###-##-####" },
-    { value: "9999 9999 9999 9999", label: "Credit Card: #### #### #### ####" },
-    { value: "99/99/9999", label: "Date: ##/##/####" },
-    { value: "aaaaaaaaaa", label: "Letters Only (10)" },
-    { value: "**********", label: "Alphanumeric (10)" }
-  ]
-};
-const SECTION_ORDER = [
-  "general",
-  "validation",
-  "style",
-  "advanced",
-  "conditional"
-];
-const SECTION_TITLES = {
-  general: "Field Options",
-  validation: "Validation",
-  style: "Style Options",
-  advanced: "Advanced",
-  conditional: "Conditional Logic"
-};
-const UNIVERSAL_OPTIONS = {
-  // === Field Options (General) ===
-  // Label and related options
-  label: {
-    type: "text",
-    label: "Element Label",
-    section: "general",
-    description: "The label displayed above or beside the field"
-  },
-  admin_label: {
-    type: "text",
-    label: "Admin Field Label",
-    section: "general",
-    description: "Label shown only in admin entries view (useful for short/technical labels)"
-  },
-  // Input options
-  placeholder: {
-    type: "text",
-    label: "Placeholder",
-    section: "general",
-    description: "Helpful hint shown inside the field when empty"
-  },
-  default_value: {
-    type: "text",
-    label: "Default Value",
-    section: "general",
-    description: "Field is pre-filled with this value. Supports SmartCodes like {user_email}"
-  },
-  required: {
-    type: "switch",
-    label: "Required",
-    section: "general",
-    description: "User must fill this field before submitting the form"
-  },
-  // Help options (grouped together)
-  help_text: {
-    type: "textarea",
-    label: "Help Message",
-    section: "general",
-    description: "Additional help text shown below or above the field",
-    rows: 2
-  },
-  help_text_position: {
-    type: "select",
-    label: "Help Message Position",
-    section: "general",
-    description: "Where to show the help message",
-    options: [
-      { value: "tooltip", label: "Tooltip on Hover" },
-      { value: "below", label: "Below Field" },
-      { value: "above", label: "Above Field" }
-    ]
-  },
-  // Prefix/Suffix (grouped together)
-  prefix_label: {
-    type: "text",
-    label: "Prefix Label",
-    section: "general",
-    description: "Text or HTML shown before the input (e.g., $, https://)"
-  },
-  suffix_label: {
-    type: "text",
-    label: "Suffix Label",
-    section: "general",
-    description: "Text or HTML shown after the input (e.g., %, .com)"
-  },
-  // === Validation ===
-  validation_message: {
-    type: "text",
-    label: "Validation Message",
-    section: "validation",
-    description: "Custom error message shown when validation fails"
-  },
-  // === Style Options ===
-  element_class: {
-    type: "text",
-    label: "Element Class",
-    section: "style",
-    description: "CSS class for the input element"
-  },
-  container_class: {
-    type: "text",
-    label: "Container Class",
-    section: "style",
-    description: "CSS class for the wrapper container"
-  },
-  name_attribute: {
-    type: "text",
-    label: "Name Attribute",
-    section: "advanced",
-    description: "Custom name attribute for the field (useful for integrations)"
-  }
-};
-const TEXT_INPUT_OPTIONS = {
-  ...UNIVERSAL_OPTIONS,
-  // === General Options ===
-  mobile_keyboard_type: {
-    type: "select",
-    label: "Mobile Keyboard Type",
-    section: "general",
-    description: "Keyboard type shown on mobile devices",
-    options: COMMON_OPTION_VALUES.keyboardTypes
-  },
-  // === Input Mask ===
-  enable_mask: {
-    type: "switch",
-    label: "Enable Mask Input",
-    section: "general",
-    description: "Force input to match a specific pattern (e.g., phone number)"
-  },
-  mask_pattern: {
-    type: "select",
-    label: "Mask Pattern",
-    section: "general",
-    description: "Predefined mask patterns",
-    options: COMMON_OPTION_VALUES.maskPatterns
-  },
-  custom_mask: {
-    type: "text",
-    label: "Custom Mask",
-    section: "general",
-    description: "Custom mask pattern: 9=digit, a=letter, *=alphanumeric (e.g., (999) 999-9999)"
-  },
-  mask_placeholder: {
-    type: "text",
-    label: "Mask Placeholder",
-    section: "general",
-    description: "Character shown for unfilled mask positions (default: _)"
-  },
-  // === Validation ===
-  character_limit: {
-    type: "number",
-    label: "Max Text Length",
-    section: "validation",
-    min: 0,
-    description: "Maximum number of characters allowed (0 = unlimited)"
-  },
-  validate_unique: {
-    type: "switch",
-    label: "Validate as Unique",
-    section: "validation",
-    description: "Check for duplicate values in previous submissions"
-  },
-  unique_error_message: {
-    type: "text",
-    label: "Duplicate Error Message",
-    section: "validation",
-    description: "Error message shown when value already exists"
-  },
-  // === Advanced ===
-  reversible_mask: {
-    type: "switch",
-    label: "Reversible Mask",
-    section: "advanced",
-    description: "Allow the mask to work in reverse when deleting"
-  },
-  clear_on_invalid: {
-    type: "switch",
-    label: "Clear if Not Match",
-    section: "advanced",
-    description: "Clear the field if input doesn't match the mask"
-  }
-};
-const EMAIL_OPTIONS = {
-  ...UNIVERSAL_OPTIONS,
-  // === Field Options ===
-  confirm_email: {
-    type: "switch",
-    label: "Require Email Confirmation",
-    section: "validation",
-    description: "User must enter the same email twice"
-  },
-  confirm_label: {
-    type: "text",
-    label: "Confirmation Field Label",
-    section: "validation",
-    description: "Label for the confirmation email field"
-  },
-  confirm_placeholder: {
-    type: "text",
-    label: "Confirmation Placeholder",
-    section: "validation",
-    description: "Placeholder for the confirmation field"
-  },
-  confirm_error_message: {
-    type: "text",
-    label: "Mismatch Error Message",
-    section: "validation",
-    description: "Error shown when emails don't match"
-  },
-  // === Validation ===
-  validate_unique: {
-    type: "switch",
-    label: "Validate as Unique",
-    section: "validation",
-    description: "Check if this email has already been submitted"
-  },
-  unique_error_message: {
-    type: "text",
-    label: "Validation Message for Duplicate",
-    section: "validation",
-    description: "Error message when email already exists"
-  }
-};
-const TEXTAREA_OPTIONS = {
-  ...UNIVERSAL_OPTIONS,
-  // === Field Options ===
-  rows: {
-    type: "number",
-    label: "Rows",
-    section: "general",
-    min: 1,
-    max: 50,
-    description: "Number of visible text lines"
-  },
-  cols: {
-    type: "number",
-    label: "Columns",
-    section: "general",
-    min: 1,
-    max: 100,
-    description: "Width in average character widths (leave empty for 100%)"
-  },
-  resize: {
-    type: "select",
-    label: "Resize Handle",
-    section: "general",
-    description: "Allow users to resize the textarea",
-    options: COMMON_OPTION_VALUES.resize
-  },
-  max_length: {
-    type: "number",
-    label: "Max Text Length",
-    section: "validation",
-    min: 0,
-    description: "Maximum number of characters allowed"
-  },
-  min_length: {
-    type: "number",
-    label: "Min Length",
-    section: "validation",
-    min: 0,
-    description: "Minimum number of characters required"
-  },
-  enable_rtl: {
-    type: "switch",
-    label: "Enable RTL",
-    section: "advanced",
-    description: "Enable right-to-left text direction"
-  }
-};
-const SELECT_OPTIONS = {
-  ...UNIVERSAL_OPTIONS,
-  // === Field Options ===
-  disable_first_option: {
-    type: "switch",
-    label: "Disable First Option",
-    section: "general",
-    description: "First option (usually placeholder) cannot be selected"
-  },
-  shuffle_options: {
-    type: "switch",
-    label: "Shuffle Options",
-    section: "general",
-    description: "Randomize option order each time the form loads"
-  },
-  enable_search: {
-    type: "switch",
-    label: "Enable Search",
-    section: "general",
-    description: "Add search functionality to dropdown (useful for many options)"
-  },
-  min_search_chars: {
-    type: "number",
-    label: "Min Search Characters",
-    section: "general",
-    min: 1,
-    description: "Minimum characters before search starts"
-  }
-};
-const MULTISELECT_OPTIONS = {
-  ...UNIVERSAL_OPTIONS,
-  // === Field Options ===
-  shuffle_options: {
-    type: "switch",
-    label: "Shuffle Options",
-    section: "general",
-    description: "Randomize option order each time the form loads"
-  },
-  enable_search: {
-    type: "switch",
-    label: "Enable Search",
-    section: "general",
-    description: "Add search functionality to dropdown (useful for many options)"
-  },
-  select_all_button: {
-    type: "switch",
-    label: "Show Select All Button",
-    section: "general",
-    description: "Add a button to select all options"
-  },
-  display_format: {
-    type: "select",
-    label: "Display Format",
-    section: "general",
-    description: "How selected options are displayed",
-    options: [
-      { value: "tags", label: "Tags (Chips)" },
-      { value: "text", label: "Text (Comma Separated)" },
-      { value: "count", label: 'Count Only (e.g., "3 selected")' }
-    ]
-  },
-  // === Selection Limits ===
-  min_selections: {
-    type: "number",
-    label: "Min Selections Required",
-    section: "validation",
-    min: 0,
-    description: "Minimum number of options user must select (0 = no minimum)"
-  },
-  max_selections: {
-    type: "number",
-    label: "Max Selections Allowed",
-    section: "validation",
-    min: 1,
-    description: "Maximum number of options user can select"
-  }
-};
-const FIELD_TYPE_OPTIONS_MAP = {
-  // === Implemented Fields ===
-  text: TEXT_INPUT_OPTIONS,
-  email: EMAIL_OPTIONS,
-  textarea: TEXTAREA_OPTIONS,
-  select: SELECT_OPTIONS,
-  multiselect: MULTISELECT_OPTIONS,
-  // === Future Fields (will have their own option sets) ===
-  url: TEXT_INPUT_OPTIONS,
-  // Reuse text input options for now
-  phone: TEXT_INPUT_OPTIONS,
-  // Reuse text input options for now
-  hidden: UNIVERSAL_OPTIONS,
-  // Minimal options for hidden fields
-  password: TEXT_INPUT_OPTIONS,
-  // Reuse text input options for now
-  number: TEXT_INPUT_OPTIONS,
-  // Reuse text input options for now
-  radio: SELECT_OPTIONS,
-  // Similar to select
-  checkbox: SELECT_OPTIONS,
-  // Similar to select
-  date: UNIVERSAL_OPTIONS,
-  time: UNIVERSAL_OPTIONS,
-  color_picker: UNIVERSAL_OPTIONS,
-  file_upload: UNIVERSAL_OPTIONS
-};
-function getOptionsForFieldType(fieldType) {
-  return FIELD_TYPE_OPTIONS_MAP[fieldType] || UNIVERSAL_OPTIONS;
-}
 const CONDITION_OPERATORS = [
   { value: "is", label: __("Is equal to", "formglut") },
   { value: "is_not", label: __("Is not equal to", "formglut") },
@@ -5343,6 +2941,7 @@ const CONDITION_OPERATORS = [
 function ConditionalLogicOptions({ field, allFields = [], onUpdate }) {
   const enabled = field.conditional_logic || false;
   const conditionMatch = field.condition_match || "any";
+  const logicMatchLabel = conditionMatch === "all" ? __("AND", "formglut") : __("OR", "formglut");
   const conditions = field.conditions || [];
   const up = (key, val) => {
     const update = {};
@@ -5422,29 +3021,35 @@ function ConditionalLogicOptions({ field, allFields = [], onUpdate }) {
           }
         )
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-conditions-list", style: { marginTop: 12 }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-conditions-list", children: [
         conditions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { padding: "20px 0", textAlign: "center", color: "#94a3b8", fontSize: 13 }, children: __('No conditions added yet. Click "Add Condition" to create one.', "formglut") }) : conditions.map((condition, index) => {
           const selectedField = availableFields.find((f) => f.id === condition.field_id);
           const isSelectField = selectedField && ["select", "radio", "checkbox", "multiselect"].includes(selectedField.type);
           const fieldOptions = isSelectField ? getFieldOptions(condition.field_id) : [];
           const noValueNeeded = ["is_empty", "is_not_empty"].includes(condition.operator);
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-condition-row", style: {
-            marginBottom: 8,
-            padding: "8px",
-            background: "#f8fafc",
-            borderRadius: 6,
-            border: "1px solid #e2e8f0",
-            overflow: "hidden"
-          }, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8, marginBottom: 8 }, children: [
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-condition-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-condition-head", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-condition-badge", children: index === 0 ? __("IF", "formglut") : logicMatchLabel }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Button,
+                {
+                  size: "small",
+                  type: "text",
+                  className: "fg-condition-remove",
+                  "aria-label": __("Remove condition", "formglut"),
+                  onClick: () => removeCondition(index),
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTrash })
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-condition-body", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Select,
                 {
-                  size: "small",
                   value: condition.field_id,
                   onChange: (v) => updateCondition(index, "field_id", v),
                   placeholder: __("Select field", "formglut"),
-                  style: { flex: 1, minWidth: 0 },
+                  style: { width: "100%" },
                   options: availableFields.map((f) => ({
                     value: f.id,
                     label: f.admin_label || f.label || f.type
@@ -5454,7 +3059,6 @@ function ConditionalLogicOptions({ field, allFields = [], onUpdate }) {
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Select,
                 {
-                  size: "small",
                   value: condition.operator,
                   onChange: (v) => {
                     updateCondition(index, "operator", v);
@@ -5463,65 +3067,37 @@ function ConditionalLogicOptions({ field, allFields = [], onUpdate }) {
                     }
                   },
                   placeholder: __("Operator", "formglut"),
-                  style: { flex: 1, minWidth: 0 },
+                  style: { width: "100%" },
                   options: CONDITION_OPERATORS
                 }
-              )
-            ] }),
-            !noValueNeeded && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
-              isSelectField ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              ),
+              !noValueNeeded && (isSelectField ? /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Select,
                 {
-                  size: "small",
                   value: condition.value,
                   onChange: (v) => updateCondition(index, "value", v),
                   placeholder: __("Select value", "formglut"),
-                  style: { flex: 1, minWidth: 0 },
+                  style: { width: "100%" },
                   options: fieldOptions,
                   allowClear: true
                 }
               ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Input,
                 {
-                  size: "small",
                   value: condition.value,
                   onChange: (e) => updateCondition(index, "value", e.target.value),
-                  placeholder: __("Enter value", "formglut"),
-                  style: { flex: 1, minWidth: 0 }
+                  placeholder: __("Enter value", "formglut")
                 }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Button,
-                {
-                  size: "small",
-                  danger: true,
-                  type: "text",
-                  onClick: () => removeCondition(index),
-                  style: { minWidth: 32, padding: "0 8px", flexShrink: 0 },
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTrash })
-                }
-              )
-            ] }),
-            noValueNeeded && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: "flex", justifyContent: "flex-end" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Button,
-              {
-                size: "small",
-                danger: true,
-                type: "text",
-                onClick: () => removeCondition(index),
-                style: { minWidth: 32, padding: "0 8px" },
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTrash })
-              }
-            ) })
+              ))
+            ] })
           ] }, index);
         }),
         availableFields.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
           Button,
           {
-            size: "small",
             type: "dashed",
+            className: "fg-condition-add",
             onClick: addCondition,
-            style: { width: "100%", marginTop: 8 },
             icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPlus, style: { fontSize: 12 } }),
             children: __("Add Condition", "formglut")
           }
@@ -5531,50 +3107,17 @@ function ConditionalLogicOptions({ field, allFields = [], onUpdate }) {
     ] })
   ] });
 }
-const FIELD_SPECIFIC_OPTIONS = {
-  // === Size/Dimensions ===
-  width: { type: "text", label: "Width", section: "style", placeholder: "e.g., 100%, 300px", description: "Custom width for the element" },
-  height: { type: "text", label: "Height", section: "style", placeholder: "e.g., 200px", description: "Custom height for the element" },
-  // === CSS Class ===
-  css_class: { type: "text", label: "CSS Class", section: "style", placeholder: "Add CSS class", description: "Custom CSS class for styling" },
-  // === URL Options ===
-  url_scheme: {
-    type: "select",
-    label: "URL Scheme",
-    section: "validation",
-    description: "Require a specific URL protocol (http or https)",
-    options: [
-      { value: "any", label: "Any" },
-      { value: "http", label: "HTTP Only" },
-      { value: "https", label: "HTTPS Only" }
-    ]
-  },
-  allow_relative: { type: "switch", label: "Allow Relative URLs", section: "validation", description: "Allow relative URLs like /path/to/page" },
-  validate_url: { type: "switch", label: "Validate URL Format", section: "validation", description: "Ensure the input is a valid URL format" },
-  // === Phone Options ===
-  phone_format: {
-    type: "select",
-    label: "Phone Format",
-    section: "general",
-    description: "Expected phone number format for validation",
-    options: [
-      { value: "international", label: "International" },
-      { value: "us", label: "US (###) ###-####" },
-      { value: "uk", label: "UK #### ######" },
-      { value: "custom", label: "Custom Format" }
-    ]
-  },
-  custom_format: { type: "text", label: "Custom Format", section: "general", placeholder: "(999) 999-9999", description: "Custom phone format mask using 9 for digits" }
-};
 function getOptionDefinitions(fieldType) {
-  const sharedOptions = getOptionsForFieldType(fieldType);
-  return { ...sharedOptions, ...FIELD_SPECIFIC_OPTIONS };
+  return getOptionsForFieldType(fieldType);
 }
 function getApplicableOptions(fieldType, field = {}) {
   const fieldTypeConfig = FIELD_TYPES[fieldType];
   if (!fieldTypeConfig) return [];
   const defaultProps = fieldTypeConfig.defaultProps || {};
-  const applicableKeys = Object.keys(defaultProps);
+  const applicableKeys = FIELD_TYPE_GROUPS[fieldType] ? [
+    ...getCommonOptionKeys(fieldType),
+    ...Object.keys(defaultProps).filter((key) => !COMMON_OPTION_KEYS.has(key))
+  ] : Object.keys(defaultProps);
   const excludeKeys = [
     "id",
     "type",
@@ -5638,9 +3181,10 @@ function renderLabelWithTooltip(label, description, inline = false) {
 function renderOptionInput(key, definition, value, onChange) {
   const { type, label, description, options: selectOptions, placeholder, min, max, rows, icon } = definition;
   const inputId = `field-option-${key}`;
+  const selectValue = type === "select" && (value === void 0 || value === null) ? selectOptions && selectOptions[0] ? selectOptions[0].value : "" : value ?? "";
   const commonProps = {
     id: inputId,
-    value: value ?? "",
+    value: type === "select" ? selectValue : value ?? "",
     style: { width: "100%" }
   };
   const labelContent = renderLabelWithTooltip(label, description, false);
@@ -5659,6 +3203,10 @@ function renderOptionInput(key, definition, value, onChange) {
             ...commonProps,
             options: selectOptions || [],
             allowClear: definition.allowClear !== false,
+            mode: definition.mode,
+            showSearch: !!definition.mode,
+            optionFilterProp: "label",
+            value: definition.mode ? Array.isArray(value) ? value : [] : commonProps.value,
             onChange: (v) => onChange(key, v)
           }
         )
@@ -5741,8 +3289,9 @@ function renderOptionInput(key, definition, value, onChange) {
       ] }, key);
   }
 }
-function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
+function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = false }) {
   var _a, _b;
+  const STYLE_TAB_HANDLED_KEYS = getStyleGroups(field.type).flatMap((name) => STYLE_GROUPS[name]);
   if (!field) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-no-selection", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-no-selection-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleInfo }) }),
@@ -5764,7 +3313,6 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
   const MASK_OPTION_KEYS = [
     "mask_pattern",
     "custom_mask",
-    "mask_placeholder",
     "reversible_mask",
     "clear_on_invalid"
   ];
@@ -5780,7 +3328,7 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
     const sections = {};
     const optionDefinitions = getOptionDefinitions(field.type);
     applicableKeys.forEach((key) => {
-      if (MASK_OPTION_KEYS.includes(key) && !field.enable_mask) {
+      if (MASK_OPTION_KEYS.includes(key) && !field.enable_mask && field.type !== "masked_input") {
         return;
       }
       if (EMAIL_CONFIRMATION_KEYS.includes(key) && !field.confirm_email) {
@@ -5803,11 +3351,11 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
     return sections;
   }, [applicableKeys, field, field.type]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: 12, padding: "6px 10px", background: "#f8fafc", borderRadius: 6, fontSize: 12, color: "#64748b", display: "flex", alignItems: "center", gap: 6 }, children: [
+    !styleOnly && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: 12, padding: "6px 10px", background: "#f8fafc", borderRadius: 6, fontSize: 12, color: "#64748b", display: "flex", alignItems: "center", gap: 6 }, children: [
       (_a = FIELD_TYPES[field.type]) == null ? void 0 : _a.icon,
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontWeight: 600 }, children: ((_b = FIELD_TYPES[field.type]) == null ? void 0 : _b.label) || field.type })
     ] }),
-    ["select", "radio", "checkbox", "multiselect"].includes(field.type) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
+    !styleOnly && ["select", "radio", "checkbox", "multiselect"].includes(field.type) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Choice Options", "formglut") }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-label", children: __("Options", "formglut") }),
@@ -5912,7 +3460,7 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
         )
       ] })
     ] }),
-    SECTION_ORDER.filter((section) => optionsBySection[section] || section === "conditional").map((section) => {
+    SECTION_ORDER.filter((section) => styleOnly ? section === "style" : section !== "style").filter((section) => optionsBySection[section] || section === "conditional").map((section) => {
       if (section === "conditional") {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __(SECTION_TITLES[section] || section, "formglut") }),
@@ -5927,9 +3475,10 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [] }) {
         ] }, section);
       }
       if (!optionsBySection[section]) return null;
+      if (styleOnly && optionsBySection[section].every(({ key }) => STYLE_TAB_HANDLED_KEYS.includes(key))) return null;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __(SECTION_TITLES[section] || section, "formglut") }),
-        optionsBySection[section].map(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: styleOnly ? __("Additional Style", "formglut") : __(SECTION_TITLES[section] || section, "formglut") }),
+        optionsBySection[section].filter(({ key }) => !(styleOnly && STYLE_TAB_HANDLED_KEYS.includes(key))).map(
           ({ key, definition }) => renderOptionInput(key, definition, field[key], up)
         )
       ] }, section);
@@ -5946,6 +3495,68 @@ let uid = 0;
 function genId() {
   uid += 1;
   return "f" + Date.now() + "_" + uid;
+}
+const CONTAINER_GAPS = { none: 0, small: 8, medium: 16, large: 24 };
+function updateParentList(list, id, fn) {
+  const idx = list.findIndex((f) => f.id === id);
+  if (idx !== -1) return fn(list, idx);
+  let found = false;
+  const next = list.map((f) => {
+    if (found || !isContainerField(f)) return f;
+    const columns = f.columns.map((col) => {
+      if (found) return col;
+      const r = updateParentList(col.fields || [], id, fn);
+      if (!r) return col;
+      found = true;
+      return { ...col, fields: r };
+    });
+    return found ? { ...f, columns } : f;
+  });
+  return found ? next : null;
+}
+function findFieldInTree(list, id) {
+  for (const f of list) {
+    if (f.id === id) return f;
+    if (isContainerField(f)) {
+      for (const col of f.columns) {
+        const r = findFieldInTree(col.fields || [], id);
+        if (r) return r;
+      }
+    }
+  }
+  return null;
+}
+function locateField(list, id, ctx = { containerId: null, colIdx: 0 }) {
+  const idx = list.findIndex((f) => f.id === id);
+  if (idx !== -1) return { ...ctx, index: idx };
+  for (const f of list) {
+    if (!isContainerField(f)) continue;
+    for (let ci = 0; ci < f.columns.length; ci++) {
+      const r = locateField(f.columns[ci].fields || [], id, { containerId: f.id, colIdx: ci });
+      if (r) return r;
+    }
+  }
+  return null;
+}
+function insertIntoTree(list, target, field) {
+  const splice = (l) => {
+    const n = [...l];
+    n.splice(Math.min(target.index ?? n.length, n.length), 0, field);
+    return n;
+  };
+  if (!target.containerId) return splice(list);
+  return updateParentList(list, target.containerId, (l, i) => l.map((f, j) => j !== i ? f : {
+    ...f,
+    columns: f.columns.map((col, ci) => ci === target.colIdx ? { ...col, fields: splice(col.fields || []) } : col)
+  })) || list;
+}
+function cloneWithNewIds(field) {
+  const copy = JSON.parse(JSON.stringify(field));
+  (function reId(f) {
+    f.id = genId();
+    if (isContainerField(f)) f.columns.forEach((col) => (col.fields || []).forEach(reId));
+  })(copy);
+  return copy;
 }
 function parseCss(cssString) {
   if (!cssString || typeof cssString !== "string") return {};
@@ -6033,7 +3644,53 @@ function applyInputMask(value, mask) {
   return result;
 }
 const pad = (val, fallback) => val != null && val !== "" ? val + "px" : fallback + "px";
-function FieldTemplate({ field: f }) {
+function getSelectionHint(min, max) {
+  min = Number(min) || 0;
+  max = Number(max) || 0;
+  if (min && max) return __("Select between %1$d and %2$d options", "formglut").replace("%1$d", min).replace("%2$d", max);
+  if (min) return __("Select at least %d options", "formglut").replace("%d", min);
+  if (max) return __("Select up to %d options", "formglut").replace("%d", max);
+  return "";
+}
+function getCountryOptions(f) {
+  let codes = Object.keys(COUNTRIES);
+  if (f.country_list === "include" && (f.included_countries || []).length) codes = codes.filter((c) => f.included_countries.includes(c));
+  else if (f.country_list === "exclude" && (f.excluded_countries || []).length) codes = codes.filter((c) => !f.excluded_countries.includes(c));
+  const text = (c) => {
+    const name = COUNTRIES[c];
+    let t = f.display_format === "code" ? c : f.display_format === "both" ? `${name} (${c})` : name;
+    if ((f.flag_type || "emoji") === "emoji") t = String.fromCodePoint(...[...c].map((ch) => 127462 + ch.charCodeAt(0) - 65)) + " " + t;
+    return t;
+  };
+  const top = (f.top_countries || []).filter((c) => codes.includes(c));
+  return { top: top.map((c) => ({ value: c, label: text(c) })), all: codes.map((c) => ({ value: c, label: text(c) })) };
+}
+function renderCountryOptions(f) {
+  const { top, all } = getCountryOptions(f);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    top.map((o) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: o.value, children: o.label }, "t" + o.value)),
+    top.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("option", { disabled: true, children: "──────────" }),
+    all.map((o) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: o.value, children: o.label }, o.value))
+  ] });
+}
+function getPhoneMask(f) {
+  if (f.phone_format === "custom") return f.custom_format || "";
+  return { us: "(999) 999-9999", uk: "9999 999999" }[f.phone_format] || "";
+}
+function getSubmitButtonStyle(f) {
+  const color = f.button_bg_color || "#e94560";
+  const sizes = { small: ["8px 16px", 13], medium: ["12px 24px", 15], large: ["14px 32px", 17] };
+  const [padding, fontSize] = sizes[f.button_size] || sizes.medium;
+  const radius = { square: 0, rounded: 8, pill: 999 }[f.button_shape] ?? 8;
+  const looks = {
+    primary: { background: color, color: f.button_text_color || "#fff", borderColor: color },
+    outline: { background: "transparent", color: f.button_text_color || color, borderColor: color },
+    secondary: { background: f.button_bg_color || "#f1f5f9", color: f.button_text_color || "#334155", borderColor: f.button_bg_color || "#e2e8f0" }
+  };
+  return { padding, fontSize, borderRadius: radius, borderWidth: 1, borderStyle: "solid", fontWeight: 600, cursor: "pointer", width: f.button_width === "full" ? "100%" : "auto", ...looks[f.button_style] || looks.primary };
+}
+const CAPTCHA_NAMES = { recaptcha: "reCAPTCHA", hcaptcha: "hCaptcha", turnstile: "Cloudflare Turnstile" };
+function FieldTemplate({ field: f, captcha = {} }) {
   const [validationErrors, setValidationErrors] = React.useState({});
   const [multiSelectValues, setMultiSelectValues] = React.useState(f.default_value || []);
   const labelCustomStyle = parseCss(f.label_style);
@@ -6043,12 +3700,12 @@ function FieldTemplate({ field: f }) {
   const containerCustomStyle = parseCss(f.container_style);
   const prefixSuffixCustomStyle = parseCss(f.prefix_suffix_style);
   const inputStyle = {
-    background: f.bg_color || "#fafbfc",
-    color: f.text_color || "#94a3b8",
-    borderColor: f.border_color || "#e2e8f0",
-    borderRadius: (f.border_radius ?? 8) + "px",
-    padding: `${pad(f.padding_top, 10)} ${pad(f.padding_right, 14)} ${pad(f.padding_bottom, 10)} ${pad(f.padding_left, 14)}`,
-    margin: `${pad(f.margin_top, 0)} ${pad(f.margin_right, 0)} ${pad(f.margin_bottom, 0)} ${pad(f.margin_left, 0)}`,
+    "--fg-bg": f.bg_color || "#f8fafc",
+    "--fg-color": f.text_color || "#1e293b",
+    "--fg-border": f.border_color || "#e2e8f0",
+    "--fg-radius": (f.border_radius ?? 8) + "px",
+    "--fg-pad": `${pad(f.padding_top, 10)} ${pad(f.padding_right, 14)} ${pad(f.padding_bottom, 10)} ${pad(f.padding_left, 14)}`,
+    "--fg-margin": `${pad(f.margin_top, 0)} ${pad(f.margin_right, 0)} ${pad(f.margin_bottom, 0)} ${pad(f.margin_left, 0)}`,
     ...inputCustomStyle
   };
   const fieldWidthVal = f.field_width === "custom" && f.field_width_custom ? f.field_width_custom + "px" : f.field_width;
@@ -6056,9 +3713,9 @@ function FieldTemplate({ field: f }) {
     ...fieldWidthVal && fieldWidthVal !== "100%" ? { maxWidth: fieldWidthVal } : {},
     ...containerCustomStyle
   };
-  const labelPlacement = f.label_placement || "top";
+  const labelPlacement = !f.label_placement || f.label_placement === "default" ? "top" : f.label_placement;
   const labelWidthVal = f.label_width === "custom" && f.label_width_custom ? f.label_width_custom + "px" : f.label_width;
-  const labelStyle = labelPlacement === "left" || labelPlacement === "right" ? { flex: "0 0 auto", width: labelWidthVal && labelWidthVal !== "auto" && labelWidthVal !== "100%" ? labelWidthVal : void 0, whiteSpace: "nowrap", marginBottom: 0, ...labelCustomStyle } : labelPlacement === "hidden" ? { display: "none", ...labelCustomStyle } : { ...labelCustomStyle };
+  const labelStyle = labelPlacement === "left" || labelPlacement === "right" ? { flex: "0 0 auto", width: labelWidthVal && labelWidthVal !== "auto" && labelWidthVal !== "100%" ? labelWidthVal : void 0, whiteSpace: "nowrap", marginBottom: 0, ...labelCustomStyle } : labelPlacement === "hidden" ? { display: "none", ...labelCustomStyle } : labelPlacement === "bottom" ? { marginTop: 6, marginBottom: 0, ...labelCustomStyle } : { ...labelCustomStyle };
   const showHelpTip = f.help_text && f.help_text_position === "tooltip";
   const showHelpAbove = f.help_text && f.help_text_position === "above";
   const showHelpBelow = f.help_text && (!f.help_text_position || f.help_text_position === "below");
@@ -6076,6 +3733,16 @@ function FieldTemplate({ field: f }) {
     }
     return value;
   };
+  const getDisplayPlaceholder = () => {
+    if (f.placeholder && f.placeholder !== "Enter text here..." && f.placeholder !== "Type your message here...") {
+      return f.placeholder;
+    }
+    if (f.enable_mask && (f.custom_mask || f.mask_pattern)) {
+      const mask = f.custom_mask || f.mask_pattern;
+      return mask.replace(/9/g, "#").replace(/a/g, "?").replace(/\*/g, "?");
+    }
+    return f.placeholder;
+  };
   const getErrorMessage = () => {
     if (f.required && validationErrors.required) {
       return f.validation_message || "This field is required";
@@ -6092,8 +3759,111 @@ function FieldTemplate({ field: f }) {
     return null;
   };
   const errorMessage = getErrorMessage();
+  if (f.type === "html") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fg-field-wrapper fg-html-content ${f.container_class || ""} ${f.css_class || ""} ${f.element_class || ""}`, dangerouslySetInnerHTML: { __html: f.html_content || "" } });
+  }
+  if (f.type === "heading") {
+    const Tag = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(f.heading_level) ? f.heading_level : "h2";
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-field-wrapper fg-heading ${f.container_class || ""} ${f.css_class || ""}`, style: { textAlign: f.alignment || "left" }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: `fg-heading-text ${f.element_class || ""}`, style: f.custom_color ? { color: f.custom_color } : void 0, children: f.text || f.label }),
+      f.description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "fg-heading-desc", children: f.description }),
+      f.show_divider && /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { className: "fg-heading-divider", style: { borderTopStyle: f.divider_style || "solid", ...f.divider_color ? { borderTopColor: f.divider_color } : {} } })
+    ] });
+  }
+  const wrapCls = (extra) => `fg-field-wrapper ${extra} ${f.container_class || ""} ${f.css_class || ""}`;
+  if (f.type === "section_break") {
+    const textStyle = f.text_color ? { color: f.text_color } : void 0;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-section-break"), style: { textAlign: f.alignment || "left", ...f.background_color ? { background: f.background_color, padding: "12px 16px", borderRadius: 8 } : {} }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-section-head", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1 }, children: [
+          f.title && /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: `fg-section-title ${f.element_class || ""}`, style: textStyle, children: f.title }),
+          f.description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "fg-section-desc", style: textStyle, children: f.description })
+        ] }),
+        f.collapsible && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-section-toggle", children: f.default_collapsed ? f.toggle_text_closed || __("Show", "formglut") : f.toggle_text_open || __("Hide", "formglut") })
+      ] }),
+      f.show_divider && /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { className: "fg-section-divider", style: { borderTopStyle: f.divider_style || "solid", borderTopWidth: (Number(f.divider_thickness) || 1) + "px", ...f.divider_color ? { borderTopColor: f.divider_color } : {} } })
+    ] });
+  }
+  if (f.type === "hidden") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-placeholder-box"), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEyeSlash }),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: f.label || __("Hidden Field", "formglut") }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-placeholder-meta", children: [
+        f.param_populate ? `?${f.param_populate}= → ` : "",
+        f.default_value ? `"${f.default_value}"` : __("(empty)", "formglut")
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-placeholder-note", children: __("Not visible on the form", "formglut") })
+    ] });
+  }
+  if (f.type === "shortcode" || f.type === "action_hook") {
+    const code = f.type === "shortcode" ? f.shortcode_content : `do_action( '${f.hook_name || ""}' )`;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-placeholder-box"), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCode }),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: code }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-placeholder-note", children: f.type === "shortcode" && f.run_shortcode === false ? __("Shortcode disabled", "formglut") : __("Output appears on the live form and in Preview", "formglut") })
+    ] });
+  }
+  if (f.type === "custom_submit_button") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: wrapCls("fg-custom-submit"), style: { textAlign: f.button_alignment || "left" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: f.element_class || "", style: getSubmitButtonStyle(f), children: f.button_text || __("Submit", "formglut") }) });
+  }
+  if (CAPTCHA_NAMES[f.type]) {
+    const cfg = captcha[f.type] || {};
+    const invisible = f.type === "recaptcha" && cfg.version !== "v2";
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-captcha-mock"), children: [
+      cfg.ready === false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-captcha-warning", children: [
+        CAPTCHA_NAMES[f.type],
+        " ",
+        __("keys are not set — the check will be skipped until you add them in", "formglut"),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: _pg.settings, target: "_blank", rel: "noopener noreferrer", children: __("Settings", "formglut") }),
+        "."
+      ] }),
+      invisible ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-captcha-box fg-captcha-invisible", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faShieldHalved }),
+        " ",
+        __("reCAPTCHA v3 — runs invisibly when the form is submitted", "formglut")
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-captcha-box fg-captcha-${f.theme === "dark" ? "dark" : "light"} ${f.size === "compact" ? "fg-captcha-compact" : ""} ${f.size === "flexible" ? "fg-captcha-flexible" : ""}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-captcha-check" }),
+        " ",
+        f.type === "turnstile" ? __("Verify you are human", "formglut") : __("I'm not a robot", "formglut"),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-captcha-brand", children: CAPTCHA_NAMES[f.type] })
+      ] })
+    ] });
+  }
+  if (f.type === "terms_conditions" || f.type === "gdpr_agreement") {
+    const isGdpr = f.type === "gdpr_agreement";
+    const mode = f.display_type === "checkbox" || !f.display_type ? "box" : f.display_type;
+    const linkText = isGdpr ? f.policy_url ? __("Privacy Policy", "formglut") : "" : mode === "modal" || mode === "link" && f.link_url ? f.link_text || __("View Terms", "formglut") : "";
+    const agree = /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: `fg-consent ${!isGdpr && f.checkbox_position === "right" ? "fg-consent-right" : ""}`, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", disabled: true, checked: isGdpr && !!f.default_checked, readOnly: true }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        f.label,
+        linkText && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#", onClick: (e) => e.preventDefault(), children: linkText })
+        ] }),
+        f.required && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "required", children: " *" })
+      ] })
+    ] });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-consent-field"), children: [
+      !isGdpr && mode === "box" && f.terms_content && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-terms-box", style: { maxHeight: (Number(f.scroll_height) || 200) + "px" }, dangerouslySetInnerHTML: { __html: f.terms_content } }),
+      isGdpr && f.policy_text && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "fg-choice-hint", children: f.policy_text }),
+      agree,
+      isGdpr && f.show_storage_info !== false && f.storage_duration_text && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "fg-choice-hint", children: f.storage_duration_text.replace("{days}", f.storage_days ?? 365) }),
+      isGdpr && f.show_withdraw_link && f.withdraw_text && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "fg-choice-hint", children: [
+        f.withdraw_text,
+        f.withdraw_email && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "#", onClick: (e) => e.preventDefault(), children: f.withdraw_email })
+        ] })
+      ] }),
+      f.help_text && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-help-text", style: helpTextCustomStyle, children: f.help_text })
+    ] });
+  }
   const label = /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-form-field-label", style: labelStyle, children: [
-    f.admin_label || f.label || /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { color: "#94a3b8", fontStyle: "italic" }, children: [
+    f.label || /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { color: "#94a3b8", fontStyle: "italic" }, children: [
       f.type,
       " ",
       __("field", "formglut")
@@ -6111,6 +3881,7 @@ function FieldTemplate({ field: f }) {
     const charLimit = f.character_limit || f.max_length ? Number(f.character_limit || f.max_length) : 0;
     const maxLength = charLimit > 0 ? charLimit : void 0;
     const displayOptions = getDisplayOptions();
+    const selectionHint = getSelectionHint(f.min_selections, f.max_selections);
     if (f.type === "textarea") {
       const resizeValue = f.resize || "vertical";
       const resizeStyle = resizeValue === "both" ? {} : { resize: resizeValue };
@@ -6123,7 +3894,7 @@ function FieldTemplate({ field: f }) {
             className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
             name: fieldName,
             rows: f.rows || 4,
-            placeholder: f.placeholder,
+            placeholder: getDisplayPlaceholder(),
             defaultValue: f.default_value,
             maxLength,
             minLength,
@@ -6147,7 +3918,7 @@ function FieldTemplate({ field: f }) {
               className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
               type: "email",
               name: `${fieldName}_primary`,
-              placeholder: f.placeholder || "Email Address",
+              placeholder: getDisplayPlaceholder(),
               defaultValue: maskedValue2,
               maxLength,
               inputMode,
@@ -6186,7 +3957,7 @@ function FieldTemplate({ field: f }) {
             className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
             type: "email",
             name: fieldName,
-            placeholder: f.placeholder || "email@example.com",
+            placeholder: getDisplayPlaceholder(),
             defaultValue: maskedValue2,
             maxLength,
             inputMode,
@@ -6210,104 +3981,169 @@ function FieldTemplate({ field: f }) {
           style: inputStyle,
           children: [
             f.placeholder && /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", disabled: firstOptionDisabled, children: f.placeholder }),
-            displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, disabled: firstOptionDisabled && i === 0, children: opt.label || `Option ${i + 1}` }, i))
+            displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, disabled: !!opt.disabled, children: opt.label || `Option ${i + 1}` }, i))
           ]
         },
         `select-${f.id}-${f.default_value || ""}`
       );
     }
     if (f.type === "multiselect") {
-      const getDisplayContent = () => {
-        const selectedCount = multiSelectValues.length;
-        const selectedOptions = displayOptions.filter(
-          (opt) => multiSelectValues.includes(opt.value || opt.label)
-        );
-        switch (f.display_format) {
-          case "count":
-            return selectedCount > 0 ? `${selectedCount} selected` : f.placeholder || "Select options...";
-          case "text":
-            return selectedOptions.map((opt) => opt.label).join(", ") || f.placeholder || "Select options...";
-          case "tags":
-          default:
-            return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", flexWrap: "wrap", gap: 4 }, children: [
-              selectedOptions.map((opt, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: {
-                background: "#e2e8f0",
-                padding: "2px 8px",
-                borderRadius: 4,
-                fontSize: 12
-              }, children: opt.label }, idx)),
-              selectedCount === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#94a3b8" }, children: f.placeholder || "Select options..." })
-            ] });
-        }
-      };
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-multiselect-wrapper fg-field-${f.id} ${f.element_class || ""}`, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
+      const defaults = Array.isArray(f.default_value) ? f.default_value : f.default_value ? [f.default_value] : [];
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-multiselect-wrapper fg-field-${f.id}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "select",
           {
-            className: "fg-form-field-input",
-            style: {
-              ...inputStyle,
-              minHeight: 38,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              padding: "8px 12px"
-            },
-            children: [
-              getDisplayContent(),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginLeft: "auto", fontSize: 12 }, children: "▼" })
-            ]
-          }
+            className: `fg-form-field-input ${f.element_class || ""}`,
+            name: `${fieldName}[]`,
+            multiple: true,
+            size: Math.min(Math.max(displayOptions.length, 2), 6),
+            defaultValue: defaults,
+            disabled: true,
+            style: { ...inputStyle, height: "auto" },
+            children: displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, children: opt.label || `Option ${i + 1}` }, i))
+          },
+          `multiselect-${f.id}-${defaults.join("|")}`
         ),
-        f.select_all_button && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            type: "button",
-            className: "fg-select-all-btn",
-            style: {
-              marginTop: 4,
-              padding: "4px 8px",
-              fontSize: 12,
-              background: "#f8fafc",
-              border: "1px solid #e2e8f0",
-              borderRadius: 4,
-              cursor: "pointer"
-            },
-            onClick: () => {
-              const allValues = displayOptions.map((opt) => opt.value || opt.label);
-              setMultiSelectValues(allValues);
-            },
-            children: "Select All"
-          }
-        ),
-        (f.min_selections > 0 || f.max_selections > 0) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontSize: 11, color: "#64748b", marginTop: 4 }, children: [
-          f.min_selections > 0 && `Min: ${f.min_selections}`,
-          f.min_selections > 0 && f.max_selections > 0 && " | ",
-          f.max_selections > 0 && `Max: ${f.max_selections}`
-        ] }),
-        multiSelectValues.length > 0 && f.selection_message && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#10b981", marginTop: 4 }, children: f.selection_message })
+        f.select_all_button && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-select-all-btn", children: __("Select All", "formglut") }),
+        selectionHint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-choice-hint", children: selectionHint })
       ] });
     }
-    if (f.type === "radio") {
-      const isInline = f.layout === "inline" || f.inline;
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: isInline ? "flex" : "block", gap: isInline ? "16px" : "8px" }, children: displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "radio", name: fieldName, disabled: true, style: { margin: 0 } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
-      ] }, i)) });
+    if (f.type === "radio" || f.type === "checkbox") {
+      const isRadio = f.type === "radio";
+      const layout = f.layout || (f.inline ? "inline" : "default");
+      const defaults = Array.isArray(f.default_value) ? f.default_value : f.default_value ? [f.default_value] : [];
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fg-choice-group fg-choice-layout-${layout} ${f.element_class || ""}`, children: displayOptions.map((opt, i) => {
+          const val = opt.value || opt.label;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "fg-choice", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: isRadio ? "radio" : "checkbox", name: fieldName, disabled: true, checked: defaults.includes(val), readOnly: true }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
+          ] }, i);
+        }) }),
+        !isRadio && selectionHint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-choice-hint", children: selectionHint })
+      ] });
     }
-    if (f.type === "checkbox") {
-      const isInline = f.layout === "inline" || f.inline;
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: isInline ? "flex" : "block", gap: isInline ? "16px" : "8px" }, children: displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", name: fieldName, disabled: true, style: { margin: 0 } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
-      ] }, i)) });
+    const cls = `fg-form-field-input ${f.element_class || ""}`;
+    const sub = (key, subLabel, input) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-subfield" + (key === "street1" || key === "street2" ? " fg-subfield-full" : ""), children: [
+      subLabel && /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "fg-sublabel", children: subLabel }),
+      input
+    ] }, key);
+    if (f.type === "name") {
+      const parts = [["first", f.show_first_name !== false], ["middle", !!f.show_middle_name], ["last", f.show_last_name !== false]].filter((p) => p[1]);
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fg-subfields fg-subfields-${f.name_layout === "vertical" ? 1 : parts.length}`, children: parts.map(([p]) => sub(p, f[`${p}_name_label`], /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: f[`${p}_name_placeholder`], readOnly: true, style: inputStyle }))) });
+    }
+    if (f.type === "country_select") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: cls, defaultValue: f.default_value || "", disabled: true, style: inputStyle, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: f.placeholder || __("Select a country", "formglut") }),
+        renderCountryOptions(f)
+      ] }, `country-${f.id}-${f.default_value || ""}`);
+    }
+    if (f.type === "spinner") {
+      const pos = f.button_position || "both";
+      const btns = f.show_buttons !== false;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-spinner fg-spinner-${pos}`, children: [
+        btns && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-spin-btn fg-spin-dec", children: f.decrement_label || "-" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "number", placeholder: f.placeholder, defaultValue: f.default_value, readOnly: true, style: inputStyle }, `spin-${f.id}-${f.default_value}`),
+        btns && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-spin-btn fg-spin-inc", children: f.increment_label || "+" })
+      ] });
+    }
+    if (f.type === "currency" || f.type === "percentage") {
+      const symbol = f.type === "currency" ? f.currency_symbol ?? "$" : "%";
+      const before = (f.symbol_position || (f.type === "currency" ? "before" : "after")) === "before";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
+        before && symbol && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", children: symbol }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "number", placeholder: f.placeholder, defaultValue: f.default_value, readOnly: true, style: inputStyle }, `num-${f.id}-${f.default_value}`),
+        !before && symbol && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", children: symbol })
+      ] });
+    }
+    if (f.type === "time") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "time", defaultValue: f.default_value, readOnly: true, style: inputStyle }, `time-${f.id}-${f.default_value}`);
+    }
+    if (f.type === "date_range") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-subfields fg-subfields-2", children: [
+        sub("start", f.start_label || __("Start Date", "formglut"), /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "date", readOnly: true, style: inputStyle })),
+        sub("end", f.end_label || __("End Date", "formglut"), /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "date", readOnly: true, style: inputStyle }))
+      ] });
+    }
+    if (f.type === "address") {
+      const cols = f.address_layout === "vertical" ? 1 : Math.min(Math.max(Number(f.grid_columns) || 2, 1), 3);
+      const parts = [
+        ["street1", true],
+        ["street2", f.include_street2 !== false],
+        ["city", f.include_city !== false],
+        ["state", f.include_state !== false],
+        ["zip", f.include_zip !== false]
+      ].filter((p) => p[1]);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-subfields fg-subfields-${cols}`, children: [
+        parts.map(([p]) => sub(p, f[`${p}_label`], /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: f[`${p}_placeholder`], readOnly: true, style: inputStyle }))),
+        f.include_country && sub("country", f.country_label || __("Country", "formglut"), /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: cls, disabled: true, style: inputStyle, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: __("Select a country", "formglut") }),
+          renderCountryOptions({})
+        ] }))
+      ] });
+    }
+    if (f.type === "password") {
+      const pw = (ph, key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-password-wrap", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "password", placeholder: ph, readOnly: true, style: inputStyle }),
+        f.show_toggle !== false && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-password-toggle", children: f.show_text || __("Show", "formglut") })
+      ] }, key);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        pw(f.placeholder, "main"),
+        f.enable_strength_meter && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-strength", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-strength-bar" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Password strength", "formglut") })
+        ] }),
+        f.requirements_hint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-choice-hint", children: f.requirements_hint }),
+        f.require_confirmation && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginTop: 10 }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "fg-sublabel", children: f.confirmation_label || __("Confirm Password", "formglut") }),
+          pw(f.confirmation_placeholder, "confirm")
+        ] })
+      ] });
+    }
+    if (f.type === "range_slider") {
+      const min = Number(f.min ?? 0), max = Number(f.max ?? 100);
+      const val = f.default_value === "" || f.default_value === void 0 ? min : Number(f.default_value);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-range", style: f.track_color ? { "--fg-range-color": f.track_color } : void 0, children: [
+        f.show_value !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-range-value", children: [
+          f.value_prefix,
+          val,
+          f.value_suffix
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "range", min, max, step: f.step || 1, value: val, readOnly: true, disabled: true, className: f.element_class || "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-range-ends", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.min_label || min }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.max_label || max })
+        ] })
+      ] });
+    }
+    if (f.type === "color_picker") {
+      const type = f.picker_type || "swatches";
+      const swatches = type === "picker" ? [] : f.swatches || [];
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-color-picker fg-swatch-${f.swatch_size || "medium"} ${f.element_class || ""}`, children: [
+        swatches.map((c) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-swatch" + (c.toLowerCase() === String(f.default_color || "").toLowerCase() ? " selected" : ""), style: { background: c } }, c)),
+        type !== "swatches" && /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "color", value: f.default_color || "#000000", readOnly: true, disabled: true })
+      ] });
+    }
+    if (f.type === "masked_input") {
+      const mask = f.custom_mask || "";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
+          f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: f.placeholder || mask.replace(/9/g, "#").replace(/[a*]/g, "?"), defaultValue: f.default_value, readOnly: true, style: inputStyle }, `mask-${f.id}-${f.default_value}`),
+          f.suffix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-suffix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.suffix_label } })
+        ] }),
+        f.mask_hint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-choice-hint", children: f.mask_hint })
+      ] });
     }
     if (typeof window.formglutProRenderPreview === "function") {
       const proPreview = window.formglutProRenderPreview(f, inputStyle);
       if (proPreview) return proPreview;
     }
-    const typeAttr = f.type === "number" ? "number" : f.type === "email" ? "email" : "text";
+    const typeAttr = { number: "number", email: "email", url: "url", phone: "tel", date: f.date_type === "datetime" ? "datetime-local" : "date" }[f.type] || "text";
+    const phoneMask = f.type === "phone" ? getPhoneMask(f) : "";
     const maskedValue = getMaskedValue(f.default_value);
+    const placeholder = f.type === "date" ? void 0 : phoneMask && !f.placeholder ? phoneMask.replace(/9/g, "#") : getDisplayPlaceholder();
+    const numAttrs = f.type === "number" ? { min: f.min_value === "" ? void 0 : f.min_value, max: f.max_value === "" ? void 0 : f.max_value, step: f.step || void 0 } : {};
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
       f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -6316,8 +4152,9 @@ function FieldTemplate({ field: f }) {
           className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
           type: typeAttr,
           name: fieldName,
-          placeholder: f.placeholder,
+          placeholder,
           defaultValue: maskedValue,
+          ...numAttrs,
           maxLength,
           inputMode,
           readOnly: true,
@@ -6329,11 +4166,11 @@ function FieldTemplate({ field: f }) {
     ] });
   }
   const helpTextContent = (showHelpAbove || showHelpBelow) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-help-text", style: helpTextCustomStyle, children: f.help_text });
-  const containerClasses = `fg-field-wrapper ${f.container_class || ""}`.trim();
+  const containerClasses = `fg-field-wrapper ${f.container_class || ""} ${f.css_class || ""}`.trim();
   if (labelPlacement === "left" || labelPlacement === "right") {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(PlaceholderStylesInjector, { fieldId: f.id, placeholderStyle: f.placeholder_style }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: containerClasses, style: { display: "flex", alignItems: "center", gap: 8, ...wrapper }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: containerClasses, style: { display: "flex", alignItems: "center", gap: 8, ...wrapperStyle }, children: [
         labelPlacement === "left" ? label : null,
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1 }, children: [
           showHelpAbove && helpTextContent,
@@ -6348,15 +4185,16 @@ function FieldTemplate({ field: f }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(PlaceholderStylesInjector, { fieldId: f.id, placeholderStyle: f.placeholder_style }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: containerClasses, style: wrapperStyle, children: [
-      label,
+      labelPlacement !== "bottom" && label,
       showHelpAbove && helpTextContent,
       renderInput(),
       showHelpBelow && helpTextContent,
+      labelPlacement === "bottom" && label,
       errorMessage && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-error-message", style: { color: "#ef4444", fontSize: 12, marginTop: 4, ...errorCustomStyle }, children: errorMessage })
     ] })
   ] });
 }
-function AddFieldsTab({ onAddField: addFieldFn }) {
+function AddFieldsTab({ onAddField: addFieldFn, insertTarget, onCancelTarget }) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [proEnabled, setProEnabled] = React.useState(false);
   React.useEffect(() => {
@@ -6413,6 +4251,14 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
     return orderedGroups;
   }, [searchQuery, proEnabled]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: "0 4px" }, children: [
+    insertTarget && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-insert-target-banner", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        __("Adding to column", "formglut"),
+        " ",
+        insertTarget.colIdx + 1
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: onCancelTarget, children: __("Cancel", "formglut") })
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Input,
       {
@@ -6465,6 +4311,58 @@ function AddFieldsTab({ onAddField: addFieldFn }) {
         }))
       }
     )
+  ] });
+}
+function ContainerOptions({ field, onUpdate }) {
+  const up = (u) => onUpdate(field.id, u);
+  const setWidth = (ci, w) => up({ columns: field.columns.map((c, i) => i === ci ? { ...c, width: Math.max(1, Number(w) || 1) } : c) });
+  const equalize = () => {
+    const n = field.columns.length;
+    const w = Math.floor(100 / n * 100) / 100;
+    up({ columns: field.columns.map((c, i) => ({ ...c, width: i === n - 1 ? Math.round((100 - w * (n - 1)) * 100) / 100 : w })) });
+  };
+  const total = Math.round(field.columns.reduce((a, c) => a + (Number(c.width) || 0), 0) * 100) / 100;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Columns", "formglut") }),
+      field.columns.map((col, ci) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-prop-label", style: { marginBottom: 0, width: 80 }, children: [
+          __("Column", "formglut"),
+          " ",
+          ci + 1
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TypedInputNumber, { min: 1, max: 100, value: col.width, onChange: (v) => setWidth(ci, v), addonAfter: "%", style: { flex: 1 } })
+      ] }, ci)),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, color: total === 100 ? "#94a3b8" : "#f59e0b" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          __("Total", "formglut"),
+          ": ",
+          total,
+          "%"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "small", onClick: equalize, children: __("Equal widths", "formglut") })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Layout", "formglut") }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-label", children: __("Column Gap", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Select, { value: field.gap || "medium", onChange: (v) => up({ gap: v }), style: { width: "100%" }, options: [
+          { value: "none", label: __("None", "formglut") },
+          { value: "small", label: __("Small (8px)", "formglut") },
+          { value: "medium", label: __("Medium (16px)", "formglut") },
+          { value: "large", label: __("Large (24px)", "formglut") }
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-prop-label", style: { marginBottom: 0 }, children: __("Stack on mobile", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Switch, { size: "small", checked: field.responsive_stack !== false, onChange: (v) => up({ responsive_stack: v }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-label", children: __("Container CSS Class", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: field.container_class || "", onChange: (e) => up({ container_class: e.target.value }) })
+      ] })
+    ] })
   ] });
 }
 function FieldOptionsTab({ field, onUpdate, submitBtn, onSubBtnUpdate, selectedSubmit, allFields = [] }) {
@@ -6529,10 +4427,21 @@ function FieldOptionsTab({ field, onUpdate, submitBtn, onSubBtnUpdate, selectedS
       ] })
     ] });
   }
+  if (isContainerField(field)) return /* @__PURE__ */ jsxRuntimeExports.jsx(ContainerOptions, { field, onUpdate });
   return /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicFieldOptions, { field, onUpdate, allFields });
 }
 function StyleOptionsTab({ field, onUpdate }) {
   var _a, _b;
+  if (isContainerField(field)) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-no-selection", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-no-selection-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-no-selection-text", children: [
+        __("Containers have no style options.", "formglut"),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+        __("Use Field Options to set column widths and gap.", "formglut")
+      ] })
+    ] });
+  }
   if (!field) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-no-selection", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-no-selection-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }) }),
@@ -6548,118 +4457,78 @@ function StyleOptionsTab({ field, onUpdate }) {
     u[key] = val;
     onUpdate(field.id, u);
   };
+  const styleGroups = getStyleGroups(field.type);
+  const has = (group) => styleGroups.includes(group);
   const renderLabel = (label, tooltip) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-prop-label", style: { marginBottom: 0 }, children: label }),
     tooltip && /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: tooltip, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleInfo, style: { fontSize: 13, color: "#94a3b8", cursor: "help", flexShrink: 0, marginTop: -1 } }) })
   ] });
+  const colorSwatchStyle = { width: 36, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 };
+  const renderStyleControl = (c, i) => {
+    const label = renderLabel(__(c.label, "formglut"), c.tip && __(c.tip, "formglut"));
+    if (c.type === "select") {
+      const value = field[c.key] || c.default;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(React.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+          label,
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Select,
+            {
+              value,
+              style: { width: "100%" },
+              onChange: (v) => onUpdate(field.id, { [c.key]: v, ...c.customKey && v !== "custom" ? { [c.customKey]: "" } : {} }),
+              options: c.options.map((o) => ({ value: o.value, label: __(o.label, "formglut") }))
+            }
+          )
+        ] }),
+        c.customKey && field[c.key] === "custom" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+          renderLabel(__(c.customLabel, "formglut"), __(c.customTip, "formglut")),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", value: field[c.customKey] || "", placeholder: __(c.customPlaceholder, "formglut"), onChange: (e) => up(c.customKey, e.target.value), addonAfter: "px" })
+        ] })
+      ] }, c.key);
+    }
+    if (c.type === "quad") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+        label,
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 6 }, children: c.keys.map((k, n) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __(c.sides[n], "formglut") }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field[k] ?? c.defaults[n], onChange: (e) => up(k, parseInt(e.target.value) || 0) })
+        ] }, k)) })
+      ] }, c.keys[0]);
+    }
+    if (c.type === "number") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+        label,
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", value: field[c.key] ?? c.default, onChange: (e) => up(c.key, parseInt(e.target.value) || 0) })
+      ] }, c.key);
+    }
+    if (c.type === "color") {
+      const value = field[c.key] || c.default;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+        label,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "color", value, onChange: (e) => up(c.key, e.target.value), style: colorSwatchStyle }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value, onChange: (e) => up(c.key, e.target.value), style: { flex: 1 } })
+        ] })
+      ] }, c.key);
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
+      label,
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: field[c.key] || "", placeholder: c.placeholder ? __(c.placeholder, "formglut") : void 0, onChange: (e) => up(c.key, e.target.value) })
+    ] }, c.key || i);
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: 12, padding: "6px 10px", background: "#f8fafc", borderRadius: 6, fontSize: 12, color: "#64748b", display: "flex", alignItems: "center", gap: 6 }, children: [
       (_a = FIELD_TYPES[field.type]) == null ? void 0 : _a.icon,
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontWeight: 600 }, children: ((_b = FIELD_TYPES[field.type]) == null ? void 0 : _b.label) || field.type })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Label Style", "formglut") }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Label Placement", "formglut"), __("Position the label above, below, left, or right of the field input.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Select, { value: field.label_placement || "top", onChange: (v) => up("label_placement", v), style: { width: "100%" }, options: [{ value: "top", label: __("Top", "formglut") }, { value: "left", label: __("Left", "formglut") }, { value: "right", label: __("Right", "formglut") }, { value: "hidden", label: __("Hidden", "formglut") }] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Label Width", "formglut"), __('Set the width of the label. Use "Auto" to let the label text determine the width.', "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Select, { value: field.label_width || "auto", onChange: (v) => {
-          up("label_width", v);
-          if (v !== "custom") up("label_width_custom", "");
-        }, style: { width: "100%" }, options: [{ value: "auto", label: __("Auto", "formglut") }, { value: "120px", label: __("Small (120px)", "formglut") }, { value: "160px", label: __("Medium (160px)", "formglut") }, { value: "200px", label: __("Large (200px)", "formglut") }, { value: "100%", label: __("Full Width", "formglut") }, { value: "custom", label: __("Custom", "formglut") }] })
-      ] }),
-      field.label_width === "custom" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Custom Width (px)", "formglut"), __("Enter a custom width in pixels for the label.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", value: field.label_width_custom || "", placeholder: __("e.g. 180", "formglut"), onChange: (e) => up("label_width_custom", e.target.value), addonAfter: "px" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Field Style", "formglut") }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Field Width", "formglut"), __("Set the width of the field input area. Half = 50%, Three Quarter = 75%, Full Width = 100%.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Select, { value: field.field_width || "100%", onChange: (v) => {
-          up("field_width", v);
-          if (v !== "custom") up("field_width_custom", "");
-        }, style: { width: "100%" }, options: [{ value: "50%", label: __("Half", "formglut") }, { value: "75%", label: __("Three Quarter", "formglut") }, { value: "100%", label: __("Full Width", "formglut") }, { value: "custom", label: __("Custom", "formglut") }] })
-      ] }),
-      field.field_width === "custom" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Custom Width (px)", "formglut"), __("Enter a custom width in pixels for the field input.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", value: field.field_width_custom || "", placeholder: __("e.g. 400", "formglut"), onChange: (e) => up("field_width_custom", e.target.value), addonAfter: "px" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Input Padding (px)", "formglut"), __("Control the spacing inside the field input between the text and the border.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 6 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Top", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.padding_top ?? 10, onChange: (e) => up("padding_top", parseInt(e.target.value) || 0) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Right", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.padding_right ?? 14, onChange: (e) => up("padding_right", parseInt(e.target.value) || 0) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Bottom", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.padding_bottom ?? 10, onChange: (e) => up("padding_bottom", parseInt(e.target.value) || 0) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Left", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.padding_left ?? 14, onChange: (e) => up("padding_left", parseInt(e.target.value) || 0) })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Input Margin (px)", "formglut"), __("Control the spacing outside the field input to separate it from other elements.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 6 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Top", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.margin_top ?? 0, onChange: (e) => up("margin_top", parseInt(e.target.value) || 0) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Right", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.margin_right ?? 0, onChange: (e) => up("margin_right", parseInt(e.target.value) || 0) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Bottom", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.margin_bottom ?? 0, onChange: (e) => up("margin_bottom", parseInt(e.target.value) || 0) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#94a3b8", marginBottom: 2 }, children: __("Left", "formglut") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", size: "small", value: field.margin_left ?? 0, onChange: (e) => up("margin_left", parseInt(e.target.value) || 0) })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Border Radius (px)", "formglut"), __("Round the corners of the field input. Higher values create more rounded corners.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { type: "number", value: field.border_radius ?? 8, onChange: (e) => up("border_radius", parseInt(e.target.value) || 0) })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Colors", "formglut") }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Background Color", "formglut"), __("The background color of the field input area.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "color", value: field.bg_color || "#ffffff", onChange: (e) => up("bg_color", e.target.value), style: { width: 36, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: field.bg_color || "#ffffff", onChange: (e) => up("bg_color", e.target.value), style: { flex: 1 } })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Border Color", "formglut"), __("The color of the border around the field input.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "color", value: field.border_color || "#e2e8f0", onChange: (e) => up("border_color", e.target.value), style: { width: 36, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: field.border_color || "#e2e8f0", onChange: (e) => up("border_color", e.target.value), style: { flex: 1 } })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
-        renderLabel(__("Text Color", "formglut"), __("The color of the text entered by users in the field input.", "formglut")),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "color", value: field.text_color || "#1e293b", onChange: (e) => up("text_color", e.target.value), style: { width: 36, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: field.text_color || "#1e293b", onChange: (e) => up("text_color", e.target.value), style: { flex: 1 } })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
+    STYLE_BLOCKS.filter((block) => has(block.group)).map((block) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __(block.title, "formglut") }),
+      block.controls.map((c, i) => renderStyleControl(c, i))
+    ] }, block.group)),
+    styleGroups.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-no-selection-text", style: { padding: "8px 0" }, children: __("This field has no style options.", "formglut") }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicFieldOptions, { field, onUpdate, styleOnly: true }),
+    has("css_class") && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Custom CSS", "formglut") }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
         renderLabel(__("CSS Class", "formglut"), __("Add a custom CSS class to this field for advanced styling. You can then target this class in your custom CSS.", "formglut")),
@@ -6713,10 +4582,24 @@ function FormEditor() {
   const [fields, setFields] = reactExports.useState([]);
   const [selectedId, setSelectedId] = reactExports.useState(null);
   const [activeTab, setActiveTab] = reactExports.useState("addFields");
-  const dragIdxRef = reactExports.useRef(null);
+  const dragIdRef = reactExports.useRef(null);
   const [submitBtn, setSubmitBtn] = reactExports.useState({ ...DEFAULT_SUBMIT_BTN });
   const [selectedSubmit, setSelectedSubmit] = reactExports.useState(false);
-  const [dropIdx, setDropIdx] = reactExports.useState(null);
+  const [dropTarget, setDropTarget] = reactExports.useState(null);
+  const [insertTarget, setInsertTarget] = reactExports.useState(null);
+  const [captchaStatus, setCaptchaStatus] = reactExports.useState({});
+  reactExports.useEffect(() => {
+    getSettings().then((d) => {
+      const st = d.settings || {};
+      const ready = (p) => !!(st[`formglut_${p}_site_key`] && st[`formglut_${p}_secret_key`]);
+      setCaptchaStatus({
+        recaptcha: { ready: ready("recaptcha"), version: st.formglut_recaptcha_version || "v3" },
+        hcaptcha: { ready: ready("hcaptcha") },
+        turnstile: { ready: ready("turnstile") }
+      });
+    }).catch(() => {
+    });
+  }, []);
   const [formTitle, setFormTitle] = reactExports.useState(__("Untitled Form", "formglut"));
   const [formId, setFormId] = reactExports.useState(getFormIdFromUrl());
   const [deviceWidth, setDeviceWidth] = reactExports.useState("100%");
@@ -6804,61 +4687,57 @@ function FormEditor() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
+  function commit(next) {
+    setFields(next);
+    setIsDirty(true);
+    pushHistory(next);
+  }
   function addField(type) {
     const f = createField(type);
     if (!f) return;
     f.id = genId();
-    const next = [...fields, f];
-    setFields(next);
-    setIsDirty(true);
-    pushHistory(next);
+    if (insertTarget && !isContainerField(f) && findFieldInTree(fields, insertTarget.containerId)) {
+      commit(insertIntoTree(fields, { ...insertTarget, index: Infinity }, f));
+    } else {
+      commit([...fields, f]);
+    }
+    setInsertTarget(null);
   }
   function removeField(id) {
-    const next = fields.filter((f) => f.id !== id);
-    setFields(next);
-    if (selectedId === id) {
+    const next = updateParentList(fields, id, (l, i) => l.filter((_, j) => j !== i));
+    if (!next) return;
+    if (selectedId === id || selectedId && !findFieldInTree(next, selectedId)) {
       setSelectedId(null);
       setActiveTab("addFields");
     }
-    setIsDirty(true);
-    pushHistory(next);
+    if (insertTarget && !findFieldInTree(next, insertTarget.containerId)) setInsertTarget(null);
+    commit(next);
   }
   function duplicateField(id) {
-    let next;
-    setFields((p) => {
-      const idx = p.findIndex((f) => f.id === id);
-      if (idx === -1) return p;
-      const copy = Object.assign({}, p[idx], { id: genId(), label: p[idx].label + " (copy)" });
-      next = [...p];
-      next.splice(idx + 1, 0, copy);
-      return next;
+    const next = updateParentList(fields, id, (l, i) => {
+      const copy = cloneWithNewIds(l[i]);
+      if (!isContainerField(copy)) copy.label = (l[i].label || "") + " (copy)";
+      const n = [...l];
+      n.splice(i + 1, 0, copy);
+      return n;
     });
+    if (!next) return;
+    commit(next);
     staticMethods.success(__("Field duplicated", "formglut"));
-    setIsDirty(true);
-    if (next) pushHistory(next);
   }
   function moveField(id, dir) {
-    let next;
-    setFields((p) => {
-      const idx = p.findIndex((f) => f.id === id);
-      if (idx === -1) return p;
-      const ni = idx + dir;
-      if (ni < 0 || ni >= p.length) return p;
-      next = [...p];
-      [next[idx], next[ni]] = [next[ni], next[idx]];
-      return next;
+    const next = updateParentList(fields, id, (l, i) => {
+      const ni = i + dir;
+      if (ni < 0 || ni >= l.length) return l;
+      const n = [...l];
+      [n[i], n[ni]] = [n[ni], n[i]];
+      return n;
     });
-    setIsDirty(true);
-    if (next) pushHistory(next);
+    if (next) commit(next);
   }
   function updateFieldProp(id, updates) {
-    let next;
-    setFields((p) => {
-      next = p.map((f) => f.id === id ? Object.assign({}, f, updates) : f);
-      return next;
-    });
-    setIsDirty(true);
-    if (next) pushHistory(next);
+    const next = updateParentList(fields, id, (l, i) => l.map((f, j) => j === i ? Object.assign({}, f, updates) : f));
+    if (next) commit(next);
   }
   function selectField(id) {
     setSelectedId(id);
@@ -6870,34 +4749,56 @@ function FormEditor() {
     setSelectedSubmit(true);
     setActiveTab("fieldOptions");
   }
+  function targetColumn(containerId, colIdx) {
+    setInsertTarget({ containerId, colIdx });
+    setActiveTab("addFields");
+  }
+  const sameTarget = (a, b) => !!a && !!b && (a.containerId || null) === (b.containerId || null) && (a.colIdx || 0) === (b.colIdx || 0);
+  function performDrop(e, target) {
+    const type = e.dataTransfer.getData("fgFieldType");
+    const dragId = dragIdRef.current;
+    dragIdRef.current = null;
+    setDropTarget(null);
+    if (!target) target = { containerId: null, colIdx: 0, index: fields.length };
+    if (type && FIELD_TYPES[type]) {
+      const f = createField(type);
+      if (!f) return;
+      f.id = genId();
+      if (target.containerId && isContainerField(f)) {
+        staticMethods.warning(__("Containers cannot be placed inside another container.", "formglut"));
+        return;
+      }
+      commit(insertIntoTree(fields, target, f));
+      return;
+    }
+    if (!dragId) return;
+    const moving = findFieldInTree(fields, dragId);
+    if (!moving) return;
+    if (target.containerId && isContainerField(moving)) {
+      staticMethods.warning(__("Containers cannot be placed inside another container.", "formglut"));
+      return;
+    }
+    const from = locateField(fields, dragId);
+    const without = updateParentList(fields, dragId, (l, i) => l.filter((_, j) => j !== i));
+    let index = target.index;
+    if (sameTarget(from, target) && from.index < index) index -= 1;
+    commit(insertIntoTree(without, { ...target, index }, moving));
+  }
   function handleCanvasDragOver(e) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
+    e.dataTransfer.dropEffect = dragIdRef.current ? "move" : "copy";
   }
   function handleCanvasDrop(e) {
     e.preventDefault();
-    const type = e.dataTransfer.getData("fgFieldType");
-    if (type && FIELD_TYPES[type]) {
-      const insertAt = dropIdx != null ? dropIdx : fields.length;
-      const f = createField(type);
-      if (f) {
-        const next = [...fields];
-        next.splice(insertAt, 0, f);
-        setFields(next);
-        setIsDirty(true);
-        pushHistory(next);
-      }
-    }
-    dragIdxRef.current = null;
-    setDropIdx(null);
+    performDrop(e, dropTarget);
   }
   function handleCanvasDragLeave(e) {
-    if (!e.currentTarget.contains(e.relatedTarget)) setDropIdx(null);
+    if (!e.currentTarget.contains(e.relatedTarget)) setDropTarget(null);
   }
   function handleEmptyDragOver(e) {
     e.preventDefault();
     e.currentTarget.classList.add("drag-over");
-    setDropIdx(null);
+    setDropTarget(null);
   }
   function handleEmptyDragLeave(e) {
     e.currentTarget.classList.remove("drag-over");
@@ -6906,59 +4807,117 @@ function FormEditor() {
     e.preventDefault();
     e.stopPropagation();
     e.currentTarget.classList.remove("drag-over");
-    const type = e.dataTransfer.getData("fgFieldType");
-    if (type && FIELD_TYPES[type]) addField(type);
-    setDropIdx(null);
+    performDrop(e, null);
   }
-  function handleFieldDragStart(e, idx) {
-    dragIdxRef.current = idx;
+  function handleFieldDragStart(e, id) {
+    e.stopPropagation();
+    dragIdRef.current = id;
     e.dataTransfer.setData("fgReorder", "true");
     e.dataTransfer.effectAllowed = "move";
   }
-  function handleFieldDragOver(e, idx) {
+  function handleFieldDragOver(e, ctx, idx) {
     e.preventDefault();
     e.stopPropagation();
     const rect = e.currentTarget.getBoundingClientRect();
-    setDropIdx(e.clientY < rect.top + rect.height / 2 ? idx : idx + 1);
+    const t = { ...ctx, index: e.clientY < rect.top + rect.height / 2 ? idx : idx + 1 };
+    if (!dropTarget || !sameTarget(dropTarget, t) || dropTarget.index !== t.index) setDropTarget(t);
   }
-  function handleFieldDrop(e, targetIdx) {
+  function handleColumnDragOver(e, ctx, len) {
     e.preventDefault();
     e.stopPropagation();
-    const type = e.dataTransfer.getData("fgFieldType");
-    if (type && FIELD_TYPES[type]) {
-      const f = createField(type);
-      if (!f) return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      const ins = e.clientY < rect.top + rect.height / 2 ? targetIdx : targetIdx + 1;
-      const next2 = [...fields];
-      next2.splice(ins, 0, f);
-      setFields(next2);
-      setIsDirty(true);
-      pushHistory(next2);
-      setDropIdx(null);
-      return;
-    }
-    const fromIdx = dragIdxRef.current;
-    if (fromIdx === null || fromIdx === targetIdx) {
-      setDropIdx(null);
-      return;
-    }
-    const rect2 = e.currentTarget.getBoundingClientRect();
-    const midY = rect2.top + rect2.height / 2;
-    const next = [...fields];
-    const item = next.splice(fromIdx, 1)[0];
-    let adj = fromIdx < targetIdx ? targetIdx - 1 : targetIdx;
-    if (e.clientY >= midY) adj += 1;
-    next.splice(adj, 0, item);
-    setFields(next);
-    setIsDirty(true);
-    pushHistory(next);
-    dragIdxRef.current = null;
-    setDropIdx(null);
+    if (!dropTarget || !sameTarget(dropTarget, ctx) || dropTarget.index !== len) setDropTarget({ ...ctx, index: len });
   }
   function handleFieldDragEnd() {
-    dragIdxRef.current = null;
-    setDropIdx(null);
+    dragIdRef.current = null;
+    setDropTarget(null);
+  }
+  const dropIndicator = /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-drop-indicator visible", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Drop here", "formglut") }) });
+  const showIndicatorAt = (ctx, idx) => !!dropTarget && sameTarget(dropTarget, ctx) && dropTarget.index === idx;
+  function renderFieldList(list, ctx) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      list.map((f, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(React.Fragment, { children: [
+        showIndicatorAt(ctx, idx) && dropIndicator,
+        renderFieldNode(f, idx, list.length, ctx)
+      ] }, f.id)),
+      showIndicatorAt(ctx, list.length) && dropIndicator
+    ] });
+  }
+  function renderFieldNode(f, idx, count, ctx) {
+    const container = isContainerField(f);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "fg-form-field" + (container ? " fg-container-field" : "") + (selectedId === f.id ? " selected" : ""),
+        onClick: (e) => {
+          e.stopPropagation();
+          selectField(f.id);
+        },
+        draggable: true,
+        onDragStart: (e) => handleFieldDragStart(e, f.id),
+        onDragOver: (e) => handleFieldDragOver(e, ctx, idx),
+        onDragEnd: handleFieldDragEnd,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-field-toolbar", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Move up", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
+              e.stopPropagation();
+              moveField(f.id, -1);
+            }, disabled: idx === 0, style: { opacity: idx === 0 ? 0.3 : 1 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowUp }) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Move down", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
+              e.stopPropagation();
+              moveField(f.id, 1);
+            }, disabled: idx === count - 1, style: { opacity: idx === count - 1 ? 0.3 : 1 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowDown }) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-sep" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Settings", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
+              e.stopPropagation();
+              selectField(f.id);
+            }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faGear }) }) }),
+            !container && /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Style", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
+              e.stopPropagation();
+              setSelectedId(f.id);
+              setActiveTab("styleOptions");
+            }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-sep" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Duplicate", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
+              e.stopPropagation();
+              duplicateField(f.id);
+            }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCopy }) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Delete", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "danger", onClick: (e) => {
+              e.stopPropagation();
+              removeField(f.id);
+            }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTrash }) }) })
+          ] }),
+          container ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-columns", style: { gap: CONTAINER_GAPS[f.gap || "medium"] ?? 16 }, children: f.columns.map((col, ci) => {
+            const colCtx = { containerId: f.id, colIdx: ci };
+            const colFields = col.fields || [];
+            const targeted = insertTarget && insertTarget.containerId === f.id && insertTarget.colIdx === ci;
+            return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "fg-column" + (colFields.length ? "" : " empty") + (targeted ? " targeted" : ""),
+                style: { flex: `${Number(col.width) || 1} 1 0%` },
+                onDragOver: (e) => handleColumnDragOver(e, colCtx, colFields.length),
+                children: [
+                  renderFieldList(colFields, colCtx),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-column-add", onClick: (e) => {
+                    e.stopPropagation();
+                    targetColumn(f.id, ci);
+                  }, children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPlus }),
+                    !colFields.length && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: targeted ? __("Pick a field on the left", "formglut") : __("Add or drop a field", "formglut") })
+                  ] })
+                ]
+              },
+              ci
+            );
+          }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FieldTemplate, { field: f, captcha: captchaStatus }),
+          !ctx.containerId && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-add-between", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-add-between-btn", onClick: (e) => {
+            e.stopPropagation();
+            setInsertTarget(null);
+            setActiveTab("addFields");
+          }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPlus }) }) })
+        ]
+      }
+    );
   }
   async function handleSave() {
     if (saving) return;
@@ -6989,7 +4948,8 @@ function FormEditor() {
       setSaving(false);
     }
   }
-  const selectedField = fields.find((f) => f.id === selectedId) || null;
+  const selectedField = selectedId ? findFieldInTree(fields, selectedId) : null;
+  const allInputFields = flattenFields(fields);
   if (loading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8fafc" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Spin, { size: "large", tip: __("Loading form...", "formglut") }) });
   }
@@ -7030,13 +4990,13 @@ function FormEditor() {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-editor-body", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-sidebar", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Tabs, { activeKey: activeTab, onChange: setActiveTab, centered: true, items: [
-        { key: "addFields", label: __("Add Fields", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AddFieldsTab, { onAddField: addField }) },
+        { key: "addFields", label: __("Add Fields", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AddFieldsTab, { onAddField: addField, insertTarget, onCancelTarget: () => setInsertTarget(null) }) },
         { key: "fieldOptions", label: __("Field Options", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(FieldOptionsTab, { field: selectedField, onUpdate: updateFieldProp, submitBtn, onSubBtnUpdate: (u) => {
           const next = { ...submitBtn, ...u };
           setSubmitBtn(next);
           setIsDirty(true);
           pushHistory(fields, next);
-        }, selectedSubmit, allFields: fields }) },
+        }, selectedSubmit, allFields: allInputFields }) },
         { key: "styleOptions", label: __("Style Options", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(StyleOptionsTab, { field: selectedField, onUpdate: updateFieldProp }) }
       ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-canvas-area", children: [
@@ -7107,6 +5067,7 @@ function FormEditor() {
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-canvas", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-canvas-form", style: { maxWidth: deviceWidth === "100%" ? "900px" : deviceWidth, transition: "max-width 0.3s ease" }, onClick: () => {
           setSelectedId(null);
           setSelectedSubmit(false);
+          setInsertTarget(null);
         }, onDragOver: handleCanvasDragOver, onDrop: handleCanvasDrop, onDragLeave: handleCanvasDragLeave, children: fields.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-empty-state", onDragOver: handleEmptyDragOver, onDragLeave: handleEmptyDragLeave, onDrop: handleEmptyDrop, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-empty-state-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPlus }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-empty-state-title", children: __("No fields yet", "formglut") }),
@@ -7116,64 +5077,8 @@ function FormEditor() {
             __("or click a field type to add it", "formglut")
           ] })
         ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          fields.map((f, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(React.Fragment, { children: [
-            dropIdx === idx && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-drop-indicator visible", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Drop here", "formglut") }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "div",
-              {
-                className: "fg-form-field" + (selectedId === f.id ? " selected" : ""),
-                onClick: (e) => {
-                  e.stopPropagation();
-                  selectField(f.id);
-                },
-                draggable: true,
-                onDragStart: (e) => handleFieldDragStart(e, idx),
-                onDragOver: (e) => handleFieldDragOver(e, idx),
-                onDragLeave: () => {
-                },
-                onDrop: (e) => handleFieldDrop(e, idx),
-                onDragEnd: handleFieldDragEnd,
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-field-toolbar", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Move up", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
-                      e.stopPropagation();
-                      moveField(f.id, -1);
-                    }, disabled: idx === 0, style: { opacity: idx === 0 ? 0.3 : 1 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowUp }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Move down", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
-                      e.stopPropagation();
-                      moveField(f.id, 1);
-                    }, disabled: idx === fields.length - 1, style: { opacity: idx === fields.length - 1 ? 0.3 : 1 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowDown }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-sep" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Settings", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
-                      e.stopPropagation();
-                      selectField(f.id);
-                    }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faGear }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Style", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
-                      e.stopPropagation();
-                      setSelectedId(f.id);
-                      setActiveTab("styleOptions");
-                    }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPalette }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-sep" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Duplicate", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: (e) => {
-                      e.stopPropagation();
-                      duplicateField(f.id);
-                    }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCopy }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Delete", "formglut"), mouseEnterDelay: 0.4, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "danger", onClick: (e) => {
-                      e.stopPropagation();
-                      removeField(f.id);
-                    }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTrash }) }) })
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(FieldTemplate, { field: f }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-add-between", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-add-between-btn", onClick: (e) => {
-                    e.stopPropagation();
-                    setActiveTab("addFields");
-                  }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPlus }) }) })
-                ]
-              }
-            )
-          ] }, f.id)),
-          dropIdx === fields.length && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-drop-indicator visible", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Drop here", "formglut") }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-submit-field" + (selectedSubmit ? " selected" : ""), onClick: (e) => {
+          renderFieldList(fields, { containerId: null, colIdx: 0 }),
+          !allInputFields.some((x) => x.type === "custom_submit_button") && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-submit-field" + (selectedSubmit ? " selected" : ""), onClick: (e) => {
             e.stopPropagation();
             selectSubmitBtn();
           }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: submitBtn.alignment !== "full" ? { textAlign: submitBtn.alignment } : {}, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "primary", size: submitBtn.size === "medium" ? "middle" : submitBtn.size, block: submitBtn.alignment === "full", style: { background: submitBtn.bg_color, borderColor: submitBtn.bg_color, color: submitBtn.text_color, height: submitBtn.height, fontWeight: submitBtn.font_weight, fontSize: submitBtn.font_size, borderRadius: submitBtn.border_radius }, children: submitBtn.text }) }) })

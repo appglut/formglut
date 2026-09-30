@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Form, Input, Button, Switch, Select, Divider, message, Spin } from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Select, Divider, message, Spin } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk, faEnvelope, faSliders, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
@@ -44,6 +44,12 @@ export default function Settings() {
             recaptchaEnabled: s.formglut_recaptcha_enabled === '1' || s.formglut_recaptcha_enabled === true,
             recaptchaSiteKey: s.formglut_recaptcha_site_key || '',
             recaptchaSecretKey: s.formglut_recaptcha_secret_key || '',
+            recaptchaVersion: s.formglut_recaptcha_version || 'v3',
+            recaptchaScore: s.formglut_recaptcha_score !== undefined && s.formglut_recaptcha_score !== '' ? Number(s.formglut_recaptcha_score) : 0.5,
+            hcaptchaSiteKey: s.formglut_hcaptcha_site_key || '',
+            hcaptchaSecretKey: s.formglut_hcaptcha_secret_key || '',
+            turnstileSiteKey: s.formglut_turnstile_site_key || '',
+            turnstileSecretKey: s.formglut_turnstile_secret_key || '',
             successMessage: s.formglut_success_message || 'Thank you! Your submission has been received.',
             errorMessage: s.formglut_error_message || 'Something went wrong. Please try again.',
             deleteOnUninstall: s.formglut_delete_on_uninstall === '1' || s.formglut_delete_on_uninstall === true,
@@ -70,6 +76,12 @@ export default function Settings() {
       formglut_recaptcha_enabled: values.recaptchaEnabled,
       formglut_recaptcha_site_key: values.recaptchaSiteKey,
       formglut_recaptcha_secret_key: values.recaptchaSecretKey,
+      formglut_recaptcha_version: values.recaptchaVersion,
+      formglut_recaptcha_score: values.recaptchaScore,
+      formglut_hcaptcha_site_key: values.hcaptchaSiteKey,
+      formglut_hcaptcha_secret_key: values.hcaptchaSecretKey,
+      formglut_turnstile_site_key: values.turnstileSiteKey,
+      formglut_turnstile_secret_key: values.turnstileSecretKey,
       formglut_success_message: values.successMessage,
       formglut_error_message: values.errorMessage,
       formglut_delete_on_uninstall: values.deleteOnUninstall,
@@ -117,7 +129,7 @@ export default function Settings() {
           <div className="fg-page-header">
             <div>
               <div className="fg-page-title">{__( 'Settings', 'formglut' )}</div>
-              <div className="fg-page-subtitle">{__( 'Configure FormGlut plugin', 'formglut' )}</div>
+              <div className="fg-page-subtitle">{__( 'Manage submissions, email notifications, spam protection and messages', 'formglut' )}</div>
             </div>
           </div>
 
@@ -133,6 +145,12 @@ export default function Settings() {
               recaptchaEnabled: false,
               recaptchaSiteKey: '',
               recaptchaSecretKey: '',
+              recaptchaVersion: 'v3',
+              recaptchaScore: 0.5,
+              hcaptchaSiteKey: '',
+              hcaptchaSecretKey: '',
+              turnstileSiteKey: '',
+              turnstileSecretKey: '',
               senderName: 'FormGlut',
               senderEmail: '',
               emailSubject: 'New form submission: {form_name}',
@@ -192,14 +210,47 @@ export default function Settings() {
               <Form.Item label={__( 'Enable Honeypot', 'formglut' )} name="honeypot" valuePropName="checked">
                 <Switch checkedChildren={__( 'On', 'formglut' )} unCheckedChildren={__( 'Off', 'formglut' )} />
               </Form.Item>
-              <Divider style={{ margin: '12px 0 20px' }} />
-              <Form.Item label={__( 'Enable reCAPTCHA v3', 'formglut' )} name="recaptchaEnabled" valuePropName="checked">
-                <Switch checkedChildren={__( 'On', 'formglut' )} unCheckedChildren={__( 'Off', 'formglut' )} />
+              <div className="fg-settings-hint">{__( 'Add a reCAPTCHA, hCaptcha or Turnstile field to a form in the editor (Security Fields) to protect it. Enter the keys for the services you use below.', 'formglut' )}</div>
+
+              <Divider orientation="left" orientationMargin={0} style={{ margin: '20px 0 16px' }}>{__( 'Google reCAPTCHA', 'formglut' )}</Divider>
+              <Form.Item label={__( 'Version', 'formglut' )} name="recaptchaVersion" extra={__( 'Keys are tied to a version — use keys created for the version you pick.', 'formglut' )}>
+                <Select style={{ maxWidth: 480 }} options={[
+                  { value: 'v3', label: __( 'reCAPTCHA v3 (invisible, score based)', 'formglut' ) },
+                  { value: 'v2', label: __( 'reCAPTCHA v2 ("I\'m not a robot" checkbox)', 'formglut' ) },
+                ]} />
               </Form.Item>
-              <Form.Item label={__( 'reCAPTCHA Site Key', 'formglut' )} name="recaptchaSiteKey">
+              <Form.Item label={__( 'Site Key', 'formglut' )} name="recaptchaSiteKey">
                 <Input placeholder={__( 'Enter your site key', 'formglut' )} style={{ maxWidth: 480 }} />
               </Form.Item>
-              <Form.Item label={__( 'reCAPTCHA Secret Key', 'formglut' )} name="recaptchaSecretKey">
+              <Form.Item label={__( 'Secret Key', 'formglut' )} name="recaptchaSecretKey">
+                <Input.Password placeholder={__( 'Enter your secret key', 'formglut' )} style={{ maxWidth: 480 }} />
+              </Form.Item>
+              <Form.Item noStyle shouldUpdate={(a, b) => a.recaptchaVersion !== b.recaptchaVersion}>
+                {({ getFieldValue }) => getFieldValue('recaptchaVersion') !== 'v2' && (
+                  <>
+                    <Form.Item label={__( 'Minimum Score', 'formglut' )} name="recaptchaScore" extra={__( '0.0 (likely bot) to 1.0 (likely human). Submissions below this score are rejected.', 'formglut' )}>
+                      <InputNumber min={0} max={1} step={0.1} style={{ width: 120 }} />
+                    </Form.Item>
+                    <Form.Item label={__( 'Protect Every Form', 'formglut' )} name="recaptchaEnabled" valuePropName="checked" extra={__( 'Run reCAPTCHA v3 on all forms, even those without a reCAPTCHA field.', 'formglut' )}>
+                      <Switch checkedChildren={__( 'On', 'formglut' )} unCheckedChildren={__( 'Off', 'formglut' )} />
+                    </Form.Item>
+                  </>
+                )}
+              </Form.Item>
+
+              <Divider orientation="left" orientationMargin={0} style={{ margin: '20px 0 16px' }}>{__( 'hCaptcha', 'formglut' )}</Divider>
+              <Form.Item label={__( 'Site Key', 'formglut' )} name="hcaptchaSiteKey">
+                <Input placeholder={__( 'Enter your site key', 'formglut' )} style={{ maxWidth: 480 }} />
+              </Form.Item>
+              <Form.Item label={__( 'Secret Key', 'formglut' )} name="hcaptchaSecretKey">
+                <Input.Password placeholder={__( 'Enter your secret key', 'formglut' )} style={{ maxWidth: 480 }} />
+              </Form.Item>
+
+              <Divider orientation="left" orientationMargin={0} style={{ margin: '20px 0 16px' }}>{__( 'Cloudflare Turnstile', 'formglut' )}</Divider>
+              <Form.Item label={__( 'Site Key', 'formglut' )} name="turnstileSiteKey">
+                <Input placeholder={__( 'Enter your site key', 'formglut' )} style={{ maxWidth: 480 }} />
+              </Form.Item>
+              <Form.Item label={__( 'Secret Key', 'formglut' )} name="turnstileSecretKey">
                 <Input.Password placeholder={__( 'Enter your secret key', 'formglut' )} style={{ maxWidth: 480 }} />
               </Form.Item>
             </div>
