@@ -41,6 +41,55 @@ class FormGlut_Settings {
 			'formglut_success_message'    => __( 'Thank you! Your submission has been received.', 'formglut' ),
 			'formglut_error_message'      => __( 'Something went wrong. Please try again.', 'formglut' ),
 			'formglut_delete_on_uninstall' => false,
+			'formglut_email_log'          => false,
+			'formglut_currency'           => 'USD',
+			'formglut_stripe_mode'        => 'test',
+			'formglut_stripe_test_publishable' => '',
+			'formglut_stripe_test_secret' => '',
+			'formglut_stripe_live_publishable' => '',
+			'formglut_stripe_live_secret' => '',
+			'formglut_mailchimp_api_key'  => '',
+			'formglut_hubspot_token'      => '',
+		);
+	}
+
+	/**
+	 * Remember a sent email when the email log is on (last 50, newest first).
+	 *
+	 * @param string|array $to      Recipients.
+	 * @param string       $subject Subject.
+	 * @param bool         $ok      Whether wp_mail() succeeded.
+	 * @param string       $context What sent it (form name or "Test email").
+	 * @return void
+	 */
+	public static function log_email( $to, $subject, $ok, $context = '' ) {
+		if ( ! self::get( 'formglut_email_log', false ) ) {
+			return;
+		}
+		$log = get_option( 'formglut_email_log_items', array() );
+		array_unshift( $log, array(
+			'date'    => current_time( 'mysql' ),
+			'to'      => implode( ', ', (array) $to ),
+			'subject' => (string) $subject,
+			'status'  => $ok ? 'sent' : 'failed',
+			'context' => (string) $context,
+		) );
+		update_option( 'formglut_email_log_items', array_slice( $log, 0, 50 ), false );
+	}
+
+	/**
+	 * Currencies Stripe accepts that the plugin offers, with their symbol and decimal places.
+	 *
+	 * @return array code => array( symbol, decimals )
+	 */
+	public static function currencies() {
+		return array(
+			'USD' => array( '$', 2 ), 'EUR' => array( '€', 2 ), 'GBP' => array( '£', 2 ), 'CAD' => array( 'CA$', 2 ), 'AUD' => array( 'A$', 2 ),
+			'NZD' => array( 'NZ$', 2 ), 'CHF' => array( 'CHF', 2 ), 'SEK' => array( 'kr', 2 ), 'NOK' => array( 'kr', 2 ), 'DKK' => array( 'kr', 2 ),
+			'PLN' => array( 'zł', 2 ), 'CZK' => array( 'Kč', 2 ), 'INR' => array( '₹', 2 ), 'BDT' => array( '৳', 2 ), 'PKR' => array( '₨', 2 ),
+			'SGD' => array( 'S$', 2 ), 'HKD' => array( 'HK$', 2 ), 'MYR' => array( 'RM', 2 ), 'ZAR' => array( 'R', 2 ), 'BRL' => array( 'R$', 2 ),
+			'MXN' => array( 'MX$', 2 ), 'AED' => array( 'AED', 2 ), 'SAR' => array( 'SAR', 2 ), 'TRY' => array( '₺', 2 ), 'JPY' => array( '¥', 0 ),
+			'KRW' => array( '₩', 0 ),
 		);
 	}
 
@@ -113,7 +162,7 @@ class FormGlut_Settings {
 		$saved = true;
 
 		// Boolean settings.
-		$bool_keys = array( 'formglut_ajax_submit', 'formglut_store_entries', 'formglut_honeypot', 'formglut_recaptcha_enabled', 'formglut_delete_on_uninstall' );
+		$bool_keys = array( 'formglut_ajax_submit', 'formglut_store_entries', 'formglut_honeypot', 'formglut_recaptcha_enabled', 'formglut_delete_on_uninstall', 'formglut_email_log' );
 		foreach ( $bool_keys as $key ) {
 			if ( isset( $settings[ $key ] ) ) {
 				$saved = self::update( $key, (bool) $settings[ $key ] ) && $saved;
@@ -121,7 +170,12 @@ class FormGlut_Settings {
 		}
 
 		// String settings (plain text).
-		$text_keys = array( 'formglut_sender_name', 'formglut_success_message', 'formglut_error_message', 'formglut_recaptcha_site_key', 'formglut_hcaptcha_site_key', 'formglut_hcaptcha_secret_key', 'formglut_turnstile_site_key', 'formglut_turnstile_secret_key' );
+		$text_keys = array( 'formglut_sender_name', 'formglut_success_message', 'formglut_error_message', 'formglut_recaptcha_site_key', 'formglut_hcaptcha_site_key', 'formglut_hcaptcha_secret_key', 'formglut_turnstile_site_key', 'formglut_turnstile_secret_key', 'formglut_stripe_test_publishable', 'formglut_stripe_test_secret', 'formglut_stripe_live_publishable', 'formglut_stripe_live_secret', 'formglut_mailchimp_api_key', 'formglut_hubspot_token' );
+		foreach ( array( 'formglut_stripe_mode' => array( 'test', 'live' ), 'formglut_currency' => array_keys( self::currencies() ) ) as $key => $allowed ) {
+			if ( isset( $settings[ $key ] ) && in_array( $settings[ $key ], $allowed, true ) ) {
+				$saved = self::update( $key, $settings[ $key ] ) && $saved;
+			}
+		}
 		foreach ( $text_keys as $key ) {
 			if ( isset( $settings[ $key ] ) ) {
 				$saved = self::update( $key, sanitize_text_field( $settings[ $key ] ) ) && $saved;

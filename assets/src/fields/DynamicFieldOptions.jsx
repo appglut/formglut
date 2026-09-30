@@ -9,9 +9,10 @@
  */
 
 import React, { useMemo } from 'react';
-import { Input, InputNumber, Select, Switch, Button, Tooltip, Collapse } from 'antd';
+import { Input, InputNumber, Select, Switch, Button, Tooltip, Collapse, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faPlus, faTrash, faCopy } from '@fortawesome/free-solid-svg-icons';
+import BulkChoices from './BulkChoices';
 import { __ } from '@wordpress/i18n';
 import { FIELD_TYPES, COMMON_OPTIONS } from './fieldTypes';
 import { getOptionsForFieldType, getCommonOptionKeys, COMMON_OPTION_KEYS, FIELD_TYPE_GROUPS, STYLE_GROUPS, getStyleGroups, SECTION_ORDER, SECTION_TITLES } from './SharedOptions';
@@ -333,6 +334,11 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [], s
         section: 'advanced'
       };
 
+      // Options that only make sense when another switch is on (definition.showWhen = that key).
+      if (definition.showWhen && (!field[definition.showWhen] || (definition.showValue && field[definition.showWhen] !== definition.showValue))) {
+        return;
+      }
+
       const section = definition.section || 'general';
       if (!sections[section]) {
         sections[section] = [];
@@ -352,6 +358,16 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [], s
         <span style={{ fontWeight: 600 }}>
           {FIELD_TYPES[field.type]?.label || field.type}
         </span>
+        {field.id && (
+          <Tooltip title={__( 'Copy the tag for this field’s value, for emails and messages', 'formglut' )}>
+            <button type="button" className="fg-field-id" onClick={() => {
+              const tag = '{field:' + field.id + '}';
+              if (navigator.clipboard?.writeText) navigator.clipboard.writeText(tag).then(() => message.success(__( 'Copied', 'formglut' ) + ' ' + tag)).catch(() => {});
+            }}>
+              {__( 'ID', 'formglut' )} <code>{field.id}</code> <FontAwesomeIcon icon={faCopy} />
+            </button>
+          </Tooltip>
+        )}
       </div>
       )}
 
@@ -390,6 +406,20 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [], s
                     }}
                     style={{ flex: 1 }}
                   />
+                  {field.show_calc_values && (
+                    <Input
+                      size="small"
+                      value={opt.calc_value ?? ''}
+                      placeholder={__('Calc', 'formglut')}
+                      title={__('Number used by Calculation fields', 'formglut')}
+                      onChange={(e) => {
+                        const newOpts = [...(field.options || [])];
+                        newOpts[idx] = { ...newOpts[idx], calc_value: e.target.value.replace(/[^0-9.\-]/g, '') };
+                        up('options', newOpts);
+                      }}
+                      style={{ width: 64, flex: 'none' }}
+                    />
+                  )}
                   <Button
                     size="small"
                     danger
@@ -412,6 +442,12 @@ export default function DynamicFieldOptions({ field, onUpdate, allFields = [], s
                 }}
                 style={{ width: '100%', marginTop: 6 }}
               >+ {__('Add Option', 'formglut')}</Button>
+              <BulkChoices options={field.options || []} onApply={(opts) => up('options', opts)} />
+              <label className="fg-calc-toggle">
+                <Switch size="small" checked={!!field.show_calc_values} onChange={(v) => up('show_calc_values', v)} />
+                <span>{__('Calculation values', 'formglut')}</span>
+                <Tooltip title={__('Give each choice a number to use in Calculation fields (for example a price).', 'formglut')}><FontAwesomeIcon icon={faCircleInfo} style={{ color: '#94a3b8', fontSize: 12 }} /></Tooltip>
+              </label>
             </div>
           </div>
 

@@ -121,3 +121,57 @@ export function getSettings() {
 export function saveSettings(settings) {
   return request('formglut_save_settings', { settings }, 'POST');
 }
+
+/* ── Tools ────────────────────────────────────────────────────────── */
+
+const { ajax_url: _url, nonce: _nonce } = window.formglut_admin || {};
+
+/** URL that downloads a file (GET handlers that send attachments). */
+export function downloadUrl(action, params = {}) {
+  const q = new URLSearchParams({ action, nonce: _nonce, ...Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== '')) });
+  return `${_url}?${q.toString()}`;
+}
+
+export function exportFormsUrl(ids) {
+  return downloadUrl('formglut_export_forms', { ids: [].concat(ids).join(',') });
+}
+
+export function importForms(data) {
+  return request('formglut_import_forms', { data }, 'POST');
+}
+
+export function exportEntriesUrl(params = {}) {
+  return downloadUrl('formglut_export_entries', params);
+}
+
+export function saveEntryNote(id, text) {
+  return request('formglut_save_entry_notes', { id, text }, 'POST');
+}
+
+export function deleteEntryNote(id, noteId) {
+  return request('formglut_save_entry_notes', { id, delete: noteId }, 'POST');
+}
+
+export function resendNotification(id) {
+  return request('formglut_resend_notification', { id }, 'POST');
+}
+
+export function getEmailLog() {
+  return request('formglut_get_email_log', {}, 'GET');
+}
+
+export function sendTestEmail(to) {
+  return request('formglut_send_test_email', { to }, 'POST');
+}
+
+export function getMailchimpLists() {
+  return request('formglut_get_mailchimp_lists', {}, 'GET');
+}
+
+export function getMigrationSources() {
+  return request('formglut_get_migration_sources', {}, 'GET');
+}
+
+export function migrateForm(source, id) {
+  return request('formglut_migrate_form', { source, id }, 'POST');
+}

@@ -1,9 +1,9 @@
-import { bE as staticMethods, ay as faGear, aq as faEnvelope, ao as faCommentDots, aV as faShieldHalved, b3 as faUserShield, af as faCheckDouble, am as faCloud, aW as faSliders, bB as reactExports, bq as jsxRuntimeExports, B as Button, g as FontAwesomeIcon, aw as faFloppyDisk, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
+import { cv as staticMethods, aO as faGear, aD as faEnvelope, aA as faCommentDots, be as faShieldHalved, bq as faUserShield, ar as faCheckDouble, ay as faCloud, aC as faCreditCard, b7 as faPlug, aE as faEnvelopeCircleCheck, bf as faSliders, co as reactExports, cc as jsxRuntimeExports, a as Button, h as FontAwesomeIcon, aM as faFloppyDisk, j as Input, bO as getEmailLog, cu as sendTestEmail, a7 as createRoot } from "./chunks/api-C3T_2YIP.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { H as Header } from "./chunks/Header-CgkrRZA-.js";
-import { c as Spin, I as Input, S as Select } from "./chunks/index-BLXOj64T.js";
-import { T as TypedInputNumber } from "./chunks/index-aGc0xIpX.js";
-import { S as Switch } from "./chunks/index-ryNm28KF.js";
+import { H as Header } from "./chunks/Header-xSHotuJx.js";
+import { a as Spin, S as Select } from "./chunks/index-DnCN3rVY.js";
+import { T as TypedInputNumber } from "./chunks/index-puzzR6yx.js";
+import { S as Switch } from "./chunks/index-BJj4IPqo.js";
 staticMethods.config({ duration: 3, maxCount: 3, top: 24, placement: "top" });
 const DEFAULTS = {
   formglut_ajax_submit: true,
@@ -25,9 +25,18 @@ const DEFAULTS = {
   formglut_hcaptcha_secret_key: "",
   formglut_turnstile_site_key: "",
   formglut_turnstile_secret_key: "",
-  formglut_delete_on_uninstall: false
+  formglut_delete_on_uninstall: false,
+  formglut_email_log: false,
+  formglut_currency: "USD",
+  formglut_stripe_mode: "test",
+  formglut_stripe_test_publishable: "",
+  formglut_stripe_test_secret: "",
+  formglut_stripe_live_publishable: "",
+  formglut_stripe_live_secret: "",
+  formglut_mailchimp_api_key: "",
+  formglut_hubspot_token: ""
 };
-const BOOL_KEYS = ["formglut_ajax_submit", "formglut_store_entries", "formglut_honeypot", "formglut_recaptcha_enabled", "formglut_delete_on_uninstall"];
+const BOOL_KEYS = ["formglut_ajax_submit", "formglut_store_entries", "formglut_honeypot", "formglut_recaptcha_enabled", "formglut_delete_on_uninstall", "formglut_email_log"];
 function normalize(server) {
   const out = { ...DEFAULTS };
   Object.keys(DEFAULTS).forEach((k) => {
@@ -119,6 +128,40 @@ const SECTIONS = [
     ]
   },
   {
+    key: "payments",
+    title: __("Payments", "formglut"),
+    icon: faCreditCard,
+    desc: __("Stripe keys for Payment fields. Find them in your Stripe Dashboard → Developers → API keys.", "formglut"),
+    fields: [
+      { key: "formglut_stripe_mode", type: "select", label: __("Mode", "formglut"), tip: __("Use Test while you try things out; no real money moves.", "formglut"), options: [{ value: "test", label: __("Test", "formglut") }, { value: "live", label: __("Live", "formglut") }] },
+      { key: "formglut_currency", type: "select", label: __("Currency", "formglut"), options: ["USD", "EUR", "GBP", "CAD", "AUD", "NZD", "CHF", "SEK", "NOK", "DKK", "PLN", "CZK", "INR", "BDT", "PKR", "SGD", "HKD", "MYR", "ZAR", "BRL", "MXN", "AED", "SAR", "TRY", "JPY", "KRW"].map((c) => ({ value: c, label: c })) },
+      { key: "formglut_stripe_test_publishable", type: "text", label: __("Test publishable key", "formglut"), placeholder: "pk_test_…", show: (s) => s.formglut_stripe_mode === "test" },
+      { key: "formglut_stripe_test_secret", type: "password", label: __("Test secret key", "formglut"), placeholder: "sk_test_…", show: (s) => s.formglut_stripe_mode === "test" },
+      { key: "formglut_stripe_live_publishable", type: "text", label: __("Live publishable key", "formglut"), placeholder: "pk_live_…", show: (s) => s.formglut_stripe_mode === "live" },
+      { key: "formglut_stripe_live_secret", type: "password", label: __("Live secret key", "formglut"), placeholder: "sk_live_…", show: (s) => s.formglut_stripe_mode === "live" }
+    ]
+  },
+  {
+    key: "integrations",
+    title: __("Integrations", "formglut"),
+    icon: faPlug,
+    desc: __("Connect services once here, then choose what each form sends in its Form Settings › Integrations.", "formglut"),
+    fields: [
+      { key: "formglut_mailchimp_api_key", type: "password", label: __("Mailchimp API key", "formglut"), tip: __("Mailchimp → Profile → Extras → API keys. It ends with your data centre, e.g. -us21.", "formglut"), placeholder: "xxxxxxxx-us21" },
+      { key: "formglut_hubspot_token", type: "password", label: __("HubSpot private app token", "formglut"), tip: __("HubSpot → Settings → Integrations → Private apps. Give the app the “crm.objects.contacts.write” scope.", "formglut"), placeholder: "pat-…" }
+    ]
+  },
+  {
+    key: "emaillog",
+    title: __("Email log", "formglut"),
+    icon: faEnvelopeCircleCheck,
+    desc: __("Check that emails go out: send a test, and keep a list of the last 50 emails FormGlut sent.", "formglut"),
+    fields: [
+      { key: "formglut_email_log", type: "switch", label: __("Keep an email log", "formglut"), tip: __("Stores recipient, subject and status (not the message) of the last 50 emails.", "formglut") }
+    ],
+    extra: "emaillog"
+  },
+  {
     key: "advanced",
     title: __("Advanced", "formglut"),
     icon: faSliders,
@@ -143,6 +186,56 @@ function Input1({ f, value, onChange }) {
     default:
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value, placeholder: f.placeholder, onChange: (e) => onChange(e.target.value) });
   }
+}
+function EmailLog() {
+  const [to, setTo] = reactExports.useState((window.formglut_admin || {}).admin_email || "");
+  const [sending, setSending] = reactExports.useState(false);
+  const [items, setItems] = reactExports.useState(null);
+  const load = () => getEmailLog().then((d) => setItems(d.items || [])).catch(() => setItems([]));
+  reactExports.useEffect(() => {
+    load();
+  }, []);
+  const send = async () => {
+    setSending(true);
+    try {
+      const r = await sendTestEmail(to);
+      staticMethods.success(r.message);
+      load();
+    } catch (e) {
+      staticMethods.error(e.message);
+    } finally {
+      setSending(false);
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-emaillog", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-row", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-label", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-label-line", children: /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: __("Send a test email", "formglut") }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-help", children: __("Uses the sender name and email above.", "formglut") })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-control", style: { display: "flex", gap: 8 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Input, { value: to, onChange: (e) => setTo(e.target.value), placeholder: "you@example.com" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: send, loading: sending, children: __("Send", "formglut") })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-emaillog-list", children: items === null ? /* @__PURE__ */ jsxRuntimeExports.jsx(Spin, { size: "small" }) : items.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-help", children: __("No emails logged yet. Turn on the log above and save.", "formglut") }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: __("Date", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: __("To", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: __("Subject", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: __("Status", "formglut") })
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: items.map((it, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: it.date }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: it.to }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { children: [
+          it.subject,
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-help", children: it.context })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-log-" + it.status, children: it.status === "sent" ? __("Sent", "formglut") : __("Failed", "formglut") }) })
+      ] }, i)) })
+    ] }) })
+  ] });
 }
 function Settings() {
   const [values, setValues] = reactExports.useState(DEFAULTS);
@@ -235,7 +328,8 @@ function Settings() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-control", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Input1, { f, value: values[f.key], onChange: (v) => update(f.key, v) }) })
           ] }, f.key)),
-          section.hint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-note", style: { margin: "4px 0 18px" }, children: section.hint })
+          section.hint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-note", style: { margin: "4px 0 18px" }, children: section.hint }),
+          section.extra === "emaillog" && /* @__PURE__ */ jsxRuntimeExports.jsx(EmailLog, {})
         ] })
       ] })
     ] })

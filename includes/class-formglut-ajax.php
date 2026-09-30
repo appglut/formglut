@@ -56,6 +56,16 @@ class FormGlut_Ajax {
 			'toggle_entry_star',
 			'get_settings',
 			'save_settings',
+			'export_forms',
+			'import_forms',
+			'export_entries',
+			'save_entry_notes',
+			'resend_notification',
+			'get_email_log',
+			'get_mailchimp_lists',
+			'get_migration_sources',
+			'migrate_form',
+			'send_test_email',
 		);
 
 		foreach ( $admin_actions as $action ) {
@@ -163,7 +173,8 @@ class FormGlut_Ajax {
 						$clean_field['options'][] = array(
 							'label' => isset( $option['label'] ) ? sanitize_text_field( $option['label'] ) : '',
 							'value' => isset( $option['value'] ) ? sanitize_text_field( $option['value'] ) : '',
-						) + ( ! empty( $option['disabled'] ) ? array( 'disabled' => true ) : array() );
+						) + ( ! empty( $option['disabled'] ) ? array( 'disabled' => true ) : array() )
+						+ ( isset( $option['calc_value'] ) && is_numeric( $option['calc_value'] ) ? array( 'calc_value' => (string) (float) $option['calc_value'] ) : array() );
 					}
 				}
 			}
@@ -251,7 +262,7 @@ class FormGlut_Ajax {
 	 *
 	 * @var string[]
 	 */
-	const NON_INPUT_TYPES = array( 'html', 'heading', 'section_break', 'shortcode', 'action_hook', 'custom_submit_button', 'recaptcha', 'hcaptcha', 'turnstile', 'divider' );
+	const NON_INPUT_TYPES = array( 'html', 'heading', 'section_break', 'shortcode', 'action_hook', 'custom_submit_button', 'recaptcha', 'hcaptcha', 'turnstile', 'divider', 'form_step', 'reset_button', 'unique_id', 'math_captcha', 'calculation', 'stripe_card' );
 
 	/**
 	 * Recursively sanitize an arbitrary field option value (strings, numbers, bools, arrays).
@@ -693,6 +704,8 @@ class FormGlut_Ajax {
 		$offset = max( 0, ( $page - 1 ) * $per_page );
 
 		$result = FormGlut_Entry::get_entries( array(
+			'date_from' => isset( $_GET['date_from'] ) ? sanitize_text_field( wp_unslash( $_GET['date_from'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			'date_to'   => isset( $_GET['date_to'] ) ? sanitize_text_field( wp_unslash( $_GET['date_to'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			'form_id'  => $form_id,
 			'search'   => $search,
 			'status'   => $status,
@@ -761,10 +774,17 @@ class FormGlut_Ajax {
 
 		$form_id = absint( $_GET['form_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		$where = '';
+		$conds = array();
 		if ( $form_id ) {
-			$where = $wpdb->prepare( ' WHERE form_id = %d', $form_id );
+			$conds[] = $wpdb->prepare( 'form_id = %d', $form_id );
 		}
+		foreach ( array( 'date_from' => '>=', 'date_to' => '<=' ) as $key => $op ) {
+			$day = isset( $_GET[ $key ] ) ? sanitize_text_field( wp_unslash( $_GET[ $key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $day ) ) {
+				$conds[] = $wpdb->prepare( "created_at {$op} %s", $day . ( '>=' === $op ? ' 00:00:00' : ' 23:59:59' ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
+		}
+		$where = $conds ? ' WHERE ' . implode( ' AND ', $conds ) : '';
 
 		$counts = array(
 			'all'     => 0,
@@ -824,8 +844,317 @@ class FormGlut_Ajax {
 				'source_url'  => esc_url( $entry->source_url ),
 				'country'     => esc_html( $entry->country ),
 				'created_at'  => esc_html( $entry->created_at ),
+				'notes'       => $this->decode_notes( isset( $entry->notes ) ? $entry->notes : '' ),
 			),
 		) );
+	}
+
+	/* ── Tools: import / export, notes, resend ────────────────────────── */
+
+	/**
+	 * Notes stored on an entry as a JSON list of { text, author, date }.
+	 *
+	 * @param string|null $raw Stored value.
+	 * @return array
+	 */
+	private function decode_notes( $raw ) {
+		$list = json_decode( (string) $raw, true );
+		return is_array( $list ) ? array_values( $list ) : array();
+	}
+
+	/**
+	 * Download one or more forms as a JSON file.
+	 *
+	 * @return void
+	 */
+	public function export_forms() {
+		$this->verify_admin_request();
+
+		$ids   = array_filter( array_map( 'absint', explode( ',', isset( $_GET['ids'] ) ? sanitize_text_field( wp_unslash( $_GET['ids'] ) ) : '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$forms = array();
+		foreach ( $ids as $id ) {
+			$form = FormGlut_Form::get( $id );
+			if ( $form ) {
+				$forms[] = array(
+					'title'      => $form->title,
+					'status'     => $form->status,
+					'fields'     => $form->fields,
+					'submit_btn' => $form->submit_btn,
+					'settings'   => $form->settings,
+				);
+			}
+		}
+		if ( empty( $forms ) ) {
+			wp_die( esc_html__( 'No forms to export.', 'formglut' ) );
+		}
+
+		$name = 1 === count( $forms ) ? sanitize_title( $forms[0]['title'] ) : 'formglut-forms';
+		nocache_headers();
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $name . '-' . gmdate( 'Y-m-d' ) . '.json"' );
+		echo wp_json_encode( array( 'plugin' => 'formglut', 'version' => FORMGLUT_VERSION, 'exported' => gmdate( 'c' ), 'forms' => $forms ), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON download.
+		exit;
+	}
+
+	/**
+	 * Create forms from an exported JSON file.
+	 *
+	 * @return void
+	 */
+	public function import_forms() {
+		$this->verify_admin_request();
+
+		$data = $this->sanitize_json( isset( $_POST['data'] ) ? $_POST['data'] : '' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput
+		if ( is_wp_error( $data ) || empty( $data['forms'] ) || ! is_array( $data['forms'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'This is not a FormGlut export file.', 'formglut' ) ) );
+		}
+
+		$created = array();
+		foreach ( array_slice( $data['forms'], 0, 100 ) as $item ) {
+			if ( ! is_array( $item ) || empty( $item['title'] ) || ! isset( $item['fields'] ) || ! is_array( $item['fields'] ) ) {
+				continue;
+			}
+			$id = FormGlut_Form::create( array(
+				'title'      => sanitize_text_field( $item['title'] ),
+				'fields'     => $this->sanitize_form_fields( $item['fields'] ),
+				'submit_btn' => $this->sanitize_submit_btn( isset( $item['submit_btn'] ) && is_array( $item['submit_btn'] ) ? $item['submit_btn'] : array() ),
+				'settings'   => isset( $item['settings'] ) && is_array( $item['settings'] ) ? $item['settings'] : array(),
+				'status'     => 'draft',
+			) );
+			if ( $id ) {
+				$created[] = $id;
+			}
+		}
+
+		if ( empty( $created ) ) {
+			wp_send_json_error( array( 'message' => __( 'No forms could be imported from this file.', 'formglut' ) ) );
+		}
+		wp_send_json_success( array(
+			/* translators: %d: number of forms */
+			'message' => sprintf( _n( '%d form imported as a draft.', '%d forms imported as drafts.', count( $created ), 'formglut' ), count( $created ) ),
+			'ids'     => $created,
+		) );
+	}
+
+	/**
+	 * Download entries as CSV (Excel-friendly UTF-8). Uses the same filters as the Entries list.
+	 *
+	 * @return void
+	 */
+	public function export_entries() {
+		$this->verify_admin_request();
+
+		$form_id = absint( $_GET['form_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$status  = isset( $_GET['status'] ) ? sanitize_key( wp_unslash( $_GET['status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$search  = isset( $_GET['search'] ) ? sanitize_text_field( wp_unslash( $_GET['search'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$from    = isset( $_GET['date_from'] ) ? sanitize_text_field( wp_unslash( $_GET['date_from'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$to      = isset( $_GET['date_to'] ) ? sanitize_text_field( wp_unslash( $_GET['date_to'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		$starred = ! empty( $_GET['starred'] ) ? 1 : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$result  = FormGlut_Entry::get_entries( array( 'form_id' => $form_id, 'status' => $status, 'starred' => $starred, 'search' => $search, 'date_from' => $from, 'date_to' => $to, 'per_page' => 0, 'orderby' => 'created_at', 'order' => 'DESC' ) );
+		$entries = $result['entries'];
+
+		// Columns: one per field, in form order. Across several forms, fields are grouped by label.
+		$columns = array();
+		$forms   = array();
+		foreach ( $entries as $entry ) {
+			if ( ! isset( $forms[ $entry->form_id ] ) ) {
+				$forms[ $entry->form_id ] = FormGlut_Form::get( $entry->form_id );
+				$form = $forms[ $entry->form_id ];
+				foreach ( $form ? FormGlut_Form::flatten_fields( $form->fields ) : array() as $field ) {
+					if ( empty( $field['id'] ) || in_array( $field['type'] ?? '', self::NON_INPUT_TYPES, true ) ) {
+						continue;
+					}
+					$label = ! empty( $field['admin_label'] ) ? $field['admin_label'] : ( ! empty( $field['label'] ) ? $field['label'] : $field['id'] );
+					$key   = $form_id ? $field['id'] : strtolower( $label );
+					if ( ! isset( $columns[ $key ] ) ) {
+						$columns[ $key ] = array( 'label' => $label, 'ids' => array() );
+					}
+					$columns[ $key ]['ids'][ $entry->form_id ] = $field['id'];
+				}
+			}
+		}
+
+		// Stop spreadsheet formula injection: prefix cells that start with = + - @.
+		$cell = static function ( $v ) {
+			$v = is_array( $v ) ? implode( ', ', array_map( 'strval', $v ) ) : (string) $v;
+			return preg_match( '/^[=+\-@\t\r]/', $v ) ? "'" . $v : $v;
+		};
+
+		$name = $form_id && ! empty( $forms[ $form_id ] ) ? sanitize_title( $forms[ $form_id ]->title ) : 'formglut';
+		nocache_headers();
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $name . '-entries-' . gmdate( 'Y-m-d' ) . '.csv"' );
+		$out = fopen( 'php://output', 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions -- BOM so Excel reads UTF-8.
+		fputcsv( $out, array_merge( array( __( 'Entry ID', 'formglut' ), __( 'Date', 'formglut' ), __( 'Form', 'formglut' ), __( 'Status', 'formglut' ) ), array_map( $cell, wp_list_pluck( $columns, 'label' ) ), array( __( 'IP address', 'formglut' ), __( 'Source URL', 'formglut' ) ) ) );
+		foreach ( $entries as $entry ) {
+			$row = array( $entry->id, $entry->created_at, $forms[ $entry->form_id ] ? $forms[ $entry->form_id ]->title : '', $entry->status );
+			foreach ( $columns as $col ) {
+				$fid   = isset( $col['ids'][ $entry->form_id ] ) ? $col['ids'][ $entry->form_id ] : '';
+				$row[] = '' !== $fid && isset( $entry->fields_data[ $fid ] ) ? $entry->fields_data[ $fid ] : '';
+			}
+			$row[] = $entry->ip_address;
+			$row[] = $entry->source_url;
+			fputcsv( $out, array_map( $cell, $row ) );
+		}
+		fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		exit;
+	}
+
+	/**
+	 * Add or delete a private note on an entry.
+	 *
+	 * @return void
+	 */
+	public function save_entry_notes() {
+		$this->verify_admin_request();
+
+		global $wpdb;
+		$entry_id = absint( $_POST['id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$entry    = $entry_id ? FormGlut_Entry::get( $entry_id ) : null;
+		if ( ! $entry ) {
+			wp_send_json_error( array( 'message' => __( 'Entry not found.', 'formglut' ) ) );
+		}
+
+		$notes  = $this->decode_notes( isset( $entry->notes ) ? $entry->notes : '' );
+		$text   = isset( $_POST['text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['text'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$delete = isset( $_POST['delete'] ) ? absint( $_POST['delete'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		if ( '' !== trim( $text ) ) {
+			$user    = wp_get_current_user();
+			$notes[] = array( 'id' => time() . wp_rand( 100, 999 ), 'text' => $text, 'author' => $user->display_name, 'date' => current_time( 'mysql' ) );
+		} elseif ( $delete ) {
+			$notes = array_values( array_filter( $notes, static function ( $n ) use ( $delete ) {
+				return (int) ( $n['id'] ?? 0 ) !== $delete;
+			} ) );
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Write a note first.', 'formglut' ) ) );
+		}
+
+		$wpdb->update( $wpdb->formglut_entries, array( 'notes' => wp_json_encode( $notes ) ), array( 'id' => $entry_id ), array( '%s' ), array( '%d' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		wp_send_json_success( array( 'notes' => $notes ) );
+	}
+
+	/**
+	 * Send the notification email(s) of an entry again.
+	 *
+	 * @return void
+	 */
+	public function resend_notification() {
+		$this->verify_admin_request();
+
+		$entry_id = absint( $_POST['id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$entry    = $entry_id ? FormGlut_Entry::get( $entry_id ) : null;
+		$form     = $entry ? FormGlut_Form::get( $entry->form_id ) : null;
+		if ( ! $entry || ! $form ) {
+			wp_send_json_error( array( 'message' => __( 'Entry or form not found.', 'formglut' ) ) );
+		}
+
+		$sent = 0;
+		$count = static function () use ( &$sent ) {
+			++$sent;
+		};
+		add_action( 'wp_mail_succeeded', $count );
+		$this->send_notification_email( $form, (array) json_decode( $entry->fields_data, true ), $entry_id, $entry->ip_address );
+		remove_action( 'wp_mail_succeeded', $count );
+
+		if ( ! $sent ) {
+			wp_send_json_error( array( 'message' => __( 'No email was sent. Check the form’s notification settings and your site’s mail setup.', 'formglut' ) ) );
+		}
+		/* translators: %d: number of emails */
+		wp_send_json_success( array( 'message' => sprintf( _n( '%d email sent.', '%d emails sent.', $sent, 'formglut' ), $sent ) ) );
+	}
+
+	/**
+	 * Mailchimp audiences for the Form Settings picker.
+	 *
+	 * @return void
+	 */
+	public function get_mailchimp_lists() {
+		$this->verify_admin_request();
+		$lists = FormGlut_Integrations::mailchimp_lists();
+		if ( is_wp_error( $lists ) ) {
+			wp_send_json_error( array( 'message' => $lists->get_error_message() ) );
+		}
+		wp_send_json_success( array( 'lists' => $lists ) );
+	}
+
+	/**
+	 * Forms in other plugins that can be imported.
+	 *
+	 * @return void
+	 */
+	public function get_migration_sources() {
+		$this->verify_admin_request();
+		wp_send_json_success( array( 'sources' => FormGlut_Migrator::sources() ) );
+	}
+
+	/**
+	 * Import one form from another plugin as a FormGlut draft.
+	 *
+	 * @return void
+	 */
+	public function migrate_form() {
+		$this->verify_admin_request();
+		$source = isset( $_POST['source'] ) ? sanitize_key( wp_unslash( $_POST['source'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$id     = absint( $_POST['id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$data   = FormGlut_Migrator::convert( $source, $id );
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'message' => $data->get_error_message() ) );
+		}
+		$form_id = FormGlut_Form::create( array(
+			'title'      => sanitize_text_field( $data['title'] ),
+			'fields'     => $this->sanitize_form_fields( $data['fields'] ),
+			'submit_btn' => $this->sanitize_submit_btn( array( 'text' => ! empty( $data['submit'] ) ? $data['submit'] : __( 'Submit', 'formglut' ) ) ),
+			'settings'   => array(),
+			'status'     => 'draft',
+		) );
+		if ( ! $form_id ) {
+			wp_send_json_error( array( 'message' => __( 'The form could not be saved.', 'formglut' ) ) );
+		}
+		FormGlut_Migrator::mark_done( $source, $id, $form_id );
+		wp_send_json_success( array( 'form_id' => $form_id, 'title' => $data['title'], 'skipped' => $data['skipped'] ) );
+	}
+
+	/**
+	 * Recent emails sent by FormGlut (when the email log is on).
+	 *
+	 * @return void
+	 */
+	public function get_email_log() {
+		$this->verify_admin_request();
+		wp_send_json_success( array( 'items' => get_option( 'formglut_email_log_items', array() ) ) );
+	}
+
+	/**
+	 * Send a test email to check the site can send mail.
+	 *
+	 * @return void
+	 */
+	public function send_test_email() {
+		$this->verify_admin_request();
+		$to = isset( $_POST['to'] ) ? sanitize_email( wp_unslash( $_POST['to'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! is_email( $to ) ) {
+			wp_send_json_error( array( 'message' => __( 'Enter a valid email address.', 'formglut' ) ) );
+		}
+		$name    = FormGlut_Settings::get( 'formglut_sender_name', 'FormGlut' );
+		$from    = FormGlut_Settings::get( 'formglut_sender_email', '' );
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		if ( is_email( $from ) ) {
+			$headers[] = 'From: ' . ( $name ? "{$name} <{$from}>" : $from );
+		}
+		$subject = __( 'FormGlut test email', 'formglut' );
+		$ok      = wp_mail( $to, $subject, '<p>' . esc_html__( 'If you can read this, your site can send FormGlut emails.', 'formglut' ) . '</p>', $headers );
+		$was_on  = FormGlut_Settings::get( 'formglut_email_log', false );
+		if ( $was_on ) {
+			FormGlut_Settings::log_email( $to, $subject, $ok, __( 'Test email', 'formglut' ) );
+		}
+		if ( ! $ok ) {
+			wp_send_json_error( array( 'message' => __( 'WordPress could not send the email. An SMTP plugin usually fixes this.', 'formglut' ) ) );
+		}
+		/* translators: %s: email address */
+		wp_send_json_success( array( 'message' => sprintf( __( 'Test email sent to %s.', 'formglut' ), $to ) ) );
 	}
 
 	/**
@@ -1006,6 +1335,26 @@ class FormGlut_Ajax {
 			return;
 		}
 
+		// Referrer check: the submission must come from a page on this site.
+		if ( ! empty( $fs['spam']['referrer_check'] ) ) {
+			$ref  = isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), PHP_URL_HOST ) : '';
+			$home = wp_parse_url( home_url(), PHP_URL_HOST );
+			if ( ! $ref || strtolower( (string) $ref ) !== strtolower( (string) $home ) ) {
+				wp_send_json_error( array( 'message' => __( 'Please submit this form from our website.', 'formglut' ) ) );
+			}
+		}
+
+		// Rate limit: submissions per visitor (IP) per hour.
+		$per_hour = (int) $fs['spam']['rate_limit'];
+		if ( $per_hour > 0 ) {
+			$rl_key = 'formglut_rl_' . md5( $form_id . '|' . $this->get_client_ip() );
+			$count  = (int) get_transient( $rl_key );
+			if ( $count >= $per_hour ) {
+				wp_send_json_error( array( 'message' => __( 'Too many submissions. Please try again later.', 'formglut' ) ) );
+			}
+			set_transient( $rl_key, $count + 1, HOUR_IN_SECONDS );
+		}
+
 		// Minimum fill time (anti-bot).
 		$min_time = (int) $fs['spam']['min_time'];
 		if ( $min_time > 0 ) {
@@ -1016,16 +1365,30 @@ class FormGlut_Ajax {
 		}
 
 		// Captcha verification: fields on the form, plus the optional "protect every form" reCAPTCHA v3.
-		$error_msg     = FormGlut_Settings::get( 'formglut_error_message', __( 'Something went wrong. Please try again.', 'formglut' ) );
 		$captcha_error = $this->verify_captchas( $form, $error_msg );
 		if ( '' !== $captcha_error ) {
 			wp_send_json_error( array( 'message' => $captcha_error ) );
 			return;
 		}
 
+		// Math captcha fields.
+		foreach ( FormGlut_Form::flatten_fields( is_array( $form->fields ) ? $form->fields : array() ) as $mc ) {
+			if ( 'math_captcha' !== ( $mc['type'] ?? '' ) || ! empty( $mc['hidden'] ) ) {
+				continue;
+			}
+			$mc_name = ! empty( $mc['name_attribute'] ) ? $mc['name_attribute'] : ( $mc['id'] ?? '' );
+			$answer  = isset( $_POST[ $mc_name ] ) ? sanitize_text_field( wp_unslash( $_POST[ $mc_name ] ) ) : '';
+			$token   = isset( $_POST[ $mc_name . '_mc' ] ) ? sanitize_text_field( wp_unslash( $_POST[ $mc_name . '_mc' ] ) ) : '';
+			if ( ! FormGlut_Form::math_answer_ok( $mc, $form_id, $answer, $token ) ) {
+				$mc_msg = ! empty( $mc['validation_message'] ) ? $mc['validation_message'] : __( 'That answer is not right. Please try again.', 'formglut' );
+				wp_send_json_error( array( 'message' => $mc_msg, 'errors' => array( $mc['id'] => $mc_msg ) ) );
+			}
+		}
+
 		// Validate and sanitize submitted fields against form definition.
-		$fields_data = array();
-		$errors      = array();
+		$fields_data     = array();
+		$errors          = array();
+		$pending_uploads = array();
 
 		if ( is_array( $form->fields ) ) {
 			foreach ( FormGlut_Form::flatten_fields( $form->fields ) as $field ) {
@@ -1038,12 +1401,81 @@ class FormGlut_Ajax {
 					continue;
 				}
 
+				// Fields this visitor cannot see are neither required nor stored.
+				if ( ! FormGlut_Form::field_visible( $field ) ) {
+					continue;
+				}
+
 				// Use custom name attribute if set, otherwise fall back to field ID
 				$field_name = isset( $field['name_attribute'] ) && '' !== $field['name_attribute']
 					? $field['name_attribute']
 					: $field_id;
 
 				$value      = isset( $_POST[ $field_name ] ) ? wp_unslash( $_POST[ $field_name ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized in sanitize_field_value() below.
+
+				// Phone with a country code dropdown: store "+code number".
+				if ( 'phone' === $field_type && ! empty( $field['show_country_code'] ) && is_string( $value ) && '' !== trim( $value ) && 0 !== strpos( trim( $value ), '+' ) ) {
+					$cc    = isset( $_POST[ $field_name . '_cc' ] ) ? strtoupper( sanitize_key( wp_unslash( $_POST[ $field_name . '_cc' ] ) ) ) : '';
+					$codes = FormGlut_Form::dial_codes();
+					if ( isset( $codes[ $cc ] ) ) {
+						$value = '+' . $codes[ $cc ] . ' ' . ltrim( trim( $value ), '0' );
+					}
+				}
+
+				// "Other" choice: needs the visitor's text, which replaces the placeholder value.
+				$other_text = '';
+				if ( in_array( $field_type, array( 'radio', 'checkbox' ), true ) && ! empty( $field['enable_other'] ) && in_array( '__other__', (array) $value, true ) ) {
+					$other_text = isset( $_POST[ $field_name . '_other' ] ) ? sanitize_text_field( wp_unslash( $_POST[ $field_name . '_other' ] ) ) : '';
+					if ( '' === $other_text ) {
+						/* translators: %s: field label */
+						$errors[ $field_id ] = sprintf( __( 'Please describe your “Other” answer for %s.', 'formglut' ), $field_label );
+						continue;
+					}
+				}
+
+				// Rich text: keep safe formatting only; an editor with no visible text counts as empty.
+				if ( 'rich_text' === $field_type && is_string( $value ) ) {
+					$value = self::clean_rich_text( $value );
+					if ( '' === trim( html_entity_decode( wp_strip_all_tags( $value ) ) ) ) {
+						$value = '';
+					}
+				}
+
+				// Payment items: the price comes from the field settings, or a checked amount the visitor typed.
+				if ( 'payment_item' === $field_type ) {
+					$posted = isset( $_POST[ $field_name ] ) ? wp_unslash( $_POST[ $field_name ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput -- parsed as a number below.
+					$amount = FormGlut_Payments::item_amount( $field, $posted );
+					if ( 'custom' === ( $field['item_type'] ?? 'fixed' ) ) {
+						$min = (float) ( $field['min_amount'] ?? 0 );
+						if ( ( $required && $amount <= 0 ) || ( $amount > 0 && $amount < $min ) ) {
+							/* translators: 1: field label, 2: minimum amount */
+							$errors[ $field_id ] = $min > 0 ? sprintf( __( '%1$s must be at least %2$s.', 'formglut' ), $field_label, number_format_i18n( $min, 2 ) ) : sprintf( /* translators: %s: field label */ __( 'Please enter an amount for %s.', 'formglut' ), $field_label );
+							continue;
+						}
+					}
+					$fields_data[ $field_id ] = number_format( $amount, 2, '.', '' );
+					continue;
+				}
+
+				// File uploads: check now, store only after every other check passes.
+				if ( 'file_upload' === $field_type ) {
+					$files = FormGlut_Uploads::collect( $field_name );
+					if ( empty( $files ) ) {
+						if ( $required && empty( $field['conditional_logic'] ) ) {
+							$errors[ $field_id ] = '' !== ( $field['validation_message'] ?? '' ) ? $field['validation_message'] : sprintf( /* translators: %s: field label */ __( '%s is required.', 'formglut' ), $field_label );
+						} else {
+							$fields_data[ $field_id ] = '';
+						}
+						continue;
+					}
+					$upload_error = FormGlut_Uploads::validate( $field, $files, $field_label );
+					if ( '' !== $upload_error ) {
+						$errors[ $field_id ] = $upload_error;
+						continue;
+					}
+					$pending_uploads[ $field_id ] = $files;
+					continue;
+				}
 
 				// Multi-part fields post an array: check required parts, then store one readable value.
 				if ( in_array( $field_type, array( 'name', 'address', 'date_range' ), true ) ) {
@@ -1091,6 +1523,13 @@ class FormGlut_Ajax {
 					continue;
 				}
 
+				// Custom validation rule.
+				$rule = in_array( $field_type, array( 'text', 'textarea', 'url', 'phone', 'password' ), true ) ? FormGlut_Form::field_pattern( $field ) : null;
+				if ( $rule && is_string( $value ) && ! preg_match( $rule['php'], $value ) ) {
+					$errors[ $field_id ] = $rule['message'];
+					continue;
+				}
+
 				// Unique value validation.
 				if ( ! empty( $field['validate_unique'] ) ) {
 					// Check if this value already exists in previous entries for this form
@@ -1123,6 +1562,21 @@ class FormGlut_Ajax {
 
 				// Sanitize by field type.
 				$fields_data[ $field_id ] = $this->sanitize_field_value( $value, $field_type, $field );
+
+				if ( '' !== $other_text ) {
+					$other_label = ! empty( $field['other_label'] ) ? $field['other_label'] : __( 'Other', 'formglut' );
+					$replace     = $other_label . ': ' . $other_text;
+					$fields_data[ $field_id ] = is_array( $fields_data[ $field_id ] )
+						? array_map( static function ( $v ) use ( $replace ) {
+							return '__other__' === $v ? $replace : $v;
+						}, $fields_data[ $field_id ] )
+						: ( '__other__' === $fields_data[ $field_id ] ? $replace : $fields_data[ $field_id ] );
+				}
+
+				// Round numbers to the chosen number of decimals.
+				if ( in_array( $field_type, array( 'number', 'currency', 'percentage', 'spinner' ), true ) && isset( $field['decimals'] ) && '' !== $field['decimals'] && is_numeric( $fields_data[ $field_id ] ) ) {
+					$fields_data[ $field_id ] = (string) round( (float) $fields_data[ $field_id ], absint( $field['decimals'] ) );
+				}
 			}
 		}
 
@@ -1155,15 +1609,50 @@ class FormGlut_Ajax {
 		}
 
 		// Spam checks: blocked words, then Akismet.
-		$is_spam = false;
+		$is_spam     = false;
+		$spam_reason = '';
 		if ( '' !== trim( $sp['keywords'] ) && FormGlut_Form_Settings::has_blocked_keyword( $sp['keywords'], $fields_data ) ) {
 			if ( 'reject' === $sp['keyword_action'] ) {
 				wp_send_json_error( array( 'message' => __( 'Your submission contains words that are not allowed.', 'formglut' ) ) );
 			}
-			$is_spam = true;
+			$is_spam     = true;
+			$spam_reason = __( 'Marked as spam: contains a blocked word.', 'formglut' );
 		}
-		if ( ! $is_spam && $sp['akismet'] ) {
-			$is_spam = FormGlut_Form_Settings::akismet_is_spam( $fields_data, $form, $ip );
+		if ( ! $is_spam && $sp['akismet'] && FormGlut_Form_Settings::akismet_is_spam( $fields_data, $form, $ip ) ) {
+			$is_spam     = true;
+			$spam_reason = __( 'Marked as spam by Akismet.', 'formglut' );
+		}
+
+		// Calculation fields: always worked out on the server from the submitted values.
+		$flat_fields = FormGlut_Form::flatten_fields( is_array( $form->fields ) ? $form->fields : array() );
+		foreach ( $flat_fields as $calc_field ) {
+			if ( 'calculation' === ( $calc_field['type'] ?? '' ) && ! empty( $calc_field['id'] ) && FormGlut_Form::field_visible( $calc_field ) ) {
+				$fields_data[ $calc_field['id'] ] = FormGlut_Calc::for_field( $calc_field, $flat_fields, $fields_data );
+			}
+		}
+
+		// Payments (Stripe): create the PaymentIntent on the first pass, verify it on the second.
+		$payment = FormGlut_Payments::process( $form, $flat_fields, $fields_data );
+		if ( is_wp_error( $payment ) ) {
+			wp_send_json_error( array( 'message' => $payment->get_error_message() ) );
+		}
+		if ( isset( $payment['respond'] ) ) {
+			wp_send_json_success( $payment['respond'] );
+		}
+		if ( ! empty( $payment['payment'] ) ) {
+			$fields_data['_payment'] = $payment['payment'];
+		}
+
+		// Unique ID fields get their value now, so numbers are only used by real submissions.
+		foreach ( FormGlut_Form::flatten_fields( is_array( $form->fields ) ? $form->fields : array() ) as $uid_field ) {
+			if ( 'unique_id' === ( $uid_field['type'] ?? '' ) && ! empty( $uid_field['id'] ) ) {
+				$fields_data[ $uid_field['id'] ] = FormGlut_Form::next_unique_id( $uid_field, $form_id );
+			}
+		}
+
+		// Everything passed: move uploaded files into place and keep their URLs.
+		foreach ( $pending_uploads as $upload_field_id => $files ) {
+			$fields_data[ $upload_field_id ] = FormGlut_Uploads::store( $files, $form_id );
 		}
 
 		// Store entry (per-form override, then the global setting).
@@ -1185,11 +1674,18 @@ class FormGlut_Ajax {
 			if ( ! $entry_id ) {
 				wp_send_json_error( array( 'message' => $error_msg ) );
 			}
+			if ( $spam_reason ) {
+				global $wpdb;
+				$wpdb->update( $wpdb->formglut_entries, array( 'notes' => wp_json_encode( array( array( 'id' => time() . '1', 'text' => $spam_reason, 'author' => 'FormGlut', 'date' => current_time( 'mysql' ) ) ) ) ), array( 'id' => $entry_id ), array( '%s' ), array( '%d' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			}
 		}
 
 		// Send email notifications (never for spam).
 		if ( ! $is_spam ) {
 			$this->send_notification_email( $form, $fields_data, $entry_id, $keep_ip ? $ip : '' );
+			FormGlut_Form_Settings::send_webhook( $form, $fields_data, $entry_id );
+			FormGlut_Form_Settings::send_slack( $form, $fields_data, $entry_id );
+			FormGlut_Integrations::dispatch( $form, $fields_data );
 		}
 
 		// Confirmation: message (with smart tags) and what the browser should do next.
@@ -1289,7 +1785,21 @@ class FormGlut_Ajax {
 					$body .= '<p style="margin-top:16px;color:#94a3b8;font-size:12px;">' . esc_html__( 'Submitted on', 'formglut' ) . ' ' . esc_html( current_time( 'mysql' ) ) . '</p>';
 				}
 
-				wp_mail( $to, $subject, $body, $headers );
+				$attachments = array();
+				if ( ! empty( $n['attach_files'] ) ) {
+					foreach ( FormGlut_Form::flatten_fields( is_array( $form->fields ) ? $form->fields : array() ) as $f ) {
+						if ( 'file_upload' === ( $f['type'] ?? '' ) && ! empty( $fields_data[ $f['id'] ] ) && is_array( $fields_data[ $f['id'] ] ) ) {
+							foreach ( $fields_data[ $f['id'] ] as $url ) {
+								$path = FormGlut_Uploads::path_from_url( $url );
+								if ( $path && filesize( $path ) < 20 * MB_IN_BYTES ) {
+									$attachments[] = $path;
+								}
+							}
+						}
+					}
+				}
+				$ok = wp_mail( $to, $subject, $body, $headers, $attachments );
+				FormGlut_Settings::log_email( $to, $subject, $ok, $form->title );
 			}
 		}
 
@@ -1298,13 +1808,26 @@ class FormGlut_Ajax {
 		if ( $ar['enabled'] && '' !== $ar['email_field'] && ! empty( $fields_data[ $ar['email_field'] ] ) && is_email( (string) $fields_data[ $ar['email_field'] ] ) ) {
 			$subject_tpl = '' !== $ar['subject'] ? $ar['subject'] : __( 'Thank you for contacting {site_name}', 'formglut' );
 			$message_tpl = '' !== trim( $ar['message'] ) ? $ar['message'] : __( "Thank you! We have received your submission.\n\n{all_fields}", 'formglut' );
-			wp_mail(
-				(string) $fields_data[ $ar['email_field'] ],
-				wp_strip_all_tags( $t( $subject_tpl ) ),
-				$wrap_body( $t( $message_tpl, true ) ),
-				$base_headers
-			);
+			$ar_to      = (string) $fields_data[ $ar['email_field'] ];
+			$ar_subject = wp_strip_all_tags( $t( $subject_tpl ) );
+			$ok         = wp_mail( $ar_to, $ar_subject, $wrap_body( $t( $message_tpl, true ) ), $base_headers );
+			FormGlut_Settings::log_email( $ar_to, $ar_subject, $ok, $form->title . ' · ' . __( 'confirmation to visitor', 'formglut' ) );
 		}
+	}
+
+	/**
+	 * Keep only the formatting the Rich Text field can produce.
+	 *
+	 * @param string $html Submitted HTML.
+	 * @return string
+	 */
+	private static function clean_rich_text( $html ) {
+		$allowed = array(
+			'p' => array(), 'br' => array(), 'div' => array(), 'strong' => array(), 'b' => array(), 'em' => array(), 'i' => array(), 'u' => array(),
+			'ul' => array(), 'ol' => array(), 'li' => array(), 'blockquote' => array(),
+			'a' => array( 'href' => true, 'target' => true, 'rel' => true ),
+		);
+		return trim( wp_kses( (string) $html, $allowed, array( 'http', 'https', 'mailto' ) ) );
 	}
 
 	/**
@@ -1319,6 +1842,12 @@ class FormGlut_Ajax {
 		switch ( $type ) {
 			case 'email':
 				return sanitize_email( $value );
+
+			case 'rich_text':
+				return self::clean_rich_text( (string) $value );
+
+			case 'star_rating':
+				return (string) absint( $value );
 
 			case 'password':
 				// Never store or email the real password.
@@ -1454,6 +1983,14 @@ class FormGlut_Ajax {
 			}
 		}
 
+		if ( 'name' === $type && ! empty( $posted['prefix'] ) ) {
+			$titles = array_map( 'trim', explode( ',', ! empty( $field['prefix_options'] ) ? $field['prefix_options'] : 'Mr, Mrs, Ms, Mx, Dr' ) );
+			if ( ! in_array( $posted['prefix'], $titles, true ) ) {
+				/* translators: %s: field label */
+				return sprintf( __( 'Please choose a valid title for %s.', 'formglut' ), $label );
+			}
+		}
+
 		if ( 'address' === $type && ! empty( $posted['country'] ) ) {
 			$countries = include FORMGLUT_PLUGIN_DIR . 'includes/data/countries.php';
 			if ( ! isset( $countries[ $posted['country'] ] ) ) {
@@ -1503,6 +2040,10 @@ class FormGlut_Ajax {
 		switch ( $type ) {
 			case 'text':
 			case 'textarea':
+				if ( ! empty( $field['max_words'] ) && count( preg_split( '/\s+/u', trim( (string) $value ), -1, PREG_SPLIT_NO_EMPTY ) ) > absint( $field['max_words'] ) ) {
+					/* translators: 1: field label, 2: number of words */
+					return sprintf( __( '%1$s must not exceed %2$d words.', 'formglut' ), $label, absint( $field['max_words'] ) );
+				}
 				$max = ! empty( $field['max_length'] ) ? absint( $field['max_length'] ) : ( ! empty( $field['character_limit'] ) ? absint( $field['character_limit'] ) : 0 );
 				$min = 'textarea' === $type && ! empty( $field['min_length'] ) ? absint( $field['min_length'] ) : 0;
 				if ( $max && mb_strlen( $value ) > $max ) {
@@ -1579,6 +2120,32 @@ class FormGlut_Ajax {
 					if ( $confirm !== $value ) {
 						return ! empty( $field['confirmation_error'] ) ? $field['confirmation_error'] : __( 'Passwords do not match', 'formglut' );
 					}
+				}
+				break;
+
+			case 'toggle':
+				$on = isset( $field['on_value'] ) && '' !== $field['on_value'] ? (string) $field['on_value'] : __( 'Yes', 'formglut' );
+				$off = isset( $field['off_value'] ) ? (string) $field['off_value'] : __( 'No', 'formglut' );
+				if ( ! in_array( (string) $value, array( $on, $off ), true ) ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( '%s is invalid.', 'formglut' ), $label );
+				}
+				if ( ! empty( $field['required'] ) && (string) $value !== $on ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please turn on %s.', 'formglut' ), $label );
+				}
+				break;
+
+			case 'star_rating':
+				$max = max( 3, min( 10, absint( isset( $field['max_stars'] ) ? $field['max_stars'] : 5 ) ) );
+				if ( ! ctype_digit( (string) $value ) || (int) $value < 1 || (int) $value > $max ) {
+					return $custom ? $custom : sprintf( /* translators: %s: field label */ __( 'Please choose a rating for %s.', 'formglut' ), $label );
+				}
+				break;
+
+			case 'rich_text':
+				$limit = ! empty( $field['max_length'] ) ? absint( $field['max_length'] ) : 0;
+				if ( $limit && mb_strlen( trim( html_entity_decode( wp_strip_all_tags( $value ) ) ) ) > $limit ) {
+					/* translators: 1: field label, 2: max length */
+					return sprintf( __( '%1$s must not exceed %2$d characters.', 'formglut' ), $label, $limit );
 				}
 				break;
 
@@ -1676,6 +2243,23 @@ class FormGlut_Ajax {
 					/* translators: 1: field label, 2: date */
 					return sprintf( __( '%1$s must be on or before %2$s.', 'formglut' ), $label, $field['max_date'] );
 				}
+				$today = wp_date( 'Y-m-d' );
+				if ( ! empty( $field['disable_past'] ) && $day < $today ) {
+					/* translators: %s: field label */
+					return sprintf( __( '%s cannot be in the past.', 'formglut' ), $label );
+				}
+				if ( ! empty( $field['disable_future'] ) && $day > $today ) {
+					/* translators: %s: field label */
+					return sprintf( __( '%s cannot be in the future.', 'formglut' ), $label );
+				}
+				if ( ! empty( $field['disable_weekends'] ) && (int) gmdate( 'N', strtotime( $day ) ) >= 6 ) {
+					/* translators: %s: field label */
+					return sprintf( __( 'Please choose a weekday for %s.', 'formglut' ), $label );
+				}
+				if ( ! empty( $field['disabled_dates'] ) && in_array( $day, array_map( 'trim', explode( ',', $field['disabled_dates'] ) ), true ) ) {
+					/* translators: %s: field label */
+					return sprintf( __( 'This date is not available for %s. Please choose another.', 'formglut' ), $label );
+				}
 				break;
 
 			case 'select':
@@ -1687,6 +2271,9 @@ class FormGlut_Ajax {
 					if ( empty( $opt['disabled'] ) ) {
 						$allowed[] = isset( $opt['value'] ) && '' !== $opt['value'] ? (string) $opt['value'] : ( isset( $opt['label'] ) ? (string) $opt['label'] : '' );
 					}
+				}
+				if ( ! empty( $field['enable_other'] ) && in_array( $type, array( 'radio', 'checkbox' ), true ) ) {
+					$allowed[] = '__other__';
 				}
 				$values = (array) $value;
 				foreach ( $values as $v ) {

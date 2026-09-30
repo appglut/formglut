@@ -286,6 +286,7 @@ public function menu_icon_styles() {
 			),
 			'plugin_url'   => FORMGLUT_PLUGIN_URL,
 			'dashboard_url' => admin_url( 'index.php' ),
+			'admin_email'   => wp_get_current_user()->user_email,
 			'pro_enabled'  => formglut_is_pro_enabled(),
 		);
 
@@ -695,7 +696,7 @@ public function menu_icon_styles() {
 				<!-- Header -->
 				<div class="fg-pro-header">
 					<span class="fg-pro-badge">🚀 FORMGLUT PRO</span>
-					<h1 class="fg-pro-title">70+ Pro Features</h1>
+					<h1 class="fg-pro-title">99 Pro Features</h1>
 					<p class="fg-pro-subtitle">Unlock powerful fields, options, and integrations to create any form you can imagine</p>
 					<a href="https://formglut.com/pro" class="fg-pro-cta-btn" target="_blank">Get FormGlut Pro →</a>
 				</div>
@@ -704,15 +705,15 @@ public function menu_icon_styles() {
 				<div class="fg-pro-tabs">
 					<button class="fg-pro-tab active" onclick="switchTab('fields')">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-						Pro Fields <span style="opacity: 0.5; font-size: 12px;">(70+)</span>
+						Pro Fields <span style="opacity: 0.5; font-size: 12px;">(44)</span>
 					</button>
 					<button class="fg-pro-tab" onclick="switchTab('options')">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.93 4.93l4.24 4.24m5.66 5.66l4.24 4.24M1 12h6m6 0h6M4.93 19.07l4.24-4.24m5.66-5.66l4.24-4.24"/></svg>
-						Pro Options <span style="opacity: 0.5; font-size: 12px;">(18+)</span>
+						Pro Options <span style="opacity: 0.5; font-size: 12px;">(32)</span>
 					</button>
 					<button class="fg-pro-tab" onclick="switchTab('integrations')">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-						Integrations <span style="opacity: 0.5; font-size: 12px;">(25+)</span>
+						Integrations <span style="opacity: 0.5; font-size: 12px;">(23)</span>
 					</button>
 				</div>
 
@@ -870,13 +871,11 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$general_fields = array(
-						array('icon' => '📍', 'title' => 'Address Autocomplete', 'desc' => 'Google Places autocomplete for accurate addresses', 'tag' => 'Smart'),
-						array('icon' => '🔗', 'title' => 'Chained Select', 'desc' => 'Dependent dropdown fields that update based on previous selections', 'tag' => 'Conditional'),
-						array('icon' => '👍', 'title' => 'Like / Dislike', 'desc' => 'Quick feedback with thumbs up/down buttons', 'tag' => 'Feedback'),
-						array('icon' => '📑', 'title' => 'Repeat Field', 'desc' => 'Repeat field groups dynamically with add/remove', 'tag' => 'Dynamic'),
-						array('icon' => '📝', 'title' => 'Rich Text', 'desc' => 'WYSIWYG editor for formatted text input with toolbar', 'tag' => 'Advanced'),
-						array('icon' => '🔍', 'title' => 'Searchable Dropdown', 'desc' => 'Enhanced dropdown with live search functionality', 'tag' => 'Enhanced'),
-						array('icon' => '🏷️', 'title' => 'Tag Input', 'desc' => 'Tag-style input for categorization and labels', 'tag' => 'Input'),
+						array('icon' => '📍', 'title' => 'Address Autocomplete + Map', 'desc' => 'Google Places autocomplete, map picker and IP-based defaults', 'tag' => 'Smart'),
+						array('icon' => '🔗', 'title' => 'Chained Select', 'desc' => 'Dependent dropdowns that update based on the previous choice', 'tag' => 'Conditional'),
+						array('icon' => '👍', 'title' => 'Like / Dislike', 'desc' => 'Quick thumbs up / down feedback', 'tag' => 'Feedback'),
+						array('icon' => '📑', 'title' => 'Repeat Field', 'desc' => 'Repeat a group of fields with add / remove', 'tag' => 'Dynamic'),
+						array('icon' => '🏷️', 'title' => 'Tag Input', 'desc' => 'Tag-style input for labels and categories', 'tag' => 'Input'),
 					);
 					foreach ($general_fields as $field) :
 					?>
@@ -901,30 +900,19 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$advanced_fields = array(
-						array('icon' => '🎤', 'title' => 'Audio Upload', 'desc' => 'Allow users to upload audio files', 'tag' => 'Media'),
-						array('icon' => '🧮', 'title' => 'Calculated Field', 'desc' => 'Math calculations between form fields', 'tag' => 'Calculation'),
-						array('icon' => '🔗', 'title' => 'Chained Fields', 'desc' => 'Multiple chained select dependencies', 'tag' => 'Conditional'),
-						array('icon' => '🎨', 'title' => 'Color Swatch', 'desc' => 'Visual color picker with swatches', 'tag' => 'Input'),
-						array('icon' => '📋', 'title' => 'Dual List Box', 'desc' => 'Two-pane selection list', 'tag' => 'Selection'),
-						array('icon' => '📊', 'title' => 'Dynamic List', 'desc' => 'List that updates based on conditions', 'tag' => 'Dynamic'),
-						array('icon' => '✉️', 'title' => 'Email Confirmation', 'desc' => 'Require users to confirm email address', 'tag' => 'Validation'),
-						array('icon' => '😀', 'title' => 'Emoji Rating', 'desc' => 'Emoji-based rating input', 'tag' => 'Rating'),
-						array('icon' => '👍', 'title' => 'Facebook Like', 'desc' => 'Facebook like button integration', 'tag' => 'Social'),
-						array('icon' => '📑', 'title' => 'Form Step', 'desc' => 'Multi-step form break with navigation', 'tag' => 'Layout'),
-						array('icon' => '🖼️', 'title' => 'Image Select', 'desc' => 'Select from visual image options', 'tag' => 'Visual'),
-						array('icon' => '📊', 'title' => 'Likert Scale', 'desc' => 'Professional survey rating scales', 'tag' => 'Survey'),
-						array('icon' => '🔍', 'title' => 'Lookup Field', 'desc' => 'Search posts, users, or custom data', 'tag' => 'Search'),
-						array('icon' => '🗺️', 'title' => 'Mark on Map', 'desc' => 'Let users mark locations on map', 'tag' => 'Location'),
-						array('icon' => '🎯', 'title' => 'Net Promoter Score', 'desc' => 'NPS survey field (0-10 scale)', 'tag' => 'Survey'),
-						array('icon' => '🔒', 'title' => 'Password Confirmation', 'desc' => 'Require password confirmation field', 'tag' => 'Security'),
-						array('icon' => '🔄', 'title' => 'Reset Button', 'desc' => 'Clear form with confirmation', 'tag' => 'Action'),
-						array('icon' => '💾', 'title' => 'Save & Resume', 'desc' => 'Allow users to save and continue later', 'tag' => 'UX'),
-						array('icon' => '✍️', 'title' => 'Signature', 'desc' => 'Digital signature canvas input', 'tag' => 'Signature'),
-						array('icon' => '🌐', 'title' => 'Social Profiles', 'desc' => 'Social media profile URL inputs', 'tag' => 'Social'),
-						array('icon' => '⭐', 'title' => 'Star Rating', 'desc' => 'Interactive star rating input', 'tag' => 'Rating'),
-						array('icon' => '🔘', 'title' => 'Toggle Switch', 'desc' => 'On/off toggle switch input', 'tag' => 'Input'),
-						array('icon' => '💡', 'title' => 'Tooltip Field', 'desc' => 'Field with helpful tooltip', 'tag' => 'Help'),
-						array('icon' => '🎥', 'title' => 'Video Embed', 'desc' => 'Embed YouTube, Vimeo, or custom videos', 'tag' => 'Media'),
+						array('icon' => '🎵', 'title' => 'Audio Upload', 'desc' => 'Upload or record audio', 'tag' => 'Media'),
+						array('icon' => '🎨', 'title' => 'Color Swatch', 'desc' => 'Pick a colour from swatches', 'tag' => 'Design'),
+						array('icon' => '↔️', 'title' => 'Dual List Box', 'desc' => 'Move items between two lists', 'tag' => 'Input'),
+						array('icon' => '🧩', 'title' => 'Dynamic Choices / Dynamic List', 'desc' => 'Choices from posts, taxonomies, users or an API', 'tag' => 'Dynamic'),
+						array('icon' => '😊', 'title' => 'Emoji Rating', 'desc' => 'Emoji / smiley rating', 'tag' => 'Feedback'),
+						array('icon' => '🖼️', 'title' => 'Image Select / Image Choices', 'desc' => 'Radio and checkbox options shown as pictures', 'tag' => 'Visual'),
+						array('icon' => '🔎', 'title' => 'Lookup Field', 'desc' => 'Fill a field from another value or list', 'tag' => 'Dynamic'),
+						array('icon' => '📈', 'title' => 'Net Promoter Score', 'desc' => '0 to 10 how-likely-to-recommend scale', 'tag' => 'Survey'),
+						array('icon' => '💾', 'title' => 'Save & Resume / Partial Entries', 'desc' => 'Visitors come back later; unfinished entries are kept', 'tag' => 'Workflow'),
+						array('icon' => '✍️', 'title' => 'Signature', 'desc' => 'Draw or type a signature saved as an image', 'tag' => 'Advanced'),
+						array('icon' => '👥', 'title' => 'Social Profiles', 'desc' => 'Collect social profile links', 'tag' => 'Input'),
+						array('icon' => '🎬', 'title' => 'Video / Media Embed', 'desc' => 'Show a video or media inside the form', 'tag' => 'Media'),
+						array('icon' => '👁️', 'title' => 'Entry Preview / Review before submit', 'desc' => 'Summary page before the final submit', 'tag' => 'Review'),
 					);
 					foreach ($advanced_fields as $field) :
 					?>
@@ -949,12 +937,9 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$upload_fields = array(
-						array('icon' => '📁', 'title' => 'File Upload', 'desc' => 'Allow users to upload files with validation', 'tag' => 'Upload'),
-						array('icon' => '🖼️', 'title' => 'Image Upload', 'desc' => 'Image upload with preview and gallery view', 'tag' => 'Image'),
-						array('icon' => '📑', 'title' => 'Multi-file Upload', 'desc' => 'Upload multiple files at once', 'tag' => 'Upload'),
-						array('icon' => '✂️', 'title' => 'Cropped Image Upload', 'desc' => 'Upload and crop images to specific dimensions', 'tag' => 'Image'),
-						array('icon' => '📷', 'title' => 'Webcam Capture', 'desc' => 'Capture photo directly from webcam', 'tag' => 'Camera'),
-						array('icon' => '🎤', 'title' => 'Voice Recording', 'desc' => 'Record voice directly in the form', 'tag' => 'Audio'),
+						array('icon' => '✂️', 'title' => 'Cropped Image Upload', 'desc' => 'Crop the image before uploading', 'tag' => 'Upload'),
+						array('icon' => '📷', 'title' => 'Webcam / Camera Capture', 'desc' => 'Capture a photo or video from the camera', 'tag' => 'Media'),
+						array('icon' => '🎙️', 'title' => 'Voice Recording', 'desc' => 'Record audio in the browser', 'tag' => 'Media'),
 					);
 					foreach ($upload_fields as $field) :
 					?>
@@ -979,14 +964,12 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$survey_fields = array(
-						array('icon' => '📊', 'title' => 'Checkable Grid', 'desc' => 'Grid-based checkbox selection', 'tag' => 'Grid'),
-						array('icon' => '🖼️', 'title' => 'Image Comparison', 'desc' => 'Compare two images side by side', 'tag' => 'Visual'),
-						array('icon' => '📊', 'title' => 'Labeled Slider', 'desc' => 'Slider with descriptive labels', 'tag' => 'Slider'),
-						array('icon' => '📋', 'title' => 'Matrix Question', 'desc' => 'Matrix-style survey questions', 'tag' => 'Survey'),
-						array('icon' => '📊', 'title' => 'Multiple Choice Grid', 'desc' => 'Select one option per row in grid', 'tag' => 'Grid'),
-						array('icon' => '🏆', 'title' => 'Quiz Score', 'desc' => 'Auto-score quiz submissions', 'tag' => 'Quiz'),
-						array('icon' => '📊', 'title' => 'Ranking', 'desc' => 'Rank items by drag and drop', 'tag' => 'Ordering'),
-						array('icon' => '📊', 'title' => 'Semantic Differential', 'desc' => 'Rate between contrasting adjectives', 'tag' => 'Survey'),
+						array('icon' => '📊', 'title' => 'Likert / Matrix / Grid', 'desc' => 'Rows-by-columns survey grid (checkable and multiple-choice grids)', 'tag' => 'Survey'),
+						array('icon' => '🖼️', 'title' => 'Image Comparison', 'desc' => 'Compare two images with a slider', 'tag' => 'Survey'),
+						array('icon' => '🎯', 'title' => 'Quiz (scored)', 'desc' => 'Scored quiz with pass / fail and result pages', 'tag' => 'Quiz'),
+						array('icon' => '📊', 'title' => 'Surveys & Polls with Results', 'desc' => 'Poll bars and survey result charts', 'tag' => 'Survey'),
+						array('icon' => '🔢', 'title' => 'Ranking', 'desc' => 'Drag options into order', 'tag' => 'Survey'),
+						array('icon' => '⚖️', 'title' => 'Semantic Differential', 'desc' => 'Bipolar scale rating', 'tag' => 'Survey'),
 					);
 					foreach ($survey_fields as $field) :
 					?>
@@ -1011,18 +994,16 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$payment_fields = array(
-						array('icon' => '🎟️', 'title' => 'Coupon Code', 'desc' => 'Discount and coupon code field', 'tag' => 'Commerce'),
-						array('icon' => '💳', 'title' => 'Credit Card', 'desc' => 'Secure credit card payment field', 'tag' => 'Payment'),
-						array('icon' => '💰', 'title' => 'Custom Amount', 'desc' => 'Let users enter payment amount', 'tag' => 'Payment'),
-						array('icon' => '💵', 'title' => 'Donation', 'desc' => 'Optimized donation form field', 'tag' => 'Nonprofit'),
-						array('icon' => '🛒', 'title' => 'Payment Item', 'desc' => 'Individual product/service item', 'tag' => 'Commerce'),
-						array('icon' => '💳', 'title' => 'Payment Method', 'desc' => 'Select payment method', 'tag' => 'Payment'),
-						array('icon' => '🧾', 'title' => 'Payment Summary', 'desc' => 'Display order summary before payment', 'tag' => 'Checkout'),
-						array('icon' => '🔄', 'title' => 'Product Variations', 'desc' => 'Product options with price variations', 'tag' => 'Commerce'),
-						array('icon' => '🔢', 'title' => 'Quantity', 'desc' => 'Item quantity selector', 'tag' => 'Commerce'),
-						array('icon' => '🚚', 'title' => 'Shipping Address', 'desc' => 'Collect shipping address', 'tag' => 'Commerce'),
-						array('icon' => '🔄', 'title' => 'Subscription', 'desc' => 'Recurring payment subscription', 'tag' => 'Recurring'),
-						array('icon' => '🧮', 'title' => 'Tax Calculation', 'desc' => 'Automatic tax calculation', 'tag' => 'Commerce'),
+						array('icon' => '🎟️', 'title' => 'Coupon Code', 'desc' => 'Percent or fixed discounts with limits and expiry', 'tag' => 'Discount'),
+						array('icon' => '💝', 'title' => 'Donation', 'desc' => 'Suggested amounts and recurring donations', 'tag' => 'Donation'),
+						array('icon' => '💳', 'title' => 'Payment Method + Payment Summary', 'desc' => 'Let visitors choose a method; show an order summary', 'tag' => 'Checkout'),
+						array('icon' => '🛍️', 'title' => 'Product Variations', 'desc' => 'Size / colour variants with their own price', 'tag' => 'Products'),
+						array('icon' => '🔢', 'title' => 'Quantity / Multiple Items / Total / Shipping', 'desc' => 'Several products, quantities, shipping options and an order total', 'tag' => 'Products'),
+						array('icon' => '🚚', 'title' => 'Shipping Address', 'desc' => 'Separate shipping details', 'tag' => 'Shipping'),
+						array('icon' => '🔁', 'title' => 'Subscriptions & Recurring Billing', 'desc' => 'Monthly or yearly plans, trials, cancel and update card', 'tag' => 'Recurring'),
+						array('icon' => '🧾', 'title' => 'Tax Calculation', 'desc' => 'Automatic tax by rate or region', 'tag' => 'Tax'),
+						array('icon' => '📦', 'title' => 'Inventory / Stock Limits', 'desc' => 'Limit how many of an item can be ordered', 'tag' => 'Stock'),
+						array('icon' => '🧮', 'title' => 'Payments Dashboard & Refunds', 'desc' => 'Payments list, refunds and receipts per entry', 'tag' => 'Reports'),
 					);
 					foreach ($payment_fields as $field) :
 					?>
@@ -1047,9 +1028,7 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$security_fields = array(
-						array('icon' => '🍯', 'title' => 'Honeypot', 'desc' => 'Hidden field to trap spam bots', 'tag' => 'Anti-Spam'),
-						array('icon' => '🧮', 'title' => 'Math Captcha', 'desc' => 'Simple math challenge for humans', 'tag' => 'Captcha'),
-						array('icon' => '🎚️', 'title' => 'Slider Captcha', 'desc' => 'Interactive slider verification', 'tag' => 'Captcha'),
+						array('icon' => '🛡️', 'title' => 'Slider Captcha', 'desc' => 'Drag-to-verify captcha', 'tag' => 'Captcha'),
 					);
 					foreach ($security_fields as $field) :
 					?>
@@ -1074,10 +1053,9 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$layout_fields = array(
-						array('icon' => '📦', 'title' => 'Accordion', 'desc' => 'Collapsible content sections', 'tag' => 'Layout'),
-						array('icon' => '⏱️', 'title' => 'Countdown Timer', 'desc' => 'Countdown to deadline or event', 'tag' => 'Timer'),
-						array('icon' => '📊', 'title' => 'Progress Bar', 'desc' => 'Show form completion progress', 'tag' => 'Progress'),
-						array('icon' => '📑', 'title' => 'Tabs', 'desc' => 'Organize form content in tabs', 'tag' => 'Layout'),
+						array('icon' => '📂', 'title' => 'Accordion', 'desc' => 'Collapsible sections', 'tag' => 'Layout'),
+						array('icon' => '⏱️', 'title' => 'Countdown Timer', 'desc' => 'Timer that closes the form or a step', 'tag' => 'Layout'),
+						array('icon' => '🗂️', 'title' => 'Tabs', 'desc' => 'Group fields in tabs', 'tag' => 'Layout'),
 					);
 					foreach ($layout_fields as $field) :
 					?>
@@ -1102,12 +1080,9 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$wp_fields = array(
-						array('icon' => '📁', 'title' => 'Category Selection', 'desc' => 'Select from WordPress categories', 'tag' => 'WordPress'),
-						array('icon' => '🖼️', 'title' => 'Featured Image', 'desc' => 'Upload/set featured image for posts', 'tag' => 'WordPress'),
-						array('icon' => '📝', 'title' => 'Post Submission', 'desc' => 'Create posts from form submissions', 'tag' => 'WordPress'),
-						array('icon' => '🏷️', 'title' => 'Tag Selection', 'desc' => 'Select from WordPress tags', 'tag' => 'WordPress'),
-						array('icon' => '👤', 'title' => 'User Registration', 'desc' => 'Register new WordPress users', 'tag' => 'WordPress'),
-						array('icon' => '👑', 'title' => 'User Role Selection', 'desc' => 'Select user role for registration', 'tag' => 'WordPress'),
+						array('icon' => '📝', 'title' => 'Post Submission (category, tags, featured image)', 'desc' => 'Create posts or custom post types from a form', 'tag' => 'Content'),
+						array('icon' => '👤', 'title' => 'User Registration / Login', 'desc' => 'Create a WordPress user, log in, update a profile', 'tag' => 'Users'),
+						array('icon' => '🔑', 'title' => 'User Role Selection', 'desc' => 'Let a user pick a role on sign-up', 'tag' => 'Users'),
 					);
 					foreach ($wp_fields as $field) :
 					?>
@@ -1179,14 +1154,90 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$form_options = array(
-						array('icon' => '🔄', 'title' => 'Conditional Logic', 'desc' => 'Show/hide fields based on user input', 'tag' => 'Logic'),
-						array('icon' => '📊', 'title' => 'Form Analytics', 'desc' => 'Track form views, submissions, conversion rates', 'tag' => 'Analytics'),
-						array('icon' => '💾', 'title' => 'Save & Continue', 'desc' => 'Allow users to save forms and continue later', 'tag' => 'UX'),
-						array('icon' => '📋', 'title' => 'Form Cloning', 'desc' => 'Duplicate forms with one click', 'tag' => 'Productivity'),
-						array('icon' => '🎨', 'title' => 'Custom Styling', 'desc' => 'Custom CSS for each form', 'tag' => 'Design'),
-						array('icon' => '📱', 'title' => 'Responsive Preview', 'desc' => 'Preview on all device sizes', 'tag' => 'Design'),
+						array('icon' => '🕘', 'title' => 'Form Revisions / Version History', 'desc' => 'Restore earlier versions of a form', 'tag' => 'History'),
 					);
 					foreach ($form_options as $opt) :
+					?>
+					<div class="fg-pro-card">
+						<div class="fg-pro-card-icon"><?php echo $opt['icon']; ?></div>
+						<h3 class="fg-pro-card-title"><?php echo $opt['title']; ?></h3>
+						<p class="fg-pro-card-desc"><?php echo $opt['desc']; ?></p>
+						<span class="fg-pro-card-tag"><?php echo $opt['tag']; ?></span>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<div class="fg-pro-section">
+				<h2 class="fg-pro-section-title">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+					Logic &amp; Workflow
+				</h2>
+				<div class="fg-pro-grid">
+					<?php
+					$logic_options = array(
+						array('icon' => '📨', 'title' => 'Multiple + Conditional Notifications', 'desc' => 'Several emails per form, sent by answers', 'tag' => 'Workflow'),
+						array('icon' => '🔀', 'title' => 'Conditional Confirmations & Redirects', 'desc' => 'Different message or page by answers', 'tag' => 'Workflow'),
+						array('icon' => '📧', 'title' => 'Double Opt-in / Email Verification', 'desc' => 'Confirm the email before the entry counts', 'tag' => 'Verify'),
+						array('icon' => '📄', 'title' => 'Form Landing Pages', 'desc' => 'Standalone shareable page per form', 'tag' => 'Publish'),
+						array('icon' => '💬', 'title' => 'Conversational Forms', 'desc' => 'One question at a time, full-screen', 'tag' => 'Workflow'),
+						array('icon' => '🔐', 'title' => 'Form Locker / Password Protection', 'desc' => 'Protect a form with a password or rules', 'tag' => 'Access'),
+						array('icon' => '✅', 'title' => 'Approval Workflows & Entry Automation', 'desc' => 'Admin approval and automatic actions', 'tag' => 'Workflow'),
+						array('icon' => '🖊️', 'title' => 'Front-end Posting & Editing', 'desc' => 'Users create posts and edit their own entries', 'tag' => 'Content'),
+						array('icon' => '📚', 'title' => 'Directories & Views', 'desc' => 'Show entries on the site with a shortcode', 'tag' => 'Display'),
+						array('icon' => '📴', 'title' => 'Offline Forms', 'desc' => 'Keep answers when the connection drops', 'tag' => 'Reliability'),
+						array('icon' => '🚪', 'title' => 'Form Abandonment Recovery', 'desc' => 'Capture and follow up on people who leave', 'tag' => 'Recovery'),
+					);
+					foreach ($logic_options as $opt) :
+					?>
+					<div class="fg-pro-card">
+						<div class="fg-pro-card-icon"><?php echo $opt['icon']; ?></div>
+						<h3 class="fg-pro-card-title"><?php echo $opt['title']; ?></h3>
+						<p class="fg-pro-card-desc"><?php echo $opt['desc']; ?></p>
+						<span class="fg-pro-card-tag"><?php echo $opt['tag']; ?></span>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<div class="fg-pro-section">
+				<h2 class="fg-pro-section-title">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+					Design &amp; Branding
+				</h2>
+				<div class="fg-pro-grid">
+					<?php
+					$design_options = array(
+						array('icon' => '🎨', 'title' => 'Advanced Form Styler + Presets', 'desc' => 'Colours, fonts, spacing, button styles and saved presets', 'tag' => 'Design'),
+						array('icon' => '🗃️', 'title' => 'Premium Template Library', 'desc' => 'Hundreds of industry templates', 'tag' => 'Templates'),
+						array('icon' => '✉️', 'title' => 'Email Template Builder', 'desc' => 'Branded HTML emails with header, footer and logo', 'tag' => 'Email'),
+						array('icon' => '🏷️', 'title' => 'White Label', 'desc' => 'Re-brand the plugin for clients', 'tag' => 'Agency'),
+					);
+					foreach ($design_options as $opt) :
+					?>
+					<div class="fg-pro-card">
+						<div class="fg-pro-card-icon"><?php echo $opt['icon']; ?></div>
+						<h3 class="fg-pro-card-title"><?php echo $opt['title']; ?></h3>
+						<p class="fg-pro-card-desc"><?php echo $opt['desc']; ?></p>
+						<span class="fg-pro-card-tag"><?php echo $opt['tag']; ?></span>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<div class="fg-pro-section">
+				<h2 class="fg-pro-section-title">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+					AI &amp; Developer
+				</h2>
+				<div class="fg-pro-grid">
+					<?php
+					$ai_options = array(
+						array('icon' => '🤖', 'title' => 'AI Form Builder + ChatGPT Actions', 'desc' => 'Generate a form from a prompt; AI summaries', 'tag' => 'AI'),
+						array('icon' => '🔌', 'title' => 'REST API + MCP Tools', 'desc' => 'Read forms and entries from other systems', 'tag' => 'Developer'),
+						array('icon' => '🚚', 'title' => 'Migrator with Entries', 'desc' => 'Import forms and entries from CF7, WPForms, Gravity, Ninja, Caldera, Fluent', 'tag' => 'Migrate'),
+					);
+					foreach ($ai_options as $opt) :
 					?>
 					<div class="fg-pro-card">
 						<div class="fg-pro-card-icon"><?php echo $opt['icon']; ?></div>
@@ -1209,12 +1260,15 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$entry_options = array(
-						array('icon' => '📥', 'title' => 'Bulk Export', 'desc' => 'Export entries in CSV, Excel, PDF', 'tag' => 'Export'),
-						array('icon' => '✏️', 'title' => 'Inline Edit', 'desc' => 'Edit entries directly from the list', 'tag' => 'Management'),
-						array('icon' => '🔄', 'title' => 'Entry Reprocessing', 'desc' => 'Reprocess entries with updated settings', 'tag' => 'Advanced'),
-						array('icon' => '📧', 'title' => 'Email Notifications', 'desc' => 'Multiple email recipients per form', 'tag' => 'Email'),
-						array('icon' => '🔔', 'title' => 'Slack Notifications', 'desc' => 'Get notified in Slack channels', 'tag' => 'Integration'),
-						array('icon' => '💬', 'title' => 'Discord Webhooks', 'desc' => 'Send form data to Discord', 'tag' => 'Integration'),
+						array('icon' => '📤', 'title' => 'Excel & Scheduled Exports', 'desc' => 'Excel / JSON exports emailed on a schedule', 'tag' => 'Export'),
+						array('icon' => '✏️', 'title' => 'Edit Entries (Inline Edit)', 'desc' => 'Edit a submitted entry in admin', 'tag' => 'Entries'),
+						array('icon' => '🔄', 'title' => 'Entry Reprocessing', 'desc' => 'Re-run emails and integrations for an entry', 'tag' => 'Entries'),
+						array('icon' => '🗄️', 'title' => 'Advanced Entry Management', 'desc' => 'Saved filters, column choice, assign, status workflow', 'tag' => 'Entries'),
+						array('icon' => '📄', 'title' => 'PDF Generator', 'desc' => 'PDF of an entry, attachable to emails', 'tag' => 'Export'),
+						array('icon' => '📈', 'title' => 'Reports, Charts & Email Summaries', 'desc' => 'Submission, conversion and field charts; weekly email', 'tag' => 'Reports'),
+						array('icon' => '🧭', 'title' => 'User Journey / Flow Tracking', 'desc' => 'Pages visited before submitting', 'tag' => 'Reports'),
+						array('icon' => '📡', 'title' => 'Google Analytics & GTM Events', 'desc' => 'Fire events on view, start and submit', 'tag' => 'Tracking'),
+						array('icon' => '🧾', 'title' => 'Activity / Audit Log', 'desc' => 'Who viewed, changed or emailed an entry', 'tag' => 'Audit'),
 					);
 					foreach ($entry_options as $opt) :
 					?>
@@ -1239,11 +1293,10 @@ public function menu_icon_styles() {
 				<div class="fg-pro-grid">
 					<?php
 					$spam_options = array(
-						array('icon' => '🛡️', 'title' => 'Akismet Integration', 'desc' => 'Industry-leading spam protection', 'tag' => 'Security'),
-						array('icon' => '🔥', 'title' => 'Honeypot Field', 'desc' => 'Hidden field to trap bots', 'tag' => 'Security'),
-						array('icon' => '⏱️', 'title' => 'Time Limit', 'desc' => 'Minimum time to complete form', 'tag' => 'Security'),
-						array('icon' => '📍', 'title' => 'Geo-blocking', 'desc' => 'Block submissions from countries', 'tag' => 'Security'),
-						array('icon' => '🔗', 'title' => 'Referrer Check', 'desc' => 'Block submissions from external sites', 'tag' => 'Security'),
+						array('icon' => '🌍', 'title' => 'IP & Country Restrictions (Geo-blocking)', 'desc' => 'Block or allow by IP range or country', 'tag' => 'Access'),
+						array('icon' => '🧑‍⚖️', 'title' => 'Moderation Queue', 'desc' => 'Review flagged entries before accepting', 'tag' => 'Review'),
+						array('icon' => '🔏', 'title' => 'GDPR Toolkit (consent log, retention rules)', 'desc' => 'Consent records and automatic retention', 'tag' => 'Privacy'),
+						array('icon' => '🧑‍💼', 'title' => 'Role Manager', 'desc' => 'Who can build forms and view / export entries', 'tag' => 'Access'),
 					);
 					foreach ($spam_options as $opt) :
 					?>
@@ -1316,11 +1369,11 @@ public function menu_icon_styles() {
 				<div style="display: flex; flex-direction: column; gap: 12px;">
 					<?php
 					$payment_integrations = array(
-						array('icon' => '💳', 'title' => 'Stripe', 'desc' => 'Accept all major credit cards with Stripe', 'tag' => 'Payment'),
-						array('icon' => '🏦', 'title' => 'PayPal', 'desc' => 'PayPal Standard and Pro integration', 'tag' => 'Payment'),
-						array('icon' => '🔵', 'title' => 'Square', 'desc' => 'Square payments integration', 'tag' => 'Payment'),
-						array('icon' => '🏪', 'title' => 'Mollie', 'desc' => 'European payment gateway', 'tag' => 'Payment'),
-						array('icon' => '💰', 'title' => 'Razorpay', 'desc' => 'Indian payment gateway', 'tag' => 'Payment'),
+						array('icon' => '🅿️', 'title' => 'PayPal', 'desc' => 'PayPal Commerce / Checkout', 'tag' => 'PayPal'),
+						array('icon' => '◼️', 'title' => 'Square', 'desc' => 'Square payments', 'tag' => 'Square'),
+						array('icon' => '💶', 'title' => 'Mollie', 'desc' => 'Mollie payments', 'tag' => 'Mollie'),
+						array('icon' => '💸', 'title' => 'Razorpay', 'desc' => 'Razorpay payments', 'tag' => 'Razorpay'),
+						array('icon' => '🏦', 'title' => 'Authorize.net, Elavon, 2Checkout, Mercado Pago', 'desc' => 'More payment gateways', 'tag' => 'Gateways'),
 					);
 					foreach ($payment_integrations as $int) :
 					?>
@@ -1347,11 +1400,10 @@ public function menu_icon_styles() {
 				<div style="display: flex; flex-direction: column; gap: 12px;">
 					<?php
 					$email_integrations = array(
-						array('icon' => '📧', 'title' => 'Mailchimp', 'desc' => 'Sync subscribers to Mailchimp lists', 'tag' => 'Marketing'),
-						array('icon' => '✈️', 'title' => 'ConvertKit', 'desc' => 'Connect to ConvertKit', 'tag' => 'Marketing'),
-						array('icon' => '🟠', 'title' => 'HubSpot', 'desc' => 'HubSpot CRM integration', 'tag' => 'CRM'),
-						array('icon' => '📊', 'title' => 'ActiveCampaign', 'desc' => 'Email marketing automation', 'tag' => 'Marketing'),
-						array('icon' => '🔄', 'title' => 'GetResponse', 'desc' => 'Email marketing platform', 'tag' => 'Marketing'),
+						array('icon' => '📮', 'title' => 'ConvertKit (Kit)', 'desc' => 'Kit forms and tags', 'tag' => 'Kit'),
+						array('icon' => '📧', 'title' => 'ActiveCampaign', 'desc' => 'Contacts and automations', 'tag' => 'ActiveCampaign'),
+						array('icon' => '📨', 'title' => 'GetResponse', 'desc' => 'Subscribe to GetResponse', 'tag' => 'GetResponse'),
+						array('icon' => '✉️', 'title' => 'Brevo, MailerLite, Klaviyo, Constant Contact, AWeber, Campaign Monitor, MailPoet', 'desc' => 'More email marketing', 'tag' => 'Email'),
 					);
 					foreach ($email_integrations as $int) :
 					?>
@@ -1378,12 +1430,12 @@ public function menu_icon_styles() {
 				<div style="display: flex; flex-direction: column; gap: 12px;">
 					<?php
 					$crm_integrations = array(
-						array('icon' => '🔵', 'title' => 'Salesforce', 'desc' => 'Send leads to Salesforce CRM', 'tag' => 'CRM'),
-						array('icon' => '🟣', 'title' => 'Zoho CRM', 'desc' => 'Zoho CRM integration', 'tag' => 'CRM'),
-						array('icon' => '🟢', 'title' => 'Pipedrive', 'desc' => 'Pipedrive CRM integration', 'tag' => 'CRM'),
-						array('icon' => '📋', 'title' => 'Trello', 'desc' => 'Create cards from submissions', 'tag' => 'Productivity'),
-						array('icon' => '📝', 'title' => 'Google Sheets', 'desc' => 'Auto-sync to Google Sheets', 'tag' => 'Productivity'),
-						array('icon' => '📊', 'title' => 'Airtable', 'desc' => 'Send data to Airtable bases', 'tag' => 'Productivity'),
+						array('icon' => '☁️', 'title' => 'Salesforce', 'desc' => 'Create leads and contacts', 'tag' => 'Salesforce'),
+						array('icon' => '📇', 'title' => 'Zoho CRM', 'desc' => 'Zoho leads', 'tag' => 'Zoho'),
+						array('icon' => '📊', 'title' => 'Pipedrive', 'desc' => 'Deals and people', 'tag' => 'Pipedrive'),
+						array('icon' => '📋', 'title' => 'Trello', 'desc' => 'Cards from entries', 'tag' => 'Trello'),
+						array('icon' => '📗', 'title' => 'Google Sheets / Drive / Calendar', 'desc' => 'Append rows, store files, create events', 'tag' => 'Sheets'),
+						array('icon' => '🗃️', 'title' => 'Airtable / Notion / Asana', 'desc' => 'Records and tasks from entries', 'tag' => 'Airtable'),
 					);
 					foreach ($crm_integrations as $int) :
 					?>
@@ -1410,12 +1462,62 @@ public function menu_icon_styles() {
 				<div style="display: flex; flex-direction: column; gap: 12px;">
 					<?php
 					$api_integrations = array(
-						array('icon' => '🔗', 'title' => 'Webhooks', 'desc' => 'Send data to any URL via POST', 'tag' => 'API'),
-						array('icon' => '⚡', 'title' => 'Zapier', 'desc' => 'Connect to 5000+ apps via Zapier', 'tag' => 'Automation'),
-						array('icon' => '🔌', 'title' => 'Make (Integromat)', 'desc' => 'Automation platform integration', 'tag' => 'Automation'),
-						array('icon' => '🔧', 'title' => 'REST API', 'desc' => 'Full API access for developers', 'tag' => 'API'),
+						array('icon' => '🪝', 'title' => 'Advanced Webhooks', 'desc' => 'Headers, field mapping, retries, delivery log', 'tag' => 'Automation'),
+						array('icon' => '⚡', 'title' => 'Zapier / Make / n8n / Automator', 'desc' => 'Native apps for automation tools', 'tag' => 'Automation'),
+						array('icon' => '🔗', 'title' => 'Make (Integromat)', 'desc' => 'Make scenarios', 'tag' => 'Automation'),
 					);
 					foreach ($api_integrations as $int) :
+					?>
+					<div class="fg-pro-integration-card">
+						<div class="fg-pro-integration-icon"><?php echo $int['icon']; ?></div>
+						<div class="fg-pro-integration-content">
+							<h3 class="fg-pro-integration-title"><?php echo $int['title']; ?></h3>
+							<p class="fg-pro-integration-desc"><?php echo $int['desc']; ?></p>
+							<span class="fg-pro-integration-tag"><?php echo $int['tag']; ?></span>
+						</div>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<div class="fg-pro-section">
+				<h2 class="fg-pro-section-title">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+					Messaging &amp; SMS
+				</h2>
+				<div style="display: flex; flex-direction: column; gap: 12px;">
+					<?php
+					$msg_integrations = array(
+						array('icon' => '💬', 'title' => 'Discord / Telegram alerts', 'desc' => 'Post to Discord or Telegram', 'tag' => 'Alerts'),
+						array('icon' => '📱', 'title' => 'SMS (Twilio, ClickSend)', 'desc' => 'Text the admin or submitter', 'tag' => 'SMS'),
+					);
+					foreach ($msg_integrations as $int) :
+					?>
+					<div class="fg-pro-integration-card">
+						<div class="fg-pro-integration-icon"><?php echo $int['icon']; ?></div>
+						<div class="fg-pro-integration-content">
+							<h3 class="fg-pro-integration-title"><?php echo $int['title']; ?></h3>
+							<p class="fg-pro-integration-desc"><?php echo $int['desc']; ?></p>
+							<span class="fg-pro-integration-tag"><?php echo $int['tag']; ?></span>
+						</div>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<div class="fg-pro-section">
+				<h2 class="fg-pro-section-title">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+					Store, Storage &amp; Languages
+				</h2>
+				<div style="display: flex; flex-direction: column; gap: 12px;">
+					<?php
+					$other_integrations = array(
+						array('icon' => '🛒', 'title' => 'WooCommerce', 'desc' => 'Sell products and sync orders', 'tag' => 'Store'),
+						array('icon' => '☁️', 'title' => 'Cloud Storage for Uploads', 'desc' => 'Send files to Dropbox, Google Drive or S3', 'tag' => 'Storage'),
+						array('icon' => '🌐', 'title' => 'Multilingual (WPML, Polylang)', 'desc' => 'Translate labels, messages and emails', 'tag' => 'Languages'),
+					);
+					foreach ($other_integrations as $int) :
 					?>
 					<div class="fg-pro-integration-card">
 						<div class="fg-pro-integration-icon"><?php echo $int['icon']; ?></div>

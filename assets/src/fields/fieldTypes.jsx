@@ -804,6 +804,200 @@ const FIELD_TYPES = {
   },
 
   /**
+   * TOGGLE SWITCH
+   */
+  toggle: {
+    label: 'Toggle',
+    icon: <FontAwesomeIcon icon={faToggleOn} />,
+    category: 'general',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Subscribe to our newsletter',
+      toggle_text: 'Yes, send me updates',
+      on_value: 'Yes',
+      off_value: 'No',
+      default_on: false,
+      validation_message: 'Please turn this on to continue',
+    },
+  },
+
+  /**
+   * STAR RATING
+   */
+  star_rating: {
+    label: 'Star Rating',
+    icon: <FontAwesomeIcon icon={faStar} />,
+    category: 'advanced',
+    coming_soon: false,
+    defaultProps: {
+      label: 'How would you rate us?',
+      max_stars: 5,
+      star_color: '#f59e0b',
+      star_size: 'medium',
+      show_labels: false,
+      rating_labels: 'Very poor, Poor, Average, Good, Excellent',
+      validation_message: 'Please choose a rating',
+    },
+  },
+
+  /**
+   * RICH TEXT
+   */
+  rich_text: {
+    label: 'Rich Text',
+    icon: <FontAwesomeIcon icon={faAlignLeft} />,
+    category: 'advanced',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Your message',
+      placeholder: 'Write here…',
+      editor_height: 160,
+      toolbar: 'basic',
+      max_length: '',
+      validation_message: 'Please write something',
+    },
+  },
+
+  /**
+   * UNIQUE ID
+   */
+  unique_id: {
+    label: 'Unique ID',
+    icon: <FontAwesomeIcon icon={faBarcode} />,
+    category: 'advanced',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Reference',
+      id_type: 'sequential',
+      id_prefix: 'REF-',
+      id_suffix: '',
+      start_number: 1,
+      number_length: 5,
+    },
+  },
+
+  /**
+   * RESET BUTTON
+   */
+  reset_button: {
+    label: 'Reset Button',
+    icon: <FontAwesomeIcon icon={faRotateRight} />,
+    category: 'layout',
+    coming_soon: false,
+    defaultProps: {
+      button_text: 'Clear form',
+      button_alignment: 'left',
+      confirm_reset: true,
+    },
+  },
+
+  /**
+   * MATH CAPTCHA
+   */
+  math_captcha: {
+    label: 'Math Captcha',
+    icon: <FontAwesomeIcon icon={faCalculator} />,
+    category: 'security',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Quick check',
+      operation: 'add',
+      help_text: 'Please answer to show you are human.',
+      validation_message: 'That answer is not right. Please try again.',
+    },
+  },
+
+  /**
+   * CALCULATION
+   */
+  calculation: {
+    label: 'Calculation',
+    icon: <FontAwesomeIcon icon={faCalculator} />,
+    category: 'advanced',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Total',
+      formula: '',
+      decimals: 2,
+      calc_prefix: '',
+      calc_suffix: '',
+      hide_on_form: false,
+    },
+  },
+
+  /**
+   * PAYMENT ITEM
+   */
+  payment_item: {
+    label: 'Payment Item',
+    icon: <FontAwesomeIcon icon={faReceipt} />,
+    category: 'payment',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Product',
+      item_type: 'fixed',
+      amount: 10,
+      min_amount: 1,
+      placeholder: '',
+      validation_message: '',
+    },
+  },
+
+  /**
+   * CARD PAYMENT (Stripe)
+   */
+  stripe_card: {
+    label: 'Card Payment',
+    icon: <FontAwesomeIcon icon={faCreditCard} />,
+    category: 'payment',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Payment details',
+      amount_source: 'items',
+      amount_field: '',
+      show_total: true,
+      payment_description: '{form_name}',
+    },
+  },
+
+  /**
+   * STEP BREAK
+   * Splits the form into steps (multi-step form). Progress style lives in Form Settings › Multi-step.
+   */
+  form_step: {
+    label: 'Step Break',
+    icon: <FontAwesomeIcon icon={faBarsProgress} />,
+    category: 'layout',
+    coming_soon: false,
+    defaultProps: {
+      step_title: 'Next step',
+      next_text: 'Next',
+      prev_text: 'Previous',
+    },
+  },
+
+  /**
+   * FILE UPLOAD
+   * Single or multiple file upload with type, size and count limits.
+   */
+  file_upload: {
+    label: 'File Upload',
+    icon: <FontAwesomeIcon icon={faUpload} />,
+    category: 'advanced',
+    coming_soon: false,
+    defaultProps: {
+      label: 'Upload File',
+      button_text: 'Choose file',
+      allowed_types: 'jpg, jpeg, png, gif, webp, pdf, doc, docx, txt',
+      max_size: 5,
+      multiple: false,
+      max_files: 3,
+      images_only: false,
+      validation_message: 'Please upload a file',
+    },
+  },
+
+  /**
    * TERMS & CONDITIONS
    * Terms agreement checkbox (FREE in FluentForm)
    */

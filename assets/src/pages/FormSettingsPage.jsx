@@ -3,7 +3,7 @@ import { Button, Spin, message, Tooltip, Popover } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGear, faCircleCheck, faEnvelope, faLock, faShieldHalved, faPalette, faChartLine,
-  faFloppyDisk, faCode, faEye, faCopy, faCheck, faTags, faChevronDown,
+  faFloppyDisk, faCode, faEye, faListOl, faPlug, faCopy, faCheck, faTags, faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { __ } from '@wordpress/i18n';
 import { _pg } from '../components/Header';
@@ -22,6 +22,8 @@ const SECTION_META = {
   spam: { icon: faShieldHalved, desc: __( 'Keep bots out and decide what data is stored.', 'formglut' ) },
   style: { icon: faPalette, desc: __( 'Size, alignment and custom CSS for this form.', 'formglut' ) },
   entries: { icon: faChartLine, desc: __( 'How this form is counted.', 'formglut' ) },
+  multistep: { icon: faListOl, desc: __( 'Progress indicator and step checks for forms with Step Break fields.', 'formglut' ) },
+  integrations: { icon: faPlug, desc: __( 'Send each submission to other services.', 'formglut' ) },
 };
 
 const NON_INPUT = ['html', 'heading', 'section_break', 'shortcode', 'action_hook', 'custom_submit_button', 'recaptcha', 'hcaptcha', 'turnstile'];
@@ -113,6 +115,13 @@ export default function FormSettingsPage() {
   const [active, setActive] = useState('confirmation');
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [mcLists, setMcLists] = useState(null);
+
+  // Mailchimp audiences, loaded when the integration is switched on.
+  useEffect(() => {
+    if (!settings.integrations?.mailchimp_enabled || mcLists !== null) return;
+    api.getMailchimpLists().then((d) => setMcLists(d.lists || [])).catch((e) => { setMcLists([]); message.error(e.message); });
+  }, [settings.integrations?.mailchimp_enabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!formId) return;
@@ -162,7 +171,9 @@ export default function FormSettingsPage() {
 
   const inputFields = flattenFields(state.fields);
   const emailFields = inputFields.filter((f) => f.type === 'email').map((f) => ({ value: f.id, label: f.admin_label || f.label || f.id }));
-  const schema = buildSchema(emailFields);
+  const mappable = inputFields.filter((f) => f.id && !NON_INPUT.includes(f.type) && !['file_upload', 'password', 'unique_id', 'form_step', 'reset_button', 'math_captcha'].includes(f.type))
+    .map((f) => ({ value: f.id, label: f.admin_label || f.label || f.id }));
+  const schema = buildSchema(emailFields, mappable, mcLists);
   const section = schema.find((s) => s.key === active) || schema[0];
   const meta = SECTION_META[section.key] || {};
   const shortcode = `[formglut id="${formId}"]`;

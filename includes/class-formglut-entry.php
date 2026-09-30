@@ -45,6 +45,8 @@ class FormGlut_Entry {
 			'status'   => '',
 			'starred'  => null,
 			'search'   => '',
+			'date_from' => '',
+			'date_to'   => '',
 			'per_page' => 20,
 			'offset'   => 0,
 			'orderby'  => 'created_at',
@@ -74,6 +76,13 @@ class FormGlut_Entry {
 		if ( $args['search'] ) {
 			$like    = '%' . $wpdb->esc_like( sanitize_text_field( $args['search'] ) ) . '%';
 			$where[] = $wpdb->prepare( 'fields_data LIKE %s', $like );
+		}
+
+		if ( $args['date_from'] && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $args['date_from'] ) ) {
+			$where[] = $wpdb->prepare( 'created_at >= %s', $args['date_from'] . ' 00:00:00' );
+		}
+		if ( $args['date_to'] && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $args['date_to'] ) ) {
+			$where[] = $wpdb->prepare( 'created_at <= %s', $args['date_to'] . ' 23:59:59' );
 		}
 
 		$where_sql = '';

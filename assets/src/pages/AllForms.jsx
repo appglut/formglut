@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Table, Button, Input, Space, Tooltip, Switch, Popconfirm, message, Modal, Row, Col, Skeleton, Card, Select, DatePicker } from 'antd';
+import { Table, Button, Input, Space, Tooltip, Switch, Popconfirm, message, Modal, Row, Col, Skeleton, Card, Select, DatePicker, Dropdown } from 'antd';
 import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlus, faMagnifyingGlass, faCopy, faPenToSquare, faTrash,
-  faFileLines, faStar, faRotateRight, faGear, faEye, faCalendarDays
+  faFileLines, faStar, faRotateRight, faGear, faEye, faCalendarDays, faFileExport, faFileImport
 } from '@fortawesome/free-solid-svg-icons';
 import { faCircleCheck as faBulkActive, faPenToSquare as faBulkDraft, faTrashCan as faBulkTrash, faXmark as faBulkClear } from '@fortawesome/free-solid-svg-icons';
 import Header, { _pg } from '../components/Header';
 import * as api from '../services/api';
+import { TEMPLATES, finalizeTemplate } from './templates';
+import MigratorModal from './MigratorModal';
 
 // Configure message placement
 message.config({
@@ -21,14 +23,17 @@ message.config({
 
 function CreateFormModal({ open, onClose }) {
   const [creating, setCreating] = useState(false);
+  const [picking, setPicking] = useState(false);
 
-  async function handleCreate() {
+  async function handleCreate(template) {
     setCreating(true);
     try {
+      const built = template ? finalizeTemplate(template) : { fields: [], settings: {} };
       const result = await api.createForm({
-        title: __( 'Untitled Form', 'formglut' ),
-        fields: [],
+        title: template ? template.title : __( 'Untitled Form', 'formglut' ),
+        fields: built.fields,
         submit_btn: {},
+        settings: built.settings || {},
         status: 'draft',
       });
       onClose();
@@ -51,14 +56,14 @@ function CreateFormModal({ open, onClose }) {
     >
       <Row gutter={24} style={{ marginTop: 24, marginBottom: 16 }}>
         <Col span={8}>
-          <div className="fg-create-card" onClick={creating ? undefined : handleCreate} style={creating ? { opacity: 0.6, pointerEvents: 'none' } : {}}>
+          <div className="fg-create-card" onClick={creating ? undefined : () => handleCreate(null)} style={creating ? { opacity: 0.6, pointerEvents: 'none' } : {}}>
             <div className="fg-create-card-icon"><FontAwesomeIcon icon={faPlus} /></div>
             <div className="fg-create-card-title">{__( 'New Blank Form', 'formglut' )}</div>
             <div className="fg-create-card-desc">{__( 'Create a new blank form from scratch.', 'formglut' )}</div>
           </div>
         </Col>
         <Col span={8}>
-          <div className="fg-create-card" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+          <div className="fg-create-card" onClick={() => setPicking(true)}>
             <div className="fg-create-card-icon"><FontAwesomeIcon icon={faFileLines} /></div>
             <div className="fg-create-card-title">{__( 'Choose a Template', 'formglut' )}</div>
             <div className="fg-create-card-desc">{__( 'Choose a pre-made form template and customize it.', 'formglut' )}</div>
@@ -67,11 +72,30 @@ function CreateFormModal({ open, onClose }) {
         <Col span={8}>
           <div className="fg-create-card" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
             <div className="fg-create-card-icon"><FontAwesomeIcon icon={faStar} /></div>
-            <div className="fg-create-card-title">{__( 'Create Conversational Form', 'formglut' )}</div>
+            <div className="fg-create-card-title">{__( 'Create Conversational Form', 'formglut' )} <span className="fg-pro-pill">PRO</span></div>
             <div className="fg-create-card-desc">{__( 'Turn your content, surveys into conversations.', 'formglut' )}</div>
           </div>
         </Col>
       </Row>
+      {picking && (
+        <div className="fg-template-grid">
+          <div className="fg-template-head">
+            <strong>{__( 'Templates', 'formglut' )}</strong>
+            <button type="button" className="fg-template-back" onClick={() => setPicking(false)}>{__( 'Hide templates', 'formglut' )}</button>
+          </div>
+          <Row gutter={[16, 16]}>
+            {TEMPLATES.map((t) => (
+              <Col key={t.key} xs={24} sm={12} lg={6}>
+                <button type="button" className="fg-template-card" disabled={creating} onClick={() => handleCreate(t)}>
+                  <span className="fg-template-icon" aria-hidden="true">{t.icon}</span>
+                  <span className="fg-template-title">{t.title}</span>
+                  <span className="fg-template-desc">{t.desc}</span>
+                </button>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      )}
     </Modal>
   );
 }
@@ -258,6 +282,24 @@ export default function AllForms() {
     }
   }
 
+  const importRef = React.useRef(null);
+  const [showMigrator, setShowMigrator] = useState(false);
+  async function handleImportFile(e) {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const text = await file.text();
+      JSON.parse(text);
+      const res = await api.importForms(text);
+      message.success(res.message || __( 'Forms imported.', 'formglut' ));
+      loadForms();
+      loadStats();
+    } catch (err) {
+      message.error(err instanceof SyntaxError ? __( 'This file is not valid JSON.', 'formglut' ) : (err.message || __( 'Import failed.', 'formglut' )));
+    }
+  }
+
   async function handleDuplicate(id) {
     try {
       await api.duplicateForm(id);
@@ -330,7 +372,9 @@ export default function AllForms() {
           <div className="fg-row-actions">
             <a href={_pg.editor + '&form_id=' + r.id}><FontAwesomeIcon icon={faPenToSquare} /> {__( 'Edit', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
-            <a href={_pg.settings}><FontAwesomeIcon icon={faGear} /> {__( 'Global Settings', 'formglut' )}</a>
+            <a href={_pg.form_settings + '&form_id=' + r.id}><FontAwesomeIcon icon={faGear} /> {__( 'Settings', 'formglut' )}</a>
+            <span className="fg-action-sep">|</span>
+            <a href={api.exportFormsUrl(r.id)}><FontAwesomeIcon icon={faFileExport} /> {__( 'Export', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
             <a href={_pg.preview + '&form_id=' + r.id} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faEye} /> {__( 'Preview', 'formglut' )}</a>
             <span className="fg-action-sep">|</span>
@@ -409,9 +453,19 @@ export default function AllForms() {
               <div className="fg-page-title">{__( 'All Forms', 'formglut' )}</div>
               <div className="fg-page-subtitle">{__( 'Manage and monitor all your forms', 'formglut' )}</div>
             </div>
-            <Button type="primary" icon={<FontAwesomeIcon icon={faPlus} />} style={{ background: '#e94560', borderColor: '#e94560' }} onClick={() => { setShowCreateModal(true); }}>
-              {__( 'Add New Form', 'formglut' )}
-            </Button>
+            <Space size={8}>
+              <input ref={importRef} type="file" accept=".json,application/json" style={{ display: 'none' }} onChange={handleImportFile} />
+              <Dropdown trigger={['click']} menu={{ items: [
+                { key: 'file', label: __( 'From a FormGlut file (.json)', 'formglut' ), onClick: () => importRef.current && importRef.current.click() },
+                { key: 'plugin', label: __( 'From another form plugin…', 'formglut' ), onClick: () => setShowMigrator(true) },
+              ] }}>
+                <Button icon={<FontAwesomeIcon icon={faFileImport} />}>{__( 'Import', 'formglut' )}</Button>
+              </Dropdown>
+              <MigratorModal open={showMigrator} onClose={() => setShowMigrator(false)} onImported={() => { loadForms(); loadStats(); }} />
+              <Button type="primary" icon={<FontAwesomeIcon icon={faPlus} />} style={{ background: '#e94560', borderColor: '#e94560' }} onClick={() => { setShowCreateModal(true); }}>
+                {__( 'Add New Form', 'formglut' )}
+              </Button>
+            </Space>
           </div>
 
           <div className="fg-stats-row">
@@ -456,6 +510,7 @@ export default function AllForms() {
                 <span>{selectedRowKeys.length} {__( 'selected', 'formglut' )}</span>
                 <Button size="small" className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faBulkActive} />} onClick={() => handleBulkStatus('active')}>{__( 'Set Active', 'formglut' )}</Button>
                 <Button size="small" className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faBulkDraft} />} onClick={() => handleBulkStatus('draft')}>{__( 'Set Draft', 'formglut' )}</Button>
+                <Button size="small" className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faFileExport} />} href={api.exportFormsUrl(selectedRowKeys)}>{__( 'Export', 'formglut' )}</Button>
                 <Popconfirm title={__( 'Delete %s form(s)?', 'formglut' ).replace( '%s', selectedRowKeys.length )} okText={__( 'Delete', 'formglut' )} cancelText={__( 'Cancel', 'formglut' )} okButtonProps={{ danger: true }} onConfirm={handleBulkDelete}>
                   <Button size="small" danger className="fg-bulk-btn" icon={<FontAwesomeIcon icon={faBulkTrash} />}>{__( 'Delete', 'formglut' )}</Button>
                 </Popconfirm>

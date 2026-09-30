@@ -540,7 +540,60 @@ const AUTOCOMPLETE_OPTION = {
  * first; a per-type map below only adds or overrides options unique to that type.
  * Which of them a type actually shows is decided by FIELD_TYPE_GROUPS.
  */
+const PATTERN_OPTIONS = {
+  validation_pattern: { type: 'select', label: 'Custom validation', section: 'validation', description: 'Check the answer against a rule. Choose a preset or “Custom pattern”.', options: [
+    { value: '', label: 'None' },
+    { value: 'letters', label: 'Letters and spaces only' },
+    { value: 'alnum', label: 'Letters and numbers only' },
+    { value: 'digits', label: 'Digits only' },
+    { value: 'postcode', label: 'Postcode / ZIP (letters, digits, spaces, dashes)' },
+    { value: 'custom', label: 'Custom pattern (regular expression)' },
+  ] },
+  validation_regex: { type: 'text', label: 'Pattern', section: 'validation', placeholder: '^[A-Z]{2}[0-9]{4}$', description: 'A regular expression the whole answer must match', showWhen: 'validation_pattern', showValue: 'custom' },
+  pattern_message: { type: 'text', label: 'Message when it does not match', section: 'validation', placeholder: 'Please use the requested format.', showWhen: 'validation_pattern' },
+};
+
+const PREFILL_OPTIONS = {
+  prefill_source: { type: 'select', label: 'Fill in automatically from', section: 'advanced', description: 'Start the field with a value from the page address, the logged-in user, a cookie or the current post', options: [
+    { value: '', label: 'Nothing (use the default value)' },
+    { value: 'url', label: 'Page address (?name=value)' },
+    { value: 'user', label: 'Logged-in user' },
+    { value: 'cookie', label: 'Cookie' },
+    { value: 'post_meta', label: 'Current post (custom field)' },
+  ] },
+  prefill_key: { type: 'text', label: 'Name to read', section: 'advanced', placeholder: 'utm_source / user_email / first_name', description: 'URL parameter, user field (user_email, display_name, first_name, last_name or any user meta key), cookie name or custom field key', showWhen: 'prefill_source' },
+};
+
+const VISIBILITY_OPTIONS = {
+  visibility: { type: 'select', label: 'Who sees this field', section: 'advanced', options: [
+    { value: '', label: 'Everyone' },
+    { value: 'logged_in', label: 'Only logged-in users' },
+    { value: 'logged_out', label: 'Only visitors who are not logged in' },
+    { value: 'admins', label: 'Only administrators' },
+  ] },
+};
+
+const WORDS_OPTIONS = {
+  max_words: { type: 'number', label: 'Maximum words', section: 'validation', description: 'Empty = no limit' },
+  show_counter: { type: 'switch', label: 'Show a live counter', section: 'general', description: 'Shows characters or words left under the box' },
+};
+
+const NUMFMT_OPTIONS = {
+  decimals: { type: 'select', label: 'Decimal places', section: 'general', description: 'Answers are rounded to this many decimals', options: [{ value: '', label: 'Any' }, ...[0, 1, 2, 3, 4].map((n) => ({ value: n, label: String(n) }))] },
+  thousand_separator: { type: 'select', label: 'Thousands separator in emails and entries', section: 'general', options: [{ value: '', label: 'None (1234567)' }, { value: ',', label: 'Comma (1,234,567)' }, { value: '.', label: 'Dot (1.234.567)' }, { value: ' ', label: 'Space (1 234 567)' }] },
+};
+
+const SEARCHABLE_OPTIONS = {
+  searchable: { type: 'switch', label: 'Searchable', section: 'general', description: 'Visitors can type to filter the list' },
+};
+
 const COMMON_OPTION_DEFS = {
+  ...WORDS_OPTIONS,
+  ...NUMFMT_OPTIONS,
+  ...SEARCHABLE_OPTIONS,
+  ...PREFILL_OPTIONS,
+  ...VISIBILITY_OPTIONS,
+  ...PATTERN_OPTIONS,
   ...UNIVERSAL_OPTIONS,
   ...HIDDEN_OPTION,
   ...AUTOCOMPLETE_OPTION,
@@ -567,9 +620,16 @@ const CHOICE_BASE_OPTIONS = {
   ], description: 'How the options are arranged' },
 };
 
-export const RADIO_OPTIONS = { ...CHOICE_BASE_OPTIONS };
+const OTHER_CHOICE_OPTIONS = {
+  enable_other: { type: 'switch', label: 'Add an “Other” choice', section: 'general', description: 'Adds a last choice with a text box for the visitor’s own answer' },
+  other_label: { type: 'text', label: '“Other” label', section: 'general', placeholder: 'Other', showWhen: 'enable_other' },
+  other_placeholder: { type: 'text', label: '“Other” box hint', section: 'general', placeholder: 'Please specify', showWhen: 'enable_other' },
+};
+
+export const RADIO_OPTIONS = { ...CHOICE_BASE_OPTIONS, ...OTHER_CHOICE_OPTIONS };
 
 export const CHECKBOX_OPTIONS = {
+  ...OTHER_CHOICE_OPTIONS,
   ...CHOICE_BASE_OPTIONS,
   min_selections: { type: 'number', label: 'Minimum Selections', section: 'validation', min: 0, description: 'Fewest options the user must tick (0 = no minimum)' },
   max_selections: { type: 'number', label: 'Maximum Selections', section: 'validation', min: 0, description: 'Most options the user can tick (0 = no limit)' },
@@ -588,6 +648,9 @@ export const URL_OPTIONS = {
 };
 
 export const PHONE_OPTIONS = {
+  show_country_code: { type: 'switch', label: 'Country code dropdown', section: 'general', description: 'Visitors pick a country flag and dial code before the number' },
+  default_country: { type: 'select', label: 'Default country', section: 'general', options: COUNTRY_OPTIONS, showWhen: 'show_country_code' },
+  preferred_countries: { type: 'select', mode: 'multiple', label: 'Countries at the top', section: 'general', options: COUNTRY_OPTIONS, showWhen: 'show_country_code' },
   ...TEXT_INPUT_OPTIONS,
   mobile_keyboard_type: { type: 'select', label: 'Mobile Keyboard', section: 'advanced', options: COMMON_OPTION_VALUES.keyboardTypesPhone, description: 'Keyboard shown on mobile devices' },
   validate_phone: { type: 'switch', label: 'Validate Phone Number', section: 'validation', description: 'Require 7–15 digits' },
@@ -607,6 +670,17 @@ export const DATE_OPTIONS = {
   ], description: 'Pick a date only, or a date and time' },
   min_date: { type: 'text', label: 'Earliest Date', section: 'validation', placeholder: 'YYYY-MM-DD', description: 'Earliest selectable date (YYYY-MM-DD)' },
   max_date: { type: 'text', label: 'Latest Date', section: 'validation', placeholder: 'YYYY-MM-DD', description: 'Latest selectable date (YYYY-MM-DD)' },
+  use_picker: { type: 'switch', label: 'Calendar popup', section: 'general', description: 'Show a calendar instead of the browser’s own date box. Needed for the format and disabled days below.' },
+  date_format: { type: 'select', label: 'Date format', section: 'general', showWhen: 'use_picker', options: [
+    { value: 'Y-m-d', label: '2026-09-30' }, { value: 'd/m/Y', label: '30/09/2026' }, { value: 'm/d/Y', label: '09/30/2026' },
+    { value: 'd.m.Y', label: '30.09.2026' }, { value: 'j F Y', label: '30 September 2026' }, { value: 'F j, Y', label: 'September 30, 2026' },
+  ] },
+  first_day: { type: 'select', label: 'Week starts on', section: 'general', showWhen: 'use_picker', options: [{ value: 1, label: 'Monday' }, { value: 0, label: 'Sunday' }, { value: 6, label: 'Saturday' }] },
+  time_24hr: { type: 'switch', label: '24-hour time', section: 'general', description: 'For “Date & Time”', showWhen: 'use_picker' },
+  disable_past: { type: 'switch', label: 'No past dates', section: 'validation' },
+  disable_future: { type: 'switch', label: 'No future dates', section: 'validation' },
+  disable_weekends: { type: 'switch', label: 'No weekends', section: 'validation' },
+  disabled_dates: { type: 'text', label: 'Blocked dates', section: 'validation', placeholder: '2026-12-25, 2027-01-01', description: 'Comma-separated dates (YYYY-MM-DD) that cannot be chosen' },
 };
 
 /**
@@ -653,6 +727,9 @@ export const NAME_OPTIONS = {
   first_name_placeholder: txt('First Name Placeholder', 'Hint text inside the first name box'),
   middle_name_placeholder: txt('Middle Name Placeholder', 'Hint text inside the middle name box'),
   last_name_placeholder: txt('Last Name Placeholder', 'Hint text inside the last name box'),
+  show_prefix: sw('Show Title (Mr / Ms …)', 'Add a title dropdown before the first name'),
+  prefix_options: txt('Title Choices', 'Comma-separated', 'general', 'Mr, Mrs, Ms, Mx, Dr'),
+  show_suffix: sw('Show Suffix', 'Add a suffix box after the last name (Jr, Sr, III …)'),
   name_layout: { type: 'select', label: 'Layout', section: 'general', allowClear: false, options: [{ value: 'horizontal', label: 'Side by side' }, { value: 'vertical', label: 'Stacked' }], description: 'Arrange the name boxes side by side or stacked' },
 };
 
@@ -693,6 +770,7 @@ export const TIME_OPTIONS = {
   min_time: txt('Earliest Time', 'Earliest allowed time (HH:MM, 24-hour)', 'validation', '09:00'),
   max_time: txt('Latest Time', 'Latest allowed time (HH:MM, 24-hour)', 'validation', '17:00'),
   time_increment: num('Minute Step', 'Allowed minute increments, e.g. 15 or 30'),
+  time_format: { type: 'select', label: 'Time format', section: 'general', description: 'How visitors pick the time. The entry always stores 24-hour HH:MM.', options: [{ value: '', label: 'Browser default' }, { value: '24', label: '24-hour (14:30)' }, { value: '12', label: '12-hour (2:30 PM)' }] },
 };
 
 export const DATE_RANGE_OPTIONS = {
@@ -761,7 +839,81 @@ export const PASSWORD_OPTIONS = {
 export const HIDDEN_FIELD_OPTIONS = {
   label: txt('Label (entries only)', 'Name shown for this value in entries and emails'),
   default_value: txt('Value', 'Value submitted with the form'),
-  param_populate: txt('Fill From URL Parameter', 'If the page URL has ?name=value, use that value instead, e.g. utm_source', 'general', 'utm_source'),
+};
+
+export const TOGGLE_OPTIONS = {
+  toggle_text: { type: 'text', label: 'Text beside the switch', section: 'general' },
+  default_on: { type: 'switch', label: 'On by default', section: 'general' },
+  on_value: { type: 'text', label: 'Value when on', section: 'advanced', description: 'Saved in the entry when the switch is on' },
+  off_value: { type: 'text', label: 'Value when off', section: 'advanced', description: 'Saved in the entry when the switch is off' },
+};
+
+export const STAR_RATING_OPTIONS = {
+  max_stars: { type: 'select', label: 'Number of stars', section: 'general', options: [3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({ value: n, label: String(n) })) },
+  show_labels: { type: 'switch', label: 'Show a word for each rating', section: 'general' },
+  rating_labels: { type: 'text', label: 'Rating words', section: 'general', placeholder: 'Very poor, Poor, Average, Good, Excellent', description: 'Comma-separated, one per star', showWhen: 'show_labels' },
+  star_color: { type: 'color', label: 'Star colour', section: 'style' },
+  star_size: { type: 'select', label: 'Star size', section: 'style', options: [{ value: 'small', label: 'Small' }, { value: 'medium', label: 'Medium' }, { value: 'large', label: 'Large' }] },
+};
+
+export const RICH_TEXT_OPTIONS = {
+  toolbar: { type: 'select', label: 'Toolbar', section: 'general', options: [{ value: 'basic', label: 'Bold, italic, lists' }, { value: 'full', label: 'Bold, italic, underline, lists, link, quote' }] },
+  editor_height: { type: 'number', label: 'Height (px)', section: 'general' },
+  max_length: { type: 'number', label: 'Maximum characters', section: 'validation', description: 'Counts visible text, not formatting. Empty = no limit.' },
+};
+
+export const UNIQUE_ID_OPTIONS = {
+  id_type: { type: 'select', label: 'ID type', section: 'general', description: 'Created when the form is submitted', options: [{ value: 'sequential', label: 'Sequential number (0001, 0002…)' }, { value: 'random', label: 'Random code (8 characters)' }, { value: 'date', label: 'Date + number (20260930-001)' }] },
+  id_prefix: { type: 'text', label: 'Prefix', section: 'general', placeholder: 'REF-' },
+  id_suffix: { type: 'text', label: 'Suffix', section: 'general' },
+  start_number: { type: 'number', label: 'Start at', section: 'general', description: 'First number for sequential IDs' },
+  number_length: { type: 'number', label: 'Minimum digits', section: 'general', description: 'Pads with zeros, e.g. 5 → 00042' },
+};
+
+export const RESET_BUTTON_OPTIONS = {
+  button_text: { type: 'text', label: 'Button text', section: 'general' },
+  button_alignment: { type: 'select', label: 'Alignment', section: 'general', options: [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }, { value: 'right', label: 'Right' }] },
+  confirm_reset: { type: 'switch', label: 'Ask before clearing', section: 'general' },
+};
+
+export const MATH_CAPTCHA_OPTIONS = {
+  operation: { type: 'select', label: 'Question type', section: 'general', options: [{ value: 'add', label: 'Addition (3 + 4)' }, { value: 'subtract', label: 'Subtraction (9 − 4)' }, { value: 'multiply', label: 'Multiplication (3 × 4)' }, { value: 'mixed', label: 'Mixed' }] },
+};
+
+export const CALCULATION_OPTIONS = {
+  formula: { type: 'textarea', label: 'Formula', section: 'general', rows: 3, placeholder: '{field:quantity} * {field:price}', description: 'Use {field:ID} for a field’s value (copy the tag from the field’s ID chip), numbers, + − * / %, brackets and round(x, 2), min(), max(), abs(), ceil(), floor(). Choices use their calculation value.' },
+  decimals: { type: 'select', label: 'Decimal places', section: 'general', options: [0, 1, 2, 3, 4].map((n) => ({ value: n, label: String(n) })) },
+  calc_prefix: { type: 'text', label: 'Text before the number', section: 'general', placeholder: '$' },
+  calc_suffix: { type: 'text', label: 'Text after the number', section: 'general', placeholder: ' USD' },
+  hide_on_form: { type: 'switch', label: 'Hide on the form', section: 'general', description: 'Still calculated and saved with the entry' },
+};
+
+export const PAYMENT_ITEM_OPTIONS = {
+  item_type: { type: 'select', label: 'Price', section: 'general', options: [{ value: 'fixed', label: 'Fixed price' }, { value: 'custom', label: 'Visitor enters the amount (donation, custom amount)' }] },
+  amount: { type: 'number', label: 'Price', section: 'general', description: 'In the currency set in Global Settings › Payments' },
+  min_amount: { type: 'number', label: 'Minimum amount', section: 'validation', description: 'For “Visitor enters the amount”' },
+};
+
+export const STRIPE_CARD_OPTIONS = {
+  amount_source: { type: 'select', label: 'Amount to charge', section: 'general', options: [{ value: 'items', label: 'Total of the Payment Item fields' }, { value: 'calc', label: 'Result of a Calculation field' }] },
+  amount_field: { type: 'text', label: 'Calculation field ID', section: 'general', placeholder: 'f123…', description: 'Copy the ID from the Calculation field’s ID chip', showWhen: 'amount_source', showValue: 'calc' },
+  show_total: { type: 'switch', label: 'Show the total above the card', section: 'general' },
+  payment_description: { type: 'text', label: 'Description in Stripe', section: 'advanced', placeholder: '{form_name} – {field:ID}', description: 'What you see in your Stripe Dashboard. Smart tags allowed.' },
+};
+
+export const FORM_STEP_OPTIONS = {
+  step_title: { type: 'text', label: 'Next step title', section: 'general', description: 'Title of the step that starts here (shown in the progress bar)' },
+  next_text: { type: 'text', label: 'Next button text', section: 'general', description: 'Button that moves to the next step' },
+  prev_text: { type: 'text', label: 'Previous button text', section: 'general', description: 'Button that goes back one step' },
+};
+
+export const FILE_UPLOAD_OPTIONS = {
+  button_text: { type: 'text', label: 'Button text', section: 'general', description: 'Text on the upload button' },
+  multiple: { type: 'switch', label: 'Allow multiple files', section: 'general', description: 'Let visitors choose more than one file' },
+  max_files: { type: 'number', label: 'Maximum number of files', section: 'validation', description: 'How many files one visitor can upload', showWhen: 'multiple' },
+  images_only: { type: 'switch', label: 'Images only', section: 'validation', description: 'Accept only JPG, PNG, GIF and WebP images' },
+  allowed_types: { type: 'text', label: 'Allowed file types', section: 'validation', placeholder: 'jpg, png, pdf', description: 'Comma-separated extensions. WordPress may still block some types for security.' },
+  max_size: { type: 'number', label: 'Max file size (MB)', section: 'validation', description: 'Per file. The server upload limit also applies.' },
 };
 
 export const SECTION_BREAK_OPTIONS = {
@@ -918,6 +1070,12 @@ export const OPTION_GROUPS = {
   length_limit: ['min_length', 'max_length'], // Min / max length
   unique: ['validate_unique', 'unique_error_message'], // Unique-value validation
   mask: ['custom_mask', 'reversible_mask', 'clear_on_invalid'], // Input-mask extras
+  pattern: ['validation_pattern', 'validation_regex', 'pattern_message'], // Custom validation rule
+  prefill: ['prefill_source', 'prefill_key'], // Fill the field from the URL, user, cookie or post
+  visibility: ['visibility'], // Who sees the field
+  words: ['max_words', 'show_counter'], // Word limit and live counter
+  numfmt: ['decimals', 'thousand_separator'], // Number display
+  searchable: ['searchable'], // Type-to-search dropdown
   date_limits: ['min_date', 'max_date'], // Min / max date
   divider: ['alignment', 'description', 'show_divider', 'divider_style', 'divider_color'], // Alignment, description and divider styling
   fallback: ['fallback_content'], // Fallback content
@@ -928,38 +1086,49 @@ export const OPTION_GROUPS = {
 };
 
 export const FIELD_TYPE_GROUPS = {
-  text: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'unique', 'mask'],
-  email: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'keyboard', 'unique'],
-  textarea: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'length_limit'],
-  select: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'shuffle'],
-  multiselect: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'shuffle', 'selection_limit'],
-  number: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'numeric', 'step'],
-  radio: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'shuffle'],
-  checkbox: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'shuffle', 'selection_limit'],
-  url: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'autocomplete'],
-  phone: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'autocomplete'],
-  date: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'date_limits'],
-  html: ['conditional', 'admin_label', 'container', 'hidden', 'element'],
-  name: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help'],
-  heading: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'divider'],
-  country_select: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder'],
-  spinner: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'step', 'stepper'],
-  currency: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'numeric', 'step', 'symbol'],
-  percentage: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'numeric', 'step', 'symbol'],
-  time: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value'],
-  date_range: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'date_limits'],
-  address: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help'],
-  masked_input: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'mask'],
-  password: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'placeholder', 'autocomplete', 'length_limit'],
-  hidden: ['admin_label', 'identity', 'value'],
-  section_break: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'divider'],
-  terms_conditions: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'helptext'],
-  gdpr_agreement: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'helptext'],
-  shortcode: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'fallback'],
-  action_hook: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'fallback'],
-  range_slider: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'step', 'stepper'],
-  color_picker: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help'],
-  custom_submit_button: ['conditional', 'admin_label', 'container', 'hidden', 'element'],
+  text: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'unique', 'mask', 'pattern', 'prefill', 'visibility', 'words'],
+  email: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'keyboard', 'unique', 'prefill', 'visibility'],
+  textarea: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'length_limit', 'pattern', 'prefill', 'visibility', 'words'],
+  select: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'shuffle', 'prefill', 'visibility', 'searchable'],
+  multiselect: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'shuffle', 'selection_limit', 'visibility'],
+  number: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'numeric', 'step', 'prefill', 'visibility', 'numfmt'],
+  radio: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'shuffle', 'prefill', 'visibility'],
+  checkbox: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'shuffle', 'selection_limit', 'visibility'],
+  url: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'autocomplete', 'pattern', 'prefill', 'visibility'],
+  phone: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'keyboard', 'autocomplete', 'pattern', 'prefill', 'visibility'],
+  date: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'date_limits', 'prefill', 'visibility'],
+  html: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'visibility'],
+  name: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'visibility'],
+  heading: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'divider', 'visibility'],
+  country_select: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'prefill', 'visibility', 'searchable'],
+  spinner: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'step', 'stepper', 'prefill', 'visibility', 'numfmt'],
+  currency: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'numeric', 'step', 'symbol', 'prefill', 'visibility', 'numfmt'],
+  percentage: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'numeric', 'step', 'symbol', 'prefill', 'visibility', 'numfmt'],
+  time: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'prefill', 'visibility'],
+  date_range: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'date_limits', 'visibility'],
+  address: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'visibility'],
+  masked_input: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'placeholder', 'affix', 'mask', 'prefill', 'visibility'],
+  password: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'placeholder', 'autocomplete', 'length_limit', 'pattern', 'visibility'],
+  hidden: ['admin_label', 'identity', 'value', 'prefill'],
+  section_break: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'divider', 'visibility'],
+  form_step: ['admin_label'],
+  payment_item: ['conditional', 'admin_label', 'container', 'identity', 'element', 'required', 'help', 'placeholder', 'visibility'],
+  stripe_card: ['admin_label', 'container', 'identity', 'help'],
+  calculation: ['conditional', 'admin_label', 'container', 'identity', 'element', 'help', 'visibility'],
+  toggle: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'prefill', 'visibility'],
+  star_rating: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'required', 'valmsg', 'help', 'prefill', 'visibility'],
+  rich_text: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'required', 'valmsg', 'help', 'placeholder', 'visibility'],
+  unique_id: ['admin_label', 'identity'],
+  reset_button: ['conditional', 'admin_label', 'container', 'element', 'visibility'],
+  math_captcha: ['admin_label', 'container', 'identity', 'valmsg', 'helptext'],
+  file_upload: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'visibility'],
+  terms_conditions: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'helptext', 'visibility'],
+  gdpr_agreement: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'helptext', 'visibility'],
+  shortcode: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'fallback', 'visibility'],
+  action_hook: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'fallback', 'visibility'],
+  range_slider: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'value', 'step', 'stepper', 'prefill', 'visibility'],
+  color_picker: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'element', 'required', 'valmsg', 'help', 'prefill', 'visibility'],
+  custom_submit_button: ['conditional', 'admin_label', 'container', 'hidden', 'element', 'visibility'],
   column_1: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'columns'],
   column_2: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'columns', 'column_spacing'],
   column_3: ['conditional', 'admin_label', 'container', 'identity', 'hidden', 'columns', 'column_spacing'],
@@ -1064,7 +1233,7 @@ export const STYLE_GROUPS = Object.fromEntries(STYLE_BLOCKS.map(block => [
 const STANDARD_INPUT_TYPES = [
   'text', 'email', 'textarea', 'select', 'multiselect', 'number', 'radio', 'checkbox', 'url', 'phone', 'date',
   'name', 'country_select', 'spinner', 'currency', 'percentage', 'time', 'date_range', 'address', 'masked_input',
-  'password', 'range_slider', 'color_picker',
+  'password', 'range_slider', 'color_picker', 'file_upload', 'toggle', 'star_rating', 'rich_text', 'math_captcha', 'calculation', 'payment_item', 'stripe_card',
 ];
 
 /** Style groups shown for a field type. Types this file doesn't know (pro fields) get every group. */
@@ -1072,7 +1241,7 @@ export function getStyleGroups(fieldType) {
   if (STANDARD_INPUT_TYPES.includes(fieldType)) return Object.keys(STYLE_GROUPS);
   if (FIELD_TYPE_GROUPS[fieldType]) {
     // Hidden inputs and column containers have nothing to style; other blocks only take a CSS class.
-    return fieldType === 'hidden' || /^column_\d+$/.test(fieldType) ? [] : ['css_class'];
+    return ['hidden', 'form_step', 'unique_id'].includes(fieldType) || /^column_\d+$/.test(fieldType) ? [] : ['css_class'];
   }
   return Object.keys(STYLE_GROUPS);
 }
@@ -1108,7 +1277,17 @@ const FIELD_TYPE_OPTIONS_MAP = {
   date_range: DATE_RANGE_OPTIONS,
   address: ADDRESS_OPTIONS,
   masked_input: MASKED_INPUT_OPTIONS,
-  file_upload: {},
+  file_upload: FILE_UPLOAD_OPTIONS,
+  toggle: TOGGLE_OPTIONS,
+  star_rating: STAR_RATING_OPTIONS,
+  rich_text: RICH_TEXT_OPTIONS,
+  unique_id: UNIQUE_ID_OPTIONS,
+  reset_button: RESET_BUTTON_OPTIONS,
+  math_captcha: MATH_CAPTCHA_OPTIONS,
+  form_step: FORM_STEP_OPTIONS,
+  payment_item: PAYMENT_ITEM_OPTIONS,
+  stripe_card: STRIPE_CARD_OPTIONS,
+  calculation: CALCULATION_OPTIONS,
   password: PASSWORD_OPTIONS,
   hidden: HIDDEN_FIELD_OPTIONS,
   section_break: SECTION_BREAK_OPTIONS,

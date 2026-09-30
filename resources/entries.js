@@ -1,13 +1,14 @@
-import { bE as staticMethods, bB as reactExports, bq as jsxRuntimeExports, J as _pg, g as FontAwesomeIcon, aZ as faStar, B as Button, at as faEye, aq as faEnvelope, ar as faEnvelopeOpen, b0 as faTrash, aH as faMagnifyingGlass, aT as faRotateRight, av as faFileLines, S as Skeleton, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
+import { cv as staticMethods, co as reactExports, bR as getEntryCounts, bU as getForms, bP as getEntries, cc as jsxRuntimeExports, O as _pg, h as FontAwesomeIcon, bi as faStar, a as Button, aH as faEye, aD as faEnvelope, aF as faEnvelopeOpen, bm as faTrash, j as Input, aY as faMagnifyingGlass, ad as exportEntriesUrl, aJ as faFileExport, bc as faRotateRight, aL as faFileLines, a8 as deleteEntry, cA as toggleEntryStar, cE as updateEntryStatus, S as Skeleton, a7 as createRoot } from "./chunks/api-C3T_2YIP.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
 import { f as faStar$1 } from "./chunks/index-B2JIQhJi.js";
-import { H as Header } from "./chunks/Header-CgkrRZA-.js";
-import { k as getEntryCounts, n as getForms, i as getEntries, T as Tooltip, d as deleteEntry, t as toggleEntryStar, u as updateEntryStatus } from "./chunks/api-V7Uk2s4S.js";
-import { P as Popconfirm, S as Space } from "./chunks/index-BHAdwT1Y.js";
-import { S as Select, I as Input } from "./chunks/index-BLXOj64T.js";
-import { F as ForwardTable } from "./chunks/Table-fv5X7Bx6.js";
-import "./chunks/index-cX7NXTCE.js";
-import "./chunks/EllipsisOutlined-lUE_jWZL.js";
+import { H as Header } from "./chunks/Header-xSHotuJx.js";
+import { P as Popconfirm, S as Space } from "./chunks/index-DUJ6TIST.js";
+import { T as Tooltip } from "./chunks/index-DoebJELJ.js";
+import { S as Select } from "./chunks/index-DnCN3rVY.js";
+import { D as DatePicker, F as ForwardTable } from "./chunks/Table-Cg2SJaMG.js";
+import "./chunks/index-3Uh34z5Q.js";
+import "./chunks/ActionButton-1FHh5CEq.js";
+import "./chunks/EllipsisOutlined-DVpo83LX.js";
 staticMethods.config({
   duration: 3,
   maxCount: 3,
@@ -69,6 +70,8 @@ function Entries() {
   const [searchInput, setSearchInput] = reactExports.useState("");
   const [statusFilter, setStatusFilter] = reactExports.useState("");
   const [formFilter, setFormFilter] = reactExports.useState("");
+  const [dateRange, setDateRange] = reactExports.useState(null);
+  const dateParams = dateRange ? { date_from: dateRange[0].format("YYYY-MM-DD"), date_to: dateRange[1].format("YYYY-MM-DD") } : {};
   const [orderby, setOrderby] = reactExports.useState("created_at");
   const [order, setOrder] = reactExports.useState("DESC");
   const [selectedRowKeys, setSelectedRowKeys] = reactExports.useState([]);
@@ -82,13 +85,13 @@ function Entries() {
   }, []);
   const loadCounts = reactExports.useCallback(async () => {
     try {
-      const params = {};
+      const params = { ...dateParams };
       if (formFilter) params.form_id = formFilter;
       const result = await getEntryCounts(params);
       setCounts(result.counts || {});
     } catch (_) {
     }
-  }, [formFilter]);
+  }, [formFilter, dateRange]);
   const loadForms = reactExports.useCallback(async () => {
     try {
       const result = await getForms({ per_page: 100 });
@@ -104,7 +107,8 @@ function Entries() {
         per_page: perPage,
         search: searchText,
         orderby,
-        order
+        order,
+        ...dateParams
       };
       if (formFilter) params.form_id = formFilter;
       if (statusFilter === "starred") {
@@ -120,7 +124,7 @@ function Entries() {
     } finally {
       setLoading(false);
     }
-  }, [page, perPage, searchText, orderby, order, formFilter, statusFilter]);
+  }, [page, perPage, searchText, orderby, order, formFilter, statusFilter, dateRange]);
   reactExports.useEffect(() => {
     loadForms();
   }, [loadForms]);
@@ -373,16 +377,38 @@ function Entries() {
                 onChange: (e) => setSearchInput(e.target.value),
                 allowClear: true
               }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              DatePicker.RangePicker,
+              {
+                value: dateRange,
+                onChange: (v) => {
+                  setDateRange(v && v[0] && v[1] ? v : null);
+                  setPage(1);
+                },
+                allowClear: true,
+                style: { width: 250 }
+              }
             )
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-table-toolbar-right", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Refresh", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "text",
-              icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateRight, spin: loading, style: { color: "#64748b" } }),
-              onClick: loadEntries
-            }
-          ) }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-table-toolbar-right", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Download the entries shown by the current filters as CSV (opens in Excel)", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFileExport }),
+                href: exportEntriesUrl({ form_id: formFilter, status: statusFilter === "starred" ? "" : statusFilter, starred: statusFilter === "starred" ? 1 : "", search: searchText, ...dateParams }),
+                children: __("Export CSV", "formglut")
+              }
+            ) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Refresh", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                type: "text",
+                icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateRight, spin: loading, style: { color: "#64748b" } }),
+                onClick: loadEntries
+              }
+            ) })
+          ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           ForwardTable,

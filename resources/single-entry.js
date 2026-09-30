@@ -1,11 +1,12 @@
-import { bB as reactExports, I as Icon$1, z as _extends, b9 as genStyleHooks, bu as merge, bJ as unit, c as ConfigContext, Y as classNames, m as RefIcon$1, n as RefIcon$2, o as RefIcon$3, bE as staticMethods, bq as jsxRuntimeExports, B as Button, J as _pg, g as FontAwesomeIcon, a7 as faArrowLeft, aZ as faStar, aR as faPrint, aq as faEnvelope, b0 as faTrash, S as Skeleton, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
+import { co as reactExports, I as Icon$1, H as _extends, bH as genStyleHooks, cg as merge, cC as unit, d as ConfigContext, $ as classNames, r as RefIcon$1, s as RefIcon$2, t as RefIcon$3, cv as staticMethods, bQ as getEntry, bS as getForm, cE as updateEntryStatus, cc as jsxRuntimeExports, a as Button, O as _pg, h as FontAwesomeIcon, ah as faArrowLeft, bi as faStar, b9 as faPrint, b2 as faPaperPlane, aD as faEnvelope, bm as faTrash, b3 as faPaperclip, b0 as faNoteSticky, j as Input, ct as saveEntryNote, a9 as deleteEntryNote, cq as resendNotification, cA as toggleEntryStar, a8 as deleteEntry, S as Skeleton, a7 as createRoot } from "./chunks/api-C3T_2YIP.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
 import { f as faStar$1 } from "./chunks/index-B2JIQhJi.js";
-import { H as Header } from "./chunks/Header-CgkrRZA-.js";
-import { j as getEntry, l as getForm, u as updateEntryStatus, T as Tooltip, t as toggleEntryStar, d as deleteEntry } from "./chunks/api-V7Uk2s4S.js";
-import { g as flattenFields } from "./chunks/fieldTypes-BMVR92Df.js";
-import { S as Space, P as Popconfirm } from "./chunks/index-BHAdwT1Y.js";
-import "./chunks/index-cX7NXTCE.js";
+import { H as Header } from "./chunks/Header-xSHotuJx.js";
+import { g as flattenFields } from "./chunks/fieldTypes-B4mkecXL.js";
+import { S as Space, P as Popconfirm } from "./chunks/index-DUJ6TIST.js";
+import { T as Tooltip } from "./chunks/index-DoebJELJ.js";
+import "./chunks/index-3Uh34z5Q.js";
+import "./chunks/ActionButton-1FHh5CEq.js";
 var WarningFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M955.7 856l-416-720c-6.2-10.7-16.9-16-27.7-16s-21.6 5.3-27.7 16l-416 720C56 877.4 71.4 904 96 904h832c24.6 0 40-26.6 27.7-48zM480 416c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v184c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V416zm32 352a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "warning", "theme": "filled" };
 var WarningFilled = function WarningFilled2(props, ref) {
   return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
@@ -923,6 +924,40 @@ function SingleEntry() {
   const [loading, setLoading] = reactExports.useState(true);
   const [error, setError] = reactExports.useState(null);
   const entryId = (window.formglut_admin || {}).entry_id;
+  const [noteText, setNoteText] = reactExports.useState("");
+  const [savingNote, setSavingNote] = reactExports.useState(false);
+  const [resending, setResending] = reactExports.useState(false);
+  async function handleAddNote() {
+    setSavingNote(true);
+    try {
+      const res = await saveEntryNote(entry.id, noteText);
+      setEntry((e) => ({ ...e, notes: res.notes }));
+      setNoteText("");
+    } catch (err) {
+      staticMethods.error(err.message || __("Could not save the note.", "formglut"));
+    } finally {
+      setSavingNote(false);
+    }
+  }
+  async function handleDeleteNote(noteId) {
+    try {
+      const res = await deleteEntryNote(entry.id, noteId);
+      setEntry((e) => ({ ...e, notes: res.notes }));
+    } catch (err) {
+      staticMethods.error(err.message || __("Could not delete the note.", "formglut"));
+    }
+  }
+  async function handleResend() {
+    setResending(true);
+    try {
+      const res = await resendNotification(entry.id);
+      staticMethods.success(res.message || __("Notification sent.", "formglut"));
+    } catch (err) {
+      staticMethods.error(err.message || __("Could not send the notification.", "formglut"));
+    } finally {
+      setResending(false);
+    }
+  }
   const loadEntry = reactExports.useCallback(async () => {
     if (!entryId) {
       setError(__("Missing entry ID.", "formglut"));
@@ -1015,12 +1050,14 @@ function SingleEntry() {
       ) })
     ] });
   }
-  const nonInputTypes = [];
+  const nonInputTypes = ["html", "heading", "section_break", "shortcode", "action_hook", "custom_submit_button", "recaptcha", "hcaptcha", "turnstile", "form_step"];
   let displayFields = [];
   if (form && form.fields) {
     displayFields = flattenFields(form.fields).filter((f) => !nonInputTypes.includes(f.type)).map((f) => ({
       label: f.admin_label || f.label || f.id,
-      value: entry.fields_data && entry.fields_data[f.id] !== void 0 ? String(entry.fields_data[f.id]) : "-"
+      raw: entry.fields_data ? entry.fields_data[f.id] : void 0,
+      type: f.type,
+      value: entry.fields_data && entry.fields_data[f.id] !== void 0 && entry.fields_data[f.id] !== "" ? Array.isArray(entry.fields_data[f.id]) ? entry.fields_data[f.id].join(", ") : String(entry.fields_data[f.id]) : "-"
     }));
   } else {
     if (entry.fields_data && typeof entry.fields_data === "object") {
@@ -1058,6 +1095,7 @@ function SingleEntry() {
             }
           ) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Print", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "text", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPrint }), style: { color: "#64748b" }, onClick: handlePrint }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Send the notification email for this entry again", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "text", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPaperPlane }), style: { color: "#64748b" }, loading: resending, onClick: handleResend }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Reply by email", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "text", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEnvelope }), style: { color: "#64748b" }, onClick: handleReply }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Popconfirm,
@@ -1086,7 +1124,11 @@ function SingleEntry() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-entry-card-body", children: [
           displayFields.map((f, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-entry-row", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-label", children: f.label }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-value", children: f.value })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-value", children: f.type === "file_upload" && Array.isArray(f.raw) && f.raw.length ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-files", children: f.raw.map((url) => /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: url, target: "_blank", rel: "noopener noreferrer", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faPaperclip }),
+              " ",
+              decodeURIComponent(url.split("/").pop()).replace(/^[A-Za-z0-9]{12}-/, "")
+            ] }, url)) }) : f.value })
           ] }, i)),
           displayFields.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { padding: "20px 0", textAlign: "center", color: "#94a3b8" }, children: __("No submission data.", "formglut") })
         ] })
@@ -1117,6 +1159,53 @@ function SingleEntry() {
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-item", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-meta-item-label", children: __("Form", "formglut") }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-meta-item-value", children: entry.form_title || "-" })
+          ] })
+        ] })
+      ] }),
+      entry.fields_data && entry.fields_data._payment && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-entry-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-card-header", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-card-title", children: __("Payment", "formglut") }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-grid", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-item", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-meta-item-label", children: __("Amount", "formglut") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-item-value", children: [
+              Number(entry.fields_data._payment.amount).toFixed(2),
+              " ",
+              entry.fields_data._payment.currency
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-item", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-meta-item-label", children: __("Status", "formglut") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-item-value", children: [
+              entry.fields_data._payment.status === "succeeded" ? __("Paid", "formglut") : entry.fields_data._payment.status,
+              entry.fields_data._payment.mode === "test" ? " · " + __("test mode", "formglut") : ""
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-meta-item", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-meta-item-label", children: __("Stripe payment", "formglut") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-meta-item-value", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `https://dashboard.stripe.com/${entry.fields_data._payment.mode === "test" ? "test/" : ""}payments/${entry.fields_data._payment.id}`, target: "_blank", rel: "noopener noreferrer", children: entry.fields_data._payment.id }) })
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-entry-card fg-notes-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-entry-card-header", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-entry-card-title", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faNoteSticky, style: { marginRight: 8, color: "#94a3b8" } }),
+          __("Notes", "formglut"),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-notes-hint", children: __("Private, only visible to admins", "formglut") })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-entry-card-body", children: [
+          (entry.notes || []).map((n) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-note", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-note-head", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: n.author }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: n.date }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Popconfirm, { title: __("Delete this note?", "formglut"), okText: __("Delete", "formglut"), cancelText: __("Cancel", "formglut"), okButtonProps: { danger: true }, onConfirm: () => handleDeleteNote(n.id), children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "fg-note-del", "aria-label": __("Delete note", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faTrash }) }) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-note-text", children: n.text })
+          ] }, n.id)),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-note-new", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Input.TextArea, { rows: 3, value: noteText, placeholder: __("Add a note about this entry…", "formglut"), onChange: (e) => setNoteText(e.target.value) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "primary", disabled: !noteText.trim(), loading: savingNote, onClick: handleAddNote, style: { marginTop: 8, background: noteText.trim() ? "#e94560" : void 0, borderColor: noteText.trim() ? "#e94560" : void 0 }, children: __("Add note", "formglut") })
           ] })
         ] })
       ] })

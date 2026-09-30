@@ -18,7 +18,7 @@ class FormGlut_Form_Settings {
 	/**
 	 * Database schema version that introduced the `settings` column.
 	 */
-	const SCHEMA_VERSION = 2;
+	const SCHEMA_VERSION = 3;
 
 	/**
 	 * Cron hook that applies the per-form entry retention period.
@@ -56,6 +56,7 @@ class FormGlut_Form_Settings {
 				'reply_to'      => '',
 				'subject'       => '',
 				'message'       => '',
+				'attach_files'  => false,
 				'autoresponder' => array(
 					'enabled'     => false,
 					'email_field' => '',
@@ -86,14 +87,45 @@ class FormGlut_Form_Settings {
 				'store_entries'  => 'global', // global | save | email_only.
 				'retention_days' => 0,
 				'min_time'       => 0,
+				'rate_limit'     => 0,
+				'referrer_check' => false,
 			),
 			'style'         => array(
 				'form_width'  => '',
 				'form_align'  => 'left', // left | center | right.
 				'custom_css'  => '',
+				'custom_js'   => '',
 			),
 			'entries'       => array(
 				'count_views' => true,
+			),
+			'multistep'     => array(
+				'progress'      => 'steps', // steps | bar | none.
+				'first_title'   => '',
+				'validate_step' => true,
+			),
+			'integrations'  => array(
+				'webhook_enabled' => false,
+				'webhook_url'     => '',
+				'webhook_format'  => 'json', // json | form.
+				'slack_enabled'   => false,
+				'slack_webhook'   => '',
+				'slack_message'   => '',
+				'mailchimp_enabled' => false,
+				'mailchimp_list'    => '',
+				'mailchimp_email'   => '',
+				'mailchimp_first'   => '',
+				'mailchimp_last'    => '',
+				'mailchimp_consent' => '',
+				'mailchimp_double'  => false,
+				'mailchimp_tags'    => '',
+				'hubspot_enabled'   => false,
+				'hubspot_email'     => '',
+				'hubspot_first'     => '',
+				'hubspot_last'      => '',
+				'hubspot_phone'     => '',
+				'hubspot_company'   => '',
+				'hubspot_message'   => '',
 			),
 		);
 	}
@@ -101,10 +133,11 @@ class FormGlut_Form_Settings {
 	/**
 	 * Sanitize raw settings from the editor and merge them onto the defaults.
 	 *
-	 * @param mixed $raw Raw settings (decoded JSON).
+	 * @param mixed $raw    Raw settings (decoded JSON).
+	 * @param bool  $saving True when an admin saves (applies the “who may add scripts” rule); false when reading.
 	 * @return array Clean settings containing every known key.
 	 */
-	public static function sanitize( $raw ) {
+	public static function sanitize( $raw, $saving = false ) {
 		$raw = is_array( $raw ) ? $raw : array();
 		$d   = self::defaults();
 		$out = $d;
@@ -173,6 +206,7 @@ class FormGlut_Form_Settings {
 			'reply_to'      => $text( $n['reply_to'] ?? '' ),
 			'subject'       => $text( $n['subject'] ?? '' ),
 			'message'       => $html( $n['message'] ?? '' ),
+			'attach_files'  => $bool( $n['attach_files'] ?? false ),
 			'autoresponder' => array(
 				'enabled'     => $bool( $ar['enabled'] ?? false ),
 				'email_field' => $text( $ar['email_field'] ?? '' ),
@@ -207,22 +241,56 @@ class FormGlut_Form_Settings {
 			'store_entries'  => $enum( $s['store_entries'] ?? 'global', array( 'global', 'save', 'email_only' ), 'global' ),
 			'retention_days' => min( 3650, $int( $s['retention_days'] ?? 0 ) ),
 			'min_time'       => min( 600, $int( $s['min_time'] ?? 0 ) ),
+			'rate_limit'     => min( 1000, $int( $s['rate_limit'] ?? 0 ) ),
+			'referrer_check' => $bool( $s['referrer_check'] ?? false ),
 		);
 
 		$st  = isset( $raw['style'] ) && is_array( $raw['style'] ) ? $raw['style'] : array();
 		$css = is_scalar( $st['custom_css'] ?? '' ) ? wp_strip_all_tags( (string) ( $st['custom_css'] ?? '' ) ) : '';
 		$css = preg_replace( '/(expression\s*\(|javascript\s*:|@import|behavior\s*:|-moz-binding)/i', '', $css );
 		$width = is_scalar( $st['form_width'] ?? '' ) ? trim( (string) ( $st['form_width'] ?? '' ) ) : '';
+		// Custom JS is kept only for users who may add scripts (single-site admins; super admins on multisite).
+		$js = is_scalar( $st['custom_js'] ?? '' ) ? (string) ( $st['custom_js'] ?? '' ) : '';
+		if ( $saving && ! current_user_can( 'unfiltered_html' ) ) {
+			$js = isset( $raw['_stored_custom_js'] ) ? (string) $raw['_stored_custom_js'] : '';
+		}
 		$out['style'] = array(
 			'form_width' => preg_match( '/^\d{1,4}(\.\d+)?(px|%|rem|em|vw)$/', $width ) ? $width : '',
 			'form_align' => $enum( $st['form_align'] ?? 'left', array( 'left', 'center', 'right' ), 'left' ),
 			'custom_css' => $css,
+			'custom_js'  => str_ireplace( '</script', '<\/script', $js ),
 		);
 
 		$e = isset( $raw['entries'] ) && is_array( $raw['entries'] ) ? $raw['entries'] : array();
 		$out['entries'] = array(
 			'count_views' => $bool( $e['count_views'] ?? true ),
 		);
+
+		$m = isset( $raw['multistep'] ) && is_array( $raw['multistep'] ) ? $raw['multistep'] : array();
+		$out['multistep'] = array(
+			'progress'      => $enum( $m['progress'] ?? 'steps', array( 'steps', 'bar', 'none' ), 'steps' ),
+			'first_title'   => $text( $m['first_title'] ?? '' ),
+			'validate_step' => $bool( $m['validate_step'] ?? true ),
+		);
+
+		$i   = isset( $raw['integrations'] ) && is_array( $raw['integrations'] ) ? $raw['integrations'] : array();
+		$url = is_scalar( $i['webhook_url'] ?? '' ) ? esc_url_raw( trim( (string) ( $i['webhook_url'] ?? '' ) ), array( 'http', 'https' ) ) : '';
+		$out['integrations'] = array(
+			'webhook_enabled' => $bool( $i['webhook_enabled'] ?? false ),
+			'webhook_url'     => $url,
+			'webhook_format'  => $enum( $i['webhook_format'] ?? 'json', array( 'json', 'form' ), 'json' ),
+			'slack_enabled'   => $bool( $i['slack_enabled'] ?? false ),
+			'slack_webhook'   => is_scalar( $i['slack_webhook'] ?? '' ) && 0 === strpos( (string) ( $i['slack_webhook'] ?? '' ), 'https://hooks.slack.com/' ) ? esc_url_raw( (string) $i['slack_webhook'] ) : '',
+			'slack_message'   => $area( $i['slack_message'] ?? '' ),
+			'mailchimp_enabled' => $bool( $i['mailchimp_enabled'] ?? false ),
+			'mailchimp_list'    => preg_replace( '/[^A-Za-z0-9]/', '', (string) ( $i['mailchimp_list'] ?? '' ) ),
+			'mailchimp_double'  => $bool( $i['mailchimp_double'] ?? false ),
+			'mailchimp_tags'    => $text( $i['mailchimp_tags'] ?? '' ),
+			'hubspot_enabled'   => $bool( $i['hubspot_enabled'] ?? false ),
+		);
+		foreach ( array( 'mailchimp_email', 'mailchimp_first', 'mailchimp_last', 'mailchimp_consent', 'hubspot_email', 'hubspot_first', 'hubspot_last', 'hubspot_phone', 'hubspot_company', 'hubspot_message' ) as $map_key ) {
+			$out['integrations'][ $map_key ] = $text( $i[ $map_key ] ?? '' );
+		}
 
 		return $out;
 	}
@@ -422,6 +490,8 @@ class FormGlut_Form_Settings {
 			'{ip}'          => $ip,
 			'{user_email}'  => $user && $user->exists() ? $user->user_email : '',
 			'{user_name}'   => $user && $user->exists() ? $user->display_name : '',
+			'{payment_amount}' => ! empty( $fields_data['_payment']['amount'] ) ? number_format_i18n( (float) $fields_data['_payment']['amount'], 2 ) . ' ' . $fields_data['_payment']['currency'] : '',
+			'{payment_id}'     => ! empty( $fields_data['_payment']['id'] ) ? $fields_data['_payment']['id'] : '',
 		);
 		$text = strtr( $text, $map );
 
@@ -442,12 +512,13 @@ class FormGlut_Form_Settings {
 					continue;
 				}
 				$label = ! empty( $field['admin_label'] ) ? $field['admin_label'] : ( isset( $field['label'] ) && '' !== $field['label'] ? $field['label'] : $id );
-				$rows[] = array( $label, $plain( $fields_data[ $id ] ) );
+				$is_rich = 'rich_text' === ( $field['type'] ?? '' );
+				$rows[]  = array( $label, $is_rich && ! $html ? trim( html_entity_decode( wp_strip_all_tags( (string) $fields_data[ $id ] ) ) ) : FormGlut_Form::display_value( $field, $fields_data[ $id ] ), $is_rich );
 			}
 			if ( $html ) {
 				$table = '<table style="width:100%;border-collapse:collapse;font-family:sans-serif;">';
 				foreach ( $rows as $row ) {
-					$table .= '<tr><td style="padding:8px 12px;border:1px solid #e2e8f0;font-weight:600;color:#334155;width:180px;">' . esc_html( $row[0] ) . '</td><td style="padding:8px 12px;border:1px solid #e2e8f0;color:#475569;">' . esc_html( $row[1] ) . '</td></tr>';
+					$table .= '<tr><td style="padding:8px 12px;border:1px solid #e2e8f0;font-weight:600;color:#334155;width:180px;">' . esc_html( $row[0] ) . '</td><td style="padding:8px 12px;border:1px solid #e2e8f0;color:#475569;">' . ( ! empty( $row[2] ) ? wp_kses_post( $row[1] ) : esc_html( $row[1] ) ) . '</td></tr>';
 				}
 				$table .= '</table>';
 			} else {
@@ -526,6 +597,78 @@ class FormGlut_Form_Settings {
 
 		$response = Akismet::http_post( http_build_query( $payload ), 'comment-check' );
 		return is_array( $response ) && isset( $response[1] ) && 'true' === trim( (string) $response[1] );
+	}
+
+	/**
+	 * POST a submission to the form's webhook URL (non-blocking).
+	 *
+	 * @param object $form        Form row.
+	 * @param array  $fields_data Submitted values keyed by field ID.
+	 * @param int    $entry_id    Entry ID (0 when not stored).
+	 * @return void
+	 */
+	public static function send_webhook( $form, $fields_data, $entry_id ) {
+		$w = $form->settings['integrations'];
+		if ( empty( $w['webhook_enabled'] ) || '' === $w['webhook_url'] || ! wp_http_validate_url( $w['webhook_url'] ) ) {
+			return;
+		}
+
+		// Field values keyed by the name attribute when set (friendlier for Zapier / Make), otherwise the field ID.
+		$named = array();
+		foreach ( FormGlut_Form::flatten_fields( is_array( $form->fields ) ? $form->fields : array() ) as $field ) {
+			$id = isset( $field['id'] ) ? $field['id'] : '';
+			if ( '' === $id || ! array_key_exists( $id, $fields_data ) ) {
+				continue;
+			}
+			$key           = ! empty( $field['name_attribute'] ) ? $field['name_attribute'] : $id;
+			$named[ $key ] = $fields_data[ $id ];
+		}
+
+		$payload = array(
+			'form_id'      => (int) $form->id,
+			'form_name'    => $form->title,
+			'entry_id'     => (int) $entry_id,
+			'submitted_at' => current_time( 'c' ),
+			'source_url'   => isset( $_SERVER['HTTP_REFERER'] ) ? esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '',
+			'fields'       => $named,
+		);
+
+		$json = 'json' === $w['webhook_format'];
+		wp_remote_post(
+			$w['webhook_url'],
+			array(
+				'timeout'  => 5,
+				'blocking' => false,
+				'headers'  => array( 'Content-Type' => $json ? 'application/json' : 'application/x-www-form-urlencoded' ),
+				'body'     => $json ? wp_json_encode( $payload ) : array_merge( array_diff_key( $payload, array( 'fields' => 1 ) ), $named ),
+			)
+		);
+	}
+
+	/**
+	 * Post a short message about a submission to a Slack channel (incoming webhook).
+	 *
+	 * @param object $form        Form row.
+	 * @param array  $fields_data Submitted values.
+	 * @param int    $entry_id    Entry ID.
+	 * @return void
+	 */
+	public static function send_slack( $form, $fields_data, $entry_id ) {
+		$i = $form->settings['integrations'];
+		if ( empty( $i['slack_enabled'] ) || '' === $i['slack_webhook'] ) {
+			return;
+		}
+		$tpl  = '' !== trim( $i['slack_message'] ) ? $i['slack_message'] : "*New entry: {form_name}*\n{all_fields}";
+		$text = self::replace_tags( $tpl, $form, $fields_data, $entry_id, false );
+		if ( $entry_id ) {
+			$text .= "\n<" . admin_url( 'admin.php?page=formglut-entry-detail&entry_id=' . absint( $entry_id ) ) . '|' . __( 'View entry', 'formglut' ) . '>';
+		}
+		wp_remote_post( $i['slack_webhook'], array(
+			'timeout'  => 5,
+			'blocking' => false,
+			'headers'  => array( 'Content-Type' => 'application/json' ),
+			'body'     => wp_json_encode( array( 'text' => $text ) ),
+		) );
 	}
 
 	/**

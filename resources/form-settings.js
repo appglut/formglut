@@ -1,12 +1,12 @@
-import { bq as jsxRuntimeExports, bE as staticMethods, bB as reactExports, J as _pg, B as Button, ad as faChartLine, aL as faPalette, aV as faShieldHalved, aG as faLock, aq as faEnvelope, ai as faCircleCheck, ay as faGear, g as FontAwesomeIcon, at as faEye, an as faCode, aw as faFloppyDisk, a$ as faTags, ag as faChevronDown, ae as faCheck, ap as faCopy, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
+import { cc as jsxRuntimeExports, j as Input, cv as staticMethods, co as reactExports, bV as getMailchimpLists, bS as getForm, O as _pg, a as Button, b7 as faPlug, aW as faListOl, ap as faChartLine, b1 as faPalette, be as faShieldHalved, aX as faLock, aD as faEnvelope, au as faCircleCheck, aO as faGear, h as FontAwesomeIcon, aH as faEye, az as faCode, aM as faFloppyDisk, cF as updateForm, bk as faTags, as as faChevronDown, aq as faCheck, aB as faCopy, a7 as createRoot } from "./chunks/api-C3T_2YIP.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { E as EditorHeader } from "./chunks/EditorHeader-B4e947SC.js";
-import { l as getForm, T as Tooltip, r as updateForm } from "./chunks/api-V7Uk2s4S.js";
-import { g as flattenFields } from "./chunks/fieldTypes-BMVR92Df.js";
-import { I as Input, S as Select, c as Spin } from "./chunks/index-BLXOj64T.js";
-import { T as TypedInputNumber } from "./chunks/index-aGc0xIpX.js";
-import { S as Switch } from "./chunks/index-ryNm28KF.js";
-import { P as Popover } from "./chunks/index-cX7NXTCE.js";
+import { E as EditorHeader } from "./chunks/EditorHeader-DpFGkIf0.js";
+import { g as flattenFields } from "./chunks/fieldTypes-B4mkecXL.js";
+import { T as TypedInputNumber } from "./chunks/index-puzzR6yx.js";
+import { S as Select, a as Spin } from "./chunks/index-DnCN3rVY.js";
+import { S as Switch } from "./chunks/index-BJj4IPqo.js";
+import { T as Tooltip } from "./chunks/index-DoebJELJ.js";
+import { P as Popover } from "./chunks/index-3Uh34z5Q.js";
 const DEFAULT_FORM_SETTINGS = {
   general: { show_title: false, form_class: "", submit_processing: "" },
   confirmation: { type: "message", message: "", redirect_url: "", after_submit: "reset", scroll: true, autoclose: 0, error_message: "" },
@@ -20,6 +20,7 @@ const DEFAULT_FORM_SETTINGS = {
     reply_to: "",
     subject: "",
     message: "",
+    attach_files: false,
     autoresponder: { enabled: false, email_field: "", subject: "", message: "" }
   },
   restrictions: {
@@ -36,9 +37,33 @@ const DEFAULT_FORM_SETTINGS = {
     one_per_ip: false,
     duplicate_message: ""
   },
-  spam: { honeypot: "global", akismet: false, keywords: "", keyword_action: "reject", store_ip: true, store_entries: "global", retention_days: 0, min_time: 0 },
-  style: { form_width: "", form_align: "left", custom_css: "" },
-  entries: { count_views: true }
+  spam: { honeypot: "global", akismet: false, keywords: "", keyword_action: "reject", store_ip: true, store_entries: "global", retention_days: 0, min_time: 0, rate_limit: 0, referrer_check: false },
+  style: { form_width: "", form_align: "left", custom_css: "", custom_js: "" },
+  entries: { count_views: true },
+  multistep: { progress: "steps", first_title: "", validate_step: true },
+  integrations: {
+    webhook_enabled: false,
+    webhook_url: "",
+    webhook_format: "json",
+    slack_enabled: false,
+    slack_webhook: "",
+    slack_message: "",
+    mailchimp_enabled: false,
+    mailchimp_list: "",
+    mailchimp_email: "",
+    mailchimp_first: "",
+    mailchimp_last: "",
+    mailchimp_consent: "",
+    mailchimp_double: false,
+    mailchimp_tags: "",
+    hubspot_enabled: false,
+    hubspot_email: "",
+    hubspot_first: "",
+    hubspot_last: "",
+    hubspot_phone: "",
+    hubspot_company: "",
+    hubspot_message: ""
+  }
 };
 function mergeFormSettings(saved) {
   const merge = (base, over) => {
@@ -52,8 +77,10 @@ function mergeFormSettings(saved) {
   };
   return merge(DEFAULT_FORM_SETTINGS, saved || {});
 }
-function buildSchema(emailFields) {
+function buildSchema(emailFields, inputFields = [], mcLists = null) {
   const emailOptions = [{ value: "", label: __("— None —", "formglut") }, ...emailFields];
+  const fieldOptions = [{ value: "", label: __("— None —", "formglut") }, ...inputFields];
+  const listOptions = mcLists && mcLists.length ? mcLists.map((l) => ({ value: l.id, label: l.name })) : [{ value: "", label: mcLists === null ? __("Loading audiences…", "formglut") : __("No audiences found — check the API key in Global Settings", "formglut") }];
   return [
     {
       key: "general",
@@ -90,6 +117,7 @@ function buildSchema(emailFields) {
         { path: "notifications.reply_to", type: "select", label: __("Reply-To", "formglut"), tip: __("Reply goes to the address the visitor typed in this field.", "formglut"), options: emailOptions, show: (s) => s.notifications.enabled },
         { path: "notifications.subject", tags: "plain", type: "text", label: __("Subject", "formglut"), tip: __("Empty uses the subject template from Settings.", "formglut"), placeholder: "New entry: {form_name}", show: (s) => s.notifications.enabled },
         { path: "notifications.message", tags: true, type: "textarea", rows: 6, label: __("Message", "formglut"), tip: __("Empty sends a table of all fields. Use {all_fields} to place that table inside your own text.", "formglut"), show: (s) => s.notifications.enabled },
+        { path: "notifications.attach_files", type: "switch", label: __("Attach uploaded files", "formglut"), tip: __("Files from File Upload fields are attached to this email (up to 20 MB each).", "formglut"), show: (s) => s.notifications.enabled },
         { path: "notifications.autoresponder.enabled", type: "switch", label: __("Send a confirmation email to the visitor", "formglut"), divider: true },
         { path: "notifications.autoresponder.email_field", type: "select", label: __("Visitor email field", "formglut"), options: emailOptions, show: (s) => s.notifications.autoresponder.enabled },
         { path: "notifications.autoresponder.subject", tags: "plain", type: "text", label: __("Subject", "formglut"), placeholder: "Thank you for contacting {site_name}", show: (s) => s.notifications.autoresponder.enabled },
@@ -122,6 +150,8 @@ function buildSchema(emailFields) {
         { path: "spam.akismet", type: "switch", label: __("Check with Akismet", "formglut"), tip: __("Needs the Akismet plugin with an API key. Spam is saved in the Spam folder.", "formglut") },
         { path: "spam.keywords", type: "textarea", rows: 4, label: __("Blocked words", "formglut"), tip: __("One word or phrase per line.", "formglut") },
         { path: "spam.keyword_action", type: "select", label: __("When a blocked word is found", "formglut"), options: [{ value: "reject", label: __("Reject the submission", "formglut") }, { value: "spam", label: __("Save it as spam", "formglut") }], show: (s) => s.spam.keywords.trim() !== "" },
+        { path: "spam.rate_limit", type: "number", label: __("Max submissions per visitor per hour", "formglut"), tip: __("0 = no limit. Counts by IP address.", "formglut") },
+        { path: "spam.referrer_check", type: "switch", label: __("Only accept submissions from this site", "formglut"), tip: __("Rejects submissions that were not sent from a page on your website.", "formglut") },
         { path: "spam.min_time", type: "number", label: __("Minimum time to fill (seconds)", "formglut"), tip: __("0 = off. Faster submissions are treated as bots.", "formglut") },
         { path: "spam.store_entries", type: "select", label: __("Save entries", "formglut"), options: [{ value: "global", label: __("Use global setting", "formglut") }, { value: "save", label: __("Always save", "formglut") }, { value: "email_only", label: __("Email only, do not save", "formglut") }] },
         { path: "spam.store_ip", type: "switch", label: __("Store IP address and browser", "formglut") },
@@ -134,7 +164,44 @@ function buildSchema(emailFields) {
       fields: [
         { path: "style.form_width", type: "text", label: __("Form width", "formglut"), tip: __("For example 640px, 100% or 40rem. Empty uses the default.", "formglut"), placeholder: "640px" },
         { path: "style.form_align", type: "select", label: __("Form alignment", "formglut"), options: [{ value: "left", label: __("Left", "formglut") }, { value: "center", label: __("Center", "formglut") }, { value: "right", label: __("Right", "formglut") }] },
+        { path: "style.custom_js", type: "code", rows: 5, label: __("JavaScript after submit", "formglut"), tip: __("Runs in the browser after a successful submission (for example to track a conversion). “event.detail.entryId” holds the entry ID. Only administrators who may add scripts can save this.", "formglut") },
         { path: "style.custom_css", type: "code", rows: 6, label: __("Custom CSS", "formglut"), tip: __("Use {form} for this form’s wrapper, e.g. {form} .formglut-label { color: red; }", "formglut") }
+      ]
+    },
+    {
+      key: "multistep",
+      title: __("Multi-step", "formglut"),
+      fields: [
+        { path: "multistep.progress", type: "select", label: __("Progress indicator", "formglut"), tip: __("Shown when the form has Step Break fields.", "formglut"), options: [{ value: "steps", label: __("Numbered steps", "formglut") }, { value: "bar", label: __("Progress bar", "formglut") }, { value: "none", label: __("None", "formglut") }] },
+        { path: "multistep.first_title", type: "text", label: __("First step title", "formglut"), tip: __("Each Step Break field sets the title of the step after it.", "formglut"), placeholder: __("Step 1", "formglut") },
+        { path: "multistep.validate_step", type: "switch", label: __("Check each step before moving on", "formglut"), tip: __("Visitors must fix errors on a step before they can go to the next one.", "formglut") }
+      ]
+    },
+    {
+      key: "integrations",
+      title: __("Integrations", "formglut"),
+      fields: [
+        { path: "integrations.webhook_enabled", type: "switch", label: __("Send entries to a webhook", "formglut"), tip: __("Posts every submission to a URL, for example a Zapier, Make or n8n webhook.", "formglut") },
+        { path: "integrations.webhook_url", type: "text", label: __("Webhook URL", "formglut"), placeholder: "https://hooks.example.com/…", show: (s) => s.integrations.webhook_enabled },
+        { path: "integrations.webhook_format", type: "select", label: __("Format", "formglut"), options: [{ value: "json", label: "JSON" }, { value: "form", label: __("Form data", "formglut") }], show: (s) => s.integrations.webhook_enabled },
+        { path: "integrations.slack_enabled", type: "switch", label: __("Post new entries to Slack", "formglut"), tip: __("Uses a Slack “Incoming Webhook” URL for the channel you want.", "formglut"), divider: true },
+        { path: "integrations.slack_webhook", type: "text", label: __("Slack webhook URL", "formglut"), placeholder: "https://hooks.slack.com/services/…", show: (s) => s.integrations.slack_enabled },
+        { path: "integrations.slack_message", type: "textarea", tags: "plain", label: __("Slack message", "formglut"), tip: __("Empty sends the form name and all fields.", "formglut"), show: (s) => s.integrations.slack_enabled },
+        { path: "integrations.mailchimp_enabled", type: "switch", label: __("Add people to Mailchimp", "formglut"), tip: __("Needs the Mailchimp API key in Global Settings › Integrations.", "formglut"), divider: true },
+        { path: "integrations.mailchimp_list", type: "select", label: __("Audience", "formglut"), options: listOptions, show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.mailchimp_email", type: "select", label: __("Email field", "formglut"), options: emailOptions, show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.mailchimp_first", type: "select", label: __("First name field", "formglut"), options: fieldOptions, show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.mailchimp_last", type: "select", label: __("Last name field", "formglut"), options: fieldOptions, show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.mailchimp_consent", type: "select", label: __("Only when this is ticked", "formglut"), tip: __("Optional: a checkbox, toggle or GDPR field the visitor must tick to be subscribed.", "formglut"), options: fieldOptions, show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.mailchimp_double", type: "switch", label: __("Double opt-in", "formglut"), tip: __("Mailchimp emails new subscribers to confirm before they are added.", "formglut"), show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.mailchimp_tags", type: "text", label: __("Tags", "formglut"), placeholder: "website, newsletter", show: (s) => s.integrations.mailchimp_enabled },
+        { path: "integrations.hubspot_enabled", type: "switch", label: __("Create HubSpot contacts", "formglut"), tip: __("Needs the HubSpot token in Global Settings › Integrations. Existing contacts are updated.", "formglut"), divider: true },
+        { path: "integrations.hubspot_email", type: "select", label: __("Email field", "formglut"), options: emailOptions, show: (s) => s.integrations.hubspot_enabled },
+        { path: "integrations.hubspot_first", type: "select", label: __("First name field", "formglut"), options: fieldOptions, show: (s) => s.integrations.hubspot_enabled },
+        { path: "integrations.hubspot_last", type: "select", label: __("Last name field", "formglut"), options: fieldOptions, show: (s) => s.integrations.hubspot_enabled },
+        { path: "integrations.hubspot_phone", type: "select", label: __("Phone field", "formglut"), options: fieldOptions, show: (s) => s.integrations.hubspot_enabled },
+        { path: "integrations.hubspot_company", type: "select", label: __("Company field", "formglut"), options: fieldOptions, show: (s) => s.integrations.hubspot_enabled },
+        { path: "integrations.hubspot_message", type: "select", label: __("Message field", "formglut"), options: fieldOptions, show: (s) => s.integrations.hubspot_enabled }
       ]
     },
     {
@@ -184,7 +251,9 @@ const SECTION_META = {
   restrictions: { icon: faLock, desc: __("Control who can submit, and when.", "formglut") },
   spam: { icon: faShieldHalved, desc: __("Keep bots out and decide what data is stored.", "formglut") },
   style: { icon: faPalette, desc: __("Size, alignment and custom CSS for this form.", "formglut") },
-  entries: { icon: faChartLine, desc: __("How this form is counted.", "formglut") }
+  entries: { icon: faChartLine, desc: __("How this form is counted.", "formglut") },
+  multistep: { icon: faListOl, desc: __("Progress indicator and step checks for forms with Step Break fields.", "formglut") },
+  integrations: { icon: faPlug, desc: __("Send each submission to other services.", "formglut") }
 };
 const NON_INPUT = ["html", "heading", "section_break", "shortcode", "action_hook", "custom_submit_button", "recaptcha", "hcaptcha", "turnstile"];
 function copyText(text, done) {
@@ -251,12 +320,22 @@ function TagPopover({ fields, mode, value, onInsert }) {
   ] }) });
 }
 function FormSettingsPage() {
+  var _a;
   const formId = parseInt(new URLSearchParams(window.location.search).get("form_id") || "0", 10) || 0;
   const [state, setState] = reactExports.useState({ loading: !!formId, error: "", title: "", fields: [], status: "" });
   const [settings, setSettings] = reactExports.useState(DEFAULT_FORM_SETTINGS);
   const [active, setActive] = reactExports.useState("confirmation");
   const [saving, setSaving] = reactExports.useState(false);
   const [dirty, setDirty] = reactExports.useState(false);
+  const [mcLists, setMcLists] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    var _a2;
+    if (!((_a2 = settings.integrations) == null ? void 0 : _a2.mailchimp_enabled) || mcLists !== null) return;
+    getMailchimpLists().then((d) => setMcLists(d.lists || [])).catch((e) => {
+      setMcLists([]);
+      staticMethods.error(e.message);
+    });
+  }, [(_a = settings.integrations) == null ? void 0 : _a.mailchimp_enabled]);
   reactExports.useEffect(() => {
     if (!formId) return;
     getForm(formId).then((d) => {
@@ -302,7 +381,8 @@ function FormSettingsPage() {
   }
   const inputFields = flattenFields(state.fields);
   const emailFields = inputFields.filter((f) => f.type === "email").map((f) => ({ value: f.id, label: f.admin_label || f.label || f.id }));
-  const schema = buildSchema(emailFields);
+  const mappable = inputFields.filter((f) => f.id && !NON_INPUT.includes(f.type) && !["file_upload", "password", "unique_id", "form_step", "reset_button", "math_captcha"].includes(f.type)).map((f) => ({ value: f.id, label: f.admin_label || f.label || f.id }));
+  const schema = buildSchema(emailFields, mappable, mcLists);
   const section = schema.find((s) => s.key === active) || schema[0];
   const meta = SECTION_META[section.key] || {};
   const shortcode = `[formglut id="${formId}"]`;

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button, Switch, Input, InputNumber, Select, Tabs, Tooltip, message, Spin, Collapse } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowLeft, faArrowUp, faArrowDown, faFloppyDisk, faEye, faRotateLeft, faRotateRight,
+  faHashtag, faArrowLeft, faArrowUp, faArrowDown, faFloppyDisk, faEye, faRotateLeft, faRotateRight,
   faCopy, faTrash, faGear, faPalette, faPlus, faCircleInfo, faCode, faClock, faEyeSlash, faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons';
 import { _pg } from '../components/Header';
@@ -13,6 +13,7 @@ import DynamicFieldOptions from '../fields/DynamicFieldOptions.jsx';
 import { getStyleGroups, STYLE_BLOCKS } from '../fields/SharedOptions.jsx';
 import { __ } from '@wordpress/i18n';
 import { COUNTRIES } from '../fields/countries.js';
+import { DIAL_CODES, flagOf } from '../fields/dialCodes.js';
 import './form-editor.css';
 
 /**
@@ -436,6 +437,34 @@ function FieldTemplate({ field: f, captcha = {} }) {
       </div>
     );
   }
+  if (f.type === 'reset_button') {
+    return (
+      <div className={wrapCls('fg-reset-field')} style={{ textAlign: f.button_alignment || 'left' }}>
+        <button type="button" className={`fg-reset-btn ${f.element_class || ''}`}>{f.button_text || __( 'Clear form', 'formglut' )}</button>
+      </div>
+    );
+  }
+  if (f.type === 'unique_id') {
+    const sample = f.id_type === 'random' ? 'K7Q2M9XA' : f.id_type === 'date' ? '20260930-001' : String(Number(f.start_number) || 1).padStart(Number(f.number_length) || 1, '0');
+    return (
+      <div className={wrapCls('fg-placeholder-box')}>
+        <FontAwesomeIcon icon={faHashtag} /> <strong>{f.label || __( 'Unique ID', 'formglut' )}</strong>
+        <code>{(f.id_prefix || '') + sample + (f.id_suffix || '')}</code>
+        <span className="fg-placeholder-note">{__( 'Created on submit, not shown on the form', 'formglut' )}</span>
+      </div>
+    );
+  }
+  if (f.type === 'form_step') {
+    return (
+      <div className="fg-step-break">
+        <div className="fg-step-break-nav">
+          <span className="fg-step-btn ghost">← {f.prev_text || __( 'Previous', 'formglut' )}</span>
+          <span className="fg-step-btn">{f.next_text || __( 'Next', 'formglut' )} →</span>
+        </div>
+        <div className="fg-step-break-line"><span>{__( 'Step break', 'formglut' )}{f.step_title ? ' · ' + f.step_title : ''}</span></div>
+      </div>
+    );
+  }
   if (f.type === 'hidden') {
     return (
       <div className={wrapCls('fg-placeholder-box')}>
@@ -636,6 +665,8 @@ function FieldTemplate({ field: f, captcha = {} }) {
     if (f.type === 'select') {
       const firstOptionDisabled = f.disable_first_option !== false;
       return (
+        <>
+        {f.searchable && <div className="fg-search-hint">{__( 'Type to search…', 'formglut' )}</div>}
         <select
           key={`select-${f.id}-${f.default_value || ''}`}
           className={`fg-form-field-input fg-field-${f.id} ${f.element_class || ''}`}
@@ -653,6 +684,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
             </option>
           ))}
         </select>
+        </>
       );
     }
 
@@ -698,6 +730,13 @@ function FieldTemplate({ field: f, captcha = {} }) {
                 </label>
               );
             })}
+            {f.enable_other && (
+              <label className="fg-choice">
+                <input type={isRadio ? 'radio' : 'checkbox'} disabled readOnly />
+                <span>{f.other_label || __( 'Other', 'formglut' )}</span>
+                <input type="text" className="fg-other-input" placeholder={f.other_placeholder || __( 'Please specify', 'formglut' )} readOnly />
+              </label>
+            )}
           </div>
           {!isRadio && selectionHint && <div className="fg-choice-hint">{selectionHint}</div>}
         </>
@@ -706,7 +745,7 @@ function FieldTemplate({ field: f, captcha = {} }) {
 
     const cls = `fg-form-field-input ${f.element_class || ''}`;
     const sub = (key, subLabel, input) => (
-      <div key={key} className={'fg-subfield' + (key === 'street1' || key === 'street2' ? ' fg-subfield-full' : '')}>
+      <div key={key} className={'fg-subfield fg-subfield-' + key + (key === 'street1' || key === 'street2' ? ' fg-subfield-full' : '')}>
         {subLabel && <label className="fg-sublabel">{subLabel}</label>}
         {input}
       </div>
@@ -714,10 +753,14 @@ function FieldTemplate({ field: f, captcha = {} }) {
 
     // === NAME ===
     if (f.type === 'name') {
-      const parts = [['first', f.show_first_name !== false], ['middle', !!f.show_middle_name], ['last', f.show_last_name !== false]].filter(p => p[1]);
+      const parts = [['prefix', !!f.show_prefix], ['first', f.show_first_name !== false], ['middle', !!f.show_middle_name], ['last', f.show_last_name !== false], ['suffix', !!f.show_suffix]].filter(p => p[1]);
       return (
-        <div className={`fg-subfields fg-subfields-${f.name_layout === 'vertical' ? 1 : parts.length}`}>
-          {parts.map(([p]) => sub(p, f[`${p}_name_label`], <input className={cls} type="text" placeholder={f[`${p}_name_placeholder`]} readOnly style={inputStyle} />))}
+        <div className={`fg-subfields fg-name-parts fg-subfields-${f.name_layout === 'vertical' ? 1 : Math.min(parts.length, 3)}`}>
+          {parts.map(([p]) => (p === 'prefix'
+            ? sub(p, __( 'Title', 'formglut' ), <select className={cls} disabled style={inputStyle}><option>—</option></select>)
+            : p === 'suffix'
+              ? sub(p, __( 'Suffix', 'formglut' ), <input className={cls} type="text" placeholder="Jr, Sr, III" readOnly style={inputStyle} />)
+              : sub(p, f[`${p}_name_label`], <input className={cls} type="text" placeholder={f[`${p}_name_placeholder`]} readOnly style={inputStyle} />)))}
         </div>
       );
     }
@@ -859,6 +902,93 @@ function FieldTemplate({ field: f, captcha = {} }) {
       if (proPreview) return proPreview;
     }
 
+    // === PAYMENT ITEM / CARD ===
+    if (f.type === 'payment_item') {
+      return f.item_type === 'custom'
+        ? <div className="fg-input-group"><span className="fg-input-prefix">$</span><input className={cls} type="text" placeholder={f.placeholder || '0.00'} readOnly style={inputStyle} /></div>
+        : <div className="fg-pay-price">${Number(f.amount || 0).toFixed(2)}</div>;
+    }
+    if (f.type === 'stripe_card') {
+      return (
+        <div className="fg-card-mock">
+          {f.show_total !== false && <div className="fg-card-total">{__( 'Total', 'formglut' )} <strong>$0.00</strong></div>}
+          <div className="fg-card-row"><span>{__( 'Card number', 'formglut' )}</span><span>1234 1234 1234 1234</span></div>
+          <div className="fg-card-row two"><span>MM / YY</span><span>CVC</span></div>
+          <div className="fg-card-note">{__( 'Secure card form by Stripe. Add your keys in Global Settings › Payments.', 'formglut' )}</div>
+        </div>
+      );
+    }
+
+    // === CALCULATION ===
+    if (f.type === 'calculation') {
+      const zero = (0).toFixed(Number(f.decimals ?? 2));
+      return (
+        <div>
+          <div className="fg-calc"><div className="fg-calc-box">{(f.calc_prefix || '') + zero + (f.calc_suffix || '')}</div></div>
+          <div className="fg-calc-formula">{f.formula ? '= ' + f.formula : __( 'Add a formula in Field Options', 'formglut' )}{f.hide_on_form ? ' · ' + __( 'hidden on the form', 'formglut' ) : ''}</div>
+        </div>
+      );
+    }
+
+    // === TOGGLE ===
+    if (f.type === 'toggle') {
+      return (
+        <label className={`fg-toggle ${f.element_class || ''}`}>
+          <input type="checkbox" checked={!!f.default_on} readOnly />
+          <span className="fg-toggle-track" />
+          <span>{f.toggle_text}</span>
+        </label>
+      );
+    }
+
+    // === STAR RATING ===
+    if (f.type === 'star_rating') {
+      const n = Number(f.max_stars) || 5;
+      const words = (f.rating_labels || '').split(',').map((w) => w.trim());
+      return (
+        <div className={`fg-stars fg-stars-${f.star_size || 'medium'}`} style={{ '--fg-star': f.star_color || '#f59e0b' }}>
+          {Array.from({ length: n }, (_, i) => <span key={i} className={i < Math.ceil(n * 0.6) ? 'on' : ''}>★</span>)}
+          {f.show_labels && <em>{words[Math.ceil(n * 0.6) - 1] || ''}</em>}
+        </div>
+      );
+    }
+
+    // === RICH TEXT ===
+    if (f.type === 'rich_text') {
+      const tools = f.toolbar === 'full' ? ['B', 'I', 'U', '•', '1.', '🔗', '❝'] : ['B', 'I', '•', '1.'];
+      return (
+        <div className="fg-richtext" style={inputStyle}>
+          <div className="fg-richtext-bar">{tools.map((t) => <span key={t}>{t}</span>)}</div>
+          <div className="fg-richtext-area" style={{ minHeight: (Number(f.editor_height) || 160) - 40 }}>{getDisplayPlaceholder()}</div>
+        </div>
+      );
+    }
+
+    // === MATH CAPTCHA ===
+    if (f.type === 'math_captcha') {
+      const q = { add: '3 + 4', subtract: '9 − 4', multiply: '3 × 4', mixed: '6 + 2' }[f.operation] || '3 + 4';
+      return (
+        <div className="fg-math">
+          <span className="fg-math-q">{q} =</span>
+          <input className={cls} type="text" readOnly style={{ ...inputStyle, width: 90 }} />
+        </div>
+      );
+    }
+
+    // === FILE UPLOAD ===
+    if (f.type === 'file_upload') {
+      const types = f.images_only ? 'JPG, PNG, GIF, WebP' : (f.allowed_types || '').toUpperCase();
+      return (
+        <div className={`fg-upload ${f.element_class || ''}`} style={inputStyle}>
+          <span className="fg-upload-btn">{f.button_text || __( 'Choose file', 'formglut' )}</span>
+          <span className="fg-upload-hint">
+            {f.multiple ? __( 'or drop files here', 'formglut' ) : __( 'or drop a file here', 'formglut' )}
+            <small>{types}{f.max_size ? ` · ${__( 'max', 'formglut' )} ${f.max_size} MB` : ''}{f.multiple && f.max_files ? ` · ${__( 'up to', 'formglut' )} ${f.max_files}` : ''}</small>
+          </span>
+        </div>
+      );
+    }
+
     // === DEFAULT INPUT (text, number, etc.) ===
     const typeAttr = { number: 'number', email: 'email', url: 'url', phone: 'tel', date: f.date_type === 'datetime' ? 'datetime-local' : 'date' }[f.type] || 'text';
     const phoneMask = f.type === 'phone' ? getPhoneMask(f) : '';
@@ -866,8 +996,10 @@ function FieldTemplate({ field: f, captcha = {} }) {
     const placeholder = f.type === 'date' ? undefined : (phoneMask && !f.placeholder ? phoneMask.replace(/9/g, '#') : getDisplayPlaceholder());
     const numAttrs = f.type === 'number' ? { min: f.min_value === '' ? undefined : f.min_value, max: f.max_value === '' ? undefined : f.max_value, step: f.step || undefined } : {};
 
+    const dial = f.type === 'phone' && f.show_country_code ? (DIAL_CODES[f.default_country || 'US'] || '1') : '';
     return (
-      <div className="fg-input-group">
+      <div className={'fg-input-group' + (dial ? ' fg-phone-cc' : '')}>
+        {dial && <span className="fg-dial">{flagOf(f.default_country || 'US')} +{dial}</span>}
         {f.prefix_label && <span className="fg-input-prefix" style={prefixSuffixCustomStyle} dangerouslySetInnerHTML={{ __html: f.prefix_label }} />}
         <input
           key={`input-${f.id}-${f.default_value || ''}-${f.max_length || ''}`}

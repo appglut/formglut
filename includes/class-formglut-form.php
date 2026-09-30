@@ -78,6 +78,206 @@ class FormGlut_Form {
 	}
 
 	/**
+	 * Whether the current visitor should see (and submit) a field.
+	 *
+	 * @param array $field Field config.
+	 * @return bool
+	 */
+	public static function field_visible( $field ) {
+		switch ( isset( $field['visibility'] ) ? $field['visibility'] : '' ) {
+			case 'logged_in':
+				return is_user_logged_in();
+			case 'logged_out':
+				return ! is_user_logged_in();
+			case 'admins':
+				return current_user_can( 'manage_options' );
+			default:
+				return true;
+		}
+	}
+
+	/**
+	 * Value to start a field with, from the URL, the logged-in user, a cookie or post meta.
+	 *
+	 * @param array $field Field config.
+	 * @return string|null Null when there is nothing to fill in.
+	 */
+	public static function prefill_value( $field ) {
+		$source = isset( $field['prefill_source'] ) ? $field['prefill_source'] : '';
+		$key    = isset( $field['prefill_key'] ) ? trim( (string) $field['prefill_key'] ) : '';
+		// Older hidden fields used "param_populate" for the URL parameter.
+		if ( '' === $source && ! empty( $field['param_populate'] ) ) {
+			$source = 'url';
+			$key    = $field['param_populate'];
+		}
+		if ( '' === $source || '' === $key ) {
+			return null;
+		}
+		$value = null;
+		switch ( $source ) {
+			case 'url':
+				$param = sanitize_key( $key );
+				$value = isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- read-only prefill, sanitized below.
+				break;
+			case 'user':
+				$user = wp_get_current_user();
+				if ( $user && $user->exists() ) {
+					$builtin = array( 'user_email', 'user_login', 'display_name', 'user_url', 'first_name', 'last_name', 'nickname', 'description' );
+					$value   = in_array( $key, $builtin, true ) ? $user->get( $key ) : get_user_meta( $user->ID, sanitize_key( $key ), true );
+				}
+				break;
+			case 'cookie':
+				$value = isset( $_COOKIE[ $key ] ) ? wp_unslash( $_COOKIE[ $key ] ) : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- sanitized below.
+				break;
+			case 'post_meta':
+				$post_id = get_the_ID();
+				$value   = $post_id ? get_post_meta( $post_id, sanitize_key( $key ), true ) : null;
+				break;
+		}
+		return is_scalar( $value ) && '' !== (string) $value ? sanitize_text_field( (string) $value ) : null;
+	}
+
+	/**
+	 * A submitted value formatted for people (emails, CSV): number separators and decimals.
+	 *
+	 * @param array $field Field config.
+	 * @param mixed $value Stored value.
+	 * @return string
+	 */
+	public static function display_value( $field, $value ) {
+		if ( is_array( $value ) ) {
+			return implode( ', ', array_map( 'strval', $value ) );
+		}
+		$value = (string) $value;
+		$type  = isset( $field['type'] ) ? $field['type'] : '';
+		if ( in_array( $type, array( 'number', 'currency', 'percentage', 'spinner' ), true ) && is_numeric( $value )
+			&& ( ( isset( $field['thousand_separator'] ) && '' !== $field['thousand_separator'] ) || ( isset( $field['decimals'] ) && '' !== $field['decimals'] ) ) ) {
+			$sep      = isset( $field['thousand_separator'] ) ? (string) $field['thousand_separator'] : '';
+			$decimals = isset( $field['decimals'] ) && '' !== $field['decimals'] ? absint( $field['decimals'] ) : ( false !== strpos( $value, '.' ) ? strlen( substr( strrchr( $value, '.' ), 1 ) ) : 0 );
+			return number_format( (float) $value, $decimals, ',' === $sep ? '.' : ( '.' === $sep ? ',' : '.' ), $sep );
+		}
+		return $value;
+	}
+
+	/**
+	 * Dialling codes keyed by ISO country code.
+	 *
+	 * @return array
+	 */
+	public static function dial_codes() {
+		static $codes = null;
+		if ( null === $codes ) {
+			$codes = include FORMGLUT_PLUGIN_DIR . 'includes/data/dial-codes.php';
+		}
+		return $codes;
+	}
+
+	/**
+	 * A signed math question for the Math Captcha field.
+	 *
+	 * @param array $field   Field config.
+	 * @param int   $form_id Form ID.
+	 * @return array { text: string, token: string }
+	 */
+	public static function math_question( $field, $form_id ) {
+		$op = isset( $field['operation'] ) ? $field['operation'] : 'add';
+		if ( 'mixed' === $op ) {
+			$op = array( 'add', 'subtract', 'multiply' )[ wp_rand( 0, 2 ) ];
+		}
+		$a = wp_rand( 1, 9 );
+		$b = wp_rand( 1, 9 );
+		if ( 'subtract' === $op && $b > $a ) {
+			list( $a, $b ) = array( $b, $a );
+		}
+		$answer = 'add' === $op ? $a + $b : ( 'subtract' === $op ? $a - $b : $a * $b );
+		$sign   = 'add' === $op ? '+' : ( 'subtract' === $op ? '−' : '×' );
+		$time   = time();
+		$fid    = isset( $field['id'] ) ? (string) $field['id'] : '';
+		return array(
+			'text'  => $a . ' ' . $sign . ' ' . $b,
+			'token' => $time . '.' . wp_hash( $answer . '|' . $time . '|' . absint( $form_id ) . '|' . $fid ),
+		);
+	}
+
+	/**
+	 * Check a Math Captcha answer against its signed token (valid for 24 hours).
+	 *
+	 * @param array  $field   Field config.
+	 * @param int    $form_id Form ID.
+	 * @param string $answer  Posted answer.
+	 * @param string $token   Posted token.
+	 * @return bool
+	 */
+	public static function math_answer_ok( $field, $form_id, $answer, $token ) {
+		$parts = explode( '.', (string) $token, 2 );
+		if ( 2 !== count( $parts ) || ! ctype_digit( $parts[0] ) || ( time() - (int) $parts[0] ) > DAY_IN_SECONDS ) {
+			return false;
+		}
+		$answer = trim( (string) $answer );
+		if ( ! preg_match( '/^-?\d{1,3}$/', $answer ) ) {
+			return false;
+		}
+		$fid = isset( $field['id'] ) ? (string) $field['id'] : '';
+		return hash_equals( wp_hash( (int) $answer . '|' . $parts[0] . '|' . absint( $form_id ) . '|' . $fid ), $parts[1] );
+	}
+
+	/**
+	 * Next value for a Unique ID field (sequential numbers are stored per form and field).
+	 *
+	 * @param array $field   Field config.
+	 * @param int   $form_id Form ID.
+	 * @return string
+	 */
+	public static function next_unique_id( $field, $form_id ) {
+		$type   = isset( $field['id_type'] ) ? $field['id_type'] : 'sequential';
+		$prefix = isset( $field['id_prefix'] ) ? (string) $field['id_prefix'] : '';
+		$suffix = isset( $field['id_suffix'] ) ? (string) $field['id_suffix'] : '';
+		if ( 'random' === $type ) {
+			return $prefix . strtoupper( wp_generate_password( 8, false ) ) . $suffix;
+		}
+		$key = 'formglut_uid_' . absint( $form_id ) . '_' . sanitize_key( isset( $field['id'] ) ? $field['id'] : '' ) . ( 'date' === $type ? '_' . wp_date( 'Ymd' ) : '' );
+		$start = 'date' === $type ? 1 : max( 1, absint( isset( $field['start_number'] ) ? $field['start_number'] : 1 ) );
+		$next  = max( $start, (int) get_option( $key, $start - 1 ) + 1 );
+		update_option( $key, $next, false );
+		$pad   = 'date' === $type ? 3 : max( 1, min( 12, absint( isset( $field['number_length'] ) ? $field['number_length'] : 1 ) ) );
+		$num   = str_pad( (string) $next, $pad, '0', STR_PAD_LEFT );
+		return $prefix . ( 'date' === $type ? wp_date( 'Ymd' ) . '-' : '' ) . $num . $suffix;
+	}
+
+	/**
+	 * Custom validation rule of a field (presets or a custom regular expression).
+	 *
+	 * @param array $field Field config.
+	 * @return array|null { js: string (HTML pattern attribute), php: string (preg pattern), message: string }
+	 */
+	public static function field_pattern( $field ) {
+		$presets = array(
+			'letters'  => '[\p{L} .\'\\-]+',
+			'alnum'    => '[\p{L}0-9 ]+',
+			'digits'   => '[0-9]+',
+			'postcode' => '[A-Za-z0-9 \\-]{2,12}',
+		);
+		$type = isset( $field['validation_pattern'] ) ? (string) $field['validation_pattern'] : '';
+		if ( isset( $presets[ $type ] ) ) {
+			$body = $presets[ $type ];
+		} elseif ( 'custom' === $type && ! empty( $field['validation_regex'] ) ) {
+			$body = trim( (string) $field['validation_regex'] );
+			$body = preg_replace( '/^\^|\$$/', '', $body ); // Anchors are implied (HTML pattern matches the whole value).
+		} else {
+			return null;
+		}
+		$php = '/^(?:' . str_replace( '/', '\/', $body ) . ')$/u';
+		if ( false === @preg_match( $php, '' ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors -- invalid user pattern is simply ignored.
+			return null;
+		}
+		return array(
+			'js'      => $body,
+			'php'     => $php,
+			'message' => ! empty( $field['pattern_message'] ) ? (string) $field['pattern_message'] : __( 'Please use the requested format.', 'formglut' ),
+		);
+	}
+
+	/**
 	 * Flatten a field tree: column containers are removed and their children inlined.
 	 *
 	 * @param array $fields Field definitions.
@@ -194,7 +394,7 @@ class FormGlut_Form {
 				'form_fields' => wp_json_encode( $data['fields'] ?? array() ),
 				'submit_btn'  => wp_json_encode( $data['submit_btn'] ?? array() ),
 				'status'      => sanitize_text_field( $data['status'] ?? 'draft' ),
-				'settings'    => wp_json_encode( FormGlut_Form_Settings::sanitize( $data['settings'] ?? array() ) ),
+				'settings'    => wp_json_encode( FormGlut_Form_Settings::sanitize( $data['settings'] ?? array(), true ) ),
 				'created_by'  => get_current_user_id(),
 			),
 			array( '%s', '%s', '%s', '%s', '%s', '%d' )
@@ -237,7 +437,10 @@ class FormGlut_Form {
 		}
 
 		if ( isset( $data['settings'] ) ) {
-			$fields['settings'] = wp_json_encode( FormGlut_Form_Settings::sanitize( $data['settings'] ) );
+			$raw = is_array( $data['settings'] ) ? $data['settings'] : array();
+			$old = self::get( $id );
+			$raw['_stored_custom_js'] = $old ? $old->settings['style']['custom_js'] : '';
+			$fields['settings'] = wp_json_encode( FormGlut_Form_Settings::sanitize( $raw, true ) );
 			$format[]           = '%s';
 		}
 

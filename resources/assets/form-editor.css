@@ -424,3 +424,61 @@ select.fg-form-field-input[multiple] { height: auto; background-image: none; pad
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500;
 }
 .fg-condition-add.ant-btn:hover { color: #fff !important; background: #e94560 !important; border-color: #e94560 !important; }
+
+/* Step break (multi-step) on the canvas */
+.fg-step-break { padding: 6px 0; }
+.fg-step-break-nav { display: flex; justify-content: space-between; margin-bottom: 10px; }
+.fg-step-btn { display: inline-block; padding: 7px 16px; border-radius: 8px; background: #e94560; color: #fff; font-size: 13px; font-weight: 600; }
+.fg-step-btn.ghost { background: #f1f5f9; color: #334155; }
+.fg-step-break-line { position: relative; text-align: center; border-top: 2px dashed #f5b5c1; margin-top: 8px; }
+.fg-step-break-line span { position: relative; top: -11px; background: #fff; padding: 0 10px; font-size: 12px; font-weight: 600; color: #e94560; }
+/* File upload on the canvas (mirrors .formglut-upload) */
+.fg-upload { display: flex; align-items: center; gap: 12px; padding: 14px !important; border: 1.5px dashed #cbd5e1 !important; border-radius: 10px; background: #f8fafc; }
+.fg-upload-btn { padding: 7px 14px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap; }
+.fg-upload-hint { font-size: 13px; color: #64748b; display: flex; flex-direction: column; }
+.fg-upload-hint small { font-size: 11.5px; color: #94a3b8; }
+
+/* Field ID chip in the Field Options header */
+.fg-field-id { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; font-size: 11px; padding: 2px 8px; border-radius: 999px; cursor: pointer; max-width: 55%; }
+.fg-field-id code { font: 11px ui-monospace, Menlo, monospace; color: #334155; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fg-field-id:hover { border-color: #94a3b8; color: #1e293b; }
+
+/* Toggle, stars, rich text, math captcha, reset (mirror the live form) */
+.fg-toggle { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; }
+.fg-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.fg-toggle-track { position: relative; width: 40px; height: 22px; border-radius: 999px; background: #cbd5e1; flex: none; transition: background .15s; }
+.fg-toggle-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.fg-toggle input:checked + .fg-toggle-track { background: #e94560; }
+.fg-toggle input:checked + .fg-toggle-track::after { transform: translateX(18px); }
+.fg-stars { display: flex; align-items: center; gap: 4px; color: #e2e8f0; }
+.fg-stars span { line-height: 1; }
+.fg-stars span.on { color: var(--fg-star); }
+.fg-stars-small span { font-size: 20px; } .fg-stars-medium span { font-size: 28px; } .fg-stars-large span { font-size: 38px; }
+.fg-stars em { font-style: normal; font-size: 13px; color: #64748b; margin-left: 8px; }
+.fg-richtext { padding: 0 !important; overflow: hidden; }
+.fg-richtext-bar { display: flex; gap: 2px; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; background: #fff; }
+.fg-richtext-bar span { min-width: 26px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 12px; font-weight: 700; color: #475569; }
+.fg-richtext-area { padding: 10px 14px; color: #94a3b8; font-size: 15px; }
+.fg-math { display: flex; align-items: center; gap: 10px; }
+.fg-math-q { font-weight: 700; font-size: 16px; color: #334155; }
+.fg-reset-btn { padding: 9px 18px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; color: #334155; font-weight: 600; font-size: 14px; }
+
+.fg-other-input { flex: 1; min-width: 0; margin-left: 4px; padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; background: #fff; }
+.fg-name-parts:not(.fg-subfields-1) { display: flex; flex-wrap: wrap; }
+.fg-name-parts:not(.fg-subfields-1) > * { flex: 1 1 120px; min-width: 0; }
+.fg-name-parts .fg-subfield-prefix, .fg-name-parts .fg-subfield-suffix { flex: 0 0 90px; }
+.fg-phone-cc { display: flex; gap: 6px; }
+.fg-phone-cc .fg-dial { flex: 0 0 auto; padding: 0 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; display: inline-flex; align-items: center; font-size: 14px; color: #334155; }
+.fg-search-hint { margin-bottom: 6px; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #94a3b8; background: #fff; }
+
+.fg-calc-toggle { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 12.5px; color: #475569; cursor: pointer; }
+.fg-calc { display: flex; align-items: center; gap: 6px; }
+.fg-calc-box { flex: 1; padding: 10px 14px; border: 1px dashed #cbd5e1; border-radius: 8px; background: #f8fafc; font-weight: 700; color: #0f172a; font-size: 16px; }
+.fg-calc-formula { font: 11.5px ui-monospace, Menlo, monospace; color: #94a3b8; margin-top: 4px; word-break: break-all; }
+
+.fg-pay-price { font-size: 18px; font-weight: 700; color: #0f172a; }
+.fg-card-mock { border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; background: #fff; }
+.fg-card-total { display: flex; justify-content: space-between; margin-bottom: 10px; color: #475569; }
+.fg-card-row { display: flex; justify-content: space-between; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; color: #94a3b8; font-size: 13px; margin-bottom: 8px; }
+.fg-card-row.two span { flex: 1; }
+.fg-card-note { font-size: 11.5px; color: #94a3b8; }

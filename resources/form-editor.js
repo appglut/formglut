@@ -1,12 +1,14 @@
-import { R as React, M as _slicedToArray, Y as classNames, y as _defineProperty, H as _objectWithoutProperties, K as KeyCode, z as _extends, G as _objectSpread2, a as CSSMotion, bI as toArray, bW as useMergedState, c1 as warningOnce, by as pickAttrs, U as _typeof, Q as _toConsumableArray, bB as reactExports, c as ConfigContext, b9 as genStyleHooks, bu as merge, bJ as unit, bC as resetComponent, b8 as genFocusStyle, bD as resetIcon, bO as useComponentConfig, bZ as useSize, $ as cloneElement, bk as initCollapseMotion, bw as omit, I as Icon, c2 as wrapperRaf, bT as useLayoutUpdateEffect, bQ as useEvent, r as RefResizeObserver, bP as useComposeRef, bo as isMobile, bi as getTransitionName, bH as textEllipsis, b7 as genFocusOutline, bL as useCSSVarCls, l as RefIcon$2, bq as jsxRuntimeExports, g as FontAwesomeIcon, ak as faCircleInfo, B as Button, b0 as faTrash, aQ as faPlus, bE as staticMethods, aS as faRotateLeft, aT as faRotateRight, J as _pg, at as faEye, an as faCode, aw as faFloppyDisk, a8 as faArrowUp, a6 as faArrowDown, ay as faGear, aL as faPalette, ap as faCopy, al as faClock, au as faEyeSlash, aV as faShieldHalved, a4 as createRoot } from "./chunks/NavMenu-DTs5z4CX.js";
+import { R as React, U as _slicedToArray, $ as classNames, G as _defineProperty, M as _objectWithoutProperties, K as KeyCode, H as _extends, L as _objectSpread2, b as CSSMotion, cz as toArray, cS as useMergedState, c_ as warningOnce, cl as pickAttrs, Y as _typeof, X as _toConsumableArray, co as reactExports, d as ConfigContext, bH as genStyleHooks, cg as merge, cC as unit, cr as resetComponent, bB as genFocusStyle, cs as resetIcon, cK as useComponentConfig, cV as useSize, a1 as cloneElement, c4 as initCollapseMotion, cj as omit, I as Icon, c$ as wrapperRaf, cP as useLayoutUpdateEffect, cM as useEvent, v as RefResizeObserver, cL as useComposeRef, ca as isMobile, c1 as getTransitionName, cy as textEllipsis, bA as genFocusOutline, cH as useCSSVarCls, q as RefIcon$2, cc as jsxRuntimeExports, a as Button, j as Input, h as FontAwesomeIcon, aw as faCircleInfo, bm as faTrash, b8 as faPlus, aB as faCopy, cv as staticMethods, b_ as getSettings, bS as getForm, bb as faRotateLeft, bc as faRotateRight, O as _pg, aH as faEye, az as faCode, aM as faFloppyDisk, ai as faArrowUp, ag as faArrowDown, aO as faGear, b1 as faPalette, cF as updateForm, a6 as createForm, ax as faClock, aR as faHashtag, aI as faEyeSlash, be as faShieldHalved, a7 as createRoot } from "./chunks/api-C3T_2YIP.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { E as EditorHeader } from "./chunks/EditorHeader-B4e947SC.js";
-import { T as Tooltip, p as getSettings, l as getForm, r as updateForm, c as createForm } from "./chunks/api-V7Uk2s4S.js";
-import { k as getStyleGroups, e as STYLE_GROUPS, F as FIELD_TYPES, S as SECTION_ORDER, c as SECTION_TITLES, b as FIELD_TYPE_GROUPS, i as getCommonOptionKeys, C as COMMON_OPTION_KEYS, j as getOptionsForFieldType, g as flattenFields, f as createField, l as isContainerField, h as getAllFieldTypes, d as STYLE_BLOCKS, a as COUNTRIES } from "./chunks/fieldTypes-BMVR92Df.js";
-import { S as Switch } from "./chunks/index-ryNm28KF.js";
-import { x as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-BLXOj64T.js";
-import { g as genCollapseMotion, c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-lUE_jWZL.js";
-import { T as TypedInputNumber } from "./chunks/index-aGc0xIpX.js";
+import { E as EditorHeader } from "./chunks/EditorHeader-DpFGkIf0.js";
+import { a as COUNTRIES, k as getStyleGroups, e as STYLE_GROUPS, F as FIELD_TYPES, S as SECTION_ORDER, c as SECTION_TITLES, b as FIELD_TYPE_GROUPS, i as getCommonOptionKeys, C as COMMON_OPTION_KEYS, j as getOptionsForFieldType, g as flattenFields, f as createField, l as isContainerField, h as getAllFieldTypes, d as STYLE_BLOCKS } from "./chunks/fieldTypes-B4mkecXL.js";
+import { M as Modal } from "./chunks/index-1tTAWJ6k.js";
+import { d as initSlideMotion, S as Select, a as Spin } from "./chunks/index-DnCN3rVY.js";
+import { S as Switch } from "./chunks/index-BJj4IPqo.js";
+import { T as Tooltip } from "./chunks/index-DoebJELJ.js";
+import { g as genCollapseMotion, c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-DVpo83LX.js";
+import { T as TypedInputNumber } from "./chunks/index-puzzR6yx.js";
+import "./chunks/ActionButton-1FHh5CEq.js";
 var PanelContent = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, forceRender = props.forceRender, className = props.className, style = props.style, children = props.children, isActive = props.isActive, role = props.role, customizeClassNames = props.classNames, styles = props.styles;
   var _React$useState = React.useState(isActive || forceRender), _React$useState2 = _slicedToArray(_React$useState, 2), rendered = _React$useState2[0], setRendered = _React$useState2[1];
@@ -2927,6 +2929,84 @@ const InternalTabs = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
 });
 const Tabs = InternalTabs;
 Tabs.TabPane = TabPane;
+const slug = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+const PRESETS = {
+  countries: { label: __("Countries", "formglut"), lines: () => Object.entries(COUNTRIES).map(([code, name]) => `${name}|${code}`) },
+  us_states: { label: __("US states", "formglut"), lines: () => ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"] },
+  months: { label: __("Months", "formglut"), lines: () => ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
+  days: { label: __("Days of the week", "formglut"), lines: () => ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
+  numbers: { label: __("Numbers 1–10", "formglut"), lines: () => Array.from({ length: 10 }, (_, i) => String(i + 1)) },
+  yesno: { label: __("Yes / No", "formglut"), lines: () => [__("Yes", "formglut"), __("No", "formglut")] },
+  agree: { label: __("Agreement scale", "formglut"), lines: () => [__("Strongly disagree", "formglut"), __("Disagree", "formglut"), __("Neutral", "formglut"), __("Agree", "formglut"), __("Strongly agree", "formglut")] },
+  satisfaction: { label: __("Satisfaction scale", "formglut"), lines: () => [__("Very unsatisfied", "formglut"), __("Unsatisfied", "formglut"), __("Neutral", "formglut"), __("Satisfied", "formglut"), __("Very satisfied", "formglut")] },
+  age: { label: __("Age ranges", "formglut"), lines: () => ["Under 18", "18–24", "25–34", "35–44", "45–54", "55–64", "65+"] }
+};
+function parseChoices(text) {
+  return text.split("\n").map((l) => l.trim()).filter(Boolean).map((line) => {
+    const i = line.lastIndexOf("|");
+    const label = (i > 0 ? line.slice(0, i) : line).trim();
+    const value = (i > 0 ? line.slice(i + 1) : "").trim() || slug(label) || label;
+    return { label, value };
+  });
+}
+function BulkChoices({ options = [], onApply }) {
+  const [open, setOpen] = reactExports.useState(false);
+  const [text, setText] = reactExports.useState("");
+  const [replace, setReplace] = reactExports.useState(true);
+  const openDialog = () => {
+    setText(options.map((o) => o.value && o.value !== slug(o.label) ? `${o.label}|${o.value}` : o.label).join("\n"));
+    setReplace(true);
+    setOpen(true);
+  };
+  const apply = () => {
+    const parsed = parseChoices(text);
+    if (!parsed.length) return;
+    onApply(replace ? parsed : [...options, ...parsed]);
+    setOpen(false);
+  };
+  const count = parseChoices(text).length;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "small", onClick: openDialog, style: { width: "100%", marginTop: 6 }, children: __("Bulk add / presets", "formglut") }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Modal,
+      {
+        open,
+        title: __("Bulk add choices", "formglut"),
+        onCancel: () => setOpen(false),
+        onOk: apply,
+        okText: replace ? __("Replace choices", "formglut") : __("Add choices", "formglut"),
+        okButtonProps: { disabled: !count, style: { background: "#e94560", borderColor: "#e94560" } },
+        width: 520,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { color: "#64748b", marginTop: 0 }, children: __("One choice per line. To save a different value, write Label|value.", "formglut") }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Select,
+            {
+              placeholder: __("Insert a preset list…", "formglut"),
+              style: { width: "100%", marginBottom: 10 },
+              value: null,
+              options: Object.entries(PRESETS).map(([k, p]) => ({ value: k, label: p.label })),
+              onChange: (k) => setText(PRESETS[k].lines().join("\n"))
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Input.TextArea, { rows: 10, value: text, onChange: (e) => setText(e.target.value), spellCheck: false, style: { fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12.5 } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 10 }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { fontSize: 12.5, color: "#64748b" }, children: [
+              count,
+              " ",
+              __("choices", "formglut")
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { display: "flex", alignItems: "center", gap: 8, fontSize: 13 }, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Switch, { size: "small", checked: replace, onChange: setReplace }),
+              " ",
+              __("Replace existing choices", "formglut")
+            ] })
+          ] })
+        ]
+      }
+    )
+  ] });
+}
 const CONDITION_OPERATORS = [
   { value: "is", label: __("Is equal to", "formglut") },
   { value: "is_not", label: __("Is not equal to", "formglut") },
@@ -3343,6 +3423,9 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = fals
         label: key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
         section: "advanced"
       };
+      if (definition.showWhen && (!field[definition.showWhen] || definition.showValue && field[definition.showWhen] !== definition.showValue)) {
+        return;
+      }
       const section = definition.section || "general";
       if (!sections[section]) {
         sections[section] = [];
@@ -3354,7 +3437,19 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = fals
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     !styleOnly && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: 12, padding: "6px 10px", background: "#f8fafc", borderRadius: 6, fontSize: 12, color: "#64748b", display: "flex", alignItems: "center", gap: 6 }, children: [
       (_a = FIELD_TYPES[field.type]) == null ? void 0 : _a.icon,
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontWeight: 600 }, children: ((_b = FIELD_TYPES[field.type]) == null ? void 0 : _b.label) || field.type })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontWeight: 600 }, children: ((_b = FIELD_TYPES[field.type]) == null ? void 0 : _b.label) || field.type }),
+      field.id && /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Copy the tag for this field’s value, for emails and messages", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "fg-field-id", onClick: () => {
+        var _a2;
+        const tag = "{field:" + field.id + "}";
+        if ((_a2 = navigator.clipboard) == null ? void 0 : _a2.writeText) navigator.clipboard.writeText(tag).then(() => staticMethods.success(__("Copied", "formglut") + " " + tag)).catch(() => {
+        });
+      }, children: [
+        __("ID", "formglut"),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: field.id }),
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCopy })
+      ] }) })
     ] }),
     !styleOnly && ["select", "radio", "checkbox", "multiselect"].includes(field.type) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-section", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-prop-section-title", children: __("Choice Options", "formglut") }),
@@ -3395,6 +3490,21 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = fals
                 style: { flex: 1 }
               }
             ),
+            field.show_calc_values && /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                size: "small",
+                value: opt.calc_value ?? "",
+                placeholder: __("Calc", "formglut"),
+                title: __("Number used by Calculation fields", "formglut"),
+                onChange: (e) => {
+                  const newOpts = [...field.options || []];
+                  newOpts[idx] = { ...newOpts[idx], calc_value: e.target.value.replace(/[^0-9.\-]/g, "") };
+                  up("options", newOpts);
+                },
+                style: { width: 64, flex: "none" }
+              }
+            ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               Button,
               {
@@ -3426,7 +3536,13 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = fals
                 __("Add Option", "formglut")
               ]
             }
-          )
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(BulkChoices, { options: field.options || [], onApply: (opts) => up("options", opts) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "fg-calc-toggle", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Switch, { size: "small", checked: !!field.show_calc_values, onChange: (v) => up("show_calc_values", v) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Calculation values", "formglut") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Give each choice a number to use in Calculation fields (for example a price).", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCircleInfo, style: { color: "#94a3b8", fontSize: 12 } }) })
+          ] })
         ] })
       ] }),
       field.type === "select" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-prop-field", children: [
@@ -3486,6 +3602,8 @@ function DynamicFieldOptions({ field, onUpdate, allFields = [], styleOnly = fals
     })
   ] });
 }
+const DIAL_CODES = { "AF": "93", "AX": "358", "AL": "355", "DZ": "213", "AS": "1", "AD": "376", "AO": "244", "AI": "1", "AG": "1", "AR": "54", "AM": "374", "AW": "297", "AU": "61", "AT": "43", "AZ": "994", "BS": "1", "BH": "973", "BD": "880", "BB": "1", "BY": "375", "BE": "32", "BZ": "501", "BJ": "229", "BM": "1", "BT": "975", "BO": "591", "BQ": "599", "BA": "387", "BW": "267", "BR": "55", "IO": "246", "BN": "673", "BG": "359", "BF": "226", "BI": "257", "CV": "238", "KH": "855", "CM": "237", "CA": "1", "KY": "1", "CF": "236", "TD": "235", "CL": "56", "CN": "86", "CX": "61", "CC": "61", "CO": "57", "KM": "269", "CG": "242", "CD": "243", "CK": "682", "CR": "506", "CI": "225", "HR": "385", "CU": "53", "CW": "599", "CY": "357", "CZ": "420", "DK": "45", "DJ": "253", "DM": "1", "DO": "1", "EC": "593", "EG": "20", "SV": "503", "GQ": "240", "ER": "291", "EE": "372", "SZ": "268", "ET": "251", "FK": "500", "FO": "298", "FJ": "679", "FI": "358", "FR": "33", "GF": "594", "PF": "689", "GA": "241", "GM": "220", "GE": "995", "DE": "49", "GH": "233", "GI": "350", "GR": "30", "GL": "299", "GD": "1", "GP": "590", "GU": "1", "GT": "502", "GG": "44", "GN": "224", "GW": "245", "GY": "592", "HT": "509", "VA": "39", "HN": "504", "HK": "852", "HU": "36", "IS": "354", "IN": "91", "ID": "62", "IR": "98", "IQ": "964", "IE": "353", "IM": "44", "IL": "972", "IT": "39", "JM": "1", "JP": "81", "JE": "44", "JO": "962", "KZ": "7", "KE": "254", "KI": "686", "KP": "850", "KR": "82", "KW": "965", "KG": "996", "LA": "856", "LV": "371", "LB": "961", "LS": "266", "LR": "231", "LY": "218", "LI": "423", "LT": "370", "LU": "352", "MO": "853", "MG": "261", "MW": "265", "MY": "60", "MV": "960", "ML": "223", "MT": "356", "MH": "692", "MQ": "596", "MR": "222", "MU": "230", "YT": "262", "MX": "52", "FM": "691", "MD": "373", "MC": "377", "MN": "976", "ME": "382", "MS": "1", "MA": "212", "MZ": "258", "MM": "95", "NA": "264", "NR": "674", "NP": "977", "NL": "31", "NC": "687", "NZ": "64", "NI": "505", "NE": "227", "NG": "234", "NU": "683", "NF": "672", "MK": "389", "MP": "1", "NO": "47", "OM": "968", "PK": "92", "PW": "680", "PS": "970", "PA": "507", "PG": "675", "PY": "595", "PE": "51", "PH": "63", "PN": "64", "PL": "48", "PT": "351", "PR": "1", "QA": "974", "RE": "262", "RO": "40", "RU": "7", "RW": "250", "BL": "590", "SH": "290", "KN": "1", "LC": "1", "MF": "590", "PM": "508", "VC": "1", "WS": "685", "SM": "378", "ST": "239", "SA": "966", "SN": "221", "RS": "381", "SC": "248", "SL": "232", "SG": "65", "SX": "1", "SK": "421", "SI": "386", "SB": "677", "SO": "252", "ZA": "27", "SS": "211", "ES": "34", "LK": "94", "SD": "249", "SR": "597", "SJ": "47", "SE": "46", "CH": "41", "SY": "963", "TW": "886", "TJ": "992", "TZ": "255", "TH": "66", "TL": "670", "TG": "228", "TK": "690", "TO": "676", "TT": "1", "TN": "216", "TR": "90", "TM": "993", "TC": "1", "TV": "688", "UG": "256", "UA": "380", "AE": "971", "GB": "44", "US": "1", "UY": "598", "UZ": "998", "VU": "678", "VE": "58", "VN": "84", "VG": "1", "VI": "1", "WF": "681", "EH": "212", "YE": "967", "ZM": "260", "ZW": "263" };
+const flagOf = (iso) => iso.toUpperCase().replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
 staticMethods.config({
   duration: 3,
   maxCount: 3,
@@ -3786,6 +3904,37 @@ function FieldTemplate({ field: f, captcha = {} }) {
       f.show_divider && /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { className: "fg-section-divider", style: { borderTopStyle: f.divider_style || "solid", borderTopWidth: (Number(f.divider_thickness) || 1) + "px", ...f.divider_color ? { borderTopColor: f.divider_color } : {} } })
     ] });
   }
+  if (f.type === "reset_button") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: wrapCls("fg-reset-field"), style: { textAlign: f.button_alignment || "left" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: `fg-reset-btn ${f.element_class || ""}`, children: f.button_text || __("Clear form", "formglut") }) });
+  }
+  if (f.type === "unique_id") {
+    const sample = f.id_type === "random" ? "K7Q2M9XA" : f.id_type === "date" ? "20260930-001" : String(Number(f.start_number) || 1).padStart(Number(f.number_length) || 1, "0");
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-placeholder-box"), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHashtag }),
+      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: f.label || __("Unique ID", "formglut") }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: (f.id_prefix || "") + sample + (f.id_suffix || "") }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-placeholder-note", children: __("Created on submit, not shown on the form", "formglut") })
+    ] });
+  }
+  if (f.type === "form_step") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-step-break", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-step-break-nav", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-step-btn ghost", children: [
+          "← ",
+          f.prev_text || __("Previous", "formglut")
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-step-btn", children: [
+          f.next_text || __("Next", "formglut"),
+          " →"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-step-break-line", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        __("Step break", "formglut"),
+        f.step_title ? " · " + f.step_title : ""
+      ] }) })
+    ] });
+  }
   if (f.type === "hidden") {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: wrapCls("fg-placeholder-box"), children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEyeSlash }),
@@ -3979,21 +4128,24 @@ function FieldTemplate({ field: f, captcha = {} }) {
     }
     if (f.type === "select") {
       const firstOptionDisabled = f.disable_first_option !== false;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "select",
-        {
-          className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
-          name: fieldName,
-          defaultValue: f.default_value,
-          disabled: true,
-          style: inputStyle,
-          children: [
-            f.placeholder && /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", disabled: firstOptionDisabled, children: f.placeholder }),
-            displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, disabled: !!opt.disabled, children: opt.label || `Option ${i + 1}` }, i))
-          ]
-        },
-        `select-${f.id}-${f.default_value || ""}`
-      );
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        f.searchable && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-search-hint", children: __("Type to search…", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "select",
+          {
+            className: `fg-form-field-input fg-field-${f.id} ${f.element_class || ""}`,
+            name: fieldName,
+            defaultValue: f.default_value,
+            disabled: true,
+            style: inputStyle,
+            children: [
+              f.placeholder && /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", disabled: firstOptionDisabled, children: f.placeholder }),
+              displayOptions.map((opt, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value || opt.label, disabled: !!opt.disabled, children: opt.label || `Option ${i + 1}` }, i))
+            ]
+          },
+          `select-${f.id}-${f.default_value || ""}`
+        )
+      ] });
     }
     if (f.type === "multiselect") {
       const defaults = Array.isArray(f.default_value) ? f.default_value : f.default_value ? [f.default_value] : [];
@@ -4021,24 +4173,31 @@ function FieldTemplate({ field: f, captcha = {} }) {
       const layout = f.layout || (f.inline ? "inline" : "default");
       const defaults = Array.isArray(f.default_value) ? f.default_value : f.default_value ? [f.default_value] : [];
       return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fg-choice-group fg-choice-layout-${layout} ${f.element_class || ""}`, children: displayOptions.map((opt, i) => {
-          const val = opt.value || opt.label;
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "fg-choice", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: isRadio ? "radio" : "checkbox", name: fieldName, disabled: true, checked: defaults.includes(val), readOnly: true }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
-          ] }, i);
-        }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-choice-group fg-choice-layout-${layout} ${f.element_class || ""}`, children: [
+          displayOptions.map((opt, i) => {
+            const val = opt.value || opt.label;
+            return /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "fg-choice", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: isRadio ? "radio" : "checkbox", name: fieldName, disabled: true, checked: defaults.includes(val), readOnly: true }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: opt.label || `Option ${i + 1}` })
+            ] }, i);
+          }),
+          f.enable_other && /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "fg-choice", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: isRadio ? "radio" : "checkbox", disabled: true, readOnly: true }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.other_label || __("Other", "formglut") }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", className: "fg-other-input", placeholder: f.other_placeholder || __("Please specify", "formglut"), readOnly: true })
+          ] })
+        ] }),
         !isRadio && selectionHint && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-choice-hint", children: selectionHint })
       ] });
     }
     const cls = `fg-form-field-input ${f.element_class || ""}`;
-    const sub = (key, subLabel, input) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-subfield" + (key === "street1" || key === "street2" ? " fg-subfield-full" : ""), children: [
+    const sub = (key, subLabel, input) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-subfield fg-subfield-" + key + (key === "street1" || key === "street2" ? " fg-subfield-full" : ""), children: [
       subLabel && /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "fg-sublabel", children: subLabel }),
       input
     ] }, key);
     if (f.type === "name") {
-      const parts = [["first", f.show_first_name !== false], ["middle", !!f.show_middle_name], ["last", f.show_last_name !== false]].filter((p) => p[1]);
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fg-subfields fg-subfields-${f.name_layout === "vertical" ? 1 : parts.length}`, children: parts.map(([p]) => sub(p, f[`${p}_name_label`], /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: f[`${p}_name_placeholder`], readOnly: true, style: inputStyle }))) });
+      const parts = [["prefix", !!f.show_prefix], ["first", f.show_first_name !== false], ["middle", !!f.show_middle_name], ["last", f.show_last_name !== false], ["suffix", !!f.show_suffix]].filter((p) => p[1]);
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fg-subfields fg-name-parts fg-subfields-${f.name_layout === "vertical" ? 1 : Math.min(parts.length, 3)}`, children: parts.map(([p]) => p === "prefix" ? sub(p, __("Title", "formglut"), /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: cls, disabled: true, style: inputStyle, children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "—" }) })) : p === "suffix" ? sub(p, __("Suffix", "formglut"), /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: "Jr, Sr, III", readOnly: true, style: inputStyle })) : sub(p, f[`${p}_name_label`], /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: f[`${p}_name_placeholder`], readOnly: true, style: inputStyle }))) });
     }
     if (f.type === "country_select") {
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: cls, defaultValue: f.default_value || "", disabled: true, style: inputStyle, children: [
@@ -4150,12 +4309,101 @@ function FieldTemplate({ field: f, captcha = {} }) {
       const proPreview = window.formglutProRenderPreview(f, inputStyle);
       if (proPreview) return proPreview;
     }
+    if (f.type === "payment_item") {
+      return f.item_type === "custom" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", children: "$" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", placeholder: f.placeholder || "0.00", readOnly: true, style: inputStyle })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-pay-price", children: [
+        "$",
+        Number(f.amount || 0).toFixed(2)
+      ] });
+    }
+    if (f.type === "stripe_card") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-card-mock", children: [
+        f.show_total !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-card-total", children: [
+          __("Total", "formglut"),
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "$0.00" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-card-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: __("Card number", "formglut") }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "1234 1234 1234 1234" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-card-row two", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MM / YY" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "CVC" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-card-note", children: __("Secure card form by Stripe. Add your keys in Global Settings › Payments.", "formglut") })
+      ] });
+    }
+    if (f.type === "calculation") {
+      const zero = 0 .toFixed(Number(f.decimals ?? 2));
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-calc", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-calc-box", children: (f.calc_prefix || "") + zero + (f.calc_suffix || "") }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-calc-formula", children: [
+          f.formula ? "= " + f.formula : __("Add a formula in Field Options", "formglut"),
+          f.hide_on_form ? " · " + __("hidden on the form", "formglut") : ""
+        ] })
+      ] });
+    }
+    if (f.type === "toggle") {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: `fg-toggle ${f.element_class || ""}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: !!f.default_on, readOnly: true }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-toggle-track" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: f.toggle_text })
+      ] });
+    }
+    if (f.type === "star_rating") {
+      const n = Number(f.max_stars) || 5;
+      const words = (f.rating_labels || "").split(",").map((w) => w.trim());
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-stars fg-stars-${f.star_size || "medium"}`, style: { "--fg-star": f.star_color || "#f59e0b" }, children: [
+        Array.from({ length: n }, (_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: i < Math.ceil(n * 0.6) ? "on" : "", children: "★" }, i)),
+        f.show_labels && /* @__PURE__ */ jsxRuntimeExports.jsx("em", { children: words[Math.ceil(n * 0.6) - 1] || "" })
+      ] });
+    }
+    if (f.type === "rich_text") {
+      const tools = f.toolbar === "full" ? ["B", "I", "U", "•", "1.", "🔗", "❝"] : ["B", "I", "•", "1."];
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-richtext", style: inputStyle, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-richtext-bar", children: tools.map((t) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: t }, t)) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-richtext-area", style: { minHeight: (Number(f.editor_height) || 160) - 40 }, children: getDisplayPlaceholder() })
+      ] });
+    }
+    if (f.type === "math_captcha") {
+      const q = { add: "3 + 4", subtract: "9 − 4", multiply: "3 × 4", mixed: "6 + 2" }[f.operation] || "3 + 4";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-math", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-math-q", children: [
+          q,
+          " ="
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: cls, type: "text", readOnly: true, style: { ...inputStyle, width: 90 } })
+      ] });
+    }
+    if (f.type === "file_upload") {
+      const types = f.images_only ? "JPG, PNG, GIF, WebP" : (f.allowed_types || "").toUpperCase();
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fg-upload ${f.element_class || ""}`, style: inputStyle, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-upload-btn", children: f.button_text || __("Choose file", "formglut") }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-upload-hint", children: [
+          f.multiple ? __("or drop files here", "formglut") : __("or drop a file here", "formglut"),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("small", { children: [
+            types,
+            f.max_size ? ` · ${__("max", "formglut")} ${f.max_size} MB` : "",
+            f.multiple && f.max_files ? ` · ${__("up to", "formglut")} ${f.max_files}` : ""
+          ] })
+        ] })
+      ] });
+    }
     const typeAttr = { number: "number", email: "email", url: "url", phone: "tel", date: f.date_type === "datetime" ? "datetime-local" : "date" }[f.type] || "text";
     const phoneMask = f.type === "phone" ? getPhoneMask(f) : "";
     const maskedValue = getMaskedValue(f.default_value);
     const placeholder = f.type === "date" ? void 0 : phoneMask && !f.placeholder ? phoneMask.replace(/9/g, "#") : getDisplayPlaceholder();
     const numAttrs = f.type === "number" ? { min: f.min_value === "" ? void 0 : f.min_value, max: f.max_value === "" ? void 0 : f.max_value, step: f.step || void 0 } : {};
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group", children: [
+    const dial = f.type === "phone" && f.show_country_code ? DIAL_CODES[f.default_country || "US"] || "1" : "";
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-input-group" + (dial ? " fg-phone-cc" : ""), children: [
+      dial && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "fg-dial", children: [
+        flagOf(f.default_country || "US"),
+        " +",
+        dial
+      ] }),
       f.prefix_label && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fg-input-prefix", style: prefixSuffixCustomStyle, dangerouslySetInnerHTML: { __html: f.prefix_label } }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "input",

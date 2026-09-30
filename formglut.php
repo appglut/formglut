@@ -53,6 +53,13 @@ function formglut_require_files() {
 		'includes/class-formglut-entry.php',
 		'includes/class-formglut-form.php',
 		'includes/class-formglut-form-settings.php',
+		'includes/class-formglut-uploads.php',
+		'includes/class-formglut-block.php',
+		'includes/class-formglut-privacy.php',
+		'includes/class-formglut-integrations.php',
+		'includes/class-formglut-calc.php',
+		'includes/class-formglut-payments.php',
+		'includes/class-formglut-migrator.php',
 		'includes/class-formglut-settings.php',
 	);
 
@@ -190,5 +197,15 @@ function formglut_init() {
 	// Boot shortcode.
 	if ( class_exists( 'FormGlut_Shortcode' ) ) {
 		FormGlut_Shortcode::get_instance();
+	}
+
+	// WordPress personal-data export / erase.
+	if ( class_exists( 'FormGlut_Privacy' ) ) {
+		FormGlut_Privacy::init();
+	}
+
+	// Gutenberg block.
+	if ( class_exists( 'FormGlut_Block' ) ) {
+		FormGlut_Block::init();
 	}
 }

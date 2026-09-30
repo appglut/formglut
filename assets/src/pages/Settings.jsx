@@ -4,8 +4,10 @@ import { Input, InputNumber, Button, Switch, Select, message, Spin } from 'antd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFloppyDisk, faGear, faEnvelope, faCommentDots, faShieldHalved, faUserShield, faCheckDouble, faCloud, faSliders,
+  faCreditCard, faPlug, faEnvelopeCircleCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
+import * as api from '../services/api';
 
 message.config({ duration: 3, maxCount: 3, top: 24, placement: 'top' });
 
@@ -30,9 +32,18 @@ const DEFAULTS = {
   formglut_turnstile_site_key: '',
   formglut_turnstile_secret_key: '',
   formglut_delete_on_uninstall: false,
+  formglut_email_log: false,
+  formglut_currency: 'USD',
+  formglut_stripe_mode: 'test',
+  formglut_stripe_test_publishable: '',
+  formglut_stripe_test_secret: '',
+  formglut_stripe_live_publishable: '',
+  formglut_stripe_live_secret: '',
+  formglut_mailchimp_api_key: '',
+  formglut_hubspot_token: '',
 };
 
-const BOOL_KEYS = ['formglut_ajax_submit', 'formglut_store_entries', 'formglut_honeypot', 'formglut_recaptcha_enabled', 'formglut_delete_on_uninstall'];
+const BOOL_KEYS = ['formglut_ajax_submit', 'formglut_store_entries', 'formglut_honeypot', 'formglut_recaptcha_enabled', 'formglut_delete_on_uninstall', 'formglut_email_log'];
 
 /** The server returns booleans as '1' / '' strings; turn everything into the types the form uses. */
 function normalize(server) {
@@ -100,6 +111,28 @@ const SECTIONS = [
     ],
   },
   {
+    key: 'payments', title: __( 'Payments', 'formglut' ), icon: faCreditCard, desc: __( 'Stripe keys for Payment fields. Find them in your Stripe Dashboard → Developers → API keys.', 'formglut' ), fields: [
+      { key: 'formglut_stripe_mode', type: 'select', label: __( 'Mode', 'formglut' ), tip: __( 'Use Test while you try things out; no real money moves.', 'formglut' ), options: [{ value: 'test', label: __( 'Test', 'formglut' ) }, { value: 'live', label: __( 'Live', 'formglut' ) }] },
+      { key: 'formglut_currency', type: 'select', label: __( 'Currency', 'formglut' ), options: ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'NZD', 'CHF', 'SEK', 'NOK', 'DKK', 'PLN', 'CZK', 'INR', 'BDT', 'PKR', 'SGD', 'HKD', 'MYR', 'ZAR', 'BRL', 'MXN', 'AED', 'SAR', 'TRY', 'JPY', 'KRW'].map((c) => ({ value: c, label: c })) },
+      { key: 'formglut_stripe_test_publishable', type: 'text', label: __( 'Test publishable key', 'formglut' ), placeholder: 'pk_test_…', show: (s) => s.formglut_stripe_mode === 'test' },
+      { key: 'formglut_stripe_test_secret', type: 'password', label: __( 'Test secret key', 'formglut' ), placeholder: 'sk_test_…', show: (s) => s.formglut_stripe_mode === 'test' },
+      { key: 'formglut_stripe_live_publishable', type: 'text', label: __( 'Live publishable key', 'formglut' ), placeholder: 'pk_live_…', show: (s) => s.formglut_stripe_mode === 'live' },
+      { key: 'formglut_stripe_live_secret', type: 'password', label: __( 'Live secret key', 'formglut' ), placeholder: 'sk_live_…', show: (s) => s.formglut_stripe_mode === 'live' },
+    ],
+  },
+  {
+    key: 'integrations', title: __( 'Integrations', 'formglut' ), icon: faPlug, desc: __( 'Connect services once here, then choose what each form sends in its Form Settings › Integrations.', 'formglut' ), fields: [
+      { key: 'formglut_mailchimp_api_key', type: 'password', label: __( 'Mailchimp API key', 'formglut' ), tip: __( 'Mailchimp → Profile → Extras → API keys. It ends with your data centre, e.g. -us21.', 'formglut' ), placeholder: 'xxxxxxxx-us21' },
+      { key: 'formglut_hubspot_token', type: 'password', label: __( 'HubSpot private app token', 'formglut' ), tip: __( 'HubSpot → Settings → Integrations → Private apps. Give the app the “crm.objects.contacts.write” scope.', 'formglut' ), placeholder: 'pat-…' },
+    ],
+  },
+  {
+    key: 'emaillog', title: __( 'Email log', 'formglut' ), icon: faEnvelopeCircleCheck, desc: __( 'Check that emails go out: send a test, and keep a list of the last 50 emails FormGlut sent.', 'formglut' ), fields: [
+      { key: 'formglut_email_log', type: 'switch', label: __( 'Keep an email log', 'formglut' ), tip: __( 'Stores recipient, subject and status (not the message) of the last 50 emails.', 'formglut' ) },
+    ],
+    extra: 'emaillog',
+  },
+  {
     key: 'advanced', title: __( 'Advanced', 'formglut' ), icon: faSliders, desc: __( 'Data handling for the whole plugin.', 'formglut' ), fields: [
       { key: 'formglut_delete_on_uninstall', type: 'switch', label: __( 'Delete data on uninstall', 'formglut' ), tip: __( 'Removes all forms, entries and settings when the plugin is deleted. This cannot be undone.', 'formglut' ) },
     ],
@@ -115,6 +148,37 @@ function Input1({ f, value, onChange }) {
     case 'score': return <InputNumber min={0} max={1} step={0.1} value={value} onChange={(v) => onChange(v ?? 0)} style={{ width: 140 }} />;
     default: return <Input value={value} placeholder={f.placeholder} onChange={(e) => onChange(e.target.value)} />;
   }
+}
+
+/** Test email + list of recently sent emails. */
+function EmailLog() {
+  const [to, setTo] = useState((window.formglut_admin || {}).admin_email || '');
+  const [sending, setSending] = useState(false);
+  const [items, setItems] = useState(null);
+  const load = () => api.getEmailLog().then((d) => setItems(d.items || [])).catch(() => setItems([]));
+  useEffect(() => { load(); }, []);
+  const send = async () => {
+    setSending(true);
+    try { const r = await api.sendTestEmail(to); message.success(r.message); load(); } catch (e) { message.error(e.message); } finally { setSending(false); }
+  };
+  return (
+    <div className="fg-emaillog">
+      <div className="fg-fs-row">
+        <div className="fg-fs-label"><div className="fg-fs-label-line"><label>{__( 'Send a test email', 'formglut' )}</label></div><div className="fg-fs-help">{__( 'Uses the sender name and email above.', 'formglut' )}</div></div>
+        <div className="fg-fs-control" style={{ display: 'flex', gap: 8 }}>
+          <Input value={to} onChange={(e) => setTo(e.target.value)} placeholder="you@example.com" />
+          <Button onClick={send} loading={sending}>{__( 'Send', 'formglut' )}</Button>
+        </div>
+      </div>
+      <div className="fg-emaillog-list">
+        {items === null ? <Spin size="small" /> : items.length === 0 ? <div className="fg-fs-help">{__( 'No emails logged yet. Turn on the log above and save.', 'formglut' )}</div> : (
+          <table><thead><tr><th>{__( 'Date', 'formglut' )}</th><th>{__( 'To', 'formglut' )}</th><th>{__( 'Subject', 'formglut' )}</th><th>{__( 'Status', 'formglut' )}</th></tr></thead>
+            <tbody>{items.map((it, i) => (<tr key={i}><td>{it.date}</td><td>{it.to}</td><td>{it.subject}<div className="fg-fs-help">{it.context}</div></td><td><span className={'fg-log-' + it.status}>{it.status === 'sent' ? __( 'Sent', 'formglut' ) : __( 'Failed', 'formglut' )}</span></td></tr>))}</tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function Settings() {
@@ -231,6 +295,7 @@ export default function Settings() {
             ))}
 
             {section.hint && <div className="fg-fs-note" style={{ margin: '4px 0 18px' }}>{section.hint}</div>}
+            {section.extra === 'emaillog' && <EmailLog />}
           </section>
         </div>
       </div>

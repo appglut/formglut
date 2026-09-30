@@ -222,7 +222,7 @@ class FormGlut_Shortcode {
 			<?php if ( '' !== $custom_css ) : ?>
 				<style><?php echo wp_strip_all_tags( $custom_css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tags stripped and sanitized when saved. ?></style>
 			<?php endif; ?>
-			<form class="formglut-form" data-form-id="<?php echo esc_attr( $form_id ); ?>" novalidate>
+			<form class="formglut-form" data-form-id="<?php echo esc_attr( $form_id ); ?>" data-step-progress="<?php echo esc_attr( $fs['multistep']['progress'] ); ?>" data-first-step="<?php echo esc_attr( $fs['multistep']['first_title'] ); ?>" data-step-validate="<?php echo $fs['multistep']['validate_step'] ? '1' : '0'; ?>" novalidate>
 				<?php if ( ! empty( $fs['general']['show_title'] ) ) : ?>
 					<h3 class="formglut-form-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above. ?></h3>
 				<?php endif; ?>
@@ -252,9 +252,13 @@ class FormGlut_Shortcode {
 				</div>
 				<?php endif; ?>
 
-				<div class="formglut-form-message formglut-success" style="display:none;"></div>
-				<div class="formglut-form-message formglut-error" style="display:none;"></div>
+				<div class="formglut-form-message formglut-success" role="status" aria-live="polite" tabindex="-1" style="display:none;"></div>
+				<div class="formglut-form-message formglut-error" role="alert" tabindex="-1" style="display:none;"></div>
 			</form>
+			<?php if ( '' !== $fs['style']['custom_js'] && $enforce ) : ?>
+				<script>document.addEventListener('formglut:submitted',function(event){if(!event.detail||event.detail.formId!==<?php echo (int) $form_id; ?>){return;}<?php echo $fs['style']['custom_js']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- saved only by users with unfiltered_html. ?>
+});</script>
+			<?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -397,6 +401,9 @@ class FormGlut_Shortcode {
 		if ( FormGlut_Form::is_container( $field ) ) {
 			return $this->render_container( $field );
 		}
+		if ( ! FormGlut_Form::field_visible( $field ) ) {
+			return '';
+		}
 
 		$type     = isset( $field['type'] ) ? sanitize_key( $field['type'] ) : 'text';
 		$id       = isset( $field['id'] ) ? sanitize_text_field( $field['id'] ) : '';
@@ -465,6 +472,20 @@ class FormGlut_Shortcode {
 			) ) ) . '"';
 		}
 
+		if ( 'unique_id' === $type ) {
+			return ''; // Created on submit.
+		}
+		if ( 'reset_button' === $type ) {
+			$align = isset( $field['button_alignment'] ) && in_array( $field['button_alignment'], array( 'left', 'center', 'right' ), true ) ? $field['button_alignment'] : 'left';
+			$el    = ! empty( $field['element_class'] ) ? ' ' . implode( ' ', array_filter( array_map( 'sanitize_html_class', explode( ' ', $field['element_class'] ) ) ) ) : '';
+			return '<div class="formglut-field formglut-field-reset_button' . esc_attr( $container_cls_attr ) . '" style="text-align:' . esc_attr( $align ) . '"' . $conditional_data . '>'
+				. '<button type="reset" class="formglut-reset-btn' . esc_attr( $el ) . '"' . ( ! isset( $field['confirm_reset'] ) || ! empty( $field['confirm_reset'] ) ? ' data-confirm="' . esc_attr__( 'Clear everything you have entered?', 'formglut' ) . '"' : '' ) . '>'
+				. esc_html( ! empty( $field['button_text'] ) ? $field['button_text'] : __( 'Clear form', 'formglut' ) ) . '</button></div>';
+		}
+		if ( 'form_step' === $type ) {
+			// A marker that the front-end script turns into steps with next / previous buttons.
+			return '<div class="formglut-step-break" data-title="' . esc_attr( isset( $field['step_title'] ) ? $field['step_title'] : '' ) . '" data-next="' . esc_attr( ! empty( $field['next_text'] ) ? $field['next_text'] : __( 'Next', 'formglut' ) ) . '" data-prev="' . esc_attr( ! empty( $field['prev_text'] ) ? $field['prev_text'] : __( 'Previous', 'formglut' ) ) . '"></div>';
+		}
 		if ( 'hidden' === $type ) {
 			return $this->render_hidden_field( $field );
 		}
@@ -561,7 +582,7 @@ class FormGlut_Shortcode {
 	 *
 	 * @var string[]
 	 */
-	const STANDARD_TYPES = array( 'text', 'email', 'textarea', 'select', 'multiselect', 'number', 'radio', 'checkbox', 'url', 'phone', 'date', 'name', 'country_select', 'spinner', 'currency', 'percentage', 'time', 'date_range', 'address', 'masked_input', 'password', 'range_slider', 'color_picker' );
+	const STANDARD_TYPES = array( 'text', 'email', 'textarea', 'select', 'multiselect', 'number', 'radio', 'checkbox', 'url', 'phone', 'date', 'name', 'country_select', 'spinner', 'currency', 'percentage', 'time', 'date_range', 'address', 'masked_input', 'password', 'range_slider', 'color_picker', 'file_upload', 'toggle', 'star_rating', 'rich_text', 'math_captcha', 'calculation', 'payment_item', 'stripe_card' );
 
 	/**
 	 * Render one of the general field types. Mirrors FieldTemplate in the form editor
@@ -581,6 +602,10 @@ class FormGlut_Shortcode {
 		$required  = ! empty( $field['required'] );
 		$ph        = isset( $field['placeholder'] ) ? (string) $field['placeholder'] : '';
 		$default   = isset( $field['default_value'] ) ? $field['default_value'] : '';
+		$prefill   = FormGlut_Form::prefill_value( $field );
+		if ( null !== $prefill ) {
+			$default = in_array( $type, array( 'checkbox', 'multiselect' ), true ) ? array_map( 'trim', explode( ',', $prefill ) ) : $prefill;
+		}
 		$defaults  = array_map( 'strval', is_array( $default ) ? $default : ( '' === $default ? array() : array( $default ) ) );
 		$el_class  = trim( 'formglut-input ' . ( isset( $field['element_class'] ) ? implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $field['element_class'] ) ) ) : '' ) );
 		$val_msg   = isset( $field['validation_message'] ) && '' !== $field['validation_message'] ? ' data-validation-message="' . esc_attr( $field['validation_message'] ) . '"' : '';
@@ -611,7 +636,7 @@ class FormGlut_Shortcode {
 
 		$control = $this->standard_control( $field, $type, compact( 'id', 'name', 'ph', 'default', 'defaults', 'el_class', 'val_msg', 'req_attr', 's' ) );
 
-		$classes = 'formglut-field formglut-field-' . $type . ( ! empty( $field['hidden'] ) ? ' formglut-hidden' : '' ) . $extra_classes . ' formglut-label-' . $placement;
+		$classes = 'formglut-field formglut-field-' . $type . ( ! empty( $field['hidden'] ) ? ' formglut-hidden' : '' ) . ( 'calculation' === $type && ! empty( $field['hide_on_form'] ) ? ' formglut-calc-hidden' : '' ) . $extra_classes . ' formglut-label-' . $placement;
 
 		$html  = '<div class="' . esc_attr( $classes ) . '"' . $s['wrapper_style_str'] . $conditional_data . '>';
 		$html .= in_array( $placement, array( 'top', 'left' ), true ) ? $label_html : '';
@@ -624,6 +649,89 @@ class FormGlut_Shortcode {
 		$html .= '</div>';
 
 		return $html;
+	}
+
+	/**
+	 * Data attributes for the live character / word counter.
+	 *
+	 * @param array $field Field config.
+	 * @return string
+	 */
+	private function counter_attrs( $field ) {
+		$words = ! empty( $field['max_words'] ) ? absint( $field['max_words'] ) : 0;
+		$show  = ! isset( $field['show_counter'] ) || ! empty( $field['show_counter'] );
+		return ( $words ? ' data-max-words="' . $words . '"' : '' ) . ( $show ? ' data-counter="1"' : ' data-counter="0"' );
+	}
+
+	/**
+	 * Data attributes (and HTML min / max) for date fields: picker options and blocked days.
+	 *
+	 * @param array $field  Field config.
+	 * @param bool  $is_dt  Date and time.
+	 * @return string
+	 */
+	private function date_attrs( $field, $is_dt ) {
+		$today = wp_date( 'Y-m-d' );
+		$min   = ! empty( $field['min_date'] ) ? $field['min_date'] : '';
+		$max   = ! empty( $field['max_date'] ) ? $field['max_date'] : '';
+		if ( ! empty( $field['disable_past'] ) && ( '' === $min || $min < $today ) ) {
+			$min = $today;
+		}
+		if ( ! empty( $field['disable_future'] ) && ( '' === $max || $max > $today ) ) {
+			$max = $today;
+		}
+		$attrs = '';
+		if ( ! empty( $field['use_picker'] ) ) {
+			$blocked = array_values( array_filter( array_map( 'trim', explode( ',', isset( $field['disabled_dates'] ) ? $field['disabled_dates'] : '' ) ), static function ( $d ) {
+				return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $d );
+			} ) );
+			$attrs .= ' data-picker="date" data-format="' . esc_attr( ! empty( $field['date_format'] ) ? $field['date_format'] : 'Y-m-d' ) . '"'
+				. ' data-first-day="' . esc_attr( isset( $field['first_day'] ) && '' !== $field['first_day'] ? absint( $field['first_day'] ) : 1 ) . '"'
+				. ( $is_dt ? ' data-time="1" data-time24="' . ( ! empty( $field['time_24hr'] ) ? '1' : '0' ) . '"' : '' )
+				. ( $min ? ' data-min="' . esc_attr( $min ) . '"' : '' ) . ( $max ? ' data-max="' . esc_attr( $max ) . '"' : '' )
+				. ( ! empty( $field['disable_weekends'] ) ? ' data-no-weekends="1"' : '' )
+				. ( $blocked ? ' data-disabled="' . esc_attr( implode( ',', $blocked ) ) . '"' : '' )
+				. ' autocomplete="off"';
+		} elseif ( $min !== ( isset( $field['min_date'] ) ? $field['min_date'] : '' ) || $max !== ( isset( $field['max_date'] ) ? $field['max_date'] : '' ) ) {
+			// Native date box: past / future limits become min / max.
+			$attrs .= ( $min && $min !== ( $field['min_date'] ?? '' ) ? ' min="' . esc_attr( $min . ( $is_dt ? 'T00:00' : '' ) ) . '"' : '' )
+				. ( $max && $max !== ( $field['max_date'] ?? '' ) ? ' max="' . esc_attr( $max . ( $is_dt ? 'T23:59' : '' ) ) . '"' : '' );
+		}
+		return $attrs;
+	}
+
+	/**
+	 * Country dial-code dropdown for the phone field.
+	 *
+	 * @param array  $field Field config.
+	 * @param string $name  Input name.
+	 * @param string $id    Input ID.
+	 * @return string
+	 */
+	private function dial_code_select( $field, $name, $id ) {
+		$codes     = FormGlut_Form::dial_codes();
+		$countries = include FORMGLUT_PLUGIN_DIR . 'includes/data/countries.php';
+		$default   = isset( $field['default_country'] ) && isset( $codes[ $field['default_country'] ] ) ? $field['default_country'] : 'US';
+		$top       = array_values( array_intersect( (array) ( isset( $field['preferred_countries'] ) ? $field['preferred_countries'] : array() ), array_keys( $codes ) ) );
+		$flag      = static function ( $iso ) {
+			return mb_chr( 127397 + ord( $iso[0] ), 'UTF-8' ) . mb_chr( 127397 + ord( $iso[1] ), 'UTF-8' );
+		};
+		$option    = static function ( $iso ) use ( $codes, $countries, $default, $flag ) {
+			return '<option value="' . esc_attr( $iso ) . '"' . selected( $iso, $default, false ) . ' data-dial="+' . esc_attr( $codes[ $iso ] ) . '">' . esc_html( $flag( $iso ) . ' ' . ( isset( $countries[ $iso ] ) ? $countries[ $iso ] : $iso ) . ' +' . $codes[ $iso ] ) . '</option>';
+		};
+		$html = '<select class="formglut-dial-code" name="' . esc_attr( $name ) . '_cc" aria-label="' . esc_attr__( 'Country code', 'formglut' ) . '" data-for="' . esc_attr( $id ) . '">';
+		foreach ( $top as $iso ) {
+			$html .= $option( $iso );
+		}
+		if ( $top ) {
+			$html .= '<option disabled>──────────</option>';
+		}
+		foreach ( array_keys( $countries ) as $iso ) {
+			if ( isset( $codes[ $iso ] ) && ! in_array( $iso, $top, true ) ) {
+				$html .= $option( $iso );
+			}
+		}
+		return $html . '</select>';
 	}
 
 	/**
@@ -654,13 +762,14 @@ class FormGlut_Shortcode {
 					. ( ! empty( $field['cols'] ) ? ' cols="' . absint( $field['cols'] ) . '"' : '' )
 					. ( $max ? ' maxlength="' . $max . '"' : '' )
 					. ( $min ? ' minlength="' . $min . '"' : '' )
-					. ( ! empty( $field['enable_rtl'] ) ? ' dir="rtl"' : '' );
+					. ( ! empty( $field['enable_rtl'] ) ? ' dir="rtl"' : '' )
+					. $this->counter_attrs( $field );
 				$style  = $this->merge_style( $s['input_style_str'], 'resize:' . $resize );
 				$input  = '<textarea name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" placeholder="' . esc_attr( $c['ph'] ) . '" class="' . esc_attr( $c['el_class'] ) . '"' . $attrs . $c['req_attr'] . $c['val_msg'] . $style . '>' . esc_textarea( is_array( $c['default'] ) ? '' : $c['default'] ) . '</textarea>';
 				return $this->with_affixes( $field, $input );
 
 			case 'select':
-				$html = '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-select' ) . '"' . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . '>';
+				$html = '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-select' ) . '"' . ( ! empty( $field['searchable'] ) ? ' data-searchable="1"' : '' ) . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . '>';
 				if ( '' !== $c['ph'] ) {
 					$ph_disabled = ! isset( $field['disable_first_option'] ) || false !== $field['disable_first_option'];
 					$html       .= '<option value=""' . ( $ph_disabled ? ' disabled' : '' ) . ( $c['defaults'] ? '' : ' selected' ) . '>' . esc_html( $c['ph'] ) . '</option>';
@@ -700,6 +809,13 @@ class FormGlut_Shortcode {
 						. ( ! empty( $opt['disabled'] ) ? ' disabled data-disabled-by-option="1"' : '' ) . ' />'
 						. '<span>' . esc_html( $opt_label ) . '</span></label>';
 				}
+				if ( ! empty( $field['enable_other'] ) ) {
+					$other_label = ! empty( $field['other_label'] ) ? $field['other_label'] : __( 'Other', 'formglut' );
+					$html       .= '<label class="formglut-choice formglut-choice-other" for="' . esc_attr( $id ) . '_other">'
+						. '<input type="' . ( $is_radio ? 'radio' : 'checkbox' ) . '" name="' . esc_attr( $name ) . ( $is_radio ? '' : '[]' ) . '" id="' . esc_attr( $id ) . '_other" value="__other__"' . ( $is_radio ? $c['req_attr'] : '' ) . ' />'
+						. '<span>' . esc_html( $other_label ) . '</span>'
+						. '<input type="text" class="formglut-other-input" name="' . esc_attr( $name ) . '_other" placeholder="' . esc_attr( ! empty( $field['other_placeholder'] ) ? $field['other_placeholder'] : __( 'Please specify', 'formglut' ) ) . '" aria-label="' . esc_attr( $other_label ) . '" /></label>';
+				}
 				$html .= '</div>';
 				return $html . ( $is_radio ? '' : $this->selection_hint( $field ) );
 
@@ -716,7 +832,8 @@ class FormGlut_Shortcode {
 					? '<button type="button" class="formglut-password-toggle" data-show="' . esc_attr( isset( $field['show_text'] ) && '' !== $field['show_text'] ? $field['show_text'] : __( 'Show', 'formglut' ) ) . '" data-hide="' . esc_attr( isset( $field['hide_text'] ) && '' !== $field['hide_text'] ? $field['hide_text'] : __( 'Hide', 'formglut' ) ) . '">' . esc_html( isset( $field['show_text'] ) && '' !== $field['show_text'] ? $field['show_text'] : __( 'Show', 'formglut' ) ) . '</button>'
 					: '';
 				$meter  = ! empty( $field['enable_strength_meter'] ) ? ' data-strength-meter="1"' : '';
-				$html   = '<div class="formglut-password-wrap"><input type="password" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" placeholder="' . esc_attr( $c['ph'] ) . '" class="' . esc_attr( $c['el_class'] ) . '"' . $attrs . $meter . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . ' />' . $toggle . '</div>';
+				$prule  = FormGlut_Form::field_pattern( $field );
+				$html   = '<div class="formglut-password-wrap"><input type="password"' . ( $prule ? ' pattern="' . esc_attr( $prule['js'] ) . '" data-pattern-message="' . esc_attr( $prule['message'] ) . '"' : '' ) . ' name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" placeholder="' . esc_attr( $c['ph'] ) . '" class="' . esc_attr( $c['el_class'] ) . '"' . $attrs . $meter . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . ' />' . $toggle . '</div>';
 				if ( $meter ) {
 					$html .= '<div class="formglut-strength" data-for="' . esc_attr( $id ) . '"><div class="formglut-strength-bar"><span></span></div><span class="formglut-strength-label">' . esc_html__( 'Password strength', 'formglut' ) . '</span></div>';
 				}
@@ -730,6 +847,114 @@ class FormGlut_Shortcode {
 						. '<div class="formglut-password-wrap"><input type="password" name="' . esc_attr( $name ) . '_confirm" id="' . esc_attr( $id ) . '_confirm" placeholder="' . esc_attr( isset( $field['confirmation_placeholder'] ) ? $field['confirmation_placeholder'] : '' ) . '" class="' . esc_attr( $c['el_class'] ) . '" autocomplete="new-password" data-confirm-of="' . esc_attr( $id ) . '" data-validation-message="' . esc_attr( $conf_err ) . '"' . $c['req_attr'] . $s['input_style_str'] . ' />' . $toggle . '</div></div>';
 				}
 				return $html;
+
+			case 'payment_item':
+				$cur = FormGlut_Payments::currency();
+				if ( 'custom' === ( $field['item_type'] ?? 'fixed' ) ) {
+					$min = (float) ( $field['min_amount'] ?? 0 );
+					return '<div class="formglut-input-group"><span class="formglut-input-prefix">' . esc_html( $cur['symbol'] ) . '</span>'
+						. '<input type="number" inputmode="decimal" step="' . ( $cur['decimals'] ? '0.01' : '1' ) . '" min="' . esc_attr( $min > 0 ? $min : 0 ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-pay-item' ) . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" placeholder="' . esc_attr( '' !== $c['ph'] ? $c['ph'] : number_format( max( $min, 0 ), $cur['decimals'] ) ) . '"' . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . ' /></div>';
+				}
+				$price = round( max( 0, (float) ( $field['amount'] ?? 0 ) ), 2 );
+				return '<div class="formglut-pay-price">' . esc_html( $cur['symbol'] . number_format_i18n( $price, $cur['decimals'] ) ) . '</div>'
+					. '<input type="hidden" class="formglut-pay-item" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr( $price ) . '" />';
+
+			case 'stripe_card':
+				$keys = FormGlut_Payments::keys();
+				$cur  = FormGlut_Payments::currency();
+				if ( '' === $keys['publishable'] || '' === $keys['secret'] ) {
+					return '<div class="formglut-captcha-notice">' . esc_html( current_user_can( 'manage_options' ) ? __( 'Add your Stripe keys in FormGlut → Global Settings → Payments to accept payments.', 'formglut' ) : __( 'Online payment is not available right now.', 'formglut' ) ) . '</div>';
+				}
+				wp_enqueue_script( 'formglut-stripe-js', 'https://js.stripe.com/v3/', array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Stripe requires the unversioned URL.
+				return '<div class="formglut-stripe" data-pk="' . esc_attr( $keys['publishable'] ) . '" data-currency="' . esc_attr( strtolower( $cur['code'] ) ) . '" data-decimals="' . esc_attr( $cur['decimals'] ) . '" data-symbol="' . esc_attr( $cur['symbol'] ) . '"'
+					. ' data-source="' . esc_attr( 'calc' === ( $field['amount_source'] ?? 'items' ) ? 'calc' : 'items' ) . '" data-amount-field="' . esc_attr( $field['amount_field'] ?? '' ) . '">'
+					. ( ! isset( $field['show_total'] ) || ! empty( $field['show_total'] ) ? '<div class="formglut-stripe-total">' . esc_html__( 'Total', 'formglut' ) . ' <strong class="formglut-stripe-amount">' . esc_html( $cur['symbol'] . number_format_i18n( 0, $cur['decimals'] ) ) . '</strong></div>' : '' )
+					. '<div class="formglut-stripe-element"></div>'
+					. ( 'test' === $keys['mode'] ? '<div class="formglut-stripe-test">' . esc_html__( 'Test mode: use card 4242 4242 4242 4242, any future date and any CVC.', 'formglut' ) . '</div>' : '' )
+					. '</div>';
+
+			case 'calculation':
+				// Describe the fields the formula uses, so the browser can show the result live.
+				$refs = array();
+				if ( preg_match_all( '/\{field:([A-Za-z0-9_\-]+)\}/', isset( $field['formula'] ) ? (string) $field['formula'] : '', $m ) ) {
+					foreach ( FormGlut_Form::flatten_fields( FormGlut_Form::get( $this->current_form_id )->fields ) as $ref ) {
+						if ( empty( $ref['id'] ) || ! in_array( $ref['id'], $m[1], true ) ) {
+							continue;
+						}
+						$calc_map = array();
+						foreach ( ( isset( $ref['options'] ) && is_array( $ref['options'] ) ? $ref['options'] : array() ) as $opt ) {
+							$key              = isset( $opt['value'] ) && '' !== $opt['value'] ? (string) $opt['value'] : ( isset( $opt['label'] ) ? (string) $opt['label'] : '' );
+							$calc_map[ $key ] = isset( $opt['calc_value'] ) && '' !== $opt['calc_value'] ? (float) $opt['calc_value'] : ( is_numeric( $key ) ? (float) $key : 0 );
+						}
+						$refs[ $ref['id'] ] = array(
+							'name' => ! empty( $ref['name_attribute'] ) ? $ref['name_attribute'] : $ref['id'],
+							'type' => $ref['type'],
+							'map'  => $calc_map ? $calc_map : null,
+							'on'   => 'toggle' === $ref['type'] ? ( ! empty( $ref['on_value'] ) ? $ref['on_value'] : 'Yes' ) : null,
+						);
+					}
+				}
+				$decimals = isset( $field['decimals'] ) && '' !== $field['decimals'] ? absint( $field['decimals'] ) : 2;
+				return '<input type="text" readonly tabindex="-1" class="' . esc_attr( $c['el_class'] . ' formglut-calc' ) . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr( ( $field['calc_prefix'] ?? '' ) . number_format( 0, $decimals ) . ( $field['calc_suffix'] ?? '' ) ) . '"'
+					. ' data-formula="' . esc_attr( isset( $field['formula'] ) ? $field['formula'] : '' ) . '" data-decimals="' . $decimals . '" data-prefix="' . esc_attr( $field['calc_prefix'] ?? '' ) . '" data-suffix="' . esc_attr( $field['calc_suffix'] ?? '' ) . '"'
+					. ' data-refs="' . esc_attr( wp_json_encode( (object) $refs ) ) . '" aria-live="polite"' . $s['input_style_str'] . ' />';
+
+			case 'toggle':
+				$on  = isset( $field['on_value'] ) && '' !== $field['on_value'] ? $field['on_value'] : __( 'Yes', 'formglut' );
+				$off = isset( $field['off_value'] ) ? $field['off_value'] : __( 'No', 'formglut' );
+				return '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $off ) . '" />'
+					. '<label class="formglut-toggle"><input type="checkbox" class="' . esc_attr( $c['el_class'] . ' formglut-toggle-input' ) . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr( $on ) . '"' . ( ! empty( $field['default_on'] ) ? ' checked' : '' ) . $c['req_attr'] . $c['val_msg'] . ' />'
+					. '<span class="formglut-toggle-track" aria-hidden="true"></span><span class="formglut-toggle-text">' . esc_html( isset( $field['toggle_text'] ) ? $field['toggle_text'] : '' ) . '</span></label>';
+
+			case 'star_rating':
+				$max   = max( 3, min( 10, absint( isset( $field['max_stars'] ) ? $field['max_stars'] : 5 ) ) );
+				$words = ! empty( $field['show_labels'] ) ? array_map( 'trim', explode( ',', isset( $field['rating_labels'] ) ? $field['rating_labels'] : '' ) ) : array();
+				$size  = isset( $field['star_size'] ) && in_array( $field['star_size'], array( 'small', 'medium', 'large' ), true ) ? $field['star_size'] : 'medium';
+				$color = ! empty( $field['star_color'] ) ? sanitize_hex_color( $field['star_color'] ) : '';
+				$html  = '<div class="formglut-stars formglut-stars-' . $size . '" role="radiogroup"' . ( $color ? ' style="--formglut-star:' . esc_attr( $color ) . '"' : '' ) . '>';
+				for ( $i = $max; $i >= 1; $i-- ) {
+					$word  = isset( $words[ $i - 1 ] ) ? $words[ $i - 1 ] : '';
+					/* translators: 1: rating, 2: maximum */
+					$aria  = $word ? $word : sprintf( __( '%1$d of %2$d stars', 'formglut' ), $i, $max );
+					$html .= '<input type="radio" class="formglut-star-input" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id . '_' . $i ) . '" value="' . $i . '"' . ( (string) $i === (string) $c['default'] ? ' checked' : '' ) . ( $c['req_attr'] && $i === $max ? ' required' : '' ) . $c['val_msg'] . ' data-word="' . esc_attr( $word ) . '" />'
+						. '<label for="' . esc_attr( $id . '_' . $i ) . '" title="' . esc_attr( $aria ) . '"><span class="screen-reader-text">' . esc_html( $aria ) . '</span>★</label>';
+				}
+				return $html . '</div>' . ( $words ? '<div class="formglut-star-word" aria-live="polite"></div>' : '' );
+
+			case 'rich_text':
+				$full  = isset( $field['toolbar'] ) && 'full' === $field['toolbar'];
+				$tools = $full ? array( 'bold' => 'B', 'italic' => 'I', 'underline' => 'U', 'insertUnorderedList' => '•', 'insertOrderedList' => '1.', 'createLink' => '🔗', 'formatBlock' => '❝' ) : array( 'bold' => 'B', 'italic' => 'I', 'insertUnorderedList' => '•', 'insertOrderedList' => '1.' );
+				$bar   = '';
+				foreach ( $tools as $cmd => $glyph ) {
+					$bar .= '<button type="button" data-cmd="' . esc_attr( $cmd ) . '" aria-label="' . esc_attr( $cmd ) . '">' . esc_html( $glyph ) . '</button>';
+				}
+				$height = max( 80, absint( isset( $field['editor_height'] ) ? $field['editor_height'] : 160 ) );
+				$maxlen = ! empty( $field['max_length'] ) ? ' data-max-length="' . absint( $field['max_length'] ) . '"' : '';
+				return '<div class="formglut-richtext"' . $s['input_style_str'] . '><div class="formglut-richtext-bar" role="toolbar">' . $bar . '</div>'
+					. '<div class="formglut-richtext-area" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="' . esc_attr( $c['ph'] ) . '" style="min-height:' . ( $height - 40 ) . 'px"' . $maxlen . '>' . wp_kses_post( is_array( $c['default'] ) ? '' : (string) $c['default'] ) . '</div>'
+					. '<textarea class="' . esc_attr( $c['el_class'] . ' formglut-richtext-value' ) . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '"' . $c['req_attr'] . $c['val_msg'] . ' hidden>' . esc_textarea( is_array( $c['default'] ) ? '' : (string) $c['default'] ) . '</textarea></div>';
+
+			case 'math_captcha':
+				$q = FormGlut_Form::math_question( $field, $this->current_form_id );
+				return '<div class="formglut-math"><span class="formglut-math-q">' . esc_html( $q['text'] ) . ' =</span>'
+					. '<input type="text" inputmode="numeric" autocomplete="off" class="' . esc_attr( $c['el_class'] ) . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" required' . $c['val_msg'] . $s['input_style_str'] . ' />'
+					. '<input type="hidden" name="' . esc_attr( $name ) . '_mc" value="' . esc_attr( $q['token'] ) . '" /></div>';
+
+			case 'file_upload':
+				$rules    = FormGlut_Uploads::rules( $field );
+				$accept   = implode( ',', array_map( static function ( $ext ) {
+					return '.' . $ext;
+				}, $rules['types'] ) );
+				$multi    = $rules['multiple'];
+				$btn_text = ! empty( $field['button_text'] ) ? $field['button_text'] : __( 'Choose file', 'formglut' );
+				$hint     = strtoupper( implode( ', ', $rules['types'] ) ) . ' · ' . sprintf( /* translators: %s: size in MB */ __( 'max %s MB', 'formglut' ), $rules['max_mb'] ) . ( $multi ? ' · ' . sprintf( /* translators: %d: number of files */ __( 'up to %d files', 'formglut' ), $rules['max_files'] ) : '' );
+				return '<div class="formglut-upload"' . $s['input_style_str'] . '>'
+					. '<input type="file" class="' . esc_attr( $c['el_class'] . ' formglut-file-input' ) . '" name="' . esc_attr( $name ) . '[]" id="' . esc_attr( $id ) . '" accept="' . esc_attr( $accept ) . '"'
+					. ( $multi ? ' multiple data-max-files="' . esc_attr( $rules['max_files'] ) . '"' : '' )
+					. ' data-max-size="' . esc_attr( $rules['max_mb'] * MB_IN_BYTES ) . '" data-types="' . esc_attr( implode( ',', $rules['types'] ) ) . '"' . $c['req_attr'] . $c['val_msg'] . ' />'
+					. '<label for="' . esc_attr( $id ) . '" class="formglut-upload-btn">' . esc_html( $btn_text ) . '</label>'
+					. '<span class="formglut-upload-hint"><span class="formglut-upload-names">' . esc_html( $multi ? __( 'or drop files here', 'formglut' ) : __( 'or drop a file here', 'formglut' ) ) . '</span><small>' . esc_html( $hint ) . '</small></span>'
+					. '</div>';
 
 			case 'range_slider':
 				$min   = isset( $field['min'] ) && is_numeric( $field['min'] ) ? $field['min'] + 0 : 0;
@@ -764,7 +989,7 @@ class FormGlut_Shortcode {
 
 
 			case 'country_select':
-				return '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-select' ) . '"' . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . '>'
+				return '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-select' ) . '"' . ( ! empty( $field['searchable'] ) ? ' data-searchable="1"' : '' ) . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . '>'
 					. '<option value="">' . esc_html( '' !== $c['ph'] ? $c['ph'] : __( 'Select a country', 'formglut' ) ) . '</option>'
 					. $this->country_options( $field ) . '</select>';
 
@@ -802,6 +1027,11 @@ class FormGlut_Shortcode {
 				$attrs = ( ! empty( $field['min_time'] ) ? ' min="' . esc_attr( $field['min_time'] ) . '"' : '' )
 					. ( ! empty( $field['max_time'] ) ? ' max="' . esc_attr( $field['max_time'] ) . '"' : '' )
 					. ( $inc ? ' step="' . ( $inc * 60 ) . '"' : '' );
+				$tfmt  = isset( $field['time_format'] ) ? (string) $field['time_format'] : '';
+				if ( in_array( $tfmt, array( '12', '24' ), true ) ) {
+					// Calendar-style time picker so 12 / 24-hour display is the same in every browser.
+					$attrs .= ' data-picker="time" data-time24="' . ( '24' === $tfmt ? '1' : '0' ) . '"' . ( $inc ? ' data-minute-step="' . $inc . '"' : '' );
+				}
 				$value = is_array( $c['default'] ) ? '' : (string) $c['default'];
 				return '<input type="time" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr( $value ) . '" class="' . esc_attr( $c['el_class'] ) . '"' . $attrs . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . ' />';
 
@@ -826,6 +1056,10 @@ class FormGlut_Shortcode {
 				if ( ! empty( $field['autocomplete_attribute'] ) ) {
 					$attrs .= ' autocomplete="' . esc_attr( $field['autocomplete_attribute'] ) . '"';
 				}
+				$rule = FormGlut_Form::field_pattern( $field );
+				if ( $rule ) {
+					$attrs .= ' pattern="' . esc_attr( $rule['js'] ) . '" data-pattern-message="' . esc_attr( $rule['message'] ) . '"';
+				}
 				if ( 'text' === $type && ! empty( $field['character_limit'] ) ) {
 					$attrs .= ' maxlength="' . absint( $field['character_limit'] ) . '"';
 				}
@@ -835,7 +1069,19 @@ class FormGlut_Shortcode {
 						. $this->num_attr( 'step', isset( $field['step'] ) ? $field['step'] : '' )
 						. ( ! empty( $field['read_only'] ) ? ' readonly' : '' );
 				}
+				if ( in_array( $type, array( 'number' ), true ) && isset( $field['decimals'] ) && '' !== $field['decimals'] && empty( $field['step'] ) ) {
+					$attrs .= ' step="' . esc_attr( 0 === absint( $field['decimals'] ) ? '1' : '0.' . str_repeat( '0', absint( $field['decimals'] ) - 1 ) . '1' ) . '"';
+				}
+				if ( 'text' === $type ) {
+					$attrs .= $this->counter_attrs( $field );
+				}
 				if ( 'date' === $type ) {
+					$attrs .= $this->date_attrs( $field, 'datetime-local' === $input_type );
+					if ( ! empty( $field['use_picker'] ) ) {
+						$input_type = 'text';
+					}
+				}
+				if ( 'date' === $type && 'text' !== $input_type ) {
 					$is_dt  = 'datetime-local' === $input_type;
 					$attrs .= ( ! empty( $field['min_date'] ) ? ' min="' . esc_attr( $field['min_date'] . ( $is_dt ? 'T00:00' : '' ) ) . '"' : '' )
 						. ( ! empty( $field['max_date'] ) ? ' max="' . esc_attr( $field['max_date'] . ( $is_dt ? 'T23:59' : '' ) ) . '"' : '' );
@@ -860,7 +1106,12 @@ class FormGlut_Shortcode {
 
 				$value = is_array( $c['default'] ) ? '' : (string) $c['default'];
 				$input = '<input type="' . $input_type . '" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '"' . ( '' !== $ph ? ' placeholder="' . esc_attr( $ph ) . '"' : '' ) . ' value="' . esc_attr( $value ) . '" class="' . esc_attr( $c['el_class'] ) . '"' . $attrs . $c['req_attr'] . $c['val_msg'] . $s['input_style_str'] . ' />';
-				$html  = $this->with_affixes( $field, $input );
+				if ( 'phone' === $type && ! empty( $field['show_country_code'] ) ) {
+					$input = $this->dial_code_select( $field, $name, $id ) . $input;
+					$html  = '<div class="formglut-phone-cc">' . $this->with_affixes( $field, $input ) . '</div>';
+				} else {
+					$html = $this->with_affixes( $field, $input );
+				}
 
 				if ( 'email' === $type && ! empty( $field['confirm_email'] ) ) {
 					$confirm_label = isset( $field['confirm_label'] ) && '' !== $field['confirm_label'] ? $field['confirm_label'] : __( 'Confirm Email Address', 'formglut' );
@@ -890,10 +1141,11 @@ class FormGlut_Shortcode {
 		};
 
 		if ( 'name' === $type ) {
-			$parts = array();
+			$parts = array( 'prefix' => array( $get( 'prefix_label', __( 'Title', 'formglut' ) ), '', $shown( 'show_prefix', false ), false ) );
 			foreach ( array( 'first' => true, 'middle' => false, 'last' => true ) as $p => $default ) {
 				$parts[ $p ] = array( $get( $p . '_name_label' ), $get( $p . '_name_placeholder' ), $shown( 'show_' . $p . '_name', $default ), $req && $shown( 'require_' . $p . '_name', $default ) );
 			}
+			$parts['suffix'] = array( $get( 'suffix_label', __( 'Suffix', 'formglut' ) ), 'Jr, Sr, III', $shown( 'show_suffix', false ), false );
 			return $parts;
 		}
 
@@ -950,14 +1202,21 @@ class FormGlut_Shortcode {
 			$req      = $sub_req ? ' required' : '';
 			$first    = false;
 
-			if ( 'country' === $key ) {
+			if ( 'name' === $type && 'prefix' === $key ) {
+				$titles = array_filter( array_map( 'trim', explode( ',', ! empty( $field['prefix_options'] ) ? $field['prefix_options'] : 'Mr, Mrs, Ms, Mx, Dr' ) ) );
+				$input  = '<select name="' . esc_attr( $sub_name ) . '" id="' . esc_attr( $sub_id ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-select' ) . '"' . $c['s']['input_style_str'] . '><option value="">—</option>';
+				foreach ( $titles as $t ) {
+					$input .= '<option value="' . esc_attr( $t ) . '">' . esc_html( $t ) . '</option>';
+				}
+				$input .= '</select>';
+			} elseif ( 'country' === $key ) {
 				$input = '<select name="' . esc_attr( $sub_name ) . '" id="' . esc_attr( $sub_id ) . '" class="' . esc_attr( $c['el_class'] . ' formglut-select' ) . '"' . $req . $c['s']['input_style_str'] . '><option value="">' . esc_html__( 'Select a country', 'formglut' ) . '</option>' . $this->country_options( array() ) . '</select>';
 			} else {
 				$input = '<input type="' . ( 'date_range' === $type ? 'date' : 'text' ) . '" name="' . esc_attr( $sub_name ) . '" id="' . esc_attr( $sub_id ) . '"' . ( '' !== $sub_ph ? ' placeholder="' . esc_attr( $sub_ph ) . '"' : '' ) . ' class="' . esc_attr( $c['el_class'] ) . '"' . $date_attrs . $req . $c['val_msg'] . $c['s']['input_style_str'] . ' />';
 			}
 
 			$full  = in_array( $key, array( 'street1', 'street2' ), true ) ? ' formglut-subfield-full' : '';
-			$html .= '<div class="formglut-subfield' . $full . '">'
+			$html .= '<div class="formglut-subfield formglut-subfield-' . esc_attr( $key ) . $full . '">'
 				. ( '' !== $sub_label ? '<label class="formglut-sublabel" for="' . esc_attr( $sub_id ) . '">' . esc_html( $sub_label ) . '</label>' : '' )
 				. $input . '</div>';
 		}
@@ -1109,9 +1368,9 @@ class FormGlut_Shortcode {
 		$id    = isset( $field['id'] ) ? sanitize_text_field( $field['id'] ) : '';
 		$name  = isset( $field['name_attribute'] ) && '' !== $field['name_attribute'] ? sanitize_text_field( $field['name_attribute'] ) : $id;
 		$value = isset( $field['default_value'] ) && ! is_array( $field['default_value'] ) ? (string) $field['default_value'] : '';
-		$param = isset( $field['param_populate'] ) ? sanitize_key( $field['param_populate'] ) : '';
-		if ( $param && isset( $_GET[ $param ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only prefill.
-			$value = sanitize_text_field( wp_unslash( $_GET[ $param ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$prefill = FormGlut_Form::prefill_value( $field );
+		if ( null !== $prefill ) {
+			$value = $prefill;
 		}
 		return '<input type="hidden" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="' . esc_attr( $value ) . '" />';
 	}

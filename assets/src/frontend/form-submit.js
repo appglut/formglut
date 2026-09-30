@@ -9,6 +9,11 @@ import { __ } from '@wordpress/i18n';
 import './formglut-frontend.css';
 import { initInputMasks } from './input-mask.js';
 import './conditional-logic.js';
+import { initSteps, showStepOf, resetSteps, initUploads, checkFiles } from './steps-uploads.js';
+import { initExtraFields } from './fields-extra.js';
+import { initPickers, initSearchable, initCounters } from './field-options.js';
+import { initCalculations } from './calc.js';
+import { initPayments, payBeforeSubmit } from './payments.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize input masks for all masked fields
@@ -16,107 +21,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.formglut-form').forEach(form => {
     form.addEventListener('submit', handleSubmit);
-    initCharacterCount(form);
+    initCounters(form);
+    initPickers(form);
+    initSearchable(form);
+    initCalculations(form);
+    initPayments(form);
+    initUploads(form);
+    initExtraFields(form);
+    initSteps(form, validateScope);
   });
 });
 
+/** Show an error under a field and link it to the input for screen readers. */
+function markInvalid(input, message) {
+  const field = input.closest('.formglut-field');
+  const errEl = document.createElement('div');
+  errEl.className = 'formglut-field-error';
+  errEl.id = (input.id || input.name || 'formglut') + '-error';
+  errEl.textContent = message;
+  input.classList.add('formglut-input-error');
+  input.setAttribute('aria-invalid', 'true');
+  input.setAttribute('aria-describedby', errEl.id);
+  (field || input.parentElement)?.appendChild(errEl);
+}
+
 /**
- * Initialize character count for inputs with maxlength/minlength.
+ * Validate the fields inside `scope` (the whole form, or one step). Marks invalid fields and
+ * returns the invalid inputs. Values of hidden fields are cleared so they are not sent.
  */
-function initCharacterCount(form) {
-  form.querySelectorAll('.formglut-input[maxlength], .formglut-input[minlength], textarea[maxlength], textarea[minlength]').forEach(input => {
-    const maxLength = parseInt(input.getAttribute('maxlength')) || 0;
-    const minLength = parseInt(input.getAttribute('minlength')) || 0;
-
-    if (!maxLength && !minLength) return;
-
+function validateScope(scope) {
+  const validationErrors = [];
+  scope.querySelectorAll('.formglut-input, .formglut-consent-input, .formglut-choice input[type="radio"][required], .formglut-star-input[required]').forEach(input => {
+    // Skip validation for conditionally hidden fields
     const field = input.closest('.formglut-field');
-    if (!field) return;
-
-    // Create wrapper for counter and warning
-    const counterWrapper = document.createElement('div');
-    counterWrapper.className = 'formglut-char-counter-wrapper';
-    counterWrapper.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 4px;';
-
-    // Create character count element
-    const counterEl = document.createElement('span');
-    counterEl.className = 'formglut-char-counter';
-    counterEl.textContent = `Input limit is ${maxLength}`;
-    counterEl.style.cssText = 'font-size: 12px; color: #64748b;';
-
-    // Create warning message element
-    const warningEl = document.createElement('span');
-    warningEl.className = 'formglut-char-warning';
-    warningEl.textContent = '';
-    warningEl.style.cssText = 'font-size: 12px; color: #dc2626; font-weight: 500;';
-
-    counterWrapper.appendChild(counterEl);
-    counterWrapper.appendChild(warningEl);
-
-    // Find input-group and add counter after it
-    const inputGroup = input.closest('.formglut-input-group');
-    if (inputGroup && inputGroup.parentElement) {
-      inputGroup.parentElement.insertBefore(counterWrapper, inputGroup.nextSibling);
-    } else {
-      field.appendChild(counterWrapper);
+    if (field && (field.classList.contains('formglut-hidden') || field.classList.contains('formglut-conditional-hidden') || field.style.display === 'none')) {
+      // Clear any value from hidden fields before submission
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        input.checked = false;
+      } else {
+        input.value = '';
+      }
+      return;
     }
 
-    // Update count on input
-    const updateCount = () => {
-      const length = input.value.length;
+    // Email confirmation must match its primary field.
+    if (input.dataset.confirmOf) {
+      const primary = document.getElementById(input.dataset.confirmOf);
+      input.setCustomValidity(primary && primary.value !== input.value ? (input.dataset.validationMessage || __( 'Email addresses do not match.', 'formglut' )) : '');
+    }
 
-      // Build counter text based on min/max length
-      let counterText = '';
-      if (length > 0) {
-        counterText = 'Typing';
-      } else {
-        counterText = 'Input';
-      }
+    // Files: size, type and count limits.
+    if (input.type === 'file') checkFiles(input);
 
-      if (maxLength && minLength) {
-        counterText += ` limit is ${minLength}-${maxLength}`;
-      } else if (maxLength) {
-        counterText += ` limit is ${maxLength}`;
-      } else if (minLength) {
-        counterText += ` minimum is ${minLength}`;
-      }
-      counterEl.textContent = counterText;
-
-      // Calculate remaining for max length
-      const remaining = maxLength ? maxLength - length : 0;
-      const minMet = minLength ? length >= minLength : true;
-
-      // Update warning based on validation state
-      if (maxLength && remaining <= 0) {
-        counterEl.style.color = '#dc2626';
-        counterEl.style.fontWeight = '600';
-        warningEl.textContent = `Character limit reached!`;
-        input.classList.add('formglut-input-error');
-      } else if (minLength && !minMet && length > 0) {
-        const needed = minLength - length;
-        counterEl.style.color = '#f59e0b';
-        counterEl.style.fontWeight = '500';
-        warningEl.textContent = `${needed} more character${needed !== 1 ? 's' : ''} needed`;
-        input.classList.add('formglut-input-error');
-      } else if (maxLength && remaining <= 5 && remaining > 0) {
-        counterEl.style.color = '#f59e0b';
-        counterEl.style.fontWeight = '500';
-        warningEl.textContent = `${remaining} character${remaining !== 1 ? 's' : ''} remaining`;
-        input.classList.remove('formglut-input-error');
-      } else {
-        counterEl.style.color = '#64748b';
-        counterEl.style.fontWeight = '400';
-        warningEl.textContent = '';
-        input.classList.remove('formglut-input-error');
-      }
-    };
-
-    input.addEventListener('input', updateCount);
-    input.addEventListener('blur', updateCount);
-
-    // Initial count
-    updateCount();
+    // Custom pattern has its own message.
+    const msg = (input.validity?.patternMismatch && input.dataset.patternMessage) || (input.type === 'file' && input.validationMessage && input.files?.length ? input.validationMessage : '') || input.dataset.validationMessage || '';
+    if (!input.checkValidity() && !field?.querySelector('.formglut-field-error')) {
+      markInvalid(input, msg || input.validationMessage);
+      validationErrors.push(input);
+    }
   });
+  return validationErrors;
 }
 
 async function handleSubmit(e) {
@@ -138,40 +102,12 @@ async function handleSubmit(e) {
 
   // Clear previous field errors.
   form.querySelectorAll('.formglut-field-error').forEach(el => el.remove());
-  form.querySelectorAll('.formglut-input-error').forEach(el => el.classList.remove('formglut-input-error'));
+  form.querySelectorAll('.formglut-input-error').forEach(el => { el.classList.remove('formglut-input-error'); el.removeAttribute('aria-invalid'); el.removeAttribute('aria-describedby'); });
 
   // Client-side validation.
-  const validationErrors = [];
-  form.querySelectorAll('.formglut-input, .formglut-consent-input, .formglut-choice input[type="radio"][required]').forEach(input => {
-    // Skip validation for conditionally hidden fields
-    const field = input.closest('.formglut-field');
-    if (field && (field.classList.contains('formglut-hidden') || field.classList.contains('formglut-conditional-hidden') || field.style.display === 'none')) {
-      // Clear any value from hidden fields before submission
-      if (input.type === 'checkbox' || input.type === 'radio') {
-        input.checked = false;
-      } else {
-        input.value = '';
-      }
-      return;
-    }
-
-    // Email confirmation must match its primary field.
-    if (input.dataset.confirmOf) {
-      const primary = document.getElementById(input.dataset.confirmOf);
-      input.setCustomValidity(primary && primary.value !== input.value ? (input.dataset.validationMessage || __( 'Email addresses do not match.', 'formglut' )) : '');
-    }
-
-    const msg = input.dataset.validationMessage || '';
-    if (!input.checkValidity() && !field?.querySelector('.formglut-field-error')) {
-      const errEl = document.createElement('div');
-      errEl.className = 'formglut-field-error';
-      errEl.textContent = msg || input.validationMessage;
-      input.classList.add('formglut-input-error');
-      input.closest('.formglut-field')?.appendChild(errEl);
-      validationErrors.push(input);
-    }
-  });
+  const validationErrors = validateScope(form);
   if (validationErrors.length) {
+    showStepOf(form, validationErrors[0]);
     validationErrors[0].focus();
     showError(errorEl, __( 'Please fix the errors above.', 'formglut' ));
     return;
@@ -226,20 +162,24 @@ async function handleSubmit(e) {
       }
     }
 
-    const response = await fetch(ajax_url, {
+    // Card payment first (if the form takes one); the entry is saved on the final request.
+    const pay = await payBeforeSubmit(form, formData, ajax_url, (msg) => showError(errorEl, msg));
+    if (pay === false) return;
+    if (pay.id) formData.set('formglut_payment_intent', pay.id);
+
+    const result = pay.result || await (await fetch(ajax_url, {
       method: 'POST',
       body: formData,
       credentials: 'same-origin',
-    });
-
-    const result = await response.json();
+    })).json();
 
     if (result.success) {
       // Per-form confirmation settings come from the server.
       const conf = result.data?.confirmation || {};
+      form.dispatchEvent(new CustomEvent('formglut:submitted', { bubbles: true, detail: { formId: Number(form.dataset.formId), entryId: result.data?.entry_id || 0 } }));
       const afterSubmit = conf.after_submit || 'reset';
       showSuccess(successEl, result.data?.message || __( 'Thank you for your submission!', 'formglut' ), conf.scroll !== false);
-      if (afterSubmit !== 'keep') form.reset();
+      if (afterSubmit !== 'keep') { form.reset(); resetSteps(form); }
 
       // Hide the fields and button, leaving only the confirmation message.
       if (afterSubmit === 'hide') {
@@ -265,14 +205,10 @@ async function handleSubmit(e) {
       if (data.errors && typeof data.errors === 'object') {
         Object.entries(data.errors).forEach(([fieldId, msg]) => {
           const input = form.querySelector(`[name="${fieldId}"], [name="${fieldId}[]"]`) || document.getElementById(fieldId);
-          if (input) {
-            input.classList.add('formglut-input-error');
-            const errEl = document.createElement('div');
-            errEl.className = 'formglut-field-error';
-            errEl.textContent = msg;
-            input.closest('.formglut-field')?.appendChild(errEl);
-          }
+          if (input) markInvalid(input, msg);
         });
+        const firstBad = form.querySelector('.formglut-input-error');
+        if (firstBad) showStepOf(form, firstBad);
         showError(errorEl, data.message || __( 'Please fix the errors above.', 'formglut' ));
       } else {
         showError(errorEl, data.message || __( 'Submission failed. Please try again.', 'formglut' ));

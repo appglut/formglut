@@ -503,3 +503,122 @@
 
 .formglut-custom-submit:disabled { opacity: .7; cursor: default; }
 .formglut-captcha-notice { padding: 8px 12px; border-radius: 8px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; font-size: 13px; }
+
+/* ── File upload ─────────────────────────────────────────────────── */
+.formglut-upload { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px; border: 1.5px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; transition: border-color .15s, background .15s; }
+.formglut-upload.is-drag, .formglut-upload:focus-within { border-color: #e94560; background: #fff5f7; }
+.formglut-upload.has-files { border-style: solid; }
+.formglut-upload .formglut-file-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; padding: 0 !important; border: 0 !important; }
+.formglut-upload-btn { position: relative; z-index: 0; padding: 7px 14px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap; pointer-events: none; }
+.formglut-upload-hint { display: flex; flex-direction: column; min-width: 0; font-size: 13px; color: #64748b; pointer-events: none; }
+.formglut-upload-names { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.formglut-upload-hint small { font-size: 11.5px; color: #94a3b8; }
+.formglut-upload:has(.formglut-input-error) { border-color: #ef4444; }
+
+/* ── Multi-step ──────────────────────────────────────────────────── */
+.formglut-step[hidden] { display: none !important; }
+.formglut-step-nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 18px; }
+.formglut-step-nav .formglut-step-next { margin-left: auto; }
+.formglut-step-nav.has-submit .formglut-form-actions { margin: 0 0 0 auto; }
+.formglut-step-prev, .formglut-step-next { border: 0; border-radius: 8px; padding: 10px 20px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.formglut-step-next { background: #e94560; color: #fff; }
+.formglut-step-prev { background: #f1f5f9; color: #334155; }
+.formglut-step-next:hover { opacity: .9; }
+.formglut-step-prev:hover { background: #e2e8f0; }
+.formglut-progress { margin: 0 0 22px; }
+.formglut-progress-steps ol { display: flex; list-style: none; margin: 0; padding: 0; gap: 8px; }
+.formglut-progress-steps li { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #94a3b8; min-width: 0; }
+.formglut-progress-steps li::after { content: ""; flex: 1; height: 2px; background: #e2e8f0; border-radius: 2px; }
+.formglut-progress-steps li:last-child { flex: 0 0 auto; }
+.formglut-progress-steps li:last-child::after { display: none; }
+.formglut-progress-steps .num { width: 26px; height: 26px; flex: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; background: #f1f5f9; color: #64748b; }
+.formglut-progress-steps .txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.formglut-progress-steps li.active { color: #0f172a; font-weight: 600; }
+.formglut-progress-steps li.active .num { background: #e94560; color: #fff; }
+.formglut-progress-steps li.done .num { background: #fde2e7; color: #e94560; }
+.formglut-progress-steps li.done::after { background: #e94560; }
+.formglut-progress-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #334155; }
+.formglut-progress-title { font-weight: 600; }
+.formglut-progress-count { color: #94a3b8; }
+.formglut-progress-track { height: 6px; background: #f1f5f9; border-radius: 6px; overflow: hidden; }
+.formglut-progress-track span { display: block; height: 100%; background: #e94560; border-radius: 6px; transition: width .25s; }
+@media (max-width: 520px) { .formglut-progress-steps .txt { display: none; } }
+
+/* ── Toggle ──────────────────────────────────────────────────────── */
+.formglut-toggle { position: relative; display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; }
+.formglut-toggle .formglut-toggle-input { position: absolute !important; opacity: 0; width: 40px !important; height: 22px; margin: 0; padding: 0 !important; }
+.formglut-toggle-track { position: relative; width: 40px; height: 22px; border-radius: 999px; background: #cbd5e1; flex: none; transition: background .15s; }
+.formglut-toggle-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.formglut-toggle-input:checked + .formglut-toggle-track { background: #e94560; }
+.formglut-toggle-input:checked + .formglut-toggle-track::after { transform: translateX(18px); }
+.formglut-toggle-input:focus-visible + .formglut-toggle-track { outline: 2px solid #e94560; outline-offset: 2px; }
+.formglut-toggle-input.formglut-input-error + .formglut-toggle-track { box-shadow: 0 0 0 2px #ef4444; }
+
+/* ── Star rating ─────────────────────────────────────────────────── */
+.formglut-stars { --formglut-star: #f59e0b; display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+.formglut-stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.formglut-stars label { color: #e2e8f0; cursor: pointer; line-height: 1; transition: color .1s, transform .1s; }
+.formglut-stars-small label { font-size: 22px; } .formglut-stars-medium label { font-size: 30px; } .formglut-stars-large label { font-size: 40px; }
+.formglut-stars label:hover, .formglut-stars label:hover ~ label, .formglut-stars input:checked ~ label { color: var(--formglut-star); }
+.formglut-stars label:hover { transform: scale(1.1); }
+.formglut-stars input:focus-visible + label { outline: 2px solid #e94560; outline-offset: 2px; border-radius: 4px; }
+.formglut-star-word { font-size: 13px; color: #64748b; margin-top: 4px; min-height: 18px; }
+.screen-reader-text { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; }
+
+/* ── Rich text ───────────────────────────────────────────────────── */
+.formglut-richtext { border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; overflow: hidden; padding: 0 !important; }
+.formglut-richtext:focus-within { border-color: #e94560; background: #fff; }
+.formglut-richtext-bar { display: flex; flex-wrap: wrap; gap: 2px; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; background: #fff; }
+.formglut-richtext-bar button { min-width: 28px; height: 26px; border: 0; border-radius: 5px; background: transparent; font-size: 13px; font-weight: 700; color: #475569; cursor: pointer; }
+.formglut-richtext-bar button:hover { background: #f1f5f9; color: #0f172a; }
+.formglut-richtext-area { padding: 10px 14px; font-size: 15px; line-height: 1.6; color: #1e293b; outline: none; overflow-wrap: anywhere; }
+.formglut-richtext.is-empty .formglut-richtext-area::before { content: attr(data-placeholder); color: #94a3b8; pointer-events: none; }
+.formglut-richtext-area ul, .formglut-richtext-area ol { margin: 0 0 0 20px; }
+.formglut-richtext-area blockquote { margin: 6px 0; padding-left: 12px; border-left: 3px solid #e2e8f0; color: #475569; }
+.formglut-richtext:has(.formglut-input-error) { border-color: #ef4444; }
+
+/* ── Math captcha, reset ─────────────────────────────────────────── */
+.formglut-math { display: flex; align-items: center; gap: 10px; }
+.formglut-math-q { font-weight: 700; font-size: 16px; color: #334155; white-space: nowrap; }
+.formglut-math .formglut-input { max-width: 110px; }
+.formglut-reset-btn { padding: 9px 18px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; color: #334155; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; }
+.formglut-reset-btn:hover { border-color: #e94560; color: #e94560; }
+
+/* ── "Other" choice ──────────────────────────────────────────────── */
+.formglut-choice-other { flex-wrap: wrap; }
+.formglut-other-input { display: none; flex: 1 1 180px; min-width: 0; margin-left: 4px; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 8px; font: inherit; font-size: 14px; background: #fff; }
+.formglut-choice-other:has(input:checked) .formglut-other-input { display: block; }
+.formglut-choice-layout-button .formglut-choice-other .formglut-other-input { position: static; opacity: 1; pointer-events: auto; }
+
+/* ── Counter, phone country code, searchable dropdown ────────────── */
+.formglut-counter { margin-top: 4px; font-size: 12px; color: #94a3b8; text-align: right; }
+.formglut-counter.is-over { color: #dc2626; font-weight: 600; }
+.formglut-phone-cc .formglut-input-group, .formglut-phone-cc { display: flex; gap: 6px; align-items: stretch; }
+.formglut-dial-code { flex: 0 0 auto; max-width: 150px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; font: inherit; font-size: 14px; color: #1e293b; }
+.formglut-phone-cc .formglut-input { flex: 1; min-width: 0; }
+.formglut-search-select { display: flex; flex-direction: column; gap: 6px; }
+.formglut-search-input { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font: inherit; font-size: 14px; background: #fff; }
+.formglut-search-input:focus { outline: none; border-color: #e94560; }
+
+/* ── flatpickr in plugin colours ─────────────────────────────────── */
+.flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.startRange, .flatpickr-day.endRange { background: #e94560; border-color: #e94560; }
+.flatpickr-day.today { border-color: #e94560; }
+.flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover { color: rgba(57,57,57,.25); }
+.formglut-form input.flatpickr-input[readonly] { cursor: pointer; }
+
+/* Name: title and suffix stay narrow */
+.formglut-field-name .formglut-subfields:not(.formglut-subfields-1) { display: flex; flex-wrap: wrap; }
+.formglut-field-name .formglut-subfields:not(.formglut-subfields-1) .formglut-subfield { flex: 1 1 140px; min-width: 0; }
+.formglut-field-name .formglut-subfield-prefix, .formglut-field-name .formglut-subfield-suffix { flex: 0 0 96px !important; }
+
+/* Calculation */
+.formglut-calc { font-weight: 700; cursor: default; }
+.formglut-field.formglut-calc-hidden { display: none; }
+
+/* Payments */
+.formglut-pay-price { font-size: 18px; font-weight: 700; color: #0f172a; }
+.formglut-stripe { border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #fff; }
+.formglut-stripe-total { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; color: #475569; font-size: 14px; }
+.formglut-stripe-amount { font-size: 18px; color: #0f172a; }
+.formglut-stripe-test { margin-top: 10px; font-size: 12px; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 6px 10px; }
+.formglut-stripe.is-free .formglut-stripe-element { opacity: .5; pointer-events: none; }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Table, Button, Input, Space, Select, Tooltip, Popconfirm, message, Skeleton } from 'antd';
+import { Table, Button, Input, Space, Select, Tooltip, Popconfirm, message, Skeleton, DatePicker } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrash, faEye, faStar as faStarSolid, faMagnifyingGlass, faRotateRight,
-  faEnvelopeOpen, faEnvelope, faFileLines,
+  faEnvelopeOpen, faEnvelope, faFileLines, faFileExport,
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import Header, { _pg } from '../components/Header';
@@ -92,6 +92,8 @@ export default function Entries() {
   const [searchInput, setSearchInput] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [formFilter, setFormFilter] = useState('');
+  const [dateRange, setDateRange] = useState(null);
+  const dateParams = dateRange ? { date_from: dateRange[0].format('YYYY-MM-DD'), date_to: dateRange[1].format('YYYY-MM-DD') } : {};
   const [orderby, setOrderby] = useState('created_at');
   const [order, setOrder] = useState('DESC');
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -108,12 +110,12 @@ export default function Entries() {
 
   const loadCounts = useCallback(async () => {
     try {
-      const params = {};
+      const params = { ...dateParams };
       if (formFilter) params.form_id = formFilter;
       const result = await api.getEntryCounts(params);
       setCounts(result.counts || {});
     } catch (_) {}
-  }, [formFilter]);
+  }, [formFilter, dateRange]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadForms = useCallback(async () => {
     try {
@@ -131,6 +133,7 @@ export default function Entries() {
         search: searchText,
         orderby,
         order,
+        ...dateParams,
       };
       if (formFilter) params.form_id = formFilter;
       if (statusFilter === 'starred') {
@@ -146,7 +149,7 @@ export default function Entries() {
     } finally {
       setLoading(false);
     }
-  }, [page, perPage, searchText, orderby, order, formFilter, statusFilter]);
+  }, [page, perPage, searchText, orderby, order, formFilter, statusFilter, dateRange]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     loadForms();
@@ -406,8 +409,20 @@ export default function Entries() {
                   onChange={(e) => setSearchInput(e.target.value)}
                   allowClear
                 />
+                <DatePicker.RangePicker
+                  value={dateRange}
+                  onChange={(v) => { setDateRange(v && v[0] && v[1] ? v : null); setPage(1); }}
+                  allowClear
+                  style={{ width: 250 }}
+                />
               </div>
               <div className="fg-table-toolbar-right">
+                <Tooltip title={__( 'Download the entries shown by the current filters as CSV (opens in Excel)', 'formglut' )}>
+                  <Button
+                    icon={<FontAwesomeIcon icon={faFileExport} />}
+                    href={api.exportEntriesUrl({ form_id: formFilter, status: statusFilter === 'starred' ? '' : statusFilter, starred: statusFilter === 'starred' ? 1 : '', search: searchText, ...dateParams })}
+                  >{__( 'Export CSV', 'formglut' )}</Button>
+                </Tooltip>
                 <Tooltip title={__( 'Refresh', 'formglut' )}>
                   <Button
                     type="text"

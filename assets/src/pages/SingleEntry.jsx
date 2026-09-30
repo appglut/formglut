@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Button, Space, Tooltip, Popconfirm, message, Skeleton, Result } from 'antd';
+import { Button, Space, Tooltip, Popconfirm, message, Skeleton, Result, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faPrint, faTrash, faEnvelope, faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPrint, faTrash, faEnvelope, faStar as faStarSolid, faPaperPlane, faNoteSticky, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import Header, { _pg } from '../components/Header';
 import * as api from '../services/api';
@@ -69,6 +69,34 @@ export default function SingleEntry() {
   const [error, setError] = useState(null);
 
   const entryId = (window.formglut_admin || {}).entry_id;
+
+  const [noteText, setNoteText] = useState('');
+  const [savingNote, setSavingNote] = useState(false);
+  const [resending, setResending] = useState(false);
+
+  async function handleAddNote() {
+    setSavingNote(true);
+    try {
+      const res = await api.saveEntryNote(entry.id, noteText);
+      setEntry((e) => ({ ...e, notes: res.notes }));
+      setNoteText('');
+    } catch (err) { message.error(err.message || __( 'Could not save the note.', 'formglut' )); } finally { setSavingNote(false); }
+  }
+
+  async function handleDeleteNote(noteId) {
+    try {
+      const res = await api.deleteEntryNote(entry.id, noteId);
+      setEntry((e) => ({ ...e, notes: res.notes }));
+    } catch (err) { message.error(err.message || __( 'Could not delete the note.', 'formglut' )); }
+  }
+
+  async function handleResend() {
+    setResending(true);
+    try {
+      const res = await api.resendNotification(entry.id);
+      message.success(res.message || __( 'Notification sent.', 'formglut' ));
+    } catch (err) { message.error(err.message || __( 'Could not send the notification.', 'formglut' )); } finally { setResending(false); }
+  }
 
   const loadEntry = useCallback(async () => {
     if (!entryId) {
@@ -175,15 +203,17 @@ export default function SingleEntry() {
   }
 
   // Build display fields from form field definitions + entry data.
-  const nonInputTypes = [];
+  const nonInputTypes = ['html', 'heading', 'section_break', 'shortcode', 'action_hook', 'custom_submit_button', 'recaptcha', 'hcaptcha', 'turnstile', 'form_step'];
   let displayFields = [];
   if (form && form.fields) {
     displayFields = flattenFields(form.fields)
       .filter(f => !nonInputTypes.includes(f.type))
       .map(f => ({
         label: f.admin_label || f.label || f.id,
-        value: entry.fields_data && entry.fields_data[f.id] !== undefined
-          ? String(entry.fields_data[f.id])
+        raw: entry.fields_data ? entry.fields_data[f.id] : undefined,
+        type: f.type,
+        value: entry.fields_data && entry.fields_data[f.id] !== undefined && entry.fields_data[f.id] !== ''
+          ? (Array.isArray(entry.fields_data[f.id]) ? entry.fields_data[f.id].join(', ') : String(entry.fields_data[f.id]))
           : '-',
       }));
   } else {
@@ -226,6 +256,9 @@ export default function SingleEntry() {
             <Tooltip title={__( 'Print', 'formglut' )}>
               <Button type="text" icon={<FontAwesomeIcon icon={faPrint} />} style={{ color: '#64748b' }} onClick={handlePrint} />
             </Tooltip>
+            <Tooltip title={__( 'Send the notification email for this entry again', 'formglut' )}>
+              <Button type="text" icon={<FontAwesomeIcon icon={faPaperPlane} />} style={{ color: '#64748b' }} loading={resending} onClick={handleResend} />
+            </Tooltip>
             <Tooltip title={__( 'Reply by email', 'formglut' )}>
               <Button type="text" icon={<FontAwesomeIcon icon={faEnvelope} />} style={{ color: '#64748b' }} onClick={handleReply} />
             </Tooltip>
@@ -253,7 +286,17 @@ export default function SingleEntry() {
             {displayFields.map((f, i) => (
               <div className="fg-entry-row" key={i}>
                 <div className="fg-entry-label">{f.label}</div>
-                <div className="fg-entry-value">{f.value}</div>
+                <div className="fg-entry-value">
+                  {f.type === 'file_upload' && Array.isArray(f.raw) && f.raw.length ? (
+                    <div className="fg-entry-files">
+                      {f.raw.map((url) => (
+                        <a key={url} href={url} target="_blank" rel="noopener noreferrer">
+                          <FontAwesomeIcon icon={faPaperclip} /> {decodeURIComponent(url.split('/').pop()).replace(/^[A-Za-z0-9]{12}-/, '')}
+                        </a>
+                      ))}
+                    </div>
+                  ) : f.value}
+                </div>
               </div>
             ))}
             {displayFields.length === 0 && (
@@ -290,6 +333,42 @@ export default function SingleEntry() {
             <div className="fg-meta-item">
               <div className="fg-meta-item-label">{__( 'Form', 'formglut' )}</div>
               <div className="fg-meta-item-value">{entry.form_title || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        {entry.fields_data && entry.fields_data._payment && (
+          <div className="fg-entry-card">
+            <div className="fg-entry-card-header">
+              <div className="fg-entry-card-title">{__( 'Payment', 'formglut' )}</div>
+            </div>
+            <div className="fg-meta-grid">
+              <div className="fg-meta-item"><div className="fg-meta-item-label">{__( 'Amount', 'formglut' )}</div><div className="fg-meta-item-value">{Number(entry.fields_data._payment.amount).toFixed(2)} {entry.fields_data._payment.currency}</div></div>
+              <div className="fg-meta-item"><div className="fg-meta-item-label">{__( 'Status', 'formglut' )}</div><div className="fg-meta-item-value">{entry.fields_data._payment.status === 'succeeded' ? __( 'Paid', 'formglut' ) : entry.fields_data._payment.status}{entry.fields_data._payment.mode === 'test' ? ' · ' + __( 'test mode', 'formglut' ) : ''}</div></div>
+              <div className="fg-meta-item"><div className="fg-meta-item-label">{__( 'Stripe payment', 'formglut' )}</div><div className="fg-meta-item-value"><a href={`https://dashboard.stripe.com/${entry.fields_data._payment.mode === 'test' ? 'test/' : ''}payments/${entry.fields_data._payment.id}`} target="_blank" rel="noopener noreferrer">{entry.fields_data._payment.id}</a></div></div>
+            </div>
+          </div>
+        )}
+
+        <div className="fg-entry-card fg-notes-card">
+          <div className="fg-entry-card-header">
+            <div className="fg-entry-card-title"><FontAwesomeIcon icon={faNoteSticky} style={{ marginRight: 8, color: '#94a3b8' }} />{__( 'Notes', 'formglut' )} <span className="fg-notes-hint">{__( 'Private, only visible to admins', 'formglut' )}</span></div>
+          </div>
+          <div className="fg-entry-card-body">
+            {(entry.notes || []).map((n) => (
+              <div className="fg-note" key={n.id}>
+                <div className="fg-note-head">
+                  <strong>{n.author}</strong> <span>{n.date}</span>
+                  <Popconfirm title={__( 'Delete this note?', 'formglut' )} okText={__( 'Delete', 'formglut' )} cancelText={__( 'Cancel', 'formglut' )} okButtonProps={{ danger: true }} onConfirm={() => handleDeleteNote(n.id)}>
+                    <button type="button" className="fg-note-del" aria-label={__( 'Delete note', 'formglut' )}><FontAwesomeIcon icon={faTrash} /></button>
+                  </Popconfirm>
+                </div>
+                <div className="fg-note-text">{n.text}</div>
+              </div>
+            ))}
+            <div className="fg-note-new">
+              <Input.TextArea rows={3} value={noteText} placeholder={__( 'Add a note about this entry…', 'formglut' )} onChange={(e) => setNoteText(e.target.value)} />
+              <Button type="primary" disabled={!noteText.trim()} loading={savingNote} onClick={handleAddNote} style={{ marginTop: 8, background: noteText.trim() ? '#e94560' : undefined, borderColor: noteText.trim() ? '#e94560' : undefined }}>{__( 'Add note', 'formglut' )}</Button>
             </div>
           </div>
         </div>
