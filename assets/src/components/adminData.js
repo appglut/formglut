@@ -8,6 +8,7 @@ export const _pg = admin.pages || {
   editor: 'form-editor.html',
   entries: 'entries.html',
   settings: 'settings.html',
+  tools: 'tools.html',
   form_settings: 'form-settings.html',
   entry_detail: 'single-entry.html',
   preview: 'preview.html',

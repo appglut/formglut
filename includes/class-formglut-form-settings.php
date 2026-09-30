@@ -18,7 +18,7 @@ class FormGlut_Form_Settings {
 	/**
 	 * Database schema version that introduced the `settings` column.
 	 */
-	const SCHEMA_VERSION = 3;
+	const SCHEMA_VERSION = 4;
 
 	/**
 	 * Cron hook that applies the per-form entry retention period.
@@ -634,14 +634,17 @@ class FormGlut_Form_Settings {
 		);
 
 		$json = 'json' === $w['webhook_format'];
-		wp_remote_post(
+		FormGlut_Http::request(
+			'Webhook',
 			$w['webhook_url'],
 			array(
+				'method'   => 'POST',
 				'timeout'  => 5,
 				'blocking' => false,
 				'headers'  => array( 'Content-Type' => $json ? 'application/json' : 'application/x-www-form-urlencoded' ),
 				'body'     => $json ? wp_json_encode( $payload ) : array_merge( array_diff_key( $payload, array( 'fields' => 1 ) ), $named ),
-			)
+			),
+			$form->id
 		);
 	}
 
@@ -663,12 +666,13 @@ class FormGlut_Form_Settings {
 		if ( $entry_id ) {
 			$text .= "\n<" . admin_url( 'admin.php?page=formglut-entry-detail&entry_id=' . absint( $entry_id ) ) . '|' . __( 'View entry', 'formglut' ) . '>';
 		}
-		wp_remote_post( $i['slack_webhook'], array(
+		FormGlut_Http::request( 'Slack', $i['slack_webhook'], array(
+			'method'   => 'POST',
 			'timeout'  => 5,
 			'blocking' => false,
 			'headers'  => array( 'Content-Type' => 'application/json' ),
 			'body'     => wp_json_encode( array( 'text' => $text ) ),
-		) );
+		), $form->id );
 	}
 
 	/**

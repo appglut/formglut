@@ -1,4 +1,4 @@
-import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
+import { _ as __ } from "./chunks/default-i18n-C5tja8m9.js";
 import { s as sprintf } from "./chunks/sprintf-DmNrJSYG.js";
 class InputMask {
   constructor(input, options = {}) {

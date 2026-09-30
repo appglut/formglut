@@ -63,7 +63,25 @@ class FormGlut_DB {
 			KEY form_id (form_id)
 		) {$charset_collate};";
 
+		$log_table = $wpdb->prefix . 'formglut_logs';
+		$log_sql   = "CREATE TABLE {$log_table} (
+			id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+			type varchar(16) NOT NULL DEFAULT 'activity',
+			event varchar(64) NOT NULL DEFAULT '',
+			object_type varchar(32) NOT NULL DEFAULT '',
+			object_id bigint UNSIGNED NOT NULL DEFAULT 0,
+			user_id bigint UNSIGNED NOT NULL DEFAULT 0,
+			summary varchar(255) NOT NULL DEFAULT '',
+			context longtext NULL,
+			status varchar(16) NOT NULL DEFAULT 'ok',
+			duration_ms int UNSIGNED NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			PRIMARY KEY  (id),
+			KEY type_created (type, created_at)
+		) {$charset_collate};";
+
 		dbDelta( $form_sql );
+		dbDelta( $log_sql );
 		dbDelta( $entry_sql );
 	}
 

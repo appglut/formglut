@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Drawer } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileLines, faPlus, faInbox, faGear, faStar, faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faFileLines, faPlus, faInbox, faGear, faStar, faToolbox, faHouse } from '@fortawesome/free-solid-svg-icons';
 import { __ } from '@wordpress/i18n';
 import { _pg, _dashboard, _pluginUrl } from './adminData';
 import './app-header.css';
@@ -24,6 +24,7 @@ export default function NavMenu() {
     'formglut-entries': 'entries',
     'formglut-entry-detail': 'entries',
     'formglut-settings': 'settings',
+    'formglut-data-logs': 'tools',
     'formglut-pro-features': 'pro',
   }[page] || '';
 
@@ -31,6 +32,7 @@ export default function NavMenu() {
     { key: 'forms', label: __( 'All Forms', 'formglut' ), icon: faFileLines, href: _pg.all_forms },
     { key: 'new', label: __( 'Add New Form', 'formglut' ), icon: faPlus, href: _pg.editor },
     { key: 'entries', label: __( 'Entries', 'formglut' ), icon: faInbox, href: _pg.entries },
+    { key: 'tools', label: __( 'Data & Logs', 'formglut' ), icon: faToolbox, href: _pg.tools },
     { key: 'settings', label: __( 'Global Settings', 'formglut' ), icon: faGear, href: _pg.settings },
     { key: 'pro', label: __( 'Pro Features', 'formglut' ), icon: faStar, href: _pg.pro_features },
   ].filter((i) => i.href);

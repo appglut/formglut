@@ -134,7 +134,7 @@ class FormGlut_Entry {
 				'browser'     => sanitize_text_field( $data['browser'] ?? '' ),
 				'source_url'  => esc_url_raw( $data['source_url'] ?? '' ),
 				'country'     => sanitize_text_field( $data['country'] ?? '' ),
-				'created_at'  => current_time( 'mysql' ),
+				'created_at'  => ( isset( $data['created_at'] ) && preg_match( '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $data['created_at'] ) ) ? $data['created_at'] : current_time( 'mysql' ),
 			),
 			array( '%d', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s' )
 		);

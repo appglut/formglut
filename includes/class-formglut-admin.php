@@ -64,6 +64,7 @@ class FormGlut_Admin {
 			'formglut-entry-detail' => __( 'Entry Detail', 'formglut' ),
 			'formglut-form-settings' => __( 'Form Settings', 'formglut' ),
 			'formglut-settings'     => __( 'Global Settings', 'formglut' ),
+			'formglut-data-logs'        => __( 'Data & Logs', 'formglut' ),
 			'formglut-pro-features' => __( 'Pro Features', 'formglut' ),
 			'formglut-preview'      => __( 'Form Preview', 'formglut' ),
 		);
@@ -128,6 +129,16 @@ class FormGlut_Admin {
 			'manage_options',
 			'formglut-settings',
 			array( $this, 'render_settings_page' )
+		);
+
+		// Submenu — Tools (migration, export / import, logs, status, maintenance).
+		add_submenu_page(
+			'formglut-all-forms',
+			__( 'Data & Logs', 'formglut' ),
+			__( 'Data & Logs', 'formglut' ),
+			'manage_options',
+			'formglut-data-logs',
+			array( $this, 'render_tools_page' )
 		);
 
 		// Submenu — Pro Features.
@@ -229,6 +240,7 @@ public function menu_icon_styles() {
 			'formglut-editor'       => 'form-editor',
 			'formglut-entries'      => 'entries',
 			'formglut-settings'     => 'settings',
+			'formglut-data-logs'        => 'tools',
 			'formglut-entry-detail' => 'single-entry',
 			'formglut-form-settings' => 'form-settings',
 		);
@@ -279,6 +291,7 @@ public function menu_icon_styles() {
 				'editor'       => admin_url( 'admin.php?page=formglut-editor' ),
 				'entries'      => admin_url( 'admin.php?page=formglut-entries' ),
 				'settings'     => admin_url( 'admin.php?page=formglut-settings' ),
+				'tools'        => admin_url( 'admin.php?page=formglut-data-logs' ),
 				'form_settings' => admin_url( 'admin.php?page=formglut-form-settings' ),
 				'entry_detail' => admin_url( 'admin.php?page=formglut-entry-detail' ),
 				'preview'      => admin_url( 'admin.php?page=formglut-preview' ),
@@ -328,6 +341,7 @@ public function menu_icon_styles() {
 			'formglut-form-editor',
 			'formglut-entries',
 			'formglut-settings',
+			'formglut-tools',
 			'formglut-form-settings',
 			'formglut-single-entry',
 			'formglut-preview',
@@ -382,6 +396,15 @@ public function menu_icon_styles() {
 	 */
 	public function render_entries_page() {
 		$this->render_page( 'entries.html' );
+	}
+
+	/**
+	 * Render Tools page.
+	 *
+	 * @return void
+	 */
+	public function render_tools_page() {
+		$this->render_page( 'tools.html' );
 	}
 
 	/**
@@ -1854,6 +1877,7 @@ public function menu_icon_styles() {
 			'formglut_page_formglut-editor',
 			'formglut_page_formglut-entries',
 			'formglut_page_formglut-settings',
+			'formglut_page_formglut-data-logs',
 			'formglut_page_formglut-entry-detail',
 			'admin_page_formglut-entry-detail',
 			'admin_page_formglut-form-settings',

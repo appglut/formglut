@@ -583,3 +583,96 @@ body {
 .fg-mig-row .m { color: #94a3b8; font-size: 12px; }
 .fg-mig-results { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
 .fg-mig-results .ok { color: #065f46; } .fg-mig-results .bad { color: #b91c1c; }
+
+/* Data & Logs page */
+.fg-tools-card { min-width: 0; padding-bottom: 26px; }
+.fg-tools-card .fg-fs-row { padding: 16px 0; }
+.fg-tools-card .fg-fs-row.is-wide { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.fg-tools-card .fg-fs-row.is-switch { grid-template-columns: minmax(0, 1fr) auto; }
+.fg-tools-card .fg-fs-row.is-switch .fg-fs-control { justify-content: flex-end; }
+.fg-tools-card .fg-fs-row .fg-fs-control > div[style*="flex"] { max-width: 100%; }
+.fg-tools-card .ant-table-wrapper { margin-top: 4px; }
+.fg-tools-card .ant-table { border: 1px solid #eef0f4; border-radius: 10px; overflow: hidden; }
+.fg-tools-card .ant-table-thead > tr > th { background: #f8fafc !important; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; color: #64748b; font-weight: 600; }
+.fg-tools-card .ant-table-tbody > tr > td { color: #334155; font-size: 13px; }
+.fg-tools-card .ant-table-tbody > tr:hover > td { background: #fff7f8 !important; }
+.fg-tools-card .ant-pagination .ant-pagination-item-active { border-color: #e94560; }
+.fg-tools-card .ant-pagination .ant-pagination-item-active a { color: #e94560; }
+.fg-tool-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; max-height: 320px; overflow: auto; padding: 2px; }
+.fg-tool-list label { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; transition: border-color .15s, background .15s; }
+.fg-tool-list label:hover { border-color: #e94560; background: #fff7f8; }
+.fg-tool-list label span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1e293b; font-weight: 500; }
+.fg-tool-list em { color: #94a3b8; font-style: normal; font-size: 12px; white-space: nowrap; }
+.fg-drop.ant-upload-wrapper .ant-upload-drag { border-radius: 12px; border: 2px dashed #e2e8f0; background: #f8fafc; padding: 18px 0; }
+.fg-drop.ant-upload-wrapper .ant-upload-drag:hover { border-color: #e94560; background: #fff7f8; }
+.fg-drop-ic { width: 46px; height: 46px; margin: 0 auto 8px; border-radius: 50%; background: #fff1f3; color: #e94560; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.fg-drop-t { font-weight: 600; color: #1e293b; }
+.fg-drop-s { font-size: 12.5px; color: #94a3b8; margin-top: 2px; }
+.fg-log-settings { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 18px 0 14px; padding: 12px 16px; background: #f8fafc; border: 1px solid #eef0f4; border-radius: 10px; color: #475569; font-size: 13px; }
+.fg-log-settings label { display: inline-flex; align-items: center; gap: 8px; }
+.fg-log-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.fg-log-filters .ant-btn-dangerous { margin-left: auto; }
+.fg-url { font-family: ui-monospace, Menlo, monospace; font-size: 12px; word-break: break-all; }
+.fg-log-detail { max-height: 420px; overflow: auto; background: #0f172a; color: #e2e8f0; padding: 14px; border-radius: 10px; font-size: 12px; white-space: pre-wrap; word-break: break-word; }
+.fg-status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 18px 0 4px; }
+.fg-status-stat { border: 1px solid #eef0f4; background: #f8fafc; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; }
+.fg-status-stat b { font-size: 24px; line-height: 1.1; color: #e94560; }
+.fg-status-stat span { color: #64748b; font-size: 12px; margin-top: 4px; }
+.fg-tool-h { margin: 26px 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; color: #64748b; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.fg-check { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; }
+.fg-check:nth-child(odd) { background: #f8fafc; }
+.fg-check em { margin-left: auto; color: #b45309; font-style: normal; font-size: 12px; text-align: right; }
+.fg-tool-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.fg-env { border-collapse: collapse; width: 100%; font-size: 13px; border: 1px solid #eef0f4; border-radius: 10px; }
+.fg-env th { text-align: left; width: 200px; color: #64748b; font-weight: 500; padding: 9px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; }
+.fg-env td { padding: 9px 14px; border-bottom: 1px solid #f1f5f9; word-break: break-word; color: #1e293b; }
+.fg-task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.fg-task { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; }
+.fg-task.danger { border-color: #fde2e4; background: #fffafa; }
+.fg-task-t { font-weight: 600; color: #1e293b; }
+.fg-task-d { font-size: 12.5px; color: #64748b; line-height: 1.5; flex: 1; margin-bottom: 8px; }
+.fg-task .ant-btn { align-self: flex-start; }
+.fg-mig-intro { color: #64748b; margin: 16px 0 14px; font-size: 13.5px; line-height: 1.6; }
+.fg-mig-empty { text-align: center; padding: 34px 20px; border: 1px dashed #dbe0e8; border-radius: 12px; background: #f8fafc; }
+.fg-mig-empty .t { font-weight: 600; color: #1e293b; }
+.fg-mig-empty .s { color: #64748b; font-size: 13px; margin: 4px 0 14px; }
+.fg-mig-empty .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.fg-mig-empty .chips span { padding: 4px 12px; border-radius: 999px; background: #fff; border: 1px solid #e2e8f0; color: #475569; font-size: 12.5px; }
+.fg-tools-card .fg-mig-source { border-radius: 12px; }
+.fg-tools-card .fg-mig-row:hover { background: #fff7f8; }
+@media (max-width: 782px) { .fg-log-filters .ant-btn-dangerous { margin-left: 0; } .fg-tool-list { grid-template-columns: 1fr; } }
+
+/* Log filter bar: one height, and neutralise WordPress admin input styles inside Ant controls. */
+.fg-log-filters .ant-input-affix-wrapper, .fg-log-filters .ant-select .ant-select-selector, .fg-log-filters .ant-picker { height: 38px; min-height: 38px; border-radius: 8px; box-sizing: border-box; }
+.fg-log-filters .ant-input-affix-wrapper { width: 240px; padding: 0 12px; align-items: center; }
+.fg-log-filters .ant-input-affix-wrapper .ant-input-prefix { margin-right: 8px; color: #94a3b8; font-size: 13px; }
+.fg-log-filters .ant-input-affix-wrapper:hover, .fg-log-filters .ant-input-affix-wrapper-focused { border-color: #e94560; box-shadow: none; }
+.fg-log-filters input, .fg-log-filters input:focus { box-shadow: none !important; outline: none !important; min-height: 0 !important; height: auto !important; margin: 0 !important; background: transparent !important; border: 0 !important; padding: 0 !important; line-height: 1.5; }
+.fg-log-filters .ant-select .ant-select-selector { align-items: center; padding: 0 12px; }
+.fg-log-filters .ant-select-single .ant-select-selection-search { inset-inline-start: 12px; }
+.fg-log-filters .ant-select-single .ant-select-selection-item, .fg-log-filters .ant-select-single .ant-select-selection-placeholder { line-height: 36px; }
+.fg-log-filters .ant-picker { padding: 0 12px; }
+.fg-log-filters .ant-picker-focused, .fg-log-filters .ant-picker:hover, .fg-log-filters .ant-select:not(.ant-select-disabled):hover .ant-select-selector, .fg-log-filters .ant-select-focused .ant-select-selector { border-color: #e94560 !important; box-shadow: none !important; }
+.fg-log-filters .ant-btn { height: 38px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; }
+.fg-log-settings .ant-input-number { border-radius: 6px; }
+.fg-log-settings .ant-input-number input { height: 28px !important; box-shadow: none !important; border: 0 !important; }
+.fg-log-settings .ant-switch-checked { background: #e94560; }
+.fg-log-filters { padding: 12px; background: #fff; border: 1px solid #eef0f4; border-radius: 12px; }
+
+/* Migration tab */
+.fg-mig-option { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 18px; margin-bottom: 16px; border: 1px solid #fbd0d7; background: #fff7f8; border-radius: 12px; }
+.fg-mig-option .t { font-weight: 600; color: #1e293b; }
+.fg-mig-option .s { color: #64748b; font-size: 12.5px; margin-top: 2px; line-height: 1.5; }
+.fg-mig-option .ant-switch-checked { background: #e94560; }
+.fg-mig-head .name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fg-mig-head .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; background: #fff; border: 1px solid #e5e7eb; border-radius: 999px; padding: 2px 10px; }
+.fg-mig-head .pill.entries { color: #e94560; border-color: #fbd0d7; background: #fff1f3; }
+.fg-mig-row .chip { font-size: 12px; color: #64748b; background: #f1f5f9; border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.fg-mig-row .chip.has { color: #be123c; background: #fff1f3; font-weight: 600; }
+.fg-mig-row .chip.zero { color: #94a3b8; }
+.fg-mig-row.on { background: #fff7f8; }
+.fg-mig-progress { margin-top: 14px; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: #f8fafc; font-size: 13px; color: #475569; }
+.fg-mig-results > div { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-radius: 10px; }
+.fg-mig-results .ok { background: #ecfdf5; } .fg-mig-results .bad { background: #fef2f2; }
+.fg-mig-results svg { margin-top: 3px; }
+.fg-mig-actions { margin-top: 16px; }

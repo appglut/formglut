@@ -113,17 +113,17 @@ class FormGlut_Payments {
 	 * @param array  $body   Form body.
 	 * @return array|WP_Error Decoded response.
 	 */
-	private static function stripe( $method, $path, $body = array() ) {
+	private static function stripe( $method, $path, $body = array(), $form_id = 0 ) {
 		$keys = self::keys();
 		if ( '' === $keys['secret'] ) {
 			return new WP_Error( 'stripe_keys', __( 'Payments are not set up yet. Please contact the site owner.', 'formglut' ) );
 		}
-		$res = wp_remote_request( 'https://api.stripe.com/v1/' . $path, array(
+		$res = FormGlut_Http::request( 'Stripe', 'https://api.stripe.com/v1/' . $path, array(
 			'method'  => $method,
 			'timeout' => 20,
 			'headers' => array( 'Authorization' => 'Bearer ' . $keys['secret'], 'Stripe-Version' => '2024-06-20' ),
 			'body'    => $body ? $body : null,
-		) );
+		), $form_id );
 		if ( is_wp_error( $res ) ) {
 			return $res;
 		}
@@ -167,7 +167,7 @@ class FormGlut_Payments {
 				'description'                          => wp_strip_all_tags( $desc ),
 				'metadata[formglut_form_id]'           => (string) $form->id,
 				'metadata[formglut_site]'              => home_url( '/' ),
-			) );
+			), (int) $form->id );
 			if ( is_wp_error( $pi ) ) {
 				return $pi;
 			}
@@ -181,7 +181,7 @@ class FormGlut_Payments {
 		if ( self::intent_used( $pi_id ) ) {
 			return new WP_Error( 'used', __( 'This payment has already been used.', 'formglut' ) );
 		}
-		$pi = self::stripe( 'GET', 'payment_intents/' . rawurlencode( $pi_id ) );
+		$pi = self::stripe( 'GET', 'payment_intents/' . rawurlencode( $pi_id ), array(), (int) $form->id );
 		if ( is_wp_error( $pi ) ) {
 			return $pi;
 		}

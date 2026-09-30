@@ -1,19 +1,20 @@
-import { co as reactExports, d as ConfigContext, $ as classNames, bH as genStyleHooks, cg as merge, cC as unit, cr as resetComponent, F as FastColor, bI as genSubStyleComponent, cj as omit, cI as useClosable, cm as pickClosable, W as Wave, cp as replaceElement, bX as getMigrationSources, cv as staticMethods, cc as jsxRuntimeExports, a as Button, ci as migrateForm, bT as getFormStats, bU as getForms, R as React, O as _pg, h as FontAwesomeIcon, b4 as faPenToSquare, aO as faGear, aJ as faFileExport, ae as exportFormsUrl, aH as faEye, aB as faCopy, bm as faTrash, aK as faFileImport, b8 as faPlus, au as faCircleCheck, bn as faTrashCan, br as faXmark, j as Input, aY as faMagnifyingGlass, an as faCalendarDays, bc as faRotateRight, aL as faFileLines, aa as deleteForm, c3 as importForms, ac as duplicateForm, cG as updateFormStatus, S as Skeleton, bi as faStar, a6 as createForm, a7 as createRoot } from "./chunks/api-C3T_2YIP.js";
-import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { r as responsiveArray, u as useBreakpoint, C as Checkbox, d as dayjs, a as Dropdown, D as DatePicker, F as ForwardTable } from "./chunks/Table-Cg2SJaMG.js";
-import { H as Header } from "./chunks/Header-xSHotuJx.js";
-import { f as createField } from "./chunks/fieldTypes-B4mkecXL.js";
-import { s as sprintf } from "./chunks/sprintf-DmNrJSYG.js";
-import { u as useColStyle, a as useRowStyle, M as Modal } from "./chunks/index-1tTAWJ6k.js";
-import { a as Spin, S as Select } from "./chunks/index-DnCN3rVY.js";
-import { g as genPresetColor, f as isPresetColor, h as isPresetStatusColor, T as Tooltip } from "./chunks/index-DoebJELJ.js";
-import { S as Switch } from "./chunks/index-BJj4IPqo.js";
-import { S as Space, P as Popconfirm } from "./chunks/index-DUJ6TIST.js";
-import "./chunks/EllipsisOutlined-DVpo83LX.js";
-import "./chunks/ActionButton-1FHh5CEq.js";
-import "./chunks/index-3Uh34z5Q.js";
+import { cI as reactExports, e as ConfigContext, a4 as classNames, cQ as staticMethods, c5 as getFormStats, c6 as getForms, R as React, ct as jsxRuntimeExports, V as _pg, i as FontAwesomeIcon, bh as faPenToSquare, aY as faGear, aT as faFileExport, ak as exportFormsUrl, aR as faEye, a as Button, aL as faCopy, bA as faTrash, aU as faFileImport, bl as faPlus, aC as faCircleCheck, bB as faTrashCan, bF as faXmark, k as Input, b9 as faMagnifyingGlass, av as faCalendarDays, bq as faRotateRight, aV as faFileLines, ag as deleteForm, ck as importForms, ai as duplicateForm, d2 as updateFormStatus, S as Skeleton, bw as faStar, ac as createForm, ad as createRoot } from "./chunks/api-CWyUJK1g.js";
+import { _ as __ } from "./chunks/default-i18n-C5tja8m9.js";
+import { r as responsiveArray, u as useBreakpoint, d as dayjs, a as Dropdown, D as DatePicker, F as ForwardTable } from "./chunks/Table-ClOQlK7w.js";
+import { H as Header } from "./chunks/Header-_5qZLjlg.js";
+import { f as createField } from "./chunks/fieldTypes-s51SpH67.js";
+import { M as MigratorModal } from "./chunks/MigratorModal-C-NqqU8H.js";
+import { S as Switch } from "./chunks/index-DLAPZase.js";
+import { S as Space, P as Popconfirm } from "./chunks/index-BZvS3h5m.js";
+import { T as Tooltip } from "./chunks/index-CN2x6X4U.js";
+import { S as Select } from "./chunks/index-DP98aNXk.js";
+import { u as useColStyle, a as useRowStyle, M as Modal } from "./chunks/index-93LLjNui.js";
+import "./chunks/EllipsisOutlined-CPbMzcRo.js";
+import "./chunks/sprintf-DmNrJSYG.js";
+import "./chunks/index-Bou9GWnt.js";
+import "./chunks/ActionButton-Cy37dVq6.js";
 const RowContext = /* @__PURE__ */ reactExports.createContext({});
-var __rest$3 = function(s, e) {
+var __rest$1 = function(s, e) {
   var t = {};
   for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
@@ -54,7 +55,7 @@ const Col = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     children,
     flex,
     style
-  } = props, others = __rest$3(props, ["prefixCls", "span", "order", "offset", "push", "pull", "className", "children", "flex", "style"]);
+  } = props, others = __rest$1(props, ["prefixCls", "span", "order", "offset", "push", "pull", "className", "children", "flex", "style"]);
   const prefixCls = getPrefixCls("col", customizePrefixCls);
   const [wrapCSSVar, hashId, cssVarCls] = useColStyle(prefixCls);
   const sizeStyle = {};
@@ -132,7 +133,7 @@ function useGutter(gutter, screens) {
   });
   return results;
 }
-var __rest$2 = function(s, e) {
+var __rest = function(s, e) {
   var t = {};
   for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
@@ -176,7 +177,7 @@ const Row = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     children,
     gutter = 0,
     wrap
-  } = props, others = __rest$2(props, ["prefixCls", "justify", "align", "className", "style", "children", "gutter", "wrap"]);
+  } = props, others = __rest(props, ["prefixCls", "justify", "align", "className", "style", "children", "gutter", "wrap"]);
   const {
     getPrefixCls,
     direction
@@ -213,299 +214,6 @@ const Row = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     ref
   }), children)));
 });
-const genBaseStyle = (token) => {
-  const {
-    paddingXXS,
-    lineWidth,
-    tagPaddingHorizontal,
-    componentCls,
-    calc
-  } = token;
-  const paddingInline = calc(tagPaddingHorizontal).sub(lineWidth).equal();
-  const iconMarginInline = calc(paddingXXS).sub(lineWidth).equal();
-  return {
-    // Result
-    [componentCls]: Object.assign(Object.assign({}, resetComponent(token)), {
-      display: "inline-block",
-      height: "auto",
-      // https://github.com/ant-design/ant-design/pull/47504
-      marginInlineEnd: token.marginXS,
-      paddingInline,
-      fontSize: token.tagFontSize,
-      lineHeight: token.tagLineHeight,
-      whiteSpace: "nowrap",
-      background: token.defaultBg,
-      border: `${unit(token.lineWidth)} ${token.lineType} ${token.colorBorder}`,
-      borderRadius: token.borderRadiusSM,
-      opacity: 1,
-      transition: `all ${token.motionDurationMid}`,
-      textAlign: "start",
-      position: "relative",
-      // RTL
-      [`&${componentCls}-rtl`]: {
-        direction: "rtl"
-      },
-      "&, a, a:hover": {
-        color: token.defaultColor
-      },
-      [`${componentCls}-close-icon`]: {
-        marginInlineStart: iconMarginInline,
-        fontSize: token.tagIconSize,
-        color: token.colorIcon,
-        cursor: "pointer",
-        transition: `all ${token.motionDurationMid}`,
-        "&:hover": {
-          color: token.colorTextHeading
-        }
-      },
-      [`&${componentCls}-has-color`]: {
-        borderColor: "transparent",
-        [`&, a, a:hover, ${token.iconCls}-close, ${token.iconCls}-close:hover`]: {
-          color: token.colorTextLightSolid
-        }
-      },
-      "&-checkable": {
-        backgroundColor: "transparent",
-        borderColor: "transparent",
-        cursor: "pointer",
-        [`&:not(${componentCls}-checkable-checked):hover`]: {
-          color: token.colorPrimary,
-          backgroundColor: token.colorFillSecondary
-        },
-        "&:active, &-checked": {
-          color: token.colorTextLightSolid
-        },
-        "&-checked": {
-          backgroundColor: token.colorPrimary,
-          "&:hover": {
-            backgroundColor: token.colorPrimaryHover
-          }
-        },
-        "&:active": {
-          backgroundColor: token.colorPrimaryActive
-        }
-      },
-      "&-hidden": {
-        display: "none"
-      },
-      // To ensure that a space will be placed between character and `Icon`.
-      [`> ${token.iconCls} + span, > span + ${token.iconCls}`]: {
-        marginInlineStart: paddingInline
-      }
-    }),
-    [`${componentCls}-borderless`]: {
-      borderColor: "transparent",
-      background: token.tagBorderlessBg
-    }
-  };
-};
-const prepareToken = (token) => {
-  const {
-    lineWidth,
-    fontSizeIcon,
-    calc
-  } = token;
-  const tagFontSize = token.fontSizeSM;
-  const tagToken = merge(token, {
-    tagFontSize,
-    tagLineHeight: unit(calc(token.lineHeightSM).mul(tagFontSize).equal()),
-    tagIconSize: calc(fontSizeIcon).sub(calc(lineWidth).mul(2)).equal(),
-    // Tag icon is much smaller
-    tagPaddingHorizontal: 8,
-    // Fixed padding.
-    tagBorderlessBg: token.defaultBg
-  });
-  return tagToken;
-};
-const prepareComponentToken = (token) => ({
-  defaultBg: new FastColor(token.colorFillQuaternary).onBackground(token.colorBgContainer).toHexString(),
-  defaultColor: token.colorText
-});
-const useStyle = genStyleHooks("Tag", (token) => {
-  const tagToken = prepareToken(token);
-  return genBaseStyle(tagToken);
-}, prepareComponentToken);
-var __rest$1 = function(s, e) {
-  var t = {};
-  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-  }
-  return t;
-};
-const CheckableTag = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  const {
-    prefixCls: customizePrefixCls,
-    style,
-    className,
-    checked,
-    children,
-    icon,
-    onChange,
-    onClick
-  } = props, restProps = __rest$1(props, ["prefixCls", "style", "className", "checked", "children", "icon", "onChange", "onClick"]);
-  const {
-    getPrefixCls,
-    tag
-  } = reactExports.useContext(ConfigContext);
-  const handleClick = (e) => {
-    onChange === null || onChange === void 0 ? void 0 : onChange(!checked);
-    onClick === null || onClick === void 0 ? void 0 : onClick(e);
-  };
-  const prefixCls = getPrefixCls("tag", customizePrefixCls);
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls);
-  const cls = classNames(prefixCls, `${prefixCls}-checkable`, {
-    [`${prefixCls}-checkable-checked`]: checked
-  }, tag === null || tag === void 0 ? void 0 : tag.className, className, hashId, cssVarCls);
-  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("span", Object.assign({}, restProps, {
-    ref,
-    style: Object.assign(Object.assign({}, style), tag === null || tag === void 0 ? void 0 : tag.style),
-    className: cls,
-    onClick: handleClick
-  }), icon, /* @__PURE__ */ reactExports.createElement("span", null, children)));
-});
-const genPresetStyle = (token) => genPresetColor(token, (colorKey, {
-  textColor,
-  lightBorderColor,
-  lightColor,
-  darkColor
-}) => ({
-  [`${token.componentCls}${token.componentCls}-${colorKey}`]: {
-    color: textColor,
-    background: lightColor,
-    borderColor: lightBorderColor,
-    // Inverse color
-    "&-inverse": {
-      color: token.colorTextLightSolid,
-      background: darkColor,
-      borderColor: darkColor
-    },
-    [`&${token.componentCls}-borderless`]: {
-      borderColor: "transparent"
-    }
-  }
-}));
-const PresetCmp = genSubStyleComponent(["Tag", "preset"], (token) => {
-  const tagToken = prepareToken(token);
-  return genPresetStyle(tagToken);
-}, prepareComponentToken);
-function capitalize(str) {
-  if (typeof str !== "string") {
-    return str;
-  }
-  const ret = str.charAt(0).toUpperCase() + str.slice(1);
-  return ret;
-}
-const genTagStatusStyle = (token, status, cssVariableType) => {
-  const capitalizedCssVariableType = capitalize(cssVariableType);
-  return {
-    [`${token.componentCls}${token.componentCls}-${status}`]: {
-      color: token[`color${cssVariableType}`],
-      background: token[`color${capitalizedCssVariableType}Bg`],
-      borderColor: token[`color${capitalizedCssVariableType}Border`],
-      [`&${token.componentCls}-borderless`]: {
-        borderColor: "transparent"
-      }
-    }
-  };
-};
-const StatusCmp = genSubStyleComponent(["Tag", "status"], (token) => {
-  const tagToken = prepareToken(token);
-  return [genTagStatusStyle(tagToken, "success", "Success"), genTagStatusStyle(tagToken, "processing", "Info"), genTagStatusStyle(tagToken, "error", "Error"), genTagStatusStyle(tagToken, "warning", "Warning")];
-}, prepareComponentToken);
-var __rest = function(s, e) {
-  var t = {};
-  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-  }
-  return t;
-};
-const InternalTag = /* @__PURE__ */ reactExports.forwardRef((tagProps, ref) => {
-  const {
-    prefixCls: customizePrefixCls,
-    className,
-    rootClassName,
-    style,
-    children,
-    icon,
-    color,
-    onClose,
-    bordered = true,
-    visible: deprecatedVisible
-  } = tagProps, props = __rest(tagProps, ["prefixCls", "className", "rootClassName", "style", "children", "icon", "color", "onClose", "bordered", "visible"]);
-  const {
-    getPrefixCls,
-    direction,
-    tag: tagContext
-  } = reactExports.useContext(ConfigContext);
-  const [visible, setVisible] = reactExports.useState(true);
-  const domProps = omit(props, ["closeIcon", "closable"]);
-  reactExports.useEffect(() => {
-    if (deprecatedVisible !== void 0) {
-      setVisible(deprecatedVisible);
-    }
-  }, [deprecatedVisible]);
-  const isPreset = isPresetColor(color);
-  const isStatus = isPresetStatusColor(color);
-  const isInternalColor = isPreset || isStatus;
-  const tagStyle = Object.assign(Object.assign({
-    backgroundColor: color && !isInternalColor ? color : void 0
-  }, tagContext === null || tagContext === void 0 ? void 0 : tagContext.style), style);
-  const prefixCls = getPrefixCls("tag", customizePrefixCls);
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls);
-  const tagClassName = classNames(prefixCls, tagContext === null || tagContext === void 0 ? void 0 : tagContext.className, {
-    [`${prefixCls}-${color}`]: isInternalColor,
-    [`${prefixCls}-has-color`]: color && !isInternalColor,
-    [`${prefixCls}-hidden`]: !visible,
-    [`${prefixCls}-rtl`]: direction === "rtl",
-    [`${prefixCls}-borderless`]: !bordered
-  }, className, rootClassName, hashId, cssVarCls);
-  const handleCloseClick = (e) => {
-    e.stopPropagation();
-    onClose === null || onClose === void 0 ? void 0 : onClose(e);
-    if (e.defaultPrevented) {
-      return;
-    }
-    setVisible(false);
-  };
-  const [, mergedCloseIcon] = useClosable(pickClosable(tagProps), pickClosable(tagContext), {
-    closable: false,
-    closeIconRender: (iconNode2) => {
-      const replacement = /* @__PURE__ */ reactExports.createElement("span", {
-        className: `${prefixCls}-close-icon`,
-        onClick: handleCloseClick
-      }, iconNode2);
-      return replaceElement(iconNode2, replacement, (originProps) => ({
-        onClick: (e) => {
-          var _a;
-          (_a = originProps === null || originProps === void 0 ? void 0 : originProps.onClick) === null || _a === void 0 ? void 0 : _a.call(originProps, e);
-          handleCloseClick(e);
-        },
-        className: classNames(originProps === null || originProps === void 0 ? void 0 : originProps.className, `${prefixCls}-close-icon`)
-      }));
-    }
-  });
-  const isNeedWave = typeof props.onClick === "function" || children && children.type === "a";
-  const iconNode = icon || null;
-  const kids = iconNode ? /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, iconNode, children && /* @__PURE__ */ reactExports.createElement("span", null, children)) : children;
-  const tagNode = /* @__PURE__ */ reactExports.createElement("span", Object.assign({}, domProps, {
-    ref,
-    className: tagClassName,
-    style: tagStyle
-  }), kids, mergedCloseIcon, isPreset && /* @__PURE__ */ reactExports.createElement(PresetCmp, {
-    key: "preset",
-    prefixCls
-  }), isStatus && /* @__PURE__ */ reactExports.createElement(StatusCmp, {
-    key: "status",
-    prefixCls
-  }));
-  return wrapCSSVar(isNeedWave ? /* @__PURE__ */ reactExports.createElement(Wave, {
-    component: "Tag"
-  }, tagNode) : tagNode);
-});
-const Tag = InternalTag;
-Tag.CheckableTag = CheckableTag;
 let n = 0;
 const f = (type, props = {}) => ({ ...createField(type), id: "f" + Date.now().toString(36) + ++n, ...props });
 const cols = (children, gap = "medium") => ({ ...createField("column_2"), id: "c" + Date.now().toString(36) + ++n, gap, columns: children.map((fields) => ({ width: 50, fields })) });
@@ -650,92 +358,6 @@ function finalizeTemplate(t) {
     built.settings.confirmation.message = built.settings.confirmation.message.replace("{field:BOOKING}", "{field:" + uid.id + "}");
   }
   return built;
-}
-function MigratorModal({ open, onClose, onImported }) {
-  const [sources, setSources] = reactExports.useState(null);
-  const [picked, setPicked] = reactExports.useState({});
-  const [running, setRunning] = reactExports.useState(false);
-  const [results, setResults] = reactExports.useState([]);
-  reactExports.useEffect(() => {
-    if (!open) return;
-    setSources(null);
-    setPicked({});
-    setResults([]);
-    getMigrationSources().then((d) => setSources(d.sources || [])).catch((e) => {
-      staticMethods.error(e.message);
-      setSources([]);
-    });
-  }, [open]);
-  const keyOf = (s, f2) => s.key + ":" + f2.id;
-  const selected = Object.keys(picked).filter((k) => picked[k]);
-  const run = async () => {
-    var _a, _b;
-    setRunning(true);
-    const out = [];
-    for (const k of selected) {
-      const [source, id] = k.split(":");
-      const title = ((_b = (_a = sources.find((s) => s.key === source)) == null ? void 0 : _a.forms.find((f2) => String(f2.id) === id)) == null ? void 0 : _b.title) || k;
-      try {
-        const r = await migrateForm(source, Number(id));
-        out.push({ ok: true, title, formId: r.form_id, skipped: r.skipped || [] });
-      } catch (e) {
-        out.push({ ok: false, title, error: e.message });
-      }
-      setResults([...out]);
-    }
-    setRunning(false);
-    setPicked({});
-    onImported();
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Modal,
-    {
-      open,
-      onCancel: onClose,
-      width: 640,
-      title: __("Import from another form plugin", "formglut"),
-      footer: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: onClose, children: __("Close", "formglut") }, "close"),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "primary", disabled: !selected.length, loading: running, onClick: run, style: selected.length ? { background: "#e94560", borderColor: "#e94560" } : void 0, children: selected.length ? sprintf(__("Import %d form(s)", "formglut"), selected.length) : __("Import", "formglut") }, "go")
-      ],
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { color: "#64748b", marginTop: 0 }, children: __("Copies each form’s fields, labels, choices and columns into a new FormGlut draft. Entries stay in the other plugin. Supported: Fluent Forms, Forminator, WPForms, Contact Form 7.", "formglut") }),
-        sources === null ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { textAlign: "center", padding: 30 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Spin, {}) }) : sources.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-fs-note", children: __("No forms from supported plugins were found on this site.", "formglut") }) : sources.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-mig-source", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-mig-head", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: s.name }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Checkbox, { checked: s.forms.length > 0 && s.forms.every((f2) => picked[keyOf(s, f2)]), onChange: (e) => setPicked((p) => {
-              const n2 = { ...p };
-              s.forms.forEach((f2) => {
-                n2[keyOf(s, f2)] = e.target.checked;
-              });
-              return n2;
-            }), children: __("Select all", "formglut") })
-          ] }),
-          s.forms.map((f2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "fg-mig-row", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Checkbox, { checked: !!picked[keyOf(s, f2)], onChange: (e) => setPicked((p) => ({ ...p, [keyOf(s, f2)]: e.target.checked })) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "t", children: f2.title || __("(no title)", "formglut") }),
-            f2.fields !== null && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "m", children: sprintf(__("%d fields", "formglut"), f2.fields) }),
-            f2.imported && /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { color: "green", children: __("Imported before", "formglut") })
-          ] }, f2.id))
-        ] }, s.key)),
-        results.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-mig-results", children: results.map((r, i) => {
-          var _a, _b;
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: r.ok ? "ok" : "bad", children: [
-            r.ok ? "✓" : "✕",
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: r.title }),
-            " ",
-            r.ok ? /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: (((_b = (_a = window.formglut_admin) == null ? void 0 : _a.pages) == null ? void 0 : _b.editor) || "") + "&form_id=" + r.formId, children: __("Open in editor", "formglut") }) : r.error,
-            r.ok && r.skipped.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-fs-help", children: [
-              __("Not imported (no matching FormGlut field):", "formglut"),
-              " ",
-              r.skipped.join(", ")
-            ] })
-          ] }, i);
-        }) })
-      ]
-    }
-  );
 }
 staticMethods.config({
   duration: 3,

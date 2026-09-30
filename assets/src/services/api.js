@@ -168,8 +168,49 @@ export function getMailchimpLists() {
   return request('formglut_get_mailchimp_lists', {}, 'GET');
 }
 
+export function toolsExportUrl(ids, entries) {
+  const { ajax_url, nonce } = window.formglut_admin || {};
+  return `${ajax_url}?action=formglut_tools_export&nonce=${nonce}&ids=${ids}&entries=${entries ? 1 : 0}`;
+}
+
+export function toolsImportPreview(data) {
+  return request('formglut_tools_import_preview', { data }, 'POST');
+}
+
+export function toolsImport(data, opts) {
+  return request('formglut_tools_import', { data, ...opts }, 'POST');
+}
+
+export function getLogs(params) {
+  return request('formglut_tools_logs', params, 'GET');
+}
+
+export function getLogEvents(type) {
+  return request('formglut_tools_log_events', { type }, 'GET');
+}
+
+export function clearLogs(type) {
+  return request('formglut_tools_clear_logs', { type }, 'POST');
+}
+
+export function logSettings(settings) {
+  return request('formglut_tools_log_settings', settings ? { settings } : {}, settings ? 'POST' : 'GET');
+}
+
+export function getSystemStatus() {
+  return request('formglut_tools_status', {}, 'GET');
+}
+
+export function runMaintenance(task) {
+  return request('formglut_tools_maintenance', { task }, 'POST');
+}
+
 export function getMigrationSources() {
   return request('formglut_get_migration_sources', {}, 'GET');
+}
+
+export function migrateEntries(source, id, form_id, offset) {
+  return request('formglut_migrate_entries', { source, id, form_id, offset }, 'POST');
 }
 
 export function migrateForm(source, id) {

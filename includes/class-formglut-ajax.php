@@ -65,6 +65,7 @@ class FormGlut_Ajax {
 			'get_mailchimp_lists',
 			'get_migration_sources',
 			'migrate_form',
+			'migrate_entries',
 			'send_test_email',
 		);
 
@@ -495,6 +496,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to create form.', 'formglut' ) ) );
 		}
 
+		/* translators: %s: form title */
+		FormGlut_Log::activity( 'form.created', sprintf( __( 'Form “%s” created', 'formglut' ), $title ), 'form', $form_id );
 		wp_send_json_success( array(
 			'message' => __( 'Form created successfully.', 'formglut' ),
 			'form_id' => absint( $form_id ),
@@ -570,6 +573,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to update form.', 'formglut' ) ) );
 		}
 
+		/* translators: %s: form title */
+		FormGlut_Log::activity( 'form.updated', sprintf( __( 'Form “%s” saved', 'formglut' ), isset( $data['title'] ) ? $data['title'] : $form->title ), 'form', $form_id, array( 'parts' => array_keys( $data ) ) );
 		wp_send_json_success( array(
 			'message' => __( 'Form updated successfully.', 'formglut' ),
 		) );
@@ -598,6 +603,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to delete form.', 'formglut' ) ) );
 		}
 
+		/* translators: %s: form title */
+		FormGlut_Log::activity( 'form.deleted', sprintf( __( 'Form “%s” deleted with its entries', 'formglut' ), $form->title ), 'form', $form_id, array(), 'warning' );
 		wp_send_json_success( array(
 			'message' => __( 'Form deleted successfully.', 'formglut' ),
 		) );
@@ -621,6 +628,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to duplicate form.', 'formglut' ) ) );
 		}
 
+		/* translators: 1: source form ID, 2: new form ID */
+		FormGlut_Log::activity( 'form.duplicated', sprintf( __( 'Form #%1$d duplicated as #%2$d', 'formglut' ), $form_id, $new_id ), 'form', $new_id );
 		wp_send_json_success( array(
 			'message' => __( 'Form duplicated successfully.', 'formglut' ),
 			'form_id' => absint( $new_id ),
@@ -656,6 +665,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to update status.', 'formglut' ) ) );
 		}
 
+		/* translators: 1: form title, 2: status */
+		FormGlut_Log::activity( 'form.status', sprintf( __( 'Form “%1$s” set to %2$s', 'formglut' ), $form->title, $status ), 'form', $form_id );
 		wp_send_json_success( array(
 			'message' => __( 'Status updated.', 'formglut' ),
 			'status'  => $status,
@@ -1103,9 +1114,10 @@ class FormGlut_Ajax {
 		if ( is_wp_error( $data ) ) {
 			wp_send_json_error( array( 'message' => $data->get_error_message() ) );
 		}
+		$split   = FormGlut_Migrator::split_keys( $data['fields'] );
 		$form_id = FormGlut_Form::create( array(
 			'title'      => sanitize_text_field( $data['title'] ),
-			'fields'     => $this->sanitize_form_fields( $data['fields'] ),
+			'fields'     => $this->sanitize_form_fields( $split['fields'] ),
 			'submit_btn' => $this->sanitize_submit_btn( array( 'text' => ! empty( $data['submit'] ) ? $data['submit'] : __( 'Submit', 'formglut' ) ) ),
 			'settings'   => array(),
 			'status'     => 'draft',
@@ -1114,7 +1126,36 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'The form could not be saved.', 'formglut' ) ) );
 		}
 		FormGlut_Migrator::mark_done( $source, $id, $form_id );
-		wp_send_json_success( array( 'form_id' => $form_id, 'title' => $data['title'], 'skipped' => $data['skipped'] ) );
+		FormGlut_Migrator::save_map( $form_id, $split['map'] );
+		FormGlut_Log::activity( 'form.migrated', sprintf( /* translators: 1: form title, 2: source plugin key */ __( 'Form “%1$s” migrated from %2$s', 'formglut' ), $data['title'], $source ), 'form', $form_id, array( 'source' => $source, 'source_id' => $id ) );
+		$counts = FormGlut_Migrator::entry_counts( $source );
+		wp_send_json_success( array( 'form_id' => $form_id, 'title' => $data['title'], 'skipped' => $data['skipped'], 'entries_total' => isset( $counts[ $id ] ) ? $counts[ $id ] : 0 ) );
+	}
+
+	/**
+	 * Copy a slice of entries from another plugin's form into an imported FormGlut form.
+	 *
+	 * @return void
+	 */
+	public function migrate_entries() {
+		$this->verify_admin_request();
+		$source  = isset( $_POST['source'] ) ? sanitize_key( wp_unslash( $_POST['source'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$id      = absint( $_POST['id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$form_id = absint( $_POST['form_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$offset  = absint( $_POST['offset'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$done    = get_option( 'formglut_migrated', array() );
+		if ( ! $form_id || ! isset( $done[ $source . ':' . $id ] ) || (int) $done[ $source . ':' . $id ] !== $form_id || ! FormGlut_Form::get( $form_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Import the form first, then copy its entries.', 'formglut' ) ) );
+		}
+		$limit  = 100;
+		$result = FormGlut_Migrator::copy_entries( $source, $id, $form_id, $offset, $limit );
+		$total  = $offset + $result['copied'];
+		$finished = $result['read'] < $limit;
+		if ( $finished ) {
+			FormGlut_Migrator::mark_entries_done( $source, $id, $total );
+			FormGlut_Log::activity( 'entry.migrated', sprintf( /* translators: 1: entries, 2: source plugin key */ __( '%1$d entries copied from %2$s', 'formglut' ), $total, $source ), 'form', $form_id, array( 'source' => $source, 'source_id' => $id ) );
+		}
+		wp_send_json_success( array( 'read' => $result['read'], 'copied' => $result['copied'], 'next' => $offset + $result['read'], 'done' => $finished ) );
 	}
 
 	/**
@@ -1180,6 +1221,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to delete entry.', 'formglut' ) ) );
 		}
 
+		/* translators: 1: entry ID, 2: form ID */
+		FormGlut_Log::activity( 'entry.deleted', sprintf( __( 'Entry #%1$d of form #%2$d deleted', 'formglut' ), $entry_id, $entry->form_id ), 'entry', $entry_id, array(), 'warning' );
 		wp_send_json_success( array(
 			'message' => __( 'Entry deleted.', 'formglut' ),
 		) );
@@ -1215,6 +1258,8 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to update entry status.', 'formglut' ) ) );
 		}
 
+		/* translators: 1: entry ID, 2: status */
+		FormGlut_Log::activity( 'entry.status', sprintf( __( 'Entry #%1$d marked %2$s', 'formglut' ), $entry_id, $status ), 'entry', $entry_id );
 		wp_send_json_success( array(
 			'message' => __( 'Entry status updated.', 'formglut' ),
 			'status'  => $status,
@@ -1285,6 +1330,9 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Failed to save settings.', 'formglut' ) ) );
 		}
 
+		FormGlut_Log::activity( 'settings.saved', __( 'Global settings saved', 'formglut' ), 'settings', 0, array( 'keys' => array_values( array_filter( array_map( static function ( $k ) {
+			return 0 === strpos( $k, 'formglut_' ) && false === strpos( $k, 'secret' ) && false === strpos( $k, 'token' ) && false === strpos( $k, 'api_key' ) ? $k : null;
+		}, array_keys( is_array( $settings ) ? $settings : array() ) ) ) ) ) );
 		wp_send_json_success( array(
 			'message' => __( 'Settings saved.', 'formglut' ),
 		) );
@@ -1680,6 +1728,9 @@ class FormGlut_Ajax {
 			}
 		}
 
+		/* translators: 1: form title, 2: entry ID */
+		FormGlut_Log::activity( $is_spam ? 'entry.spam' : 'entry.created', $is_spam ? sprintf( __( 'Submission to “%1$s” saved as spam (entry #%2$d)', 'formglut' ), $form->title, $entry_id ) : sprintf( __( 'New submission to “%1$s” (entry #%2$d)', 'formglut' ), $form->title, $entry_id ), 'entry', $entry_id, array( 'form_id' => (int) $form_id, 'stored' => (bool) $entry_id, 'paid' => isset( $fields_data['_payment'] ) ), $is_spam ? 'warning' : 'ok' );
+
 		// Send email notifications (never for spam).
 		if ( ! $is_spam ) {
 			$this->send_notification_email( $form, $fields_data, $entry_id, $keep_ip ? $ip : '' );
@@ -1928,14 +1979,15 @@ class FormGlut_Ajax {
 			if ( '' === $token ) {
 				return $message;
 			}
-			$response = wp_remote_post( $endpoints[ $provider ][0], array(
+			$response = FormGlut_Http::request( ucfirst( $provider ), $endpoints[ $provider ][0], array(
+				'method'  => 'POST',
 				'body'    => array(
 					'secret'   => $cfg['secret'],
 					'response' => $token,
 					'remoteip' => $this->get_client_ip(),
 				),
 				'timeout' => 10,
-			) );
+			), (int) $form->id );
 			if ( is_wp_error( $response ) ) {
 				return $message;
 			}

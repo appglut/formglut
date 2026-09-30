@@ -53,6 +53,9 @@ function formglut_require_files() {
 		'includes/class-formglut-entry.php',
 		'includes/class-formglut-form.php',
 		'includes/class-formglut-form-settings.php',
+		'includes/class-formglut-log.php',
+		'includes/class-formglut-http.php',
+		'includes/class-formglut-tools.php',
 		'includes/class-formglut-uploads.php',
 		'includes/class-formglut-block.php',
 		'includes/class-formglut-privacy.php',
@@ -197,6 +200,11 @@ function formglut_init() {
 	// Boot shortcode.
 	if ( class_exists( 'FormGlut_Shortcode' ) ) {
 		FormGlut_Shortcode::get_instance();
+	}
+
+	// Tools page backend (export / import, logs, status, maintenance).
+	if ( class_exists( 'FormGlut_Tools' ) ) {
+		FormGlut_Tools::init();
 	}
 
 	// WordPress personal-data export / erase.

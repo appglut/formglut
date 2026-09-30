@@ -24,10 +24,10 @@ class FormGlut_Integrations {
 	public static function dispatch( $form, $fields_data ) {
 		$i = $form->settings['integrations'];
 		if ( ! empty( $i['mailchimp_enabled'] ) ) {
-			self::mailchimp( $i, $fields_data );
+			self::mailchimp( $i, $fields_data, (int) $form->id );
 		}
 		if ( ! empty( $i['hubspot_enabled'] ) ) {
-			self::hubspot( $i, $fields_data );
+			self::hubspot( $i, $fields_data, (int) $form->id );
 		}
 	}
 
@@ -57,7 +57,7 @@ class FormGlut_Integrations {
 		if ( ! $api ) {
 			return new WP_Error( 'no_key', __( 'Add a valid Mailchimp API key in Global Settings › Integrations first.', 'formglut' ) );
 		}
-		$res = wp_remote_get( $api['base'] . 'lists?count=200&fields=lists.id,lists.name', array( 'headers' => $api['headers'], 'timeout' => 10 ) );
+		$res = FormGlut_Http::request( 'Mailchimp', $api['base'] . 'lists?count=200&fields=lists.id,lists.name', array( 'headers' => $api['headers'], 'timeout' => 10 ) );
 		if ( is_wp_error( $res ) ) {
 			return $res;
 		}
@@ -91,7 +91,7 @@ class FormGlut_Integrations {
 	 * @param array $data Submitted values.
 	 * @return void
 	 */
-	private static function mailchimp( $i, $data ) {
+	private static function mailchimp( $i, $data, $form_id = 0 ) {
 		$api   = self::mailchimp_api();
 		$email = self::val( $data, $i['mailchimp_email'] );
 		if ( ! $api || '' === $i['mailchimp_list'] || ! is_email( $email ) ) {
@@ -110,18 +110,19 @@ class FormGlut_Integrations {
 		if ( $merge ) {
 			$body['merge_fields'] = $merge;
 		}
-		wp_remote_request( $url, array( 'method' => 'PUT', 'headers' => $api['headers'], 'timeout' => 8, 'body' => wp_json_encode( $body ) ) );
+		FormGlut_Http::request( 'Mailchimp', $url, array( 'method' => 'PUT', 'headers' => $api['headers'], 'timeout' => 8, 'body' => wp_json_encode( $body ) ), $form_id );
 
 		$tags = array_filter( array_map( 'trim', explode( ',', (string) $i['mailchimp_tags'] ) ) );
 		if ( $tags ) {
-			wp_remote_post( $url . '/tags', array(
+			FormGlut_Http::request( 'Mailchimp', $url . '/tags', array(
+				'method'   => 'POST',
 				'headers'  => $api['headers'],
 				'timeout'  => 5,
 				'blocking' => false,
 				'body'     => wp_json_encode( array( 'tags' => array_map( static function ( $t ) {
 					return array( 'name' => $t, 'status' => 'active' );
 				}, $tags ) ) ),
-			) );
+			), $form_id );
 		}
 	}
 
@@ -132,7 +133,7 @@ class FormGlut_Integrations {
 	 * @param array $data Submitted values.
 	 * @return void
 	 */
-	private static function hubspot( $i, $data ) {
+	private static function hubspot( $i, $data, $form_id = 0 ) {
 		$token = trim( (string) FormGlut_Settings::get( 'formglut_hubspot_token', '' ) );
 		$email = self::val( $data, $i['hubspot_email'] );
 		if ( '' === $token || ! is_email( $email ) ) {
@@ -147,11 +148,12 @@ class FormGlut_Integrations {
 			'message'   => self::val( $data, $i['hubspot_message'] ),
 		), 'strlen' );
 		$args  = array( 'headers' => array( 'Authorization' => 'Bearer ' . $token, 'Content-Type' => 'application/json' ), 'timeout' => 8, 'body' => wp_json_encode( array( 'properties' => $props ) ) );
-		$res   = wp_remote_post( 'https://api.hubapi.com/crm/v3/objects/contacts', $args );
+		$args['method'] = 'POST';
+		$res            = FormGlut_Http::request( 'HubSpot', 'https://api.hubapi.com/crm/v3/objects/contacts', $args, $form_id );
 		if ( ! is_wp_error( $res ) && 409 === wp_remote_retrieve_response_code( $res ) ) {
 			// The contact exists: update it instead.
 			$args['method'] = 'PATCH';
-			wp_remote_request( 'https://api.hubapi.com/crm/v3/objects/contacts/' . rawurlencode( $email ) . '?idProperty=email', $args );
+			FormGlut_Http::request( 'HubSpot', 'https://api.hubapi.com/crm/v3/objects/contacts/' . rawurlencode( $email ) . '?idProperty=email', $args, $form_id );
 		}
 	}
 }
