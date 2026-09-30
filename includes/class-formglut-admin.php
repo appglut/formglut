@@ -62,6 +62,7 @@ class FormGlut_Admin {
 				? __( 'Edit Form', 'formglut' ) : __( 'Add New Form', 'formglut' ),
 			'formglut-entries'      => __( 'Entries', 'formglut' ),
 			'formglut-entry-detail' => __( 'Entry Detail', 'formglut' ),
+			'formglut-form-settings' => __( 'Form Settings', 'formglut' ),
 			'formglut-settings'     => __( 'Settings', 'formglut' ),
 			'formglut-pro-features' => __( 'Pro Features', 'formglut' ),
 			'formglut-preview'      => __( 'Form Preview', 'formglut' ),
@@ -149,6 +150,16 @@ class FormGlut_Admin {
 			array( $this, 'render_entry_detail_page' )
 		);
 
+		// Hidden submenu — Form Settings (settings of one form, opened with ?form_id=).
+		add_submenu_page(
+			'__formglut_does_not_exist',
+			__( 'Form Settings', 'formglut' ),
+			'',
+			'manage_options',
+			'formglut-form-settings',
+			array( $this, 'render_form_settings_page' )
+		);
+
 		// Hidden submenu - Form Preview.
 		add_submenu_page(
 			'__formglut_does_not_exist',
@@ -219,6 +230,7 @@ public function menu_icon_styles() {
 			'formglut-entries'      => 'entries',
 			'formglut-settings'     => 'settings',
 			'formglut-entry-detail' => 'single-entry',
+			'formglut-form-settings' => 'form-settings',
 		);
 
 		$entry = isset( $entry_map[ $page ] ) ? $entry_map[ $page ] : 'all-forms';
@@ -267,6 +279,7 @@ public function menu_icon_styles() {
 				'editor'       => admin_url( 'admin.php?page=formglut-editor' ),
 				'entries'      => admin_url( 'admin.php?page=formglut-entries' ),
 				'settings'     => admin_url( 'admin.php?page=formglut-settings' ),
+				'form_settings' => admin_url( 'admin.php?page=formglut-form-settings' ),
 				'entry_detail' => admin_url( 'admin.php?page=formglut-entry-detail' ),
 				'preview'      => admin_url( 'admin.php?page=formglut-preview' ),
 				'pro_features' => admin_url( 'admin.php?page=formglut-pro-features' ),
@@ -314,6 +327,7 @@ public function menu_icon_styles() {
 			'formglut-form-editor',
 			'formglut-entries',
 			'formglut-settings',
+			'formglut-form-settings',
 			'formglut-single-entry',
 			'formglut-preview',
 			'formglut-frontend',
@@ -1452,6 +1466,15 @@ public function menu_icon_styles() {
 	}
 
 	/**
+	 * Render the settings page of a single form.
+	 *
+	 * @return void
+	 */
+	public function render_form_settings_page() {
+		$this->render_page( 'form-settings.html' );
+	}
+
+	/**
 	 * Output the preview page as a standalone document, before the admin chrome loads.
 	 *
 	 * The shell (header + device switcher) embeds the form in an iframe so that
@@ -1731,6 +1754,7 @@ public function menu_icon_styles() {
 			'formglut_page_formglut-settings',
 			'formglut_page_formglut-entry-detail',
 			'admin_page_formglut-entry-detail',
+			'admin_page_formglut-form-settings',
 			'admin_page_formglut-preview',
 		);
 

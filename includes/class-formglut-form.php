@@ -61,6 +61,9 @@ class FormGlut_Form {
 			$form->fields    = is_array( $raw ) ? $raw : array();
 			$form->submit_btn = is_array( $raw_btn ) ? $raw_btn : array();
 		}
+
+		// Per-form settings (defaults filled in, always sanitized).
+		$form->settings = FormGlut_Form_Settings::from_stored( isset( $form->settings ) ? $form->settings : '' );
 	}
 
 	/**
@@ -191,9 +194,10 @@ class FormGlut_Form {
 				'form_fields' => wp_json_encode( $data['fields'] ?? array() ),
 				'submit_btn'  => wp_json_encode( $data['submit_btn'] ?? array() ),
 				'status'      => sanitize_text_field( $data['status'] ?? 'draft' ),
+				'settings'    => wp_json_encode( FormGlut_Form_Settings::sanitize( $data['settings'] ?? array() ) ),
 				'created_by'  => get_current_user_id(),
 			),
-			array( '%s', '%s', '%s', '%s', '%d' )
+			array( '%s', '%s', '%s', '%s', '%s', '%d' )
 		);
 
 		return $inserted ? $wpdb->insert_id : false;
@@ -230,6 +234,11 @@ class FormGlut_Form {
 		if ( isset( $data['status'] ) ) {
 			$fields['status'] = sanitize_text_field( $data['status'] );
 			$format[]         = '%s';
+		}
+
+		if ( isset( $data['settings'] ) ) {
+			$fields['settings'] = wp_json_encode( FormGlut_Form_Settings::sanitize( $data['settings'] ) );
+			$format[]           = '%s';
 		}
 
 		$fields['updated_at'] = current_time( 'mysql' );
@@ -279,6 +288,7 @@ class FormGlut_Form {
 			'title'      => $form->title . ' (copy)',
 			'fields'     => $form->fields,
 			'submit_btn' => $form->submit_btn,
+			'settings'   => $form->settings,
 			'status'     => 'draft',
 		) );
 	}

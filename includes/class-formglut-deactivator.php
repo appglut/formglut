@@ -21,6 +21,7 @@ class FormGlut_Deactivator {
 	 */
 	public static function deactivate() {
 		self::clear_transients();
+		wp_clear_scheduled_hook( 'formglut_retention_cleanup' );
 		flush_rewrite_rules();
 	}
 

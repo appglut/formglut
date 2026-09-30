@@ -77,5 +77,6 @@ class FormGlut_Activator {
 	 */
 	private static function set_db_version() {
 		update_option( 'formglut_db_version', FORMGLUT_VERSION );
+		update_option( 'formglut_schema_version', FormGlut_Form_Settings::SCHEMA_VERSION );
 	}
 }

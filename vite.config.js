@@ -13,6 +13,7 @@ export default defineConfig({
         'entries': resolve(__dirname, 'assets/src/pages/index-entries.jsx'),
         'form-editor': resolve(__dirname, 'assets/src/pages/index-form-editor.jsx'),
         'settings': resolve(__dirname, 'assets/src/pages/index-settings.jsx'),
+        'form-settings': resolve(__dirname, 'assets/src/pages/index-form-settings.jsx'),
         'single-entry': resolve(__dirname, 'assets/src/pages/index-single-entry.jsx'),
         'form-frontend': resolve(__dirname, 'assets/src/frontend/form-submit.js'),
       },

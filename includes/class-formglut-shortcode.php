@@ -79,8 +79,10 @@ class FormGlut_Shortcode {
 			return '';
 		}
 
-		// Increment view count.
-		FormGlut_Form::increment_views( $form_id );
+		// Increment view count (can be turned off per form).
+		if ( ! empty( $form->settings['entries']['count_views'] ) ) {
+			FormGlut_Form::increment_views( $form_id );
+		}
 
 		// Enqueue frontend assets (once per page load).
 		$this->enqueue_frontend_assets();
@@ -97,7 +99,7 @@ class FormGlut_Shortcode {
 	 */
 	public function render_preview( $form ) {
 		$this->enqueue_frontend_assets();
-		return $this->build_form_html( $form );
+		return $this->build_form_html( $form, false );
 	}
 
 	/**
@@ -166,11 +168,37 @@ class FormGlut_Shortcode {
 	/**
 	 * Build the complete form HTML.
 	 *
-	 * @param object $form Form object with decoded fields.
+	 * @param object $form    Form object with decoded fields.
+	 * @param bool   $enforce Apply restrictions (login, schedule, entry limit). False in the admin preview.
 	 * @return string HTML output (escaped).
 	 */
-	private function build_form_html( $form ) {
+	private function build_form_html( $form, $enforce = true ) {
 		$form_id  = absint( $form->id );
+		$fs       = $form->settings;
+
+		// Restrictions: show the reason instead of the form.
+		if ( $enforce ) {
+			$availability = FormGlut_Form_Settings::availability( $form );
+			if ( ! $availability['open'] ) {
+				return '<div class="formglut-form-wrapper" id="formglut-form-' . esc_attr( $form_id ) . '"><div class="formglut-form-message formglut-error" style="display:block;">' . esc_html( $availability['message'] ) . '</div></div>';
+			}
+		}
+
+		// Wrapper class, width and alignment.
+		$wrapper_class = 'formglut-form-wrapper' . ( '' !== $fs['general']['form_class'] ? ' ' . $fs['general']['form_class'] : '' );
+		$wrapper_style = '';
+		if ( '' !== $fs['style']['form_width'] ) {
+			$wrapper_style .= 'max-width:' . $fs['style']['form_width'] . ';';
+		}
+		if ( 'center' === $fs['style']['form_align'] ) {
+			$wrapper_style .= 'margin-left:auto;margin-right:auto;';
+		} elseif ( 'right' === $fs['style']['form_align'] ) {
+			$wrapper_style .= 'margin-left:auto;margin-right:0;';
+		} elseif ( '' !== $fs['style']['form_width'] ) {
+			$wrapper_style .= 'margin-left:0;margin-right:auto;';
+		}
+		$custom_css = '' !== $fs['style']['custom_css'] ? str_replace( '{form}', '#formglut-form-' . $form_id, $fs['style']['custom_css'] ) : '';
+		$processing = $fs['general']['submit_processing'];
 
 		$this->current_form_id = $form_id;
 		$has_custom_submit     = false;
@@ -190,8 +218,14 @@ class FormGlut_Shortcode {
 
 		ob_start();
 		?>
-		<div class="formglut-form-wrapper" id="formglut-form-<?php echo esc_attr( $form_id ); ?>">
+		<div class="<?php echo esc_attr( $wrapper_class ); ?>" id="formglut-form-<?php echo esc_attr( $form_id ); ?>"<?php echo '' !== $wrapper_style ? ' style="' . esc_attr( $wrapper_style ) . '"' : ''; ?>>
+			<?php if ( '' !== $custom_css ) : ?>
+				<style><?php echo wp_strip_all_tags( $custom_css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tags stripped and sanitized when saved. ?></style>
+			<?php endif; ?>
 			<form class="formglut-form" data-form-id="<?php echo esc_attr( $form_id ); ?>" novalidate>
+				<?php if ( ! empty( $fs['general']['show_title'] ) ) : ?>
+					<h3 class="formglut-form-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above. ?></h3>
+				<?php endif; ?>
 				<?php wp_nonce_field( 'formglut_submit_nonce', 'formglut_nonce_field' ); ?>
 				<input type="hidden" name="action" value="formglut_submit_form" />
 				<input type="hidden" name="form_id" value="<?php echo esc_attr( $form_id ); ?>" />
@@ -201,13 +235,17 @@ class FormGlut_Shortcode {
 					<?php echo $this->render_field( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each field method escapes internally. ?>
 				<?php endforeach; ?>
 
-				<?php if ( FormGlut_Settings::get( 'formglut_honeypot', true ) ) : ?>
+				<?php if ( FormGlut_Form_Settings::honeypot_enabled( $form ) ) : ?>
 					<?php echo $this->render_honeypot(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php endif; ?>
+
+				<?php if ( (int) $fs['spam']['min_time'] > 0 ) : ?>
+					<input type="hidden" name="formglut_ts" value="<?php echo esc_attr( FormGlut_Form_Settings::time_token( $form_id ) ); ?>" />
 				<?php endif; ?>
 
 				<?php if ( ! $has_custom_submit ) : ?>
 				<div class="formglut-form-actions" style="<?php echo esc_attr( $btn_styles['align'] ); ?>">
-					<button type="submit" class="formglut-submit-btn" style="<?php echo esc_attr( $btn_styles['inline'] ); ?>">
+					<button type="submit" class="formglut-submit-btn" style="<?php echo esc_attr( $btn_styles['inline'] ); ?>"<?php echo '' !== $processing ? ' data-loading-text="' . esc_attr( $processing ) . '"' : ''; ?>>
 						<span class="formglut-btn-text"><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped above. ?></span>
 						<span class="formglut-btn-spinner" style="display:none;">&nbsp;&hellip;</span>
 					</button>

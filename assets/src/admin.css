@@ -16,8 +16,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
-  height: 68px;
+  padding: 0 24px;
+  height: 64px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -26,7 +26,8 @@ body {
 .fg-header-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  min-width: 120px;
 }
 .fg-header-logo {
   display: flex;
@@ -39,13 +40,14 @@ body {
   display: block;
   margin-top:3px;
 }
-.fg-header-nav { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.06); border-radius: 10px; padding: 4px; }
+.fg-header-right { display: flex; gap: 8px; align-items: center; min-width: 120px; justify-content: flex-end; }
+.fg-header-nav { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.06); border-radius: 8px; padding: 3px; }
 .fg-header-nav a {
   color: rgba(255,255,255,0.65);
-  padding: 8px 18px;
-  border-radius: 8px;
+  padding: 7px 18px;
+  border-radius: 6px;
   text-decoration: none;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   transition: all 0.2s;
 }
@@ -60,10 +62,10 @@ body {
   color: #fff;
   background: rgba(255,255,255,0.12);
 }
-.fg-header-nav a.active {
-  background: rgba(233, 69, 96, 0.25);
+.fg-header-nav a.active, .fg-header-nav a.active:link, .fg-header-nav a.active:visited {
+  background: #e94560;
   color: #fff;
-  box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+  box-shadow: 0 2px 8px rgba(233, 69, 96, 0.3);
 }
 
 /* Layout */
@@ -459,3 +461,75 @@ body {
   transform: translateY(-38%); display: inline-flex; align-items: center; line-height: 1;
 }
 .fg-table-toolbar .ant-select .ant-select-arrow svg { display: block; }
+
+/* ── Form settings page ───────────────────────────────────────────── */
+.fg-fs-top { max-width: 1100px; margin: 0 auto 20px; }
+.fg-fs-back { display: inline-flex; align-items: center; gap: 8px; color: #64748b; text-decoration: none; font-size: 13px; margin-bottom: 10px; }
+.fg-fs-back:hover { color: #e94560; }
+.fg-fs-titlebar { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.fg-fs-formname { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; color: #334155; }
+.fg-fs-id { background: #f1f5f9; color: #64748b; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+.fg-fs-code { display: inline-flex; align-items: center; gap: 8px; border: 1px dashed #cbd5e1; background: #fff; color: #475569; font: 12px ui-monospace, Menlo, monospace; padding: 3px 10px; border-radius: 8px; cursor: pointer; }
+.fg-fs-code:hover { border-color: #e94560; color: #e94560; }
+.fg-fs-actions { display: flex; align-items: center; gap: 14px; }
+.fg-fs-unsaved { font-size: 12.5px; color: #c2410c; background: #fff7ed; padding: 4px 12px; border-radius: 999px; }
+.fg-fs-note { margin-top: 12px; font-size: 13px; color: #64748b; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 14px; }
+.fg-fs-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 22px; max-width: 1100px; margin: 0 auto; align-items: start; }
+.fg-fs-nav { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 4px; background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 8px; }
+.fg-fs-nav button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; background: transparent; padding: 10px 12px; border-radius: 10px; color: #475569; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .12s, color .12s; }
+.fg-fs-nav button .ic { width: 30px; height: 30px; border-radius: 8px; background: #f1f5f9; color: #64748b; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex: none; }
+.fg-fs-nav button:hover { background: #f8fafc; }
+.fg-fs-nav button.active { background: #fff1f3; color: #e94560; font-weight: 600; }
+.fg-fs-nav button.active .ic { background: #e94560; color: #fff; }
+.fg-fs-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 0 26px 10px; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+.fg-fs-card-head { display: flex; gap: 14px; align-items: center; padding: 22px 0 18px; border-bottom: 1px solid #f0f0f0; }
+.fg-fs-card-head .ic { width: 42px; height: 42px; border-radius: 12px; background: #fff1f3; color: #e94560; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; flex: none; }
+.fg-fs-card-head h2 { margin: 0; font-size: 18px; font-weight: 700; color: #0f172a; }
+.fg-fs-card-head p { margin: 2px 0 0; font-size: 13px; color: #64748b; }
+.fg-fs-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 28px; align-items: center; padding: 18px 0; border-bottom: 1px solid #f3f4f6; }
+.fg-fs-row:last-of-type { border-bottom: 0; }
+.fg-fs-row.has-divider { margin-top: 10px; border-top: 1px solid #e5e7eb; }
+.fg-fs-row.is-wide { align-items: start; }
+.fg-fs-row.is-switch .fg-fs-control { display: flex; justify-content: flex-end; }
+.fg-fs-label label { display: block; font-size: 14px; font-weight: 600; color: #1e293b; }
+.fg-fs-help { margin-top: 3px; font-size: 12.5px; line-height: 1.5; color: #64748b; }
+.fg-fs-control .ant-input, .fg-fs-control .ant-input-number, .fg-fs-control .ant-select { border-radius: 8px; }
+.fg-fs-control .ant-input, .fg-fs-control .ant-select-selector { padding-top: 6px; padding-bottom: 6px; }
+.fg-fs-control input.ant-input { height: 38px; }
+.fg-fs-control .ant-select-selector { min-height: 38px; }
+.fg-fs-tags { margin: 6px 0 18px; padding: 14px 16px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; }
+.fg-fs-tags-title { font-size: 13px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px; }
+.fg-fs-tags-title span { font-weight: 400; color: #94a3b8; font-size: 12px; }
+.fg-fs-tags-sub { margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: #94a3b8; font-weight: 600; }
+.fg-fs-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fg-fs-chips button { border: 1px solid #e2e8f0; background: #fff; color: #475569; font: 12px ui-monospace, Menlo, monospace; padding: 3px 10px; border-radius: 999px; cursor: pointer; }
+.fg-fs-chips button:hover { border-color: #e94560; color: #e94560; }
+.fg-fs-empty { max-width: 420px; margin: 0 auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 32px; }
+.fg-fs-empty-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+@media (max-width: 900px) {
+  .fg-fs-layout { grid-template-columns: 1fr; }
+  .fg-fs-nav { position: static; flex-direction: row; overflow-x: auto; }
+  .fg-fs-nav button { white-space: nowrap; width: auto; }
+  .fg-fs-row { grid-template-columns: 1fr; gap: 10px; }
+  .fg-fs-row.is-switch { grid-template-columns: 1fr auto; align-items: center; }
+}
+
+.fg-fs-page { min-height: 100vh; background: #f0f2f5; }
+.fg-fs-body { padding: 26px 24px 60px; }
+
+/* Smart tags picker */
+.fg-fs-label-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fg-tag-btn { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border: 0; background: transparent; color: #64748b; font-size: 14px; border-radius: 50%; cursor: pointer; transition: background .12s, color .12s; }
+.fg-tag-btn:hover, .fg-tag-btn:focus-visible { background: #e5e7eb; color: #1e293b; outline: none; }
+.fg-tag-popover .ant-popover-inner { padding: 0; border-radius: 12px; overflow: hidden; }
+.fg-tag-pop { width: 340px; max-height: 380px; overflow-y: auto; padding: 12px 8px 10px; }
+.fg-tag-title { font-size: 14px; font-weight: 700; color: #1e293b; padding: 0 10px; }
+.fg-tag-hint { font-size: 12.5px; line-height: 1.5; color: #64748b; padding: 4px 10px 8px; }
+.fg-tag-group { font-size: 11px; text-transform: uppercase; letter-spacing: .6px; font-weight: 700; color: #94a3b8; padding: 8px 10px 4px; }
+.fg-tag-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px; cursor: pointer; }
+.fg-tag-item:hover, .fg-tag-item:focus-visible { background: #f1f5f9; outline: none; }
+.fg-tag-item .name { flex: 1; min-width: 0; font-size: 13px; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fg-tag-item code { font: 11px ui-monospace, Menlo, monospace; color: #64748b; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 6px; padding: 1px 6px; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fg-tag-item .copy { border: 0; background: transparent; color: #94a3b8; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+.fg-tag-item .copy:hover { background: #e5e7eb; color: #1e293b; }
+.fg-tag-item .copy.done { color: #059669; }

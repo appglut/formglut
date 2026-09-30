@@ -235,11 +235,26 @@ async function handleSubmit(e) {
     const result = await response.json();
 
     if (result.success) {
-      showSuccess(successEl, result.data?.message || __( 'Thank you for your submission!', 'formglut' ));
-      form.reset();
+      // Per-form confirmation settings come from the server.
+      const conf = result.data?.confirmation || {};
+      const afterSubmit = conf.after_submit || 'reset';
+      showSuccess(successEl, result.data?.message || __( 'Thank you for your submission!', 'formglut' ), conf.scroll !== false);
+      if (afterSubmit !== 'keep') form.reset();
 
-      // Optionally redirect.
-      const redirectUrl = form.dataset.redirect;
+      // Hide the fields and button, leaving only the confirmation message.
+      if (afterSubmit === 'hide') {
+        Array.from(form.children).forEach((el) => {
+          if (!el.classList.contains('formglut-form-message') && !el.classList.contains('formglut-form-title')) el.style.display = 'none';
+        });
+      }
+
+      // Auto-hide the message after N seconds.
+      if (conf.autoclose > 0) {
+        setTimeout(() => { if (successEl) successEl.style.display = 'none'; }, conf.autoclose * 1000);
+      }
+
+      // Redirect to the configured URL.
+      const redirectUrl = conf.redirect_url || form.dataset.redirect;
       if (redirectUrl) {
         window.location.href = redirectUrl;
       }
@@ -274,11 +289,11 @@ async function handleSubmit(e) {
   }
 }
 
-function showSuccess(el, msg) {
+function showSuccess(el, msg, scroll = true) {
   if (!el) return;
   el.textContent = msg;
   el.style.display = 'block';
-  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (scroll) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function showError(el, msg) {

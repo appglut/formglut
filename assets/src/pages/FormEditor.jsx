@@ -6,6 +6,7 @@ import {
   faCopy, faTrash, faGear, faPalette, faPlus, faCircleInfo, faCode, faClock, faEyeSlash, faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons';
 import { _pg } from '../components/Header';
+import EditorHeader from '../components/EditorHeader';
 import * as api from '../services/api';
 import { FIELD_TYPES, createField, getAllFieldTypes, getEnabledFieldTypes, isContainerField, flattenFields } from '../fields/fieldTypes.jsx';
 import DynamicFieldOptions from '../fields/DynamicFieldOptions.jsx';
@@ -1642,17 +1643,7 @@ export default function FormEditor() {
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header className="fg-editor-header">
-        <div className="fg-editor-header-left">
-          <a className="fg-editor-back" href={_pg.all_forms}><FontAwesomeIcon icon={faArrowLeft} /> {__( 'Back', 'formglut' )}</a>
-          <input className="fg-editor-title-input" value={formTitle} onChange={(e) => { setFormTitle(e.target.value); setIsDirty(true); }} placeholder={__( 'Enter form title...', 'formglut' )} />
-        </div>
-        <div className="fg-editor-header-center">
-          <button className="fg-editor-tab active">{__( 'Editor', 'formglut' )}</button>
-          <a className="fg-editor-tab" href={_pg.settings}>{__( 'Settings', 'formglut' )}</a>
-          <a className="fg-editor-tab" href={_pg.entries}>{__( 'Entries', 'formglut' )}</a>
-        </div>
-        <div className="fg-editor-header-right">
+      <EditorHeader formId={formId} title={formTitle} onTitleChange={(v) => { setFormTitle(v); setIsDirty(true); }} active="editor">
           <Tooltip title={__( 'Undo', 'formglut' )}><Button icon={<FontAwesomeIcon icon={faRotateLeft} />} size="small" type="text" style={{ color: 'rgba(255,255,255,0.7)' }} onClick={undo} disabled={historyIdx <= 0} /></Tooltip>
           <Tooltip title={__( 'Redo', 'formglut' )}><Button icon={<FontAwesomeIcon icon={faRotateRight} />} size="small" type="text" style={{ color: 'rgba(255,255,255,0.7)' }} onClick={redo} disabled={historyIdx >= history.length - 1} /></Tooltip>
           <Button icon={<FontAwesomeIcon icon={faEye} />} style={{ color: '#fff', background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.15)', borderRadius: 8 }} onClick={() => { if (formId) { window.open(_pg.preview + '&form_id=' + formId, '_blank'); } else { message.warning(__( 'Save the form first to preview.', 'formglut' )); } }}>{__( 'Preview', 'formglut' )}</Button>
@@ -1664,8 +1655,7 @@ export default function FormEditor() {
           <Button icon={<FontAwesomeIcon icon={faFloppyDisk} />} type="primary" loading={saving} onClick={handleSave} style={{ background: '#e94560', borderColor: '#e94560', borderRadius: 8, fontWeight: 600 }}>
             {isDirty ? __( 'Save Form *', 'formglut' ) : __( 'Save Form', 'formglut' )}
           </Button>
-        </div>
-      </header>
+              </EditorHeader>
 
       <div className="fg-editor-body">
         <div className="fg-sidebar">

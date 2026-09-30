@@ -1,11 +1,13 @@
-import { R as React, a3 as _slicedToArray, a8 as classNames, Y as _defineProperty, a1 as _objectWithoutProperties, K as KeyCode, Z as _extends, a0 as _objectSpread2, a as CSSMotion, bO as toArray, c0 as useMergedState, c7 as warningOnce, bE as pickAttrs, a6 as _typeof, a5 as _toConsumableArray, bG as reactExports, d as ConfigContext, bc as genStyleHooks, bB as merge, bP as unit, bH as resetComponent, ba as genFocusStyle, bI as resetIcon, bT as useComponentConfig, c2 as useSize, aa as cloneElement, br as initCollapseMotion, bC as omit, I as Icon, c8 as wrapperRaf, bZ as useLayoutUpdateEffect, bV as useEvent, A as RefResizeObserver, bU as useComposeRef, bv as isMobile, bp as getTransitionName, bN as textEllipsis, b9 as genFocusOutline, bR as useCSSVarCls, u as RefIcon$2, bx as jsxRuntimeExports, E as Tooltip, i as FontAwesomeIcon, ar as faCircleInfo, B as Button, b3 as faTrash, aU as faPlus, bK as staticMethods, a2 as _pg, ai as faArrowLeft, aW as faRotateLeft, aX as faRotateRight, ay as faEye, at as faCode, aB as faFloppyDisk, aj as faArrowUp, ah as faArrowDown, aD as faGear, aP as faPalette, au as faCopy, as as faClock, az as faEyeSlash, aZ as faShieldHalved, af as createRoot } from "./chunks/Header-DQeOh4jx.js";
-import { k as getSettings, h as getForm, l as updateForm, c as createForm } from "./chunks/api-CyfhXhZs.js";
-import { k as getStyleGroups, e as STYLE_GROUPS, F as FIELD_TYPES, S as SECTION_ORDER, c as SECTION_TITLES, b as FIELD_TYPE_GROUPS, i as getCommonOptionKeys, C as COMMON_OPTION_KEYS, j as getOptionsForFieldType, g as flattenFields, f as createField, l as isContainerField, h as getAllFieldTypes, d as STYLE_BLOCKS, a as COUNTRIES } from "./chunks/fieldTypes-DTO528vk.js";
+import { R as React, a6 as _slicedToArray, ab as classNames, $ as _defineProperty, a3 as _objectWithoutProperties, K as KeyCode, a0 as _extends, a2 as _objectSpread2, a as CSSMotion, bX as toArray, ca as useMergedState, ci as warningOnce, bM as pickAttrs, a9 as _typeof, a8 as _toConsumableArray, bP as reactExports, d as ConfigContext, bj as genStyleHooks, bI as merge, bY as unit, bQ as resetComponent, bh as genFocusStyle, bR as resetIcon, c1 as useComponentConfig, cd as useSize, ad as cloneElement, by as initCollapseMotion, bK as omit, I as Icon, cj as wrapperRaf, c7 as useLayoutUpdateEffect, c3 as useEvent, E as RefResizeObserver, c2 as useComposeRef, bC as isMobile, bw as getTransitionName, bW as textEllipsis, bg as genFocusOutline, b_ as useCSSVarCls, v as RefIcon$2, bE as jsxRuntimeExports, H as Tooltip, i as FontAwesomeIcon, ax as faCircleInfo, B as Button, ba as faTrash, a$ as faPlus, bT as staticMethods, b1 as faRotateLeft, b2 as faRotateRight, a4 as _pg, aE as faEye, az as faCode, aH as faFloppyDisk, am as faArrowUp, ak as faArrowDown, aJ as faGear, aW as faPalette, aA as faCopy, ay as faClock, aF as faEyeSlash, b4 as faShieldHalved, ai as createRoot } from "./chunks/NavMenu-D0YBC0d1.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
-import { S as Switch } from "./chunks/index-Cg_vhjBG.js";
-import { f as genCollapseMotion, y as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-DUFQZRHD.js";
-import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-Bj9WiQlh.js";
-import { T as TypedInputNumber } from "./chunks/index-CsH6ZKSA.js";
+import { E as EditorHeader } from "./chunks/EditorHeader-DE2K_3W-.js";
+import { k as getSettings, h as getForm, l as updateForm, c as createForm } from "./chunks/api-CyfhXhZs.js";
+import { k as getStyleGroups, e as STYLE_GROUPS, F as FIELD_TYPES, S as SECTION_ORDER, c as SECTION_TITLES, b as FIELD_TYPE_GROUPS, i as getCommonOptionKeys, C as COMMON_OPTION_KEYS, j as getOptionsForFieldType, g as flattenFields, f as createField, l as isContainerField, h as getAllFieldTypes, d as STYLE_BLOCKS, a as COUNTRIES } from "./chunks/fieldTypes-BVTzv2gA.js";
+import { S as Switch } from "./chunks/index-C0Htsu4a.js";
+import { x as initSlideMotion, S as Select, I as Input, c as Spin } from "./chunks/index-CEbUDJaq.js";
+import { c as RefIcon$1, E as ExportMenu, M as MenuItem, a as Dropdown, R as RefIcon$3 } from "./chunks/EllipsisOutlined-Cbet2jbC.js";
+import { g as genCollapseMotion } from "./chunks/collapse-DdhdDMvL.js";
+import { T as TypedInputNumber } from "./chunks/index-C-rCU2IL.js";
 var PanelContent = /* @__PURE__ */ React.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, forceRender = props.forceRender, className = props.className, style = props.style, children = props.children, isActive = props.isActive, role = props.role, customizeClassNames = props.classNames, styles = props.styles;
   var _React$useState = React.useState(isActive || forceRender), _React$useState2 = _slicedToArray(_React$useState, 2), rendered = _React$useState2[0], setRendered = _React$useState2[1];
@@ -4964,39 +4966,24 @@ function FormEditor() {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8fafc" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Spin, { size: "large", tip: __("Loading form...", "formglut") }) });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { height: "100vh", display: "flex", flexDirection: "column" }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "fg-editor-header", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-editor-header-left", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "fg-editor-back", href: _pg.all_forms, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faArrowLeft }),
-          " ",
-          __("Back", "formglut")
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "fg-editor-title-input", value: formTitle, onChange: (e) => {
-          setFormTitle(e.target.value);
-          setIsDirty(true);
-        }, placeholder: __("Enter form title...", "formglut") })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-editor-header-center", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "fg-editor-tab active", children: __("Editor", "formglut") }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "fg-editor-tab", href: _pg.settings, children: __("Settings", "formglut") }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "fg-editor-tab", href: _pg.entries, children: __("Entries", "formglut") })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-editor-header-right", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Undo", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateLeft }), size: "small", type: "text", style: { color: "rgba(255,255,255,0.7)" }, onClick: undo, disabled: historyIdx <= 0 }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Redo", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateRight }), size: "small", type: "text", style: { color: "rgba(255,255,255,0.7)" }, onClick: redo, disabled: historyIdx >= history.length - 1 }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEye }), style: { color: "#fff", background: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.15)", borderRadius: 8 }, onClick: () => {
-          if (formId) {
-            window.open(_pg.preview + "&form_id=" + formId, "_blank");
-          } else {
-            staticMethods.warning(__("Save the form first to preview.", "formglut"));
-          }
-        }, children: __("Preview", "formglut") }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: formId ? `[formglut id="${formId}"]` : __("Save the form first to get shortcode.", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCode }), style: { color: "#fff", background: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.15)", borderRadius: 8 }, disabled: !formId, onClick: () => {
-          const shortcode = `[formglut id="${formId}"]`;
-          copyToClipboard(shortcode).then(() => staticMethods.success(__("Shortcode copied!", "formglut"))).catch(() => staticMethods.error(__("Failed to copy shortcode.", "formglut")));
-        }, children: __("Shortcode", "formglut") }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFloppyDisk }), type: "primary", loading: saving, onClick: handleSave, style: { background: "#e94560", borderColor: "#e94560", borderRadius: 8, fontWeight: 600 }, children: isDirty ? __("Save Form *", "formglut") : __("Save Form", "formglut") })
-      ] })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(EditorHeader, { formId, title: formTitle, onTitleChange: (v) => {
+      setFormTitle(v);
+      setIsDirty(true);
+    }, active: "editor", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Undo", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateLeft }), size: "small", type: "text", style: { color: "rgba(255,255,255,0.7)" }, onClick: undo, disabled: historyIdx <= 0 }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: __("Redo", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faRotateRight }), size: "small", type: "text", style: { color: "rgba(255,255,255,0.7)" }, onClick: redo, disabled: historyIdx >= history.length - 1 }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faEye }), style: { color: "#fff", background: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.15)", borderRadius: 8 }, onClick: () => {
+        if (formId) {
+          window.open(_pg.preview + "&form_id=" + formId, "_blank");
+        } else {
+          staticMethods.warning(__("Save the form first to preview.", "formglut"));
+        }
+      }, children: __("Preview", "formglut") }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, { title: formId ? `[formglut id="${formId}"]` : __("Save the form first to get shortcode.", "formglut"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faCode }), style: { color: "#fff", background: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.15)", borderRadius: 8 }, disabled: !formId, onClick: () => {
+        const shortcode = `[formglut id="${formId}"]`;
+        copyToClipboard(shortcode).then(() => staticMethods.success(__("Shortcode copied!", "formglut"))).catch(() => staticMethods.error(__("Failed to copy shortcode.", "formglut")));
+      }, children: __("Shortcode", "formglut") }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faFloppyDisk }), type: "primary", loading: saving, onClick: handleSave, style: { background: "#e94560", borderColor: "#e94560", borderRadius: 8, fontWeight: 600 }, children: isDirty ? __("Save Form *", "formglut") : __("Save Form", "formglut") })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-editor-body", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-sidebar", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Tabs, { activeKey: activeTab, onChange: setActiveTab, centered: true, items: [

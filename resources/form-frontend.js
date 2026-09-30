@@ -668,7 +668,7 @@ function initCharacterCount(form) {
   });
 }
 async function handleSubmit(e) {
-  var _a;
+  var _a, _b;
   e.preventDefault();
   const form = e.currentTarget;
   const wrapper = form.closest(".formglut-form-wrapper");
@@ -766,9 +766,21 @@ async function handleSubmit(e) {
     });
     const result = await response.json();
     if (result.success) {
-      showSuccess(successEl, ((_a = result.data) == null ? void 0 : _a.message) || __("Thank you for your submission!", "formglut"));
-      form.reset();
-      const redirectUrl = form.dataset.redirect;
+      const conf = ((_a = result.data) == null ? void 0 : _a.confirmation) || {};
+      const afterSubmit = conf.after_submit || "reset";
+      showSuccess(successEl, ((_b = result.data) == null ? void 0 : _b.message) || __("Thank you for your submission!", "formglut"), conf.scroll !== false);
+      if (afterSubmit !== "keep") form.reset();
+      if (afterSubmit === "hide") {
+        Array.from(form.children).forEach((el) => {
+          if (!el.classList.contains("formglut-form-message") && !el.classList.contains("formglut-form-title")) el.style.display = "none";
+        });
+      }
+      if (conf.autoclose > 0) {
+        setTimeout(() => {
+          if (successEl) successEl.style.display = "none";
+        }, conf.autoclose * 1e3);
+      }
+      const redirectUrl = conf.redirect_url || form.dataset.redirect;
       if (redirectUrl) {
         window.location.href = redirectUrl;
       }
@@ -801,11 +813,11 @@ async function handleSubmit(e) {
     if (btnSpinner) btnSpinner.style.display = "none";
   }
 }
-function showSuccess(el, msg) {
+function showSuccess(el, msg, scroll = true) {
   if (!el) return;
   el.textContent = msg;
   el.style.display = "block";
-  el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  if (scroll) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 function showError(el, msg) {
   if (!el) return;

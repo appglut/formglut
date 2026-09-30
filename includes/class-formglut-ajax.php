@@ -417,6 +417,7 @@ class FormGlut_Ajax {
 				'title'      => esc_html( $form->title ),
 				'fields'     => $form->fields,
 				'submit_btn' => $form->submit_btn,
+				'settings'   => $form->settings,
 				'status'     => esc_html( $form->status ),
 				'views'      => absint( $form->views ),
 				'created_at' => esc_html( $form->created_at ),
@@ -458,6 +459,14 @@ class FormGlut_Ajax {
 			$submit_btn = $this->sanitize_submit_btn( $parsed );
 		}
 
+		$settings = array();
+		if ( isset( $_POST['settings'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$parsed = $this->sanitize_json( $_POST['settings'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( ! is_wp_error( $parsed ) ) {
+				$settings = $parsed;
+			}
+		}
+
 		$status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : 'draft'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! in_array( $status, array( 'active', 'draft', 'closed', 'published' ), true ) ) {
 			$status = 'draft';
@@ -467,6 +476,7 @@ class FormGlut_Ajax {
 			'title'      => $title,
 			'fields'     => $fields,
 			'submit_btn' => $submit_btn,
+			'settings'   => $settings,
 			'status'     => $status,
 		) );
 
@@ -522,6 +532,14 @@ class FormGlut_Ajax {
 				wp_send_json_error( array( 'message' => $parsed->get_error_message() ) );
 			}
 			$data['submit_btn'] = $this->sanitize_submit_btn( $parsed );
+		}
+
+		if ( isset( $_POST['settings'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$parsed = $this->sanitize_json( $_POST['settings'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( is_wp_error( $parsed ) ) {
+				wp_send_json_error( array( 'message' => $parsed->get_error_message() ) );
+			}
+			$data['settings'] = $parsed;
 		}
 
 		if ( isset( $_POST['status'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -969,11 +987,32 @@ class FormGlut_Ajax {
 			wp_send_json_error( array( 'message' => $error_msg ) );
 		}
 
-		// Check honeypot — only if enabled in settings.
-		$honeypot_enabled = FormGlut_Settings::get( 'formglut_honeypot', true );
-		if ( $honeypot_enabled && ! empty( $_POST['formglut_hp'] ) ) {
+		// Per-form settings (defaults already filled in).
+		$fs   = $form->settings;
+		$conf = $fs['confirmation'];
+		if ( '' !== $conf['error_message'] ) {
+			$error_msg = $conf['error_message'];
+		}
+
+		// Restrictions: login required, schedule and entry limit.
+		$availability = FormGlut_Form_Settings::availability( $form );
+		if ( ! $availability['open'] ) {
+			wp_send_json_error( array( 'message' => $availability['message'] ) );
+		}
+
+		// Check honeypot (per-form override, then the global setting).
+		if ( FormGlut_Form_Settings::honeypot_enabled( $form ) && ! empty( $_POST['formglut_hp'] ) ) {
 			wp_send_json_success( array( 'message' => $success_msg ) );
 			return;
+		}
+
+		// Minimum fill time (anti-bot).
+		$min_time = (int) $fs['spam']['min_time'];
+		if ( $min_time > 0 ) {
+			$token = isset( $_POST['formglut_ts'] ) ? sanitize_text_field( wp_unslash( $_POST['formglut_ts'] ) ) : '';
+			if ( ! FormGlut_Form_Settings::time_token_ok( $token, $form_id, $min_time ) ) {
+				wp_send_json_error( array( 'message' => __( 'Please take a moment to complete the form before submitting.', 'formglut' ) ) );
+			}
 		}
 
 		// Captcha verification: fields on the form, plus the optional "protect every form" reCAPTCHA v3.
@@ -1094,17 +1133,51 @@ class FormGlut_Ajax {
 			) );
 		}
 
-		// Store entry — only if setting enabled.
-		$entry_id = 0;
-		$store_entries = FormGlut_Settings::get( 'formglut_store_entries', true );
+		// Per-form submission rules.
+		$ip = $this->get_client_ip();
+		$rs = $fs['restrictions'];
+		$sp = $fs['spam'];
+
+		if ( $rs['deny_empty'] && ! array_filter( $fields_data, static function ( $v ) {
+			return is_array( $v ) ? ! empty( array_filter( $v, 'strlen' ) ) : '' !== trim( (string) $v );
+		} ) ) {
+			wp_send_json_error( array( 'message' => __( 'Please fill in the form before submitting.', 'formglut' ) ) );
+		}
+
+		if ( $rs['one_per_ip'] && '' !== $ip ) {
+			global $wpdb;
+			$already = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->formglut_entries} WHERE form_id = %d AND ip_address = %s", $form_id, $ip )
+			);
+			if ( $already > 0 ) {
+				wp_send_json_error( array( 'message' => '' !== $rs['duplicate_message'] ? $rs['duplicate_message'] : __( 'You have already submitted this form.', 'formglut' ) ) );
+			}
+		}
+
+		// Spam checks: blocked words, then Akismet.
+		$is_spam = false;
+		if ( '' !== trim( $sp['keywords'] ) && FormGlut_Form_Settings::has_blocked_keyword( $sp['keywords'], $fields_data ) ) {
+			if ( 'reject' === $sp['keyword_action'] ) {
+				wp_send_json_error( array( 'message' => __( 'Your submission contains words that are not allowed.', 'formglut' ) ) );
+			}
+			$is_spam = true;
+		}
+		if ( ! $is_spam && $sp['akismet'] ) {
+			$is_spam = FormGlut_Form_Settings::akismet_is_spam( $fields_data, $form, $ip );
+		}
+
+		// Store entry (per-form override, then the global setting).
+		$entry_id      = 0;
+		$store_entries = FormGlut_Form_Settings::stores_entries( $form );
+		$keep_ip       = (bool) $sp['store_ip'];
 		if ( $store_entries ) {
 			$entry_id = FormGlut_Entry::create( array(
 				'form_id'     => $form_id,
 				'fields_data' => $fields_data,
-				'status'      => 'unread',
+				'status'      => $is_spam ? 'spam' : 'unread',
 				'starred'     => 0,
-				'ip_address'  => $this->get_client_ip(),
-				'browser'     => $this->get_user_browser(),
+				'ip_address'  => $keep_ip ? $ip : '',
+				'browser'     => $keep_ip ? $this->get_user_browser() : '',
 				'source_url'  => isset( $_SERVER['HTTP_REFERER'] ) ? esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '',
 				'country'     => '',
 			) );
@@ -1114,77 +1187,124 @@ class FormGlut_Ajax {
 			}
 		}
 
-		// Send email notification.
-		$this->send_notification_email( $form, $fields_data, $entry_id );
+		// Send email notifications (never for spam).
+		if ( ! $is_spam ) {
+			$this->send_notification_email( $form, $fields_data, $entry_id, $keep_ip ? $ip : '' );
+		}
+
+		// Confirmation: message (with smart tags) and what the browser should do next.
+		$message  = FormGlut_Form_Settings::replace_tags( '' !== $conf['message'] ? $conf['message'] : $success_msg, $form, $fields_data, $entry_id, false, $keep_ip ? $ip : '' );
+		$redirect = '';
+		if ( 'url' === $conf['type'] && '' !== $conf['redirect_url'] ) {
+			$encoded  = array_map( static function ( $v ) {
+				return rawurlencode( is_array( $v ) ? implode( ',', $v ) : (string) $v );
+			}, $fields_data );
+			$redirect = esc_url_raw( FormGlut_Form_Settings::replace_tags( $conf['redirect_url'], $form, $encoded, $entry_id ) );
+		}
 
 		wp_send_json_success( array(
-			'message'  => $success_msg,
-			'entry_id' => absint( $entry_id ),
+			'message'      => $message,
+			'entry_id'     => absint( $entry_id ),
+			'confirmation' => array(
+				'redirect_url' => $redirect,
+				'after_submit' => $conf['after_submit'],
+				'scroll'       => (bool) $conf['scroll'],
+				'autoclose'    => (int) $conf['autoclose'],
+			),
 		) );
 	}
 
 	/**
-	 * Send notification email for a form submission.
+	 * Send the admin notification (and optional auto-responder) for a form submission.
+	 *
+	 * Per-form notification settings win; empty values fall back to the global settings.
 	 *
 	 * @param object $form        Form object.
 	 * @param array  $fields_data Sanitized field values.
 	 * @param int    $entry_id    Entry ID (0 if not stored).
+	 * @param string $ip          Visitor IP (empty when not stored).
 	 */
-	private function send_notification_email( $form, $fields_data, $entry_id ) {
-		$admin_email = FormGlut_Settings::get( 'formglut_admin_email', '' );
-		if ( empty( $admin_email ) || ! is_email( $admin_email ) ) {
-			return;
-		}
+	private function send_notification_email( $form, $fields_data, $entry_id, $ip = '' ) {
+		$n = $form->settings['notifications'];
+		$t = static function ( $text, $html = false ) use ( $form, $fields_data, $entry_id, $ip ) {
+			return FormGlut_Form_Settings::replace_tags( $text, $form, $fields_data, $entry_id, $html, $ip );
+		};
 
-		$sender_name  = FormGlut_Settings::get( 'formglut_sender_name', __( 'FormGlut', 'formglut' ) );
-		$sender_email = FormGlut_Settings::get( 'formglut_sender_email', '' );
-		$subject_tpl  = FormGlut_Settings::get( 'formglut_email_subject', __( 'New form submission: {form_name}', 'formglut' ) );
+		$sender_name  = '' !== $n['from_name'] ? $t( $n['from_name'] ) : FormGlut_Settings::get( 'formglut_sender_name', __( 'FormGlut', 'formglut' ) );
+		$sender_email = '' !== $n['from_email'] ? $n['from_email'] : FormGlut_Settings::get( 'formglut_sender_email', '' );
 
-		// Build email headers.
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		$base_headers = array( 'Content-Type: text/html; charset=UTF-8' );
 		if ( ! empty( $sender_email ) && is_email( $sender_email ) ) {
-			$from = ! empty( $sender_name ) ? "{$sender_name} <{$sender_email}>" : $sender_email;
-			$headers[] = "From: {$from}";
+			$from           = ! empty( $sender_name ) ? "{$sender_name} <{$sender_email}>" : $sender_email;
+			$base_headers[] = "From: {$from}";
 		}
 
-		// Build subject with template variables.
-		$subject = str_replace(
-			array( '{form_name}', '{form_id}', '{entry_id}' ),
-			array( $form->title, $form->id, $entry_id ),
-			$subject_tpl
-		);
+		$wrap_body = static function ( $body ) {
+			return false === strpos( $body, '<' ) ? wpautop( $body ) : $body;
+		};
 
-		// Build email body as HTML table.
-		$body_lines = array(
-			'<h2>' . esc_html( $subject ) . '</h2>',
-			'<table style="width:100%;border-collapse:collapse;font-family:sans-serif;">',
-		);
+		// ── Admin notification ────────────────────────────────────────────
+		if ( $n['enabled'] ) {
+			$resolve = function ( $list ) use ( $t ) {
+				$out = array();
+				foreach ( preg_split( '/[\s,;]+/', (string) $list ) as $addr ) {
+					$addr = trim( $t( $addr ) );
+					if ( '' !== $addr && is_email( $addr ) ) {
+						$out[] = $addr;
+					}
+				}
+				return $out;
+			};
 
-		if ( is_array( $form->fields ) ) {
-			foreach ( FormGlut_Form::flatten_fields( $form->fields ) as $field ) {
-				$field_id    = isset( $field['id'] ) ? $field['id'] : '';
-				$field_label = ! empty( $field['admin_label'] ) ? $field['admin_label'] : ( isset( $field['label'] ) ? $field['label'] : $field_id );
-				$value       = isset( $fields_data[ $field_id ] ) ? $fields_data[ $field_id ] : '';
+			$to = '' !== $n['to'] ? $resolve( $n['to'] ) : array();
+			if ( empty( $to ) ) {
+				$global = FormGlut_Settings::get( 'formglut_admin_email', '' );
+				$to     = ! empty( $global ) && is_email( $global ) ? array( $global ) : array();
+			}
 
-				if ( ! array_key_exists( $field_id, $fields_data ) ) {
-					continue;
+			if ( ! empty( $to ) ) {
+				$headers = $base_headers;
+
+				if ( '' !== $n['reply_to'] ) {
+					$reply = isset( $fields_data[ $n['reply_to'] ] ) ? (string) $fields_data[ $n['reply_to'] ] : $t( $n['reply_to'] );
+					if ( is_email( $reply ) ) {
+						$headers[] = 'Reply-To: ' . $reply;
+					}
+				}
+				foreach ( $resolve( $n['cc'] ) as $addr ) {
+					$headers[] = 'Cc: ' . $addr;
+				}
+				foreach ( $resolve( $n['bcc'] ) as $addr ) {
+					$headers[] = 'Bcc: ' . $addr;
 				}
 
-				if ( is_array( $value ) ) {
-					$value = implode( ', ', $value );
+				$subject_tpl = '' !== $n['subject'] ? $n['subject'] : FormGlut_Settings::get( 'formglut_email_subject', __( 'New form submission: {form_name}', 'formglut' ) );
+				$subject     = wp_strip_all_tags( $t( $subject_tpl ) );
+
+				if ( '' !== trim( $n['message'] ) ) {
+					$body = $wrap_body( $t( $n['message'], true ) );
+				} else {
+					$body  = '<h2>' . esc_html( $subject ) . '</h2>';
+					$body .= $t( '{all_fields}', true );
+					$body .= '<p style="margin-top:16px;color:#94a3b8;font-size:12px;">' . esc_html__( 'Submitted on', 'formglut' ) . ' ' . esc_html( current_time( 'mysql' ) ) . '</p>';
 				}
 
-				$body_lines[] = '<tr>';
-				$body_lines[] = '<td style="padding:8px 12px;border:1px solid #e2e8f0;font-weight:600;color:#334155;width:180px;">' . esc_html( $field_label ) . '</td>';
-				$body_lines[] = '<td style="padding:8px 12px;border:1px solid #e2e8f0;color:#475569;">' . esc_html( $value ) . '</td>';
-				$body_lines[] = '</tr>';
+				wp_mail( $to, $subject, $body, $headers );
 			}
 		}
 
-		$body_lines[] = '</table>';
-		$body_lines[] = '<p style="margin-top:16px;color:#94a3b8;font-size:12px;">' . esc_html__( 'Submitted on', 'formglut' ) . ' ' . esc_html( current_time( 'mysql' ) ) . '</p>';
-
-		wp_mail( $admin_email, $subject, implode( "\n", $body_lines ), $headers );
+		// ── Auto-responder to the submitter ──────────────────────────────
+		$ar = $n['autoresponder'];
+		if ( $ar['enabled'] && '' !== $ar['email_field'] && ! empty( $fields_data[ $ar['email_field'] ] ) && is_email( (string) $fields_data[ $ar['email_field'] ] ) ) {
+			$subject_tpl = '' !== $ar['subject'] ? $ar['subject'] : __( 'Thank you for contacting {site_name}', 'formglut' );
+			$message_tpl = '' !== trim( $ar['message'] ) ? $ar['message'] : __( "Thank you! We have received your submission.\n\n{all_fields}", 'formglut' );
+			wp_mail(
+				(string) $fields_data[ $ar['email_field'] ],
+				wp_strip_all_tags( $t( $subject_tpl ) ),
+				$wrap_body( $t( $message_tpl, true ) ),
+				$base_headers
+			);
+		}
 	}
 
 	/**

@@ -1,8 +1,9 @@
-import { c8 as wrapperRaf, bG as reactExports, a7 as canUseDom, I as Icon, Z as _extends, d as ConfigContext, a8 as classNames, bO as toArray$1, bC as omit, aa as cloneElement, E as Tooltip, bL as supportNodeRef, bU as useComposeRef, bl as getNodeRef, g as ContextIsolator, bP as unit, b9 as genFocusOutline, bN as textEllipsis, bc as genStyleHooks, bB as merge, bt as initZoomMotion, a9 as clearFix, bH as resetComponent, F as FastColor, bI as resetIcon, c5 as useZIndex, bV as useEvent, bR as useCSSVarCls, br as initCollapseMotion, bg as getArrowStyle, ba as genFocusStyle, bf as getArrowOffsetToken, bh as getArrowToken, ag as devUseWarning, c3 as useToken, c0 as useMergedState, bm as getPlacements, c9 as zIndexContext, a1 as _objectWithoutProperties, a3 as _slicedToArray, Y as _defineProperty, a0 as _objectSpread2, R as React, ac as composeRef, k as FormItemInputContext, D as DisabledContext, W as Wave, T as TARGET_CLS, bX as useId, c2 as useSize, bE as pickAttrs, a6 as _typeof, c7 as warningOnce, a5 as _toConsumableArray, bS as useCompactItemContext, B as Button$1, s as ReactDOM, K as KeyCode, bd as genSubStyleComponent, bT as useComponentConfig, b_ as useLocale, bz as locale$1, bY as useLayoutEffect, bu as isEqual, bF as reactDomExports, bM as supportRef, b$ as useMemo, be as get, A as RefResizeObserver, bw as isVisible, b7 as fillRef, bj as getDOM, bn as getScrollBarSize, bo as getTargetScrollBarSize, a as CSSMotion, $ as _inherits, X as _createSuper, Q as _classCallCheck, _ as _assertThisInitialized, U as _createClass, n as Keyframe, z as RefIcon$g, bD as operationUnit, bA as localeValues, e as ConfigProvider } from "./Header-DQeOh4jx.js";
-import { f as genCollapseMotion, y as initSlideMotion, A as slideDownOut, G as slideUpOut, z as slideDownIn, C as slideUpIn, x as initMoveMotion, q as genPurePanel, w as initInputToken, v as initComponentToken$1, d as genBasicInputStyle, g as genBaseOutlinedStyle, h as genDisabledStyle, l as genInputSmallStyle, S as Select, L as List, R as RefIcon$f, a as Input, b as RefIcon$h, E as Empty, D as DefaultRenderEmpty, c as Spin } from "./index-DUFQZRHD.js";
-import { D as Divider, M as MenuItem$1, u as useFullPath, S as SubMenu$1, E as ExportMenu, R as RefIcon$d, b as MenuItemGroup, a as Dropdown$2, c as RefIcon$e } from "./EllipsisOutlined-Bj9WiQlh.js";
-import { a as Space } from "./index-Bbou1sxC.js";
-import { c as useForceUpdate, b as toNamePathStr, u as useBreakpoint } from "./useForm-DbJu_6Bo.js";
+import { cj as wrapperRaf, bP as reactExports, aa as canUseDom, I as Icon, a0 as _extends, d as ConfigContext, ab as classNames, bX as toArray$1, bK as omit, ad as cloneElement, H as Tooltip, bU as supportNodeRef, c2 as useComposeRef, bs as getNodeRef, g as ContextIsolator, bY as unit, bg as genFocusOutline, bW as textEllipsis, bj as genStyleHooks, bI as merge, bA as initZoomMotion, ac as clearFix, bQ as resetComponent, F as FastColor, bR as resetIcon, cg as useZIndex, c3 as useEvent, b_ as useCSSVarCls, by as initCollapseMotion, bn as getArrowStyle, bh as genFocusStyle, bm as getArrowOffsetToken, bo as getArrowToken, aj as devUseWarning, ce as useToken, ca as useMergedState, bt as getPlacements, ck as zIndexContext, a3 as _objectWithoutProperties, a6 as _slicedToArray, $ as _defineProperty, a2 as _objectSpread2, R as React, af as composeRef, k as FormItemInputContext, D as DisabledContext, W as Wave, T as TARGET_CLS, c5 as useId, cd as useSize, bM as pickAttrs, a9 as _typeof, ci as warningOnce, a8 as _toConsumableArray, c0 as useCompactItemContext, B as Button$1, t as ReactDOM, K as KeyCode, bk as genSubStyleComponent, c1 as useComponentConfig, c8 as useLocale, bG as locale$1, c6 as useLayoutEffect, bB as isEqual, bO as reactDomExports, bV as supportRef, c9 as useMemo, bl as get, E as RefResizeObserver, bD as isVisible, be as fillRef, bq as getDOM, bu as getScrollBarSize, bv as getTargetScrollBarSize, a as CSSMotion, a1 as _inherits, Y as _createSuper, U as _classCallCheck, _ as _assertThisInitialized, X as _createClass, n as Keyframe, A as RefIcon$g, bJ as mergeProps, bL as operationUnit, bH as localeValues, e as ConfigProvider } from "./NavMenu-D0YBC0d1.js";
+import { x as initSlideMotion, z as slideDownOut, C as slideUpOut, y as slideDownIn, A as slideUpIn, w as initMoveMotion, p as genPurePanel, v as initInputToken, u as initComponentToken$1, d as genBasicInputStyle, g as genBaseOutlinedStyle, f as genDisabledStyle, k as genInputSmallStyle, S as Select, L as List, R as RefIcon$f, a as Input, b as RefIcon$h, E as Empty, D as DefaultRenderEmpty, c as Spin } from "./index-CEbUDJaq.js";
+import { D as Divider, M as MenuItem$1, u as useFullPath, S as SubMenu$1, E as ExportMenu, R as RefIcon$d, b as MenuItemGroup, a as Dropdown$2, c as RefIcon$e } from "./EllipsisOutlined-Cbet2jbC.js";
+import { g as genCollapseMotion } from "./collapse-DdhdDMvL.js";
+import { S as Space } from "./index-CpZl-a5U.js";
+import { c as useForceUpdate, b as toNamePathStr, u as useBreakpoint } from "./useForm-BgzEbaR7.js";
 function isWindow(obj) {
   return obj !== null && obj !== void 0 && obj === obj.window;
 }
@@ -61,19 +62,6 @@ function scrollTo(y, options = {}) {
     }
   };
   wrapperRaf(frameFunc);
-}
-function mergeProps(...items) {
-  const ret = {};
-  items.forEach((item) => {
-    if (item) {
-      Object.keys(item).forEach((key) => {
-        if (item[key] !== void 0) {
-          ret[key] = item[key];
-        }
-      });
-    }
-  });
-  return ret;
 }
 const useMultipleSelect = (getKey2) => {
   const [prevSelectedIndex, setPrevSelectedIndex] = reactExports.useState(null);
@@ -13479,7 +13467,6 @@ ForwardTable.Column = Column;
 ForwardTable.ColumnGroup = ColumnGroup;
 ForwardTable.Summary = FooterComponents;
 export {
-  ForwardTable as F,
-  mergeProps as m
+  ForwardTable as F
 };
-//# sourceMappingURL=Table-Cw21W_QS.js.map
+//# sourceMappingURL=Table-DSNMf6bZ.js.map

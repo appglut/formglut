@@ -1,12 +1,15 @@
-import { bK as staticMethods, bG as reactExports, bx as jsxRuntimeExports, a2 as _pg, i as FontAwesomeIcon, b1 as faStar, E as Tooltip, B as Button, ay as faEye, av as faEnvelope, aw as faEnvelopeOpen, b3 as faTrash, H as Header, aL as faMagnifyingGlass, aX as faRotateRight, aA as faFileLines, af as createRoot } from "./chunks/Header-DQeOh4jx.js";
+import { bT as staticMethods, bP as reactExports, bE as jsxRuntimeExports, a4 as _pg, i as FontAwesomeIcon, b8 as faStar, H as Tooltip, B as Button, aE as faEye, aB as faEnvelope, aC as faEnvelopeOpen, ba as faTrash, aS as faMagnifyingGlass, b2 as faRotateRight, aG as faFileLines, G as Skeleton, ai as createRoot } from "./chunks/NavMenu-D0YBC0d1.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
 import { f as faStar$1 } from "./chunks/index-B2JIQhJi.js";
+import { H as Header } from "./chunks/Header-BoZ45_PN.js";
 import { f as getEntryCounts, j as getForms, g as getEntries, d as deleteEntry, t as toggleEntryStar, u as updateEntryStatus } from "./chunks/api-CyfhXhZs.js";
-import { P as Popconfirm, a as Space, S as Skeleton } from "./chunks/index-Bbou1sxC.js";
-import { S as Select, I as Input } from "./chunks/index-DUFQZRHD.js";
-import { F as ForwardTable } from "./chunks/Table-Cw21W_QS.js";
-import "./chunks/EllipsisOutlined-Bj9WiQlh.js";
-import "./chunks/useForm-DbJu_6Bo.js";
+import { P as Popconfirm, S as Space } from "./chunks/index-CpZl-a5U.js";
+import { S as Select, I as Input } from "./chunks/index-CEbUDJaq.js";
+import { F as ForwardTable } from "./chunks/Table-DSNMf6bZ.js";
+import "./chunks/index-DXRCHqrQ.js";
+import "./chunks/EllipsisOutlined-Cbet2jbC.js";
+import "./chunks/collapse-DdhdDMvL.js";
+import "./chunks/useForm-BgzEbaR7.js";
 staticMethods.config({
   duration: 3,
   maxCount: 3,

@@ -52,6 +52,7 @@ function formglut_require_files() {
 		'includes/class-formglut-shortcode.php',
 		'includes/class-formglut-entry.php',
 		'includes/class-formglut-form.php',
+		'includes/class-formglut-form-settings.php',
 		'includes/class-formglut-settings.php',
 	);
 
@@ -169,6 +170,12 @@ function formglut_init() {
 
 	// Register custom table names on $wpdb.
 	formglut_register_table_names();
+
+	// Add the per-form settings column on installs that predate it, and schedule entry retention.
+	if ( class_exists( 'FormGlut_Form_Settings' ) ) {
+		FormGlut_Form_Settings::maybe_upgrade();
+		FormGlut_Form_Settings::init_retention();
+	}
 
 	// Boot admin.
 	if ( class_exists( 'FormGlut_Admin' ) ) {

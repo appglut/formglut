@@ -9337,8 +9337,8 @@ function prepare() {
       var content = getComputedStyle(div).content || "";
       content = content.replace(/^"/, "").replace(/"$/, "");
       content.split(";").forEach(function(item) {
-        var _item$split = item.split(":"), _item$split2 = _slicedToArray$1(_item$split, 2), path = _item$split2[0], hash = _item$split2[1];
-        cachePathMap[path] = hash;
+        var _item$split = item.split(":"), _item$split2 = _slicedToArray$1(_item$split, 2), path2 = _item$split2[0], hash = _item$split2[1];
+        cachePathMap[path2] = hash;
       });
       var inlineMapStyle = document.querySelector("style[".concat(ATTR_CACHE_MAP, "]"));
       if (inlineMapStyle) {
@@ -9350,22 +9350,22 @@ function prepare() {
     }
   }
 }
-function existPath(path) {
+function existPath(path2) {
   prepare();
-  return !!cachePathMap[path];
+  return !!cachePathMap[path2];
 }
-function getStyleAndHash(path) {
-  var hash = cachePathMap[path];
+function getStyleAndHash(path2) {
+  var hash = cachePathMap[path2];
   var styleStr = null;
   if (hash && canUseDom()) {
     if (fromCSSFile) {
       styleStr = CSS_FILE_STYLE;
     } else {
-      var _style = document.querySelector("style[".concat(ATTR_MARK, '="').concat(cachePathMap[path], '"]'));
+      var _style = document.querySelector("style[".concat(ATTR_MARK, '="').concat(cachePathMap[path2], '"]'));
       if (_style) {
         styleStr = _style.innerHTML;
       } else {
-        delete cachePathMap[path];
+        delete cachePathMap[path2];
       }
     }
   }
@@ -9508,15 +9508,15 @@ var parseStyle = function parseStyle2(interpolation) {
   }
   return [styleStr, effectStyle];
 };
-function uniqueHash(path, styleStr) {
-  return murmur2("".concat(path.join("%")).concat(styleStr));
+function uniqueHash(path2, styleStr) {
+  return murmur2("".concat(path2.join("%")).concat(styleStr));
 }
 function Empty() {
   return null;
 }
 var STYLE_PREFIX = "style";
 function useStyleRegister(info, styleFn) {
-  var token2 = info.token, path = info.path, hashId = info.hashId, layer = info.layer, nonce = info.nonce, clientOnly = info.clientOnly, _info$order = info.order, order = _info$order === void 0 ? 0 : _info$order;
+  var token2 = info.token, path2 = info.path, hashId = info.hashId, layer = info.layer, nonce = info.nonce, clientOnly = info.clientOnly, _info$order = info.order, order = _info$order === void 0 ? 0 : _info$order;
   var _React$useContext = reactExports.useContext(StyleContext), autoClear = _React$useContext.autoClear;
   _React$useContext.mock;
   var defaultCache = _React$useContext.defaultCache, hashPriority = _React$useContext.hashPriority, container = _React$useContext.container, ssrInline = _React$useContext.ssrInline, transformers = _React$useContext.transformers, linters = _React$useContext.linters, cache = _React$useContext.cache, enableLayer = _React$useContext.layer;
@@ -9525,7 +9525,7 @@ function useStyleRegister(info, styleFn) {
   if (enableLayer) {
     fullPath.push("layer");
   }
-  fullPath.push.apply(fullPath, _toConsumableArray$1(path));
+  fullPath.push.apply(fullPath, _toConsumableArray$1(path2));
   var isMergedClientSide = isClientSide;
   var _useGlobalCache = useGlobalCache(
     STYLE_PREFIX,
@@ -9544,7 +9544,7 @@ function useStyleRegister(info, styleFn) {
         hashId,
         hashPriority,
         layer: enableLayer ? layer : void 0,
-        path: path.join("-"),
+        path: path2.join("-"),
         transformers,
         linters
       }), _parseStyle6 = _slicedToArray$1(_parseStyle5, 2), parsedStyle = _parseStyle6[0], effectStyle = _parseStyle6[1];
@@ -9735,13 +9735,13 @@ var IconContext = /* @__PURE__ */ reactExports.createContext({});
 function _toArray(r2) {
   return _arrayWithHoles$1(r2) || _iterableToArray$1(r2) || _unsupportedIterableToArray$1(r2) || _nonIterableRest$1();
 }
-function get(entity, path) {
+function get(entity, path2) {
   var current = entity;
-  for (var i2 = 0; i2 < path.length; i2 += 1) {
+  for (var i2 = 0; i2 < path2.length; i2 += 1) {
     if (current === null || current === void 0) {
       return void 0;
     }
-    current = current[path[i2]];
+    current = current[path2[i2]];
   }
   return current;
 }
@@ -9749,9 +9749,9 @@ function internalSet(entity, paths, value, removeIfUndefined) {
   if (!paths.length) {
     return value;
   }
-  var _paths = _toArray(paths), path = _paths[0], restPath = _paths.slice(1);
+  var _paths = _toArray(paths), path2 = _paths[0], restPath = _paths.slice(1);
   var clone;
-  if (!entity && typeof path === "number") {
+  if (!entity && typeof path2 === "number") {
     clone = [];
   } else if (Array.isArray(entity)) {
     clone = _toConsumableArray$1(entity);
@@ -9759,9 +9759,9 @@ function internalSet(entity, paths, value, removeIfUndefined) {
     clone = _objectSpread2$1({}, entity);
   }
   if (removeIfUndefined && value === void 0 && restPath.length === 1) {
-    delete clone[path][restPath[0]];
+    delete clone[path2][restPath[0]];
   } else {
-    clone[path] = internalSet(clone[path], restPath, value, removeIfUndefined);
+    clone[path2] = internalSet(clone[path2], restPath, value, removeIfUndefined);
   }
   return clone;
 }
@@ -9785,25 +9785,25 @@ function merge$1() {
   }
   var clone = createEmpty(sources[0]);
   sources.forEach(function(src) {
-    function internalMerge(path, parentLoopSet) {
+    function internalMerge(path2, parentLoopSet) {
       var loopSet = new Set(parentLoopSet);
-      var value = get(src, path);
+      var value = get(src, path2);
       var isArr = Array.isArray(value);
       if (isArr || isObject(value)) {
         if (!loopSet.has(value)) {
           loopSet.add(value);
-          var originValue = get(clone, path);
+          var originValue = get(clone, path2);
           if (isArr) {
-            clone = set(clone, path, []);
+            clone = set(clone, path2, []);
           } else if (!originValue || _typeof$1(originValue) !== "object") {
-            clone = set(clone, path, createEmpty(value));
+            clone = set(clone, path2, createEmpty(value));
           }
           keys(value).forEach(function(key) {
-            internalMerge([].concat(_toConsumableArray$1(path), [key]), loopSet);
+            internalMerge([].concat(_toConsumableArray$1(path2), [key]), loopSet);
           });
         }
       } else {
-        clone = set(clone, path, value);
+        clone = set(clone, path2, value);
       }
     }
     internalMerge([]);
@@ -11878,7 +11878,7 @@ function getAlphaColor(frontColor, backgroundColor) {
     a: 1
   }).toRgbString();
 }
-var __rest$8 = function(s2, e2) {
+var __rest$9 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -11889,7 +11889,7 @@ var __rest$8 = function(s2, e2) {
 function formatToken(derivativeToken) {
   const {
     override
-  } = derivativeToken, restToken = __rest$8(derivativeToken, ["override"]);
+  } = derivativeToken, restToken = __rest$9(derivativeToken, ["override"]);
   const overrideTokens = Object.assign({}, override);
   Object.keys(seedToken).forEach((token2) => {
     delete overrideTokens[token2];
@@ -12043,7 +12043,7 @@ function formatToken(derivativeToken) {
   }), overrideTokens);
   return aliasToken;
 }
-var __rest$7 = function(s2, e2) {
+var __rest$8 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -12093,7 +12093,7 @@ const getComputedToken = (originToken, overrideToken, theme) => {
   const derivativeToken = theme.getDerivativeToken(originToken);
   const {
     override
-  } = overrideToken, components = __rest$7(overrideToken, ["override"]);
+  } = overrideToken, components = __rest$8(overrideToken, ["override"]);
   let mergedDerivativeToken = Object.assign(Object.assign({}, derivativeToken), {
     override
   });
@@ -12102,7 +12102,7 @@ const getComputedToken = (originToken, overrideToken, theme) => {
     Object.entries(components).forEach(([key, value]) => {
       const {
         theme: componentTheme
-      } = value, componentTokens = __rest$7(value, ["theme"]);
+      } = value, componentTokens = __rest$8(value, ["theme"]);
       let mergedComponentToken = componentTokens;
       if (componentTheme) {
         mergedComponentToken = getComputedToken(Object.assign(Object.assign({}, mergedDerivativeToken), componentTokens), {
@@ -12394,10 +12394,10 @@ function useTheme(theme, parentTheme, config2) {
     return !isEqual(prevTheme, nextTheme, true);
   }));
 }
-var _excluded$b = ["children"];
+var _excluded$c = ["children"];
 var Context$1 = /* @__PURE__ */ reactExports.createContext({});
 function MotionProvider(_ref2) {
-  var children = _ref2.children, props = _objectWithoutProperties(_ref2, _excluded$b);
+  var children = _ref2.children, props = _objectWithoutProperties(_ref2, _excluded$c);
   return /* @__PURE__ */ reactExports.createElement(Context$1.Provider, {
     value: props
   }, children);
@@ -12916,7 +12916,7 @@ function diffKeys() {
   });
   return list;
 }
-var _excluded$a = ["component", "children", "onVisibleChanged", "onAllRemoved"], _excluded2$1 = ["status"];
+var _excluded$b = ["component", "children", "onVisibleChanged", "onAllRemoved"], _excluded2$1 = ["status"];
 var MOTION_PROP_NAMES = ["eventProps", "visible", "children", "motionName", "motionAppear", "motionEnter", "motionLeave", "motionLeaveImmediately", "motionDeadline", "removeOnLeave", "leavedClassName", "onAppearPrepare", "onAppearStart", "onAppearActive", "onAppearEnd", "onEnterStart", "onEnterActive", "onEnterEnd", "onLeaveStart", "onLeaveActive", "onLeaveEnd"];
 function genCSSMotionList(transitionSupport) {
   var CSSMotion$1 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : CSSMotion;
@@ -12964,7 +12964,7 @@ function genCSSMotionList(transitionSupport) {
         var keyEntities = this.state.keyEntities;
         var _this$props = this.props, component = _this$props.component, children = _this$props.children, _onVisibleChanged = _this$props.onVisibleChanged;
         _this$props.onAllRemoved;
-        var restProps = _objectWithoutProperties(_this$props, _excluded$a);
+        var restProps = _objectWithoutProperties(_this$props, _excluded$b);
         var Component = component || reactExports.Fragment;
         var motionProps = {};
         MOTION_PROP_NAMES.forEach(function(prop) {
@@ -13045,7 +13045,7 @@ function MotionWrapper(props) {
   return children;
 }
 const PropWarning = () => null;
-var __rest$6 = function(s2, e2) {
+var __rest$7 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -13348,7 +13348,7 @@ const ProviderChildren = (props) => {
       token: token2,
       components,
       cssVar
-    } = _a, rest = __rest$6(_a, ["algorithm", "token", "components", "cssVar"]);
+    } = _a, rest = __rest$7(_a, ["algorithm", "token", "components", "cssVar"]);
     const themeObj = algorithm && (!Array.isArray(algorithm) || algorithm.length > 0) ? createTheme(algorithm) : defaultTheme;
     const parsedComponents = {};
     Object.entries(components || {}).forEach(([componentName, componentToken]) => {
@@ -13491,7 +13491,7 @@ var useInsertStyles = function useInsertStyles2(eleRef) {
     });
   }, []);
 };
-var _excluded$9 = ["icon", "className", "onClick", "style", "primaryColor", "secondaryColor"];
+var _excluded$a = ["icon", "className", "onClick", "style", "primaryColor", "secondaryColor"];
 var twoToneColorPalette = {
   primaryColor: "#333",
   secondaryColor: "#E6E6E6",
@@ -13507,7 +13507,7 @@ function getTwoToneColors() {
   return _objectSpread2$1({}, twoToneColorPalette);
 }
 var IconBase = function IconBase2(props) {
-  var icon3 = props.icon, className = props.className, onClick = props.onClick, style2 = props.style, primaryColor = props.primaryColor, secondaryColor = props.secondaryColor, restProps = _objectWithoutProperties(props, _excluded$9);
+  var icon3 = props.icon, className = props.className, onClick = props.onClick, style2 = props.style, primaryColor = props.primaryColor, secondaryColor = props.secondaryColor, restProps = _objectWithoutProperties(props, _excluded$a);
   var svgRef = reactExports.useRef();
   var colors = twoToneColorPalette;
   if (primaryColor) {
@@ -13557,10 +13557,10 @@ function getTwoToneColor() {
   }
   return [colors.primaryColor, colors.secondaryColor];
 }
-var _excluded$8 = ["className", "icon", "spin", "rotate", "tabIndex", "onClick", "twoToneColor"];
+var _excluded$9 = ["className", "icon", "spin", "rotate", "tabIndex", "onClick", "twoToneColor"];
 setTwoToneColor(blue.primary);
 var Icon = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
-  var className = props.className, icon3 = props.icon, spin = props.spin, rotate = props.rotate, tabIndex = props.tabIndex, onClick = props.onClick, twoToneColor = props.twoToneColor, restProps = _objectWithoutProperties(props, _excluded$8);
+  var className = props.className, icon3 = props.icon, spin = props.spin, rotate = props.rotate, tabIndex = props.tabIndex, onClick = props.onClick, twoToneColor = props.twoToneColor, restProps = _objectWithoutProperties(props, _excluded$9);
   var _React$useContext = reactExports.useContext(IconContext), _React$useContext$pre = _React$useContext.prefixCls, prefixCls = _React$useContext$pre === void 0 ? "anticon" : _React$useContext$pre, rootClassName = _React$useContext.rootClassName;
   var classString = classNames(rootClassName, prefixCls, _defineProperty$1(_defineProperty$1({}, "".concat(prefixCls, "-").concat(icon3.name), !!icon3.name), "".concat(prefixCls, "-spin"), !!spin || icon3.name === "loading"), className);
   var iconTabIndex = tabIndex;
@@ -13960,7 +13960,7 @@ var useStack = function useStack2(config2) {
   }
   return [!!config2, result];
 };
-var _excluded$7 = ["className", "style", "classNames", "styles"];
+var _excluded$8 = ["className", "style", "classNames", "styles"];
 var NoticeList = function NoticeList2(props) {
   var configList = props.configList, placement = props.placement, prefixCls = props.prefixCls, className = props.className, style2 = props.style, motion = props.motion, onAllNoticeRemoved = props.onAllNoticeRemoved, onNoticeClose = props.onNoticeClose, stackConfig = props.stack;
   var _useContext = reactExports.useContext(NotificationContext), ctxCls = _useContext.classNames;
@@ -14009,7 +14009,7 @@ var NoticeList = function NoticeList2(props) {
     var config2 = _ref2.config, motionClassName = _ref2.className, motionStyle = _ref2.style, motionIndex = _ref2.index;
     var _ref3 = config2, key = _ref3.key, times = _ref3.times;
     var strKey = String(key);
-    var _ref4 = config2, configClassName = _ref4.className, configStyle = _ref4.style, configClassNames = _ref4.classNames, configStyles = _ref4.styles, restConfig = _objectWithoutProperties(_ref4, _excluded$7);
+    var _ref4 = config2, configClassName = _ref4.className, configStyle = _ref4.style, configClassNames = _ref4.classNames, configStyles = _ref4.styles, restConfig = _objectWithoutProperties(_ref4, _excluded$8);
     var dataIndex = keys2.findIndex(function(item) {
       return item.key === strKey;
     });
@@ -14173,7 +14173,7 @@ var Notifications = /* @__PURE__ */ reactExports.forwardRef(function(props, ref)
     }) : list;
   })), container);
 });
-var _excluded$6 = ["getContainer", "motion", "prefixCls", "maxCount", "className", "style", "onAllRemoved", "stack", "renderNotifications"];
+var _excluded$7 = ["getContainer", "motion", "prefixCls", "maxCount", "className", "style", "onAllRemoved", "stack", "renderNotifications"];
 var defaultGetContainer = function defaultGetContainer2() {
   return document.body;
 };
@@ -14197,7 +14197,7 @@ function mergeConfig() {
 }
 function useNotification() {
   var rootConfig = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-  var _rootConfig$getContai = rootConfig.getContainer, getContainer2 = _rootConfig$getContai === void 0 ? defaultGetContainer : _rootConfig$getContai, motion = rootConfig.motion, prefixCls = rootConfig.prefixCls, maxCount = rootConfig.maxCount, className = rootConfig.className, style2 = rootConfig.style, onAllRemoved = rootConfig.onAllRemoved, stack = rootConfig.stack, renderNotifications2 = rootConfig.renderNotifications, shareConfig = _objectWithoutProperties(rootConfig, _excluded$6);
+  var _rootConfig$getContai = rootConfig.getContainer, getContainer2 = _rootConfig$getContai === void 0 ? defaultGetContainer : _rootConfig$getContai, motion = rootConfig.motion, prefixCls = rootConfig.prefixCls, maxCount = rootConfig.maxCount, className = rootConfig.className, style2 = rootConfig.style, onAllRemoved = rootConfig.onAllRemoved, stack = rootConfig.stack, renderNotifications2 = rootConfig.renderNotifications, shareConfig = _objectWithoutProperties(rootConfig, _excluded$7);
   var _React$useState = reactExports.useState(), _React$useState2 = _slicedToArray$1(_React$useState, 2), container = _React$useState2[0], setContainer = _React$useState2[1];
   var notificationsRef = reactExports.useRef();
   var contextHolder = /* @__PURE__ */ reactExports.createElement(Notifications, {
@@ -14287,6 +14287,106 @@ var LoadingOutlined = function LoadingOutlined2(props, ref) {
   }));
 };
 var RefIcon = /* @__PURE__ */ reactExports.forwardRef(LoadingOutlined);
+function mergeProps(...items) {
+  const ret = {};
+  items.forEach((item) => {
+    if (item) {
+      Object.keys(item).forEach((key) => {
+        if (item[key] !== void 0) {
+          ret[key] = item[key];
+        }
+      });
+    }
+  });
+  return ret;
+}
+function pickClosable(context) {
+  if (!context) {
+    return void 0;
+  }
+  const {
+    closable,
+    closeIcon
+  } = context;
+  return {
+    closable,
+    closeIcon
+  };
+}
+function useClosableConfig(closableCollection) {
+  const {
+    closable,
+    closeIcon
+  } = closableCollection || {};
+  return React.useMemo(() => {
+    if (
+      // If `closable`, whatever rest be should be true
+      !closable && (closable === false || closeIcon === false || closeIcon === null)
+    ) {
+      return false;
+    }
+    if (closable === void 0 && closeIcon === void 0) {
+      return null;
+    }
+    let closableConfig = {
+      closeIcon: typeof closeIcon !== "boolean" && closeIcon !== null ? closeIcon : void 0
+    };
+    if (closable && typeof closable === "object") {
+      closableConfig = Object.assign(Object.assign({}, closableConfig), closable);
+    }
+    return closableConfig;
+  }, [closable, closeIcon]);
+}
+const EmptyFallbackCloseCollection = {};
+const useClosable = (propCloseCollection, contextCloseCollection, fallbackCloseCollection = EmptyFallbackCloseCollection) => {
+  const propCloseConfig = useClosableConfig(propCloseCollection);
+  const contextCloseConfig = useClosableConfig(contextCloseCollection);
+  const [contextLocale] = useLocale("global", localeValues.global);
+  const closeBtnIsDisabled = typeof propCloseConfig !== "boolean" ? !!(propCloseConfig === null || propCloseConfig === void 0 ? void 0 : propCloseConfig.disabled) : false;
+  const mergedFallbackCloseCollection = React.useMemo(() => Object.assign({
+    closeIcon: /* @__PURE__ */ React.createElement(RefIcon$3, null)
+  }, fallbackCloseCollection), [fallbackCloseCollection]);
+  const mergedClosableConfig = React.useMemo(() => {
+    if (propCloseConfig === false) {
+      return false;
+    }
+    if (propCloseConfig) {
+      return mergeProps(mergedFallbackCloseCollection, contextCloseConfig, propCloseConfig);
+    }
+    if (contextCloseConfig === false) {
+      return false;
+    }
+    if (contextCloseConfig) {
+      return mergeProps(mergedFallbackCloseCollection, contextCloseConfig);
+    }
+    return !mergedFallbackCloseCollection.closable ? false : mergedFallbackCloseCollection;
+  }, [propCloseConfig, contextCloseConfig, mergedFallbackCloseCollection]);
+  return React.useMemo(() => {
+    var _a, _b;
+    if (mergedClosableConfig === false) {
+      return [false, null, closeBtnIsDisabled, {}];
+    }
+    const {
+      closeIconRender
+    } = mergedFallbackCloseCollection;
+    const {
+      closeIcon
+    } = mergedClosableConfig;
+    let mergedCloseIcon = closeIcon;
+    const ariaOrDataProps = pickAttrs(mergedClosableConfig, true);
+    if (mergedCloseIcon !== null && mergedCloseIcon !== void 0) {
+      if (closeIconRender) {
+        mergedCloseIcon = closeIconRender(closeIcon);
+      }
+      mergedCloseIcon = /* @__PURE__ */ React.isValidElement(mergedCloseIcon) ? /* @__PURE__ */ React.cloneElement(mergedCloseIcon, Object.assign(Object.assign(Object.assign({}, mergedCloseIcon.props), {
+        "aria-label": (_b = (_a = mergedCloseIcon.props) === null || _a === void 0 ? void 0 : _a["aria-label"]) !== null && _b !== void 0 ? _b : contextLocale.close
+      }), ariaOrDataProps)) : /* @__PURE__ */ React.createElement("span", Object.assign({
+        "aria-label": contextLocale.close
+      }, ariaOrDataProps), mergedCloseIcon);
+    }
+    return [true, mergedCloseIcon, closeBtnIsDisabled, ariaOrDataProps];
+  }, [closeBtnIsDisabled, contextLocale.close, mergedClosableConfig, mergedFallbackCloseCollection]);
+};
 const zIndexContext = /* @__PURE__ */ React.createContext(void 0);
 const CONTAINER_OFFSET = 100;
 const CONTAINER_OFFSET_MAX_COUNT = 10;
@@ -14470,18 +14570,18 @@ const genMessageStyle = (token2) => {
     }
   ];
 };
-const prepareComponentToken$2 = (token2) => ({
+const prepareComponentToken$4 = (token2) => ({
   zIndexPopup: token2.zIndexPopupBase + CONTAINER_MAX_OFFSET + 10,
   contentBg: token2.colorBgElevated,
   contentPadding: `${(token2.controlHeightLG - token2.fontSize * token2.lineHeight) / 2}px ${token2.paddingSM}px`
 });
-const useStyle$4 = genStyleHooks("Message", (token2) => {
+const useStyle$6 = genStyleHooks("Message", (token2) => {
   const combinedToken = merge(token2, {
     height: 150
   });
   return genMessageStyle(combinedToken);
-}, prepareComponentToken$2);
-var __rest$5 = function(s2, e2) {
+}, prepareComponentToken$4);
+var __rest$6 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -14504,20 +14604,20 @@ const PureContent = ({
 }) => /* @__PURE__ */ reactExports.createElement("div", {
   className: classNames(`${prefixCls}-custom-content`, `${prefixCls}-${type4}`)
 }, icon3 || TypeIcon[type4], /* @__PURE__ */ reactExports.createElement("span", null, children));
-const PurePanel$1 = (props) => {
+const PurePanel$2 = (props) => {
   const {
     prefixCls: staticPrefixCls,
     className,
     type: type4,
     icon: icon3,
     content
-  } = props, restProps = __rest$5(props, ["prefixCls", "className", "type", "icon", "content"]);
+  } = props, restProps = __rest$6(props, ["prefixCls", "className", "type", "icon", "content"]);
   const {
     getPrefixCls
   } = reactExports.useContext(ConfigContext);
   const prefixCls = staticPrefixCls || getPrefixCls("message");
   const rootCls = useCSSVarCls(prefixCls);
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle$4(prefixCls, rootCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$6(prefixCls, rootCls);
   return wrapCSSVar(/* @__PURE__ */ reactExports.createElement(Notify, Object.assign({}, restProps, {
     prefixCls,
     className: classNames(className, hashId, `${prefixCls}-notice-pure-panel`, cssVarCls, rootCls),
@@ -14549,7 +14649,7 @@ function wrapPromiseFn(openFn) {
   result.promise = closePromise;
   return result;
 }
-var __rest$4 = function(s2, e2) {
+var __rest$5 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -14564,7 +14664,7 @@ const Wrapper = ({
   prefixCls
 }) => {
   const rootCls = useCSSVarCls(prefixCls);
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle$4(prefixCls, rootCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$6(prefixCls, rootCls);
   return wrapCSSVar(/* @__PURE__ */ reactExports.createElement(NotificationProvider, {
     classNames: {
       list: classNames(hashId, cssVarCls, rootCls)
@@ -14660,7 +14760,7 @@ function useInternalMessage(messageConfig) {
         className,
         style: style2,
         onClose
-      } = config2, restConfig = __rest$4(config2, ["content", "icon", "type", "key", "className", "style", "onClose"]);
+      } = config2, restConfig = __rest$5(config2, ["content", "icon", "type", "key", "className", "style", "onClose"]);
       let mergedKey = key;
       if (mergedKey === void 0 || mergedKey === null) {
         keyIndex += 1;
@@ -15175,7 +15275,7 @@ const genWaveStyle = (token2) => {
     }
   };
 };
-const useStyle$3 = genComponentStyleHook("Wave", genWaveStyle);
+const useStyle$5 = genComponentStyleHook("Wave", genWaveStyle);
 const TARGET_CLS = `${defaultPrefixCls}-wave-target`;
 function isValidWaveColor(color) {
   return color && color !== "#fff" && color !== "#ffffff" && color !== "rgb(255, 255, 255)" && color !== "rgba(255, 255, 255, 1)" && !/rgba\((?:\d*, ){3}0\)/.test(color) && // any transparent rgba color
@@ -15353,7 +15453,7 @@ const Wave = (props) => {
   } = reactExports.useContext(ConfigContext);
   const containerRef = reactExports.useRef(null);
   const prefixCls = getPrefixCls("wave");
-  const [, hashId] = useStyle$3(prefixCls);
+  const [, hashId] = useStyle$5(prefixCls);
   const showWave = useWave(containerRef, classNames(prefixCls, hashId), component);
   React.useEffect(() => {
     const node2 = containerRef.current;
@@ -15416,12 +15516,12 @@ const genSpaceCompactStyle = (token2) => {
     }
   };
 };
-const useStyle$2 = genStyleHooks(["Space", "Compact"], (token2) => [genSpaceCompactStyle(token2)], () => ({}), {
+const useStyle$4 = genStyleHooks(["Space", "Compact"], (token2) => [genSpaceCompactStyle(token2)], () => ({}), {
   // Space component don't apply extra font style
   // https://github.com/ant-design/ant-design/issues/40315
   resetStyle: false
 });
-var __rest$3 = function(s2, e2) {
+var __rest$4 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -15465,7 +15565,7 @@ const NoCompactStyle = (props) => {
 const CompactItem = (props) => {
   const {
     children
-  } = props, others = __rest$3(props, ["children"]);
+  } = props, others = __rest$4(props, ["children"]);
   return /* @__PURE__ */ reactExports.createElement(SpaceCompactItemContext.Provider, {
     value: reactExports.useMemo(() => others, [others])
   }, children);
@@ -15483,10 +15583,10 @@ const Compact$1 = (props) => {
     className,
     rootClassName,
     children
-  } = props, restProps = __rest$3(props, ["size", "direction", "block", "prefixCls", "className", "rootClassName", "children"]);
+  } = props, restProps = __rest$4(props, ["size", "direction", "block", "prefixCls", "className", "rootClassName", "children"]);
   const mergedSize = useSize((ctx) => size !== null && size !== void 0 ? size : ctx);
   const prefixCls = getPrefixCls("space-compact", customizePrefixCls);
-  const [wrapCSSVar, hashId] = useStyle$2(prefixCls);
+  const [wrapCSSVar, hashId] = useStyle$4(prefixCls);
   const clx = classNames(prefixCls, hashId, {
     [`${prefixCls}-rtl`]: directionConfig === "rtl",
     [`${prefixCls}-block`]: block,
@@ -15511,7 +15611,7 @@ const Compact$1 = (props) => {
     className: clx
   }, restProps), nodes));
 };
-var __rest$2 = function(s2, e2) {
+var __rest$3 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -15529,7 +15629,7 @@ const ButtonGroup = (props) => {
     prefixCls: customizePrefixCls,
     size,
     className
-  } = props, others = __rest$2(props, ["prefixCls", "size", "className"]);
+  } = props, others = __rest$3(props, ["prefixCls", "size", "className"]);
   const prefixCls = getPrefixCls("btn-group", customizePrefixCls);
   const [, , hashId] = useToken();
   const sizeCls = reactExports.useMemo(() => {
@@ -15759,7 +15859,7 @@ const genGroupStyle = (token2) => {
     ]
   };
 };
-var _excluded$5 = ["b"], _excluded2 = ["v"];
+var _excluded$6 = ["b"], _excluded2 = ["v"];
 var getRoundNumber = function getRoundNumber2(value) {
   return Math.round(Number(value || 0));
 };
@@ -15768,7 +15868,7 @@ var convertHsb2Hsv = function convertHsb2Hsv2(color) {
     return color;
   }
   if (color && _typeof$1(color) === "object" && "h" in color && "b" in color) {
-    var _ref2 = color, b2 = _ref2.b, resets = _objectWithoutProperties(_ref2, _excluded$5);
+    var _ref2 = color, b2 = _ref2.b, resets = _objectWithoutProperties(_ref2, _excluded$6);
     return _objectSpread2$1(_objectSpread2$1({}, resets), {}, {
       v: b2
     });
@@ -16168,7 +16268,7 @@ const prepareToken = (token2) => {
   });
   return buttonToken;
 };
-const prepareComponentToken$1 = (token2) => {
+const prepareComponentToken$3 = (token2) => {
   var _a, _b, _c, _d, _e, _f;
   const contentFontSize = (_a = token2.contentFontSize) !== null && _a !== void 0 ? _a : token2.fontSize;
   const contentFontSizeSM = (_b = token2.contentFontSizeSM) !== null && _b !== void 0 ? _b : token2.fontSize;
@@ -16671,7 +16771,7 @@ const genBlockButtonStyle = (token2) => {
     }
   };
 };
-const useStyle$1 = genStyleHooks("Button", (token2) => {
+const useStyle$3 = genStyleHooks("Button", (token2) => {
   const buttonToken = prepareToken(token2);
   return [
     // Shared
@@ -16689,7 +16789,7 @@ const useStyle$1 = genStyleHooks("Button", (token2) => {
     // Button Group
     genGroupStyle(buttonToken)
   ];
-}, prepareComponentToken$1, {
+}, prepareComponentToken$3, {
   unitless: {
     fontWeight: true,
     contentLineHeight: true,
@@ -16841,8 +16941,8 @@ const Compact = genSubStyleComponent(["Button", "compact"], (token2) => {
     genCompactItemVerticalStyle(buttonToken),
     genButtonCompactStyle(buttonToken)
   ];
-}, prepareComponentToken$1);
-var __rest$1 = function(s2, e2) {
+}, prepareComponentToken$3);
+var __rest$2 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -16898,7 +16998,7 @@ const InternalCompoundedButton = /* @__PURE__ */ React.forwardRef((props, ref) =
     style: customStyle = {},
     autoInsertSpace,
     autoFocus
-  } = props, rest = __rest$1(props, ["loading", "prefixCls", "color", "variant", "type", "danger", "shape", "size", "styles", "disabled", "className", "rootClassName", "children", "icon", "iconPosition", "ghost", "block", "htmlType", "classNames", "style", "autoInsertSpace", "autoFocus"]);
+  } = props, rest = __rest$2(props, ["loading", "prefixCls", "color", "variant", "type", "danger", "shape", "size", "styles", "disabled", "className", "rootClassName", "children", "icon", "iconPosition", "ghost", "block", "htmlType", "classNames", "style", "autoInsertSpace", "autoFocus"]);
   const mergedType = type4 || "default";
   const {
     button
@@ -16933,7 +17033,7 @@ const InternalCompoundedButton = /* @__PURE__ */ React.forwardRef((props, ref) =
   } = useComponentConfig("button");
   const mergedInsertSpace = (_a = autoInsertSpace !== null && autoInsertSpace !== void 0 ? autoInsertSpace : contextAutoInsertSpace) !== null && _a !== void 0 ? _a : true;
   const prefixCls = getPrefixCls("btn", customizePrefixCls);
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle$1(prefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$3(prefixCls);
   const disabled2 = reactExports.useContext(DisabledContext);
   const mergedDisabled = customDisabled !== null && customDisabled !== void 0 ? customDisabled : disabled2;
   const groupSize = reactExports.useContext(GroupSizeContext);
@@ -17618,13 +17718,13 @@ function asyncMap(objArr, option, func, callback, source) {
 function isErrorObj(obj) {
   return !!(obj && obj.message !== void 0);
 }
-function getValue(value, path) {
+function getValue(value, path2) {
   var v2 = value;
-  for (var i2 = 0; i2 < path.length; i2++) {
+  for (var i2 = 0; i2 < path2.length; i2++) {
     if (v2 == void 0) {
       return v2;
     }
-    v2 = v2[path[i2]];
+    v2 = v2[path2[i2]];
   }
   return v2;
 }
@@ -17779,8 +17879,8 @@ const getUrlRegex = function() {
   var domain = "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*";
   var tld = "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))";
   var port = "(?::\\d{2,5})?";
-  var path = '(?:[/?#][^\\s"]*)?';
-  var regex = "(?:".concat(protocol, "|www\\.)").concat(auth, "(?:localhost|").concat(ipv4, "|").concat(ipv6, "|").concat(host).concat(domain).concat(tld, ")").concat(port).concat(path);
+  var path2 = '(?:[/?#][^\\s"]*)?';
+  var regex = "(?:".concat(protocol, "|www\\.)").concat(auth, "(?:localhost|").concat(ipv4, "|").concat(ipv6, "|").concat(host).concat(domain).concat(tld, ")").concat(port).concat(path2);
   urlReg = new RegExp("(?:^".concat(regex, "$)"), "i");
   return urlReg;
 };
@@ -18690,8 +18790,8 @@ function _finishOnFirstFailed() {
   }));
   return _finishOnFirstFailed.apply(this, arguments);
 }
-function getNamePath(path) {
-  return toArray$2(path);
+function getNamePath(path2) {
+  return toArray$2(path2);
 }
 function cloneByNamePathList(store, namePathList) {
   var newStore = {};
@@ -18703,8 +18803,8 @@ function cloneByNamePathList(store, namePathList) {
 }
 function containsNamePath(namePathList, namePath) {
   var partialMatch = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-  return namePathList && namePathList.some(function(path) {
-    return matchNamePath(namePath, path, partialMatch);
+  return namePathList && namePathList.some(function(path2) {
+    return matchNamePath(namePath, path2, partialMatch);
   });
 }
 function matchNamePath(namePath, subNamePath) {
@@ -18763,7 +18863,7 @@ function move(array4, moveIndex, toIndex) {
   }
   return array4;
 }
-var _excluded$4 = ["name"];
+var _excluded$5 = ["name"];
 var EMPTY_ERRORS = [];
 function requireUpdate(shouldUpdate, prev2, next2, prevValue, nextValue, info) {
   if (typeof shouldUpdate === "function") {
@@ -19199,7 +19299,7 @@ _defineProperty$1(Field, "defaultProps", {
 });
 function WrapperField(_ref6) {
   var _restProps$isListFiel;
-  var name = _ref6.name, restProps = _objectWithoutProperties(_ref6, _excluded$4);
+  var name = _ref6.name, restProps = _objectWithoutProperties(_ref6, _excluded$5);
   var fieldContext = reactExports.useContext(Context);
   var listContext = reactExports.useContext(ListContext);
   var namePath = name !== void 0 ? getNamePath(name) : void 0;
@@ -19422,7 +19522,7 @@ var NameMap = /* @__PURE__ */ function() {
   }]);
   return NameMap2;
 }();
-var _excluded$3 = ["name"];
+var _excluded$4 = ["name"];
 var FormStore = /* @__PURE__ */ _createClass$1(function FormStore2(forceRootUpdate) {
   var _this = this;
   _classCallCheck$1(this, FormStore2);
@@ -19816,7 +19916,7 @@ var FormStore = /* @__PURE__ */ _createClass$1(function FormStore2(forceRootUpda
     var prevStore = _this.store;
     var namePathList = [];
     fields.forEach(function(fieldData) {
-      var name = fieldData.name, data = _objectWithoutProperties(fieldData, _excluded$3);
+      var name = fieldData.name, data = _objectWithoutProperties(fieldData, _excluded$4);
       var namePath = getNamePath(name);
       namePathList.push(namePath);
       if ("value" in data) {
@@ -20222,9 +20322,9 @@ var FormProvider$1 = function FormProvider(_ref2) {
     })
   }, children);
 };
-var _excluded$2 = ["name", "initialValues", "fields", "form", "preserve", "children", "component", "validateMessages", "validateTrigger", "onValuesChange", "onFieldsChange", "onFinish", "onFinishFailed", "clearOnDestroy"];
+var _excluded$3 = ["name", "initialValues", "fields", "form", "preserve", "children", "component", "validateMessages", "validateTrigger", "onValuesChange", "onFieldsChange", "onFinish", "onFinishFailed", "clearOnDestroy"];
 var Form = function Form2(_ref2, ref) {
-  var name = _ref2.name, initialValues = _ref2.initialValues, fields = _ref2.fields, form = _ref2.form, preserve2 = _ref2.preserve, children = _ref2.children, _ref$component = _ref2.component, Component = _ref$component === void 0 ? "form" : _ref$component, validateMessages = _ref2.validateMessages, _ref$validateTrigger = _ref2.validateTrigger, validateTrigger = _ref$validateTrigger === void 0 ? "onChange" : _ref$validateTrigger, onValuesChange = _ref2.onValuesChange, _onFieldsChange = _ref2.onFieldsChange, _onFinish = _ref2.onFinish, onFinishFailed = _ref2.onFinishFailed, clearOnDestroy = _ref2.clearOnDestroy, restProps = _objectWithoutProperties(_ref2, _excluded$2);
+  var name = _ref2.name, initialValues = _ref2.initialValues, fields = _ref2.fields, form = _ref2.form, preserve2 = _ref2.preserve, children = _ref2.children, _ref$component = _ref2.component, Component = _ref$component === void 0 ? "form" : _ref$component, validateMessages = _ref2.validateMessages, _ref$validateTrigger = _ref2.validateTrigger, validateTrigger = _ref$validateTrigger === void 0 ? "onChange" : _ref$validateTrigger, onValuesChange = _ref2.onValuesChange, _onFieldsChange = _ref2.onFieldsChange, _onFinish = _ref2.onFinish, onFinishFailed = _ref2.onFinishFailed, clearOnDestroy = _ref2.clearOnDestroy, restProps = _objectWithoutProperties(_ref2, _excluded$3);
   var nativeElementRef = reactExports.useRef(null);
   var formContext = reactExports.useContext(FormContext$1);
   var _useForm = useForm(form), _useForm2 = _slicedToArray$1(_useForm, 1), formInstance = _useForm2[0];
@@ -20444,6 +20544,660 @@ const ContextIsolator = (props) => {
   }
   return result;
 };
+const Element$1 = (props) => {
+  const {
+    prefixCls,
+    className,
+    style: style2,
+    size,
+    shape
+  } = props;
+  const sizeCls = classNames({
+    [`${prefixCls}-lg`]: size === "large",
+    [`${prefixCls}-sm`]: size === "small"
+  });
+  const shapeCls = classNames({
+    [`${prefixCls}-circle`]: shape === "circle",
+    [`${prefixCls}-square`]: shape === "square",
+    [`${prefixCls}-round`]: shape === "round"
+  });
+  const sizeStyle = reactExports.useMemo(() => typeof size === "number" ? {
+    width: size,
+    height: size,
+    lineHeight: `${size}px`
+  } : {}, [size]);
+  return /* @__PURE__ */ reactExports.createElement("span", {
+    className: classNames(prefixCls, sizeCls, shapeCls, className),
+    style: Object.assign(Object.assign({}, sizeStyle), style2)
+  });
+};
+const skeletonClsLoading = new Keyframe(`ant-skeleton-loading`, {
+  "0%": {
+    backgroundPosition: "100% 50%"
+  },
+  "100%": {
+    backgroundPosition: "0 50%"
+  }
+});
+const genSkeletonElementCommonSize = (size) => ({
+  height: size,
+  lineHeight: unit$1(size)
+});
+const genSkeletonElementAvatarSize = (size) => Object.assign({
+  width: size
+}, genSkeletonElementCommonSize(size));
+const genSkeletonColor = (token2) => ({
+  background: token2.skeletonLoadingBackground,
+  backgroundSize: "400% 100%",
+  animationName: skeletonClsLoading,
+  animationDuration: token2.skeletonLoadingMotionDuration,
+  animationTimingFunction: "ease",
+  animationIterationCount: "infinite"
+});
+const genSkeletonElementInputSize = (size, calc) => Object.assign({
+  width: calc(size).mul(5).equal(),
+  minWidth: calc(size).mul(5).equal()
+}, genSkeletonElementCommonSize(size));
+const genSkeletonElementAvatar = (token2) => {
+  const {
+    skeletonAvatarCls,
+    gradientFromColor,
+    controlHeight,
+    controlHeightLG,
+    controlHeightSM
+  } = token2;
+  return {
+    [skeletonAvatarCls]: Object.assign({
+      display: "inline-block",
+      verticalAlign: "top",
+      background: gradientFromColor
+    }, genSkeletonElementAvatarSize(controlHeight)),
+    [`${skeletonAvatarCls}${skeletonAvatarCls}-circle`]: {
+      borderRadius: "50%"
+    },
+    [`${skeletonAvatarCls}${skeletonAvatarCls}-lg`]: Object.assign({}, genSkeletonElementAvatarSize(controlHeightLG)),
+    [`${skeletonAvatarCls}${skeletonAvatarCls}-sm`]: Object.assign({}, genSkeletonElementAvatarSize(controlHeightSM))
+  };
+};
+const genSkeletonElementInput = (token2) => {
+  const {
+    controlHeight,
+    borderRadiusSM,
+    skeletonInputCls,
+    controlHeightLG,
+    controlHeightSM,
+    gradientFromColor,
+    calc
+  } = token2;
+  return {
+    [skeletonInputCls]: Object.assign({
+      display: "inline-block",
+      verticalAlign: "top",
+      background: gradientFromColor,
+      borderRadius: borderRadiusSM
+    }, genSkeletonElementInputSize(controlHeight, calc)),
+    [`${skeletonInputCls}-lg`]: Object.assign({}, genSkeletonElementInputSize(controlHeightLG, calc)),
+    [`${skeletonInputCls}-sm`]: Object.assign({}, genSkeletonElementInputSize(controlHeightSM, calc))
+  };
+};
+const genSkeletonElementImageSize = (size) => Object.assign({
+  width: size
+}, genSkeletonElementCommonSize(size));
+const genSkeletonElementImage = (token2) => {
+  const {
+    skeletonImageCls,
+    imageSizeBase,
+    gradientFromColor,
+    borderRadiusSM,
+    calc
+  } = token2;
+  return {
+    [skeletonImageCls]: Object.assign(Object.assign({
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      verticalAlign: "middle",
+      background: gradientFromColor,
+      borderRadius: borderRadiusSM
+    }, genSkeletonElementImageSize(calc(imageSizeBase).mul(2).equal())), {
+      [`${skeletonImageCls}-path`]: {
+        fill: "#bfbfbf"
+      },
+      [`${skeletonImageCls}-svg`]: Object.assign(Object.assign({}, genSkeletonElementImageSize(imageSizeBase)), {
+        maxWidth: calc(imageSizeBase).mul(4).equal(),
+        maxHeight: calc(imageSizeBase).mul(4).equal()
+      }),
+      [`${skeletonImageCls}-svg${skeletonImageCls}-svg-circle`]: {
+        borderRadius: "50%"
+      }
+    }),
+    [`${skeletonImageCls}${skeletonImageCls}-circle`]: {
+      borderRadius: "50%"
+    }
+  };
+};
+const genSkeletonElementButtonShape = (token2, size, buttonCls) => {
+  const {
+    skeletonButtonCls
+  } = token2;
+  return {
+    [`${buttonCls}${skeletonButtonCls}-circle`]: {
+      width: size,
+      minWidth: size,
+      borderRadius: "50%"
+    },
+    [`${buttonCls}${skeletonButtonCls}-round`]: {
+      borderRadius: size
+    }
+  };
+};
+const genSkeletonElementButtonSize = (size, calc) => Object.assign({
+  width: calc(size).mul(2).equal(),
+  minWidth: calc(size).mul(2).equal()
+}, genSkeletonElementCommonSize(size));
+const genSkeletonElementButton = (token2) => {
+  const {
+    borderRadiusSM,
+    skeletonButtonCls,
+    controlHeight,
+    controlHeightLG,
+    controlHeightSM,
+    gradientFromColor,
+    calc
+  } = token2;
+  return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({
+    [skeletonButtonCls]: Object.assign({
+      display: "inline-block",
+      verticalAlign: "top",
+      background: gradientFromColor,
+      borderRadius: borderRadiusSM,
+      width: calc(controlHeight).mul(2).equal(),
+      minWidth: calc(controlHeight).mul(2).equal()
+    }, genSkeletonElementButtonSize(controlHeight, calc))
+  }, genSkeletonElementButtonShape(token2, controlHeight, skeletonButtonCls)), {
+    [`${skeletonButtonCls}-lg`]: Object.assign({}, genSkeletonElementButtonSize(controlHeightLG, calc))
+  }), genSkeletonElementButtonShape(token2, controlHeightLG, `${skeletonButtonCls}-lg`)), {
+    [`${skeletonButtonCls}-sm`]: Object.assign({}, genSkeletonElementButtonSize(controlHeightSM, calc))
+  }), genSkeletonElementButtonShape(token2, controlHeightSM, `${skeletonButtonCls}-sm`));
+};
+const genBaseStyle = (token2) => {
+  const {
+    componentCls,
+    skeletonAvatarCls,
+    skeletonTitleCls,
+    skeletonParagraphCls,
+    skeletonButtonCls,
+    skeletonInputCls,
+    skeletonImageCls,
+    controlHeight,
+    controlHeightLG,
+    controlHeightSM,
+    gradientFromColor,
+    padding,
+    marginSM,
+    borderRadius,
+    titleHeight,
+    blockRadius,
+    paragraphLiHeight,
+    controlHeightXS,
+    paragraphMarginTop
+  } = token2;
+  return {
+    [componentCls]: {
+      display: "table",
+      width: "100%",
+      [`${componentCls}-header`]: {
+        display: "table-cell",
+        paddingInlineEnd: padding,
+        verticalAlign: "top",
+        // Avatar
+        [skeletonAvatarCls]: Object.assign({
+          display: "inline-block",
+          verticalAlign: "top",
+          background: gradientFromColor
+        }, genSkeletonElementAvatarSize(controlHeight)),
+        [`${skeletonAvatarCls}-circle`]: {
+          borderRadius: "50%"
+        },
+        [`${skeletonAvatarCls}-lg`]: Object.assign({}, genSkeletonElementAvatarSize(controlHeightLG)),
+        [`${skeletonAvatarCls}-sm`]: Object.assign({}, genSkeletonElementAvatarSize(controlHeightSM))
+      },
+      [`${componentCls}-content`]: {
+        display: "table-cell",
+        width: "100%",
+        verticalAlign: "top",
+        // Title
+        [skeletonTitleCls]: {
+          width: "100%",
+          height: titleHeight,
+          background: gradientFromColor,
+          borderRadius: blockRadius,
+          [`+ ${skeletonParagraphCls}`]: {
+            marginBlockStart: controlHeightSM
+          }
+        },
+        // paragraph
+        [skeletonParagraphCls]: {
+          padding: 0,
+          "> li": {
+            width: "100%",
+            height: paragraphLiHeight,
+            listStyle: "none",
+            background: gradientFromColor,
+            borderRadius: blockRadius,
+            "+ li": {
+              marginBlockStart: controlHeightXS
+            }
+          }
+        },
+        [`${skeletonParagraphCls}> li:last-child:not(:first-child):not(:nth-child(2))`]: {
+          width: "61%"
+        }
+      },
+      [`&-round ${componentCls}-content`]: {
+        [`${skeletonTitleCls}, ${skeletonParagraphCls} > li`]: {
+          borderRadius
+        }
+      }
+    },
+    [`${componentCls}-with-avatar ${componentCls}-content`]: {
+      // Title
+      [skeletonTitleCls]: {
+        marginBlockStart: marginSM,
+        [`+ ${skeletonParagraphCls}`]: {
+          marginBlockStart: paragraphMarginTop
+        }
+      }
+    },
+    // Skeleton element
+    [`${componentCls}${componentCls}-element`]: Object.assign(Object.assign(Object.assign(Object.assign({
+      display: "inline-block",
+      width: "auto"
+    }, genSkeletonElementButton(token2)), genSkeletonElementAvatar(token2)), genSkeletonElementInput(token2)), genSkeletonElementImage(token2)),
+    // Skeleton Block Button, Input
+    [`${componentCls}${componentCls}-block`]: {
+      width: "100%",
+      [skeletonButtonCls]: {
+        width: "100%"
+      },
+      [skeletonInputCls]: {
+        width: "100%"
+      }
+    },
+    // With active animation
+    [`${componentCls}${componentCls}-active`]: {
+      [`
+        ${skeletonTitleCls},
+        ${skeletonParagraphCls} > li,
+        ${skeletonAvatarCls},
+        ${skeletonButtonCls},
+        ${skeletonInputCls},
+        ${skeletonImageCls}
+      `]: Object.assign({}, genSkeletonColor(token2))
+    }
+  };
+};
+const prepareComponentToken$2 = (token2) => {
+  const {
+    colorFillContent,
+    colorFill
+  } = token2;
+  const gradientFromColor = colorFillContent;
+  const gradientToColor = colorFill;
+  return {
+    color: gradientFromColor,
+    colorGradientEnd: gradientToColor,
+    gradientFromColor,
+    gradientToColor,
+    titleHeight: token2.controlHeight / 2,
+    blockRadius: token2.borderRadiusSM,
+    paragraphMarginTop: token2.marginLG + token2.marginXXS,
+    paragraphLiHeight: token2.controlHeight / 2
+  };
+};
+const useStyle$2 = genStyleHooks("Skeleton", (token2) => {
+  const {
+    componentCls,
+    calc
+  } = token2;
+  const skeletonToken = merge(token2, {
+    skeletonAvatarCls: `${componentCls}-avatar`,
+    skeletonTitleCls: `${componentCls}-title`,
+    skeletonParagraphCls: `${componentCls}-paragraph`,
+    skeletonButtonCls: `${componentCls}-button`,
+    skeletonInputCls: `${componentCls}-input`,
+    skeletonImageCls: `${componentCls}-image`,
+    imageSizeBase: calc(token2.controlHeight).mul(1.5).equal(),
+    borderRadius: 100,
+    // Large number to make capsule shape
+    skeletonLoadingBackground: `linear-gradient(90deg, ${token2.gradientFromColor} 25%, ${token2.gradientToColor} 37%, ${token2.gradientFromColor} 63%)`,
+    skeletonLoadingMotionDuration: "1.4s"
+  });
+  return genBaseStyle(skeletonToken);
+}, prepareComponentToken$2, {
+  deprecatedTokens: [["color", "gradientFromColor"], ["colorGradientEnd", "gradientToColor"]]
+});
+const SkeletonAvatar = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    className,
+    rootClassName,
+    active,
+    shape = "circle",
+    size = "default"
+  } = props;
+  const {
+    getPrefixCls
+  } = reactExports.useContext(ConfigContext);
+  const prefixCls = getPrefixCls("skeleton", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$2(prefixCls);
+  const otherProps = omit(props, ["prefixCls", "className"]);
+  const cls = classNames(prefixCls, `${prefixCls}-element`, {
+    [`${prefixCls}-active`]: active
+  }, className, rootClassName, hashId, cssVarCls);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+    className: cls
+  }, /* @__PURE__ */ reactExports.createElement(Element$1, Object.assign({
+    prefixCls: `${prefixCls}-avatar`,
+    shape,
+    size
+  }, otherProps))));
+};
+const SkeletonButton = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    className,
+    rootClassName,
+    active,
+    block = false,
+    size = "default"
+  } = props;
+  const {
+    getPrefixCls
+  } = reactExports.useContext(ConfigContext);
+  const prefixCls = getPrefixCls("skeleton", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$2(prefixCls);
+  const otherProps = omit(props, ["prefixCls"]);
+  const cls = classNames(prefixCls, `${prefixCls}-element`, {
+    [`${prefixCls}-active`]: active,
+    [`${prefixCls}-block`]: block
+  }, className, rootClassName, hashId, cssVarCls);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+    className: cls
+  }, /* @__PURE__ */ reactExports.createElement(Element$1, Object.assign({
+    prefixCls: `${prefixCls}-button`,
+    size
+  }, otherProps))));
+};
+const path = "M365.714286 329.142857q0 45.714286-32.036571 77.677714t-77.677714 32.036571-77.677714-32.036571-32.036571-77.677714 32.036571-77.677714 77.677714-32.036571 77.677714 32.036571 32.036571 77.677714zM950.857143 548.571429l0 256-804.571429 0 0-109.714286 182.857143-182.857143 91.428571 91.428571 292.571429-292.571429zM1005.714286 146.285714l-914.285714 0q-7.460571 0-12.873143 5.412571t-5.412571 12.873143l0 694.857143q0 7.460571 5.412571 12.873143t12.873143 5.412571l914.285714 0q7.460571 0 12.873143-5.412571t5.412571-12.873143l0-694.857143q0-7.460571-5.412571-12.873143t-12.873143-5.412571zM1097.142857 164.571429l0 694.857143q0 37.741714-26.843429 64.585143t-64.585143 26.843429l-914.285714 0q-37.741714 0-64.585143-26.843429t-26.843429-64.585143l0-694.857143q0-37.741714 26.843429-64.585143t64.585143-26.843429l914.285714 0q37.741714 0 64.585143 26.843429t26.843429 64.585143z";
+const SkeletonImage = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    className,
+    rootClassName,
+    style: style2,
+    active
+  } = props;
+  const {
+    getPrefixCls
+  } = reactExports.useContext(ConfigContext);
+  const prefixCls = getPrefixCls("skeleton", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$2(prefixCls);
+  const cls = classNames(prefixCls, `${prefixCls}-element`, {
+    [`${prefixCls}-active`]: active
+  }, className, rootClassName, hashId, cssVarCls);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+    className: cls
+  }, /* @__PURE__ */ reactExports.createElement("div", {
+    className: classNames(`${prefixCls}-image`, className),
+    style: style2
+  }, /* @__PURE__ */ reactExports.createElement("svg", {
+    viewBox: "0 0 1098 1024",
+    xmlns: "http://www.w3.org/2000/svg",
+    className: `${prefixCls}-image-svg`
+  }, /* @__PURE__ */ reactExports.createElement("title", null, "Image placeholder"), /* @__PURE__ */ reactExports.createElement("path", {
+    d: path,
+    className: `${prefixCls}-image-path`
+  })))));
+};
+const SkeletonInput = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    className,
+    rootClassName,
+    active,
+    block,
+    size = "default"
+  } = props;
+  const {
+    getPrefixCls
+  } = reactExports.useContext(ConfigContext);
+  const prefixCls = getPrefixCls("skeleton", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$2(prefixCls);
+  const otherProps = omit(props, ["prefixCls"]);
+  const cls = classNames(prefixCls, `${prefixCls}-element`, {
+    [`${prefixCls}-active`]: active,
+    [`${prefixCls}-block`]: block
+  }, className, rootClassName, hashId, cssVarCls);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+    className: cls
+  }, /* @__PURE__ */ reactExports.createElement(Element$1, Object.assign({
+    prefixCls: `${prefixCls}-input`,
+    size
+  }, otherProps))));
+};
+const SkeletonNode = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    className,
+    rootClassName,
+    style: style2,
+    active,
+    children
+  } = props;
+  const {
+    getPrefixCls
+  } = reactExports.useContext(ConfigContext);
+  const prefixCls = getPrefixCls("skeleton", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$2(prefixCls);
+  const cls = classNames(prefixCls, `${prefixCls}-element`, {
+    [`${prefixCls}-active`]: active
+  }, hashId, className, rootClassName, cssVarCls);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+    className: cls
+  }, /* @__PURE__ */ reactExports.createElement("div", {
+    className: classNames(`${prefixCls}-image`, className),
+    style: style2
+  }, children)));
+};
+const getWidth = (index2, props) => {
+  const {
+    width,
+    rows = 2
+  } = props;
+  if (Array.isArray(width)) {
+    return width[index2];
+  }
+  if (rows - 1 === index2) {
+    return width;
+  }
+  return void 0;
+};
+const Paragraph = (props) => {
+  const {
+    prefixCls,
+    className,
+    style: style2,
+    rows = 0
+  } = props;
+  const rowList = Array.from({
+    length: rows
+  }).map((_2, index2) => (
+    // eslint-disable-next-line react/no-array-index-key
+    /* @__PURE__ */ reactExports.createElement("li", {
+      key: index2,
+      style: {
+        width: getWidth(index2, props)
+      }
+    })
+  ));
+  return /* @__PURE__ */ reactExports.createElement("ul", {
+    className: classNames(prefixCls, className),
+    style: style2
+  }, rowList);
+};
+const Title = ({
+  prefixCls,
+  className,
+  width,
+  style: style2
+}) => (
+  // biome-ignore lint/a11y/useHeadingContent: HOC here
+  /* @__PURE__ */ reactExports.createElement("h3", {
+    className: classNames(prefixCls, className),
+    style: Object.assign({
+      width
+    }, style2)
+  })
+);
+function getComponentProps(prop) {
+  if (prop && typeof prop === "object") {
+    return prop;
+  }
+  return {};
+}
+function getAvatarBasicProps(hasTitle, hasParagraph) {
+  if (hasTitle && !hasParagraph) {
+    return {
+      size: "large",
+      shape: "square"
+    };
+  }
+  return {
+    size: "large",
+    shape: "circle"
+  };
+}
+function getTitleBasicProps(hasAvatar, hasParagraph) {
+  if (!hasAvatar && hasParagraph) {
+    return {
+      width: "38%"
+    };
+  }
+  if (hasAvatar && hasParagraph) {
+    return {
+      width: "50%"
+    };
+  }
+  return {};
+}
+function getParagraphBasicProps(hasAvatar, hasTitle) {
+  const basicProps = {};
+  if (!hasAvatar || !hasTitle) {
+    basicProps.width = "61%";
+  }
+  if (!hasAvatar && hasTitle) {
+    basicProps.rows = 3;
+  } else {
+    basicProps.rows = 2;
+  }
+  return basicProps;
+}
+const Skeleton = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    loading,
+    className,
+    rootClassName,
+    style: style2,
+    children,
+    avatar = false,
+    title = true,
+    paragraph = true,
+    active,
+    round: round2
+  } = props;
+  const {
+    getPrefixCls,
+    direction,
+    className: contextClassName,
+    style: contextStyle
+  } = useComponentConfig("skeleton");
+  const prefixCls = getPrefixCls("skeleton", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$2(prefixCls);
+  if (loading || !("loading" in props)) {
+    const hasAvatar = !!avatar;
+    const hasTitle = !!title;
+    const hasParagraph = !!paragraph;
+    let avatarNode;
+    if (hasAvatar) {
+      const avatarProps = Object.assign(Object.assign({
+        prefixCls: `${prefixCls}-avatar`
+      }, getAvatarBasicProps(hasTitle, hasParagraph)), getComponentProps(avatar));
+      avatarNode = /* @__PURE__ */ reactExports.createElement("div", {
+        className: `${prefixCls}-header`
+      }, /* @__PURE__ */ reactExports.createElement(Element$1, Object.assign({}, avatarProps)));
+    }
+    let contentNode;
+    if (hasTitle || hasParagraph) {
+      let $title;
+      if (hasTitle) {
+        const titleProps = Object.assign(Object.assign({
+          prefixCls: `${prefixCls}-title`
+        }, getTitleBasicProps(hasAvatar, hasParagraph)), getComponentProps(title));
+        $title = /* @__PURE__ */ reactExports.createElement(Title, Object.assign({}, titleProps));
+      }
+      let paragraphNode;
+      if (hasParagraph) {
+        const paragraphProps = Object.assign(Object.assign({
+          prefixCls: `${prefixCls}-paragraph`
+        }, getParagraphBasicProps(hasAvatar, hasTitle)), getComponentProps(paragraph));
+        paragraphNode = /* @__PURE__ */ reactExports.createElement(Paragraph, Object.assign({}, paragraphProps));
+      }
+      contentNode = /* @__PURE__ */ reactExports.createElement("div", {
+        className: `${prefixCls}-content`
+      }, $title, paragraphNode);
+    }
+    const cls = classNames(prefixCls, {
+      [`${prefixCls}-with-avatar`]: hasAvatar,
+      [`${prefixCls}-active`]: active,
+      [`${prefixCls}-rtl`]: direction === "rtl",
+      [`${prefixCls}-round`]: round2
+    }, contextClassName, className, rootClassName, hashId, cssVarCls);
+    return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+      className: cls,
+      style: Object.assign(Object.assign({}, contextStyle), style2)
+    }, avatarNode, contentNode));
+  }
+  return children !== null && children !== void 0 ? children : null;
+};
+Skeleton.Button = SkeletonButton;
+Skeleton.Avatar = SkeletonAvatar;
+Skeleton.Input = SkeletonInput;
+Skeleton.Image = SkeletonImage;
+Skeleton.Node = SkeletonNode;
+function voidFunc() {
+}
+const WatermarkContext = /* @__PURE__ */ reactExports.createContext({
+  add: voidFunc,
+  remove: voidFunc
+});
+function usePanelRef(panelSelector) {
+  const watermark = reactExports.useContext(WatermarkContext);
+  const panelEleRef = reactExports.useRef(null);
+  const panelRef = useEvent((ele) => {
+    if (ele) {
+      const innerContentEle = panelSelector ? ele.querySelector(panelSelector) : ele;
+      if (innerContentEle) {
+        watermark.add(innerContentEle);
+        panelEleRef.current = innerContentEle;
+      }
+    } else {
+      watermark.remove(panelEleRef.current);
+    }
+  });
+  return panelRef;
+}
 const AppConfigContext = /* @__PURE__ */ React.createContext({});
 const isMobile = function() {
   if (typeof navigator === "undefined" || typeof window === "undefined") {
@@ -21254,11 +22008,11 @@ function useWinClick(open2, clickToHide, targetEle, popupEle, mask, maskClosable
   }
   return onPopupPointerDown;
 }
-var _excluded$1 = ["prefixCls", "children", "action", "showAction", "hideAction", "popupVisible", "defaultPopupVisible", "onPopupVisibleChange", "afterPopupVisibleChange", "mouseEnterDelay", "mouseLeaveDelay", "focusDelay", "blurDelay", "mask", "maskClosable", "getPopupContainer", "forceRender", "autoDestroy", "destroyPopupOnHide", "popup", "popupClassName", "popupStyle", "popupPlacement", "builtinPlacements", "popupAlign", "zIndex", "stretch", "getPopupClassNameFromAlign", "fresh", "alignPoint", "onPopupClick", "onPopupAlign", "arrow", "popupMotion", "maskMotion", "popupTransitionName", "popupAnimation", "maskTransitionName", "maskAnimation", "className", "getTriggerDOMNode"];
+var _excluded$2 = ["prefixCls", "children", "action", "showAction", "hideAction", "popupVisible", "defaultPopupVisible", "onPopupVisibleChange", "afterPopupVisibleChange", "mouseEnterDelay", "mouseLeaveDelay", "focusDelay", "blurDelay", "mask", "maskClosable", "getPopupContainer", "forceRender", "autoDestroy", "destroyPopupOnHide", "popup", "popupClassName", "popupStyle", "popupPlacement", "builtinPlacements", "popupAlign", "zIndex", "stretch", "getPopupClassNameFromAlign", "fresh", "alignPoint", "onPopupClick", "onPopupAlign", "arrow", "popupMotion", "maskMotion", "popupTransitionName", "popupAnimation", "maskTransitionName", "maskAnimation", "className", "getTriggerDOMNode"];
 function generateTrigger() {
   var PortalComponent = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : Portal;
   var Trigger2 = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
-    var _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-trigger-popup" : _props$prefixCls, children = props.children, _props$action = props.action, action = _props$action === void 0 ? "hover" : _props$action, showAction = props.showAction, hideAction = props.hideAction, popupVisible = props.popupVisible, defaultPopupVisible = props.defaultPopupVisible, onPopupVisibleChange = props.onPopupVisibleChange, afterPopupVisibleChange = props.afterPopupVisibleChange, mouseEnterDelay = props.mouseEnterDelay, _props$mouseLeaveDela = props.mouseLeaveDelay, mouseLeaveDelay = _props$mouseLeaveDela === void 0 ? 0.1 : _props$mouseLeaveDela, focusDelay = props.focusDelay, blurDelay = props.blurDelay, mask = props.mask, _props$maskClosable = props.maskClosable, maskClosable = _props$maskClosable === void 0 ? true : _props$maskClosable, getPopupContainer = props.getPopupContainer, forceRender = props.forceRender, autoDestroy = props.autoDestroy, destroyPopupOnHide = props.destroyPopupOnHide, popup = props.popup, popupClassName = props.popupClassName, popupStyle = props.popupStyle, popupPlacement = props.popupPlacement, _props$builtinPlaceme = props.builtinPlacements, builtinPlacements = _props$builtinPlaceme === void 0 ? {} : _props$builtinPlaceme, popupAlign = props.popupAlign, zIndex = props.zIndex, stretch = props.stretch, getPopupClassNameFromAlign = props.getPopupClassNameFromAlign, fresh = props.fresh, alignPoint = props.alignPoint, onPopupClick = props.onPopupClick, onPopupAlign = props.onPopupAlign, arrow = props.arrow, popupMotion = props.popupMotion, maskMotion = props.maskMotion, popupTransitionName = props.popupTransitionName, popupAnimation = props.popupAnimation, maskTransitionName = props.maskTransitionName, maskAnimation = props.maskAnimation, className = props.className, getTriggerDOMNode = props.getTriggerDOMNode, restProps = _objectWithoutProperties(props, _excluded$1);
+    var _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-trigger-popup" : _props$prefixCls, children = props.children, _props$action = props.action, action = _props$action === void 0 ? "hover" : _props$action, showAction = props.showAction, hideAction = props.hideAction, popupVisible = props.popupVisible, defaultPopupVisible = props.defaultPopupVisible, onPopupVisibleChange = props.onPopupVisibleChange, afterPopupVisibleChange = props.afterPopupVisibleChange, mouseEnterDelay = props.mouseEnterDelay, _props$mouseLeaveDela = props.mouseLeaveDelay, mouseLeaveDelay = _props$mouseLeaveDela === void 0 ? 0.1 : _props$mouseLeaveDela, focusDelay = props.focusDelay, blurDelay = props.blurDelay, mask = props.mask, _props$maskClosable = props.maskClosable, maskClosable = _props$maskClosable === void 0 ? true : _props$maskClosable, getPopupContainer = props.getPopupContainer, forceRender = props.forceRender, autoDestroy = props.autoDestroy, destroyPopupOnHide = props.destroyPopupOnHide, popup = props.popup, popupClassName = props.popupClassName, popupStyle = props.popupStyle, popupPlacement = props.popupPlacement, _props$builtinPlaceme = props.builtinPlacements, builtinPlacements = _props$builtinPlaceme === void 0 ? {} : _props$builtinPlaceme, popupAlign = props.popupAlign, zIndex = props.zIndex, stretch = props.stretch, getPopupClassNameFromAlign = props.getPopupClassNameFromAlign, fresh = props.fresh, alignPoint = props.alignPoint, onPopupClick = props.onPopupClick, onPopupAlign = props.onPopupAlign, arrow = props.arrow, popupMotion = props.popupMotion, maskMotion = props.maskMotion, popupTransitionName = props.popupTransitionName, popupAnimation = props.popupAnimation, maskTransitionName = props.maskTransitionName, maskAnimation = props.maskAnimation, className = props.className, getTriggerDOMNode = props.getTriggerDOMNode, restProps = _objectWithoutProperties(props, _excluded$2);
     var mergedAutoDestroy = autoDestroy || destroyPopupOnHide || false;
     var _React$useState = reactExports.useState(false), _React$useState2 = _slicedToArray$1(_React$useState, 2), mobile = _React$useState2[0], setMobile = _React$useState2[1];
     useLayoutEffect(function() {
@@ -21672,11 +22426,11 @@ var placements = {
     targetOffset
   }
 };
-var _excluded = ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "children", "onVisibleChange", "afterVisibleChange", "transitionName", "animation", "motion", "placement", "align", "destroyTooltipOnHide", "defaultVisible", "getTooltipContainer", "overlayInnerStyle", "arrowContent", "overlay", "id", "showArrow", "classNames", "styles"];
+var _excluded$1 = ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "children", "onVisibleChange", "afterVisibleChange", "transitionName", "animation", "motion", "placement", "align", "destroyTooltipOnHide", "defaultVisible", "getTooltipContainer", "overlayInnerStyle", "arrowContent", "overlay", "id", "showArrow", "classNames", "styles"];
 var Tooltip$1 = function Tooltip(props, ref) {
   var overlayClassName = props.overlayClassName, _props$trigger = props.trigger, trigger = _props$trigger === void 0 ? ["hover"] : _props$trigger, _props$mouseEnterDela = props.mouseEnterDelay, mouseEnterDelay = _props$mouseEnterDela === void 0 ? 0 : _props$mouseEnterDela, _props$mouseLeaveDela = props.mouseLeaveDelay, mouseLeaveDelay = _props$mouseLeaveDela === void 0 ? 0.1 : _props$mouseLeaveDela, overlayStyle = props.overlayStyle, _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-tooltip" : _props$prefixCls, children = props.children, onVisibleChange = props.onVisibleChange, afterVisibleChange = props.afterVisibleChange, transitionName = props.transitionName, animation = props.animation, motion = props.motion, _props$placement = props.placement, placement = _props$placement === void 0 ? "right" : _props$placement, _props$align = props.align, align = _props$align === void 0 ? {} : _props$align, _props$destroyTooltip = props.destroyTooltipOnHide, destroyTooltipOnHide = _props$destroyTooltip === void 0 ? false : _props$destroyTooltip, defaultVisible = props.defaultVisible, getTooltipContainer = props.getTooltipContainer, overlayInnerStyle = props.overlayInnerStyle;
   props.arrowContent;
-  var overlay = props.overlay, id2 = props.id, _props$showArrow = props.showArrow, showArrow = _props$showArrow === void 0 ? true : _props$showArrow, tooltipClassNames = props.classNames, tooltipStyles = props.styles, restProps = _objectWithoutProperties(props, _excluded);
+  var overlay = props.overlay, id2 = props.id, _props$showArrow = props.showArrow, showArrow = _props$showArrow === void 0 ? true : _props$showArrow, tooltipClassNames = props.classNames, tooltipStyles = props.styles, restProps = _objectWithoutProperties(props, _excluded$1);
   var mergedId = useId(id2);
   var triggerRef = reactExports.useRef(null);
   reactExports.useImperativeHandle(ref, function() {
@@ -22217,7 +22971,7 @@ const genTooltipStyle = (token2) => {
     }
   ];
 };
-const prepareComponentToken = (token2) => Object.assign(Object.assign({
+const prepareComponentToken$1 = (token2) => Object.assign(Object.assign({
   zIndexPopup: token2.zIndexPopupBase + 70
 }, getArrowOffsetToken({
   contentRadius: token2.borderRadius,
@@ -22225,7 +22979,7 @@ const prepareComponentToken = (token2) => Object.assign(Object.assign({
 })), getArrowToken(merge(token2, {
   borderRadiusOuter: Math.min(token2.borderRadiusOuter, 4)
 })));
-const useStyle = (prefixCls, injectStyle = true) => {
+const useStyle$1 = (prefixCls, injectStyle = true) => {
   const useStyle2 = genStyleHooks("Tooltip", (token2) => {
     const {
       borderRadius,
@@ -22240,7 +22994,7 @@ const useStyle = (prefixCls, injectStyle = true) => {
       tooltipBg: colorBgSpotlight
     });
     return [genTooltipStyle(TooltipToken), initZoomMotion(token2, "zoom-big-fast")];
-  }, prepareComponentToken, {
+  }, prepareComponentToken$1, {
     resetStyle: false,
     // Popover use Tooltip as internal component. We do not need to handle this.
     injectStyle
@@ -22275,7 +23029,7 @@ function parseColor(prefixCls, color) {
     arrowStyle
   };
 }
-const PurePanel = (props) => {
+const PurePanel$1 = (props) => {
   const {
     prefixCls: customizePrefixCls,
     className,
@@ -22288,7 +23042,7 @@ const PurePanel = (props) => {
     getPrefixCls
   } = reactExports.useContext(ConfigContext);
   const prefixCls = getPrefixCls("tooltip", customizePrefixCls);
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$1(prefixCls);
   const colorInfo = parseColor(prefixCls, color);
   const arrowContentStyle = colorInfo.arrowStyle;
   const formattedOverlayInnerStyle = Object.assign(Object.assign({}, overlayInnerStyle), colorInfo.overlayStyle);
@@ -22304,7 +23058,7 @@ const PurePanel = (props) => {
     overlayInnerStyle: formattedOverlayInnerStyle
   }), title)));
 };
-var __rest = function(s2, e2) {
+var __rest$1 = function(s2, e2) {
   var t2 = {};
   for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
   if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -22341,7 +23095,7 @@ const InternalTooltip = /* @__PURE__ */ reactExports.forwardRef((props, ref) => 
     overlayClassName,
     styles: styles2,
     classNames: tooltipClassNames
-  } = props, restProps = __rest(props, ["prefixCls", "openClassName", "getTooltipContainer", "color", "overlayInnerStyle", "children", "afterOpenChange", "afterVisibleChange", "destroyTooltipOnHide", "destroyOnHidden", "arrow", "title", "overlay", "builtinPlacements", "arrowPointAtCenter", "autoAdjustOverflow", "motion", "getPopupContainer", "placement", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "rootClassName", "overlayClassName", "styles", "classNames"]);
+  } = props, restProps = __rest$1(props, ["prefixCls", "openClassName", "getTooltipContainer", "color", "overlayInnerStyle", "children", "afterOpenChange", "afterVisibleChange", "destroyTooltipOnHide", "destroyOnHidden", "arrow", "title", "overlay", "builtinPlacements", "arrowPointAtCenter", "autoAdjustOverflow", "motion", "getPopupContainer", "placement", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "rootClassName", "overlayClassName", "styles", "classNames"]);
   const mergedShowArrow = !!arrow;
   const [, token2] = useToken();
   const {
@@ -22418,7 +23172,7 @@ const InternalTooltip = /* @__PURE__ */ reactExports.forwardRef((props, ref) => 
   const child = /* @__PURE__ */ reactExports.isValidElement(children) && !isFragment(children) ? children : /* @__PURE__ */ reactExports.createElement("span", null, children);
   const childProps = child.props;
   const childCls = !childProps.className || typeof childProps.className === "string" ? classNames(childProps.className, openClassName || `${prefixCls}-open`) : childProps.className;
-  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls, !injectFromPopover);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle$1(prefixCls, !injectFromPopover);
   const colorInfo = parseColor(prefixCls, color);
   const arrowContentStyle = colorInfo.arrowStyle;
   const rootClassNames = classNames(overlayClassName, {
@@ -22465,7 +23219,771 @@ const InternalTooltip = /* @__PURE__ */ reactExports.forwardRef((props, ref) => 
   }, content));
 });
 const Tooltip2 = InternalTooltip;
-Tooltip2._InternalPanelDoNotUseOrYouWillBeFired = PurePanel;
+Tooltip2._InternalPanelDoNotUseOrYouWillBeFired = PurePanel$1;
+var DrawerContext = /* @__PURE__ */ reactExports.createContext(null);
+var RefContext = /* @__PURE__ */ reactExports.createContext({});
+var _excluded = ["prefixCls", "className", "containerRef"];
+var DrawerPanel$1 = function DrawerPanel2(props) {
+  var prefixCls = props.prefixCls, className = props.className, containerRef = props.containerRef, restProps = _objectWithoutProperties(props, _excluded);
+  var _React$useContext = reactExports.useContext(RefContext), panelRef = _React$useContext.panel;
+  var mergedRef = useComposeRef(panelRef, containerRef);
+  return /* @__PURE__ */ reactExports.createElement("div", _extends({
+    className: classNames("".concat(prefixCls, "-content"), className),
+    role: "dialog",
+    ref: mergedRef
+  }, pickAttrs(props, {
+    aria: true
+  }), {
+    "aria-modal": "true"
+  }, restProps));
+};
+function parseWidthHeight(value) {
+  if (typeof value === "string" && String(Number(value)) === value) {
+    warningOnce(false, "Invalid value type of `width` or `height` which should be number type instead.");
+    return Number(value);
+  }
+  return value;
+}
+var sentinelStyle = {
+  width: 0,
+  height: 0,
+  overflow: "hidden",
+  outline: "none",
+  position: "absolute"
+};
+function DrawerPopup(props, ref) {
+  var _ref2, _pushConfig$distance, _pushConfig;
+  var prefixCls = props.prefixCls, open2 = props.open, placement = props.placement, inline2 = props.inline, push = props.push, forceRender = props.forceRender, autoFocus = props.autoFocus, keyboard = props.keyboard, drawerClassNames = props.classNames, rootClassName = props.rootClassName, rootStyle = props.rootStyle, zIndex = props.zIndex, className = props.className, id2 = props.id, style2 = props.style, motion = props.motion, width = props.width, height = props.height, children = props.children, mask = props.mask, maskClosable = props.maskClosable, maskMotion = props.maskMotion, maskClassName = props.maskClassName, maskStyle = props.maskStyle, afterOpenChange = props.afterOpenChange, onClose = props.onClose, onMouseEnter = props.onMouseEnter, onMouseOver = props.onMouseOver, onMouseLeave = props.onMouseLeave, onClick = props.onClick, onKeyDown = props.onKeyDown, onKeyUp = props.onKeyUp, styles2 = props.styles, drawerRender = props.drawerRender;
+  var panelRef = reactExports.useRef();
+  var sentinelStartRef = reactExports.useRef();
+  var sentinelEndRef = reactExports.useRef();
+  reactExports.useImperativeHandle(ref, function() {
+    return panelRef.current;
+  });
+  var onPanelKeyDown = function onPanelKeyDown2(event) {
+    var keyCode = event.keyCode, shiftKey = event.shiftKey;
+    switch (keyCode) {
+      case KeyCode.TAB: {
+        if (keyCode === KeyCode.TAB) {
+          if (!shiftKey && document.activeElement === sentinelEndRef.current) {
+            var _sentinelStartRef$cur;
+            (_sentinelStartRef$cur = sentinelStartRef.current) === null || _sentinelStartRef$cur === void 0 || _sentinelStartRef$cur.focus({
+              preventScroll: true
+            });
+          } else if (shiftKey && document.activeElement === sentinelStartRef.current) {
+            var _sentinelEndRef$curre;
+            (_sentinelEndRef$curre = sentinelEndRef.current) === null || _sentinelEndRef$curre === void 0 || _sentinelEndRef$curre.focus({
+              preventScroll: true
+            });
+          }
+        }
+        break;
+      }
+      case KeyCode.ESC: {
+        if (onClose && keyboard) {
+          event.stopPropagation();
+          onClose(event);
+        }
+        break;
+      }
+    }
+  };
+  reactExports.useEffect(function() {
+    if (open2 && autoFocus) {
+      var _panelRef$current;
+      (_panelRef$current = panelRef.current) === null || _panelRef$current === void 0 || _panelRef$current.focus({
+        preventScroll: true
+      });
+    }
+  }, [open2]);
+  var _React$useState = reactExports.useState(false), _React$useState2 = _slicedToArray$1(_React$useState, 2), pushed = _React$useState2[0], setPushed = _React$useState2[1];
+  var parentContext = reactExports.useContext(DrawerContext);
+  var pushConfig;
+  if (typeof push === "boolean") {
+    pushConfig = push ? {} : {
+      distance: 0
+    };
+  } else {
+    pushConfig = push || {};
+  }
+  var pushDistance = (_ref2 = (_pushConfig$distance = (_pushConfig = pushConfig) === null || _pushConfig === void 0 ? void 0 : _pushConfig.distance) !== null && _pushConfig$distance !== void 0 ? _pushConfig$distance : parentContext === null || parentContext === void 0 ? void 0 : parentContext.pushDistance) !== null && _ref2 !== void 0 ? _ref2 : 180;
+  var mergedContext = reactExports.useMemo(function() {
+    return {
+      pushDistance,
+      push: function push2() {
+        setPushed(true);
+      },
+      pull: function pull() {
+        setPushed(false);
+      }
+    };
+  }, [pushDistance]);
+  reactExports.useEffect(function() {
+    if (open2) {
+      var _parentContext$push;
+      parentContext === null || parentContext === void 0 || (_parentContext$push = parentContext.push) === null || _parentContext$push === void 0 || _parentContext$push.call(parentContext);
+    } else {
+      var _parentContext$pull;
+      parentContext === null || parentContext === void 0 || (_parentContext$pull = parentContext.pull) === null || _parentContext$pull === void 0 || _parentContext$pull.call(parentContext);
+    }
+  }, [open2]);
+  reactExports.useEffect(function() {
+    return function() {
+      var _parentContext$pull2;
+      parentContext === null || parentContext === void 0 || (_parentContext$pull2 = parentContext.pull) === null || _parentContext$pull2 === void 0 || _parentContext$pull2.call(parentContext);
+    };
+  }, []);
+  var maskNode = /* @__PURE__ */ reactExports.createElement(CSSMotion, _extends({
+    key: "mask"
+  }, maskMotion, {
+    visible: mask && open2
+  }), function(_ref22, maskRef) {
+    var motionMaskClassName = _ref22.className, motionMaskStyle = _ref22.style;
+    return /* @__PURE__ */ reactExports.createElement("div", {
+      className: classNames("".concat(prefixCls, "-mask"), motionMaskClassName, drawerClassNames === null || drawerClassNames === void 0 ? void 0 : drawerClassNames.mask, maskClassName),
+      style: _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, motionMaskStyle), maskStyle), styles2 === null || styles2 === void 0 ? void 0 : styles2.mask),
+      onClick: maskClosable && open2 ? onClose : void 0,
+      ref: maskRef
+    });
+  });
+  var motionProps = typeof motion === "function" ? motion(placement) : motion;
+  var wrapperStyle = {};
+  if (pushed && pushDistance) {
+    switch (placement) {
+      case "top":
+        wrapperStyle.transform = "translateY(".concat(pushDistance, "px)");
+        break;
+      case "bottom":
+        wrapperStyle.transform = "translateY(".concat(-pushDistance, "px)");
+        break;
+      case "left":
+        wrapperStyle.transform = "translateX(".concat(pushDistance, "px)");
+        break;
+      default:
+        wrapperStyle.transform = "translateX(".concat(-pushDistance, "px)");
+        break;
+    }
+  }
+  if (placement === "left" || placement === "right") {
+    wrapperStyle.width = parseWidthHeight(width);
+  } else {
+    wrapperStyle.height = parseWidthHeight(height);
+  }
+  var eventHandlers = {
+    onMouseEnter,
+    onMouseOver,
+    onMouseLeave,
+    onClick,
+    onKeyDown,
+    onKeyUp
+  };
+  var panelNode = /* @__PURE__ */ reactExports.createElement(CSSMotion, _extends({
+    key: "panel"
+  }, motionProps, {
+    visible: open2,
+    forceRender,
+    onVisibleChanged: function onVisibleChanged(nextVisible) {
+      afterOpenChange === null || afterOpenChange === void 0 || afterOpenChange(nextVisible);
+    },
+    removeOnLeave: false,
+    leavedClassName: "".concat(prefixCls, "-content-wrapper-hidden")
+  }), function(_ref3, motionRef) {
+    var motionClassName = _ref3.className, motionStyle = _ref3.style;
+    var content = /* @__PURE__ */ reactExports.createElement(DrawerPanel$1, _extends({
+      id: id2,
+      containerRef: motionRef,
+      prefixCls,
+      className: classNames(className, drawerClassNames === null || drawerClassNames === void 0 ? void 0 : drawerClassNames.content),
+      style: _objectSpread2$1(_objectSpread2$1({}, style2), styles2 === null || styles2 === void 0 ? void 0 : styles2.content)
+    }, pickAttrs(props, {
+      aria: true
+    }), eventHandlers), children);
+    return /* @__PURE__ */ reactExports.createElement("div", _extends({
+      className: classNames("".concat(prefixCls, "-content-wrapper"), drawerClassNames === null || drawerClassNames === void 0 ? void 0 : drawerClassNames.wrapper, motionClassName),
+      style: _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, wrapperStyle), motionStyle), styles2 === null || styles2 === void 0 ? void 0 : styles2.wrapper)
+    }, pickAttrs(props, {
+      data: true
+    })), drawerRender ? drawerRender(content) : content);
+  });
+  var containerStyle = _objectSpread2$1({}, rootStyle);
+  if (zIndex) {
+    containerStyle.zIndex = zIndex;
+  }
+  return /* @__PURE__ */ reactExports.createElement(DrawerContext.Provider, {
+    value: mergedContext
+  }, /* @__PURE__ */ reactExports.createElement("div", {
+    className: classNames(prefixCls, "".concat(prefixCls, "-").concat(placement), rootClassName, _defineProperty$1(_defineProperty$1({}, "".concat(prefixCls, "-open"), open2), "".concat(prefixCls, "-inline"), inline2)),
+    style: containerStyle,
+    tabIndex: -1,
+    ref: panelRef,
+    onKeyDown: onPanelKeyDown
+  }, maskNode, /* @__PURE__ */ reactExports.createElement("div", {
+    tabIndex: 0,
+    ref: sentinelStartRef,
+    style: sentinelStyle,
+    "aria-hidden": "true",
+    "data-sentinel": "start"
+  }), panelNode, /* @__PURE__ */ reactExports.createElement("div", {
+    tabIndex: 0,
+    ref: sentinelEndRef,
+    style: sentinelStyle,
+    "aria-hidden": "true",
+    "data-sentinel": "end"
+  })));
+}
+var RefDrawerPopup = /* @__PURE__ */ reactExports.forwardRef(DrawerPopup);
+var Drawer$1 = function Drawer2(props) {
+  var _props$open = props.open, open2 = _props$open === void 0 ? false : _props$open, _props$prefixCls = props.prefixCls, prefixCls = _props$prefixCls === void 0 ? "rc-drawer" : _props$prefixCls, _props$placement = props.placement, placement = _props$placement === void 0 ? "right" : _props$placement, _props$autoFocus = props.autoFocus, autoFocus = _props$autoFocus === void 0 ? true : _props$autoFocus, _props$keyboard = props.keyboard, keyboard = _props$keyboard === void 0 ? true : _props$keyboard, _props$width = props.width, width = _props$width === void 0 ? 378 : _props$width, _props$mask = props.mask, mask = _props$mask === void 0 ? true : _props$mask, _props$maskClosable = props.maskClosable, maskClosable = _props$maskClosable === void 0 ? true : _props$maskClosable, getContainer2 = props.getContainer, forceRender = props.forceRender, afterOpenChange = props.afterOpenChange, destroyOnClose = props.destroyOnClose, onMouseEnter = props.onMouseEnter, onMouseOver = props.onMouseOver, onMouseLeave = props.onMouseLeave, onClick = props.onClick, onKeyDown = props.onKeyDown, onKeyUp = props.onKeyUp, panelRef = props.panelRef;
+  var _React$useState = reactExports.useState(false), _React$useState2 = _slicedToArray$1(_React$useState, 2), animatedVisible = _React$useState2[0], setAnimatedVisible = _React$useState2[1];
+  var _React$useState3 = reactExports.useState(false), _React$useState4 = _slicedToArray$1(_React$useState3, 2), mounted = _React$useState4[0], setMounted = _React$useState4[1];
+  useLayoutEffect(function() {
+    setMounted(true);
+  }, []);
+  var mergedOpen = mounted ? open2 : false;
+  var popupRef = reactExports.useRef();
+  var lastActiveRef = reactExports.useRef();
+  useLayoutEffect(function() {
+    if (mergedOpen) {
+      lastActiveRef.current = document.activeElement;
+    }
+  }, [mergedOpen]);
+  var internalAfterOpenChange = function internalAfterOpenChange2(nextVisible) {
+    var _popupRef$current;
+    setAnimatedVisible(nextVisible);
+    afterOpenChange === null || afterOpenChange === void 0 || afterOpenChange(nextVisible);
+    if (!nextVisible && lastActiveRef.current && !((_popupRef$current = popupRef.current) !== null && _popupRef$current !== void 0 && _popupRef$current.contains(lastActiveRef.current))) {
+      var _lastActiveRef$curren;
+      (_lastActiveRef$curren = lastActiveRef.current) === null || _lastActiveRef$curren === void 0 || _lastActiveRef$curren.focus({
+        preventScroll: true
+      });
+    }
+  };
+  var refContext = reactExports.useMemo(function() {
+    return {
+      panel: panelRef
+    };
+  }, [panelRef]);
+  if (!forceRender && !animatedVisible && !mergedOpen && destroyOnClose) {
+    return null;
+  }
+  var eventHandlers = {
+    onMouseEnter,
+    onMouseOver,
+    onMouseLeave,
+    onClick,
+    onKeyDown,
+    onKeyUp
+  };
+  var drawerPopupProps = _objectSpread2$1(_objectSpread2$1({}, props), {}, {
+    open: mergedOpen,
+    prefixCls,
+    placement,
+    autoFocus,
+    keyboard,
+    width,
+    mask,
+    maskClosable,
+    inline: getContainer2 === false,
+    afterOpenChange: internalAfterOpenChange,
+    ref: popupRef
+  }, eventHandlers);
+  return /* @__PURE__ */ reactExports.createElement(RefContext.Provider, {
+    value: refContext
+  }, /* @__PURE__ */ reactExports.createElement(Portal, {
+    open: mergedOpen || forceRender || animatedVisible,
+    autoDestroy: false,
+    getContainer: getContainer2,
+    autoLock: mask && (mergedOpen || animatedVisible)
+  }, /* @__PURE__ */ reactExports.createElement(RefDrawerPopup, drawerPopupProps)));
+};
+const DrawerPanel = (props) => {
+  var _a, _b;
+  const {
+    prefixCls,
+    ariaId,
+    title,
+    footer,
+    extra,
+    closable,
+    loading,
+    onClose,
+    headerStyle,
+    bodyStyle,
+    footerStyle,
+    children,
+    classNames: drawerClassNames,
+    styles: drawerStyles
+  } = props;
+  const drawerContext = useComponentConfig("drawer");
+  let closablePlacement;
+  if (closable === false) {
+    closablePlacement = void 0;
+  } else if (closable === void 0 || closable === true) {
+    closablePlacement = "start";
+  } else {
+    closablePlacement = (closable === null || closable === void 0 ? void 0 : closable.placement) === "end" ? "end" : "start";
+  }
+  const customCloseIconRender = reactExports.useCallback((icon3) => /* @__PURE__ */ reactExports.createElement("button", {
+    type: "button",
+    onClick: onClose,
+    className: classNames(`${prefixCls}-close`, {
+      [`${prefixCls}-close-${closablePlacement}`]: closablePlacement === "end"
+    })
+  }, icon3), [onClose, prefixCls, closablePlacement]);
+  const [mergedClosable, mergedCloseIcon] = useClosable(pickClosable(props), pickClosable(drawerContext), {
+    closable: true,
+    closeIconRender: customCloseIconRender
+  });
+  const renderHeader = () => {
+    var _a2, _b2;
+    if (!title && !mergedClosable) {
+      return null;
+    }
+    return /* @__PURE__ */ reactExports.createElement("div", {
+      style: Object.assign(Object.assign(Object.assign({}, (_a2 = drawerContext.styles) === null || _a2 === void 0 ? void 0 : _a2.header), headerStyle), drawerStyles === null || drawerStyles === void 0 ? void 0 : drawerStyles.header),
+      className: classNames(`${prefixCls}-header`, {
+        [`${prefixCls}-header-close-only`]: mergedClosable && !title && !extra
+      }, (_b2 = drawerContext.classNames) === null || _b2 === void 0 ? void 0 : _b2.header, drawerClassNames === null || drawerClassNames === void 0 ? void 0 : drawerClassNames.header)
+    }, /* @__PURE__ */ reactExports.createElement("div", {
+      className: `${prefixCls}-header-title`
+    }, closablePlacement === "start" && mergedCloseIcon, title && /* @__PURE__ */ reactExports.createElement("div", {
+      className: `${prefixCls}-title`,
+      id: ariaId
+    }, title)), extra && /* @__PURE__ */ reactExports.createElement("div", {
+      className: `${prefixCls}-extra`
+    }, extra), closablePlacement === "end" && mergedCloseIcon);
+  };
+  const renderFooter = () => {
+    var _a2, _b2;
+    if (!footer) {
+      return null;
+    }
+    const footerClassName = `${prefixCls}-footer`;
+    return /* @__PURE__ */ reactExports.createElement("div", {
+      className: classNames(footerClassName, (_a2 = drawerContext.classNames) === null || _a2 === void 0 ? void 0 : _a2.footer, drawerClassNames === null || drawerClassNames === void 0 ? void 0 : drawerClassNames.footer),
+      style: Object.assign(Object.assign(Object.assign({}, (_b2 = drawerContext.styles) === null || _b2 === void 0 ? void 0 : _b2.footer), footerStyle), drawerStyles === null || drawerStyles === void 0 ? void 0 : drawerStyles.footer)
+    }, footer);
+  };
+  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, renderHeader(), /* @__PURE__ */ reactExports.createElement("div", {
+    className: classNames(`${prefixCls}-body`, drawerClassNames === null || drawerClassNames === void 0 ? void 0 : drawerClassNames.body, (_a = drawerContext.classNames) === null || _a === void 0 ? void 0 : _a.body),
+    style: Object.assign(Object.assign(Object.assign({}, (_b = drawerContext.styles) === null || _b === void 0 ? void 0 : _b.body), bodyStyle), drawerStyles === null || drawerStyles === void 0 ? void 0 : drawerStyles.body)
+  }, loading ? /* @__PURE__ */ reactExports.createElement(Skeleton, {
+    active: true,
+    title: false,
+    paragraph: {
+      rows: 5
+    },
+    className: `${prefixCls}-body-skeleton`
+  }) : children), renderFooter());
+};
+const getMoveTranslate = (direction) => {
+  const value = "100%";
+  return {
+    left: `translateX(-${value})`,
+    right: `translateX(${value})`,
+    top: `translateY(-${value})`,
+    bottom: `translateY(${value})`
+  }[direction];
+};
+const getEnterLeaveStyle = (startStyle, endStyle) => ({
+  "&-enter, &-appear": Object.assign(Object.assign({}, startStyle), {
+    "&-active": endStyle
+  }),
+  "&-leave": Object.assign(Object.assign({}, endStyle), {
+    "&-active": startStyle
+  })
+});
+const getFadeStyle = (from2, duration) => Object.assign({
+  "&-enter, &-appear, &-leave": {
+    "&-start": {
+      transition: "none"
+    },
+    "&-active": {
+      transition: `all ${duration}`
+    }
+  }
+}, getEnterLeaveStyle({
+  opacity: from2
+}, {
+  opacity: 1
+}));
+const getPanelMotionStyles = (direction, duration) => [getFadeStyle(0.7, duration), getEnterLeaveStyle({
+  transform: getMoveTranslate(direction)
+}, {
+  transform: "none"
+})];
+const genMotionStyle = (token2) => {
+  const {
+    componentCls,
+    motionDurationSlow
+  } = token2;
+  return {
+    [componentCls]: {
+      // ======================== Mask ========================
+      [`${componentCls}-mask-motion`]: getFadeStyle(0, motionDurationSlow),
+      // ======================= Panel ========================
+      [`${componentCls}-panel-motion`]: ["left", "right", "top", "bottom"].reduce((obj, direction) => Object.assign(Object.assign({}, obj), {
+        [`&-${direction}`]: getPanelMotionStyles(direction, motionDurationSlow)
+      }), {})
+    }
+  };
+};
+const genDrawerStyle = (token2) => {
+  const {
+    borderRadiusSM,
+    componentCls,
+    zIndexPopup,
+    colorBgMask,
+    colorBgElevated,
+    motionDurationSlow,
+    motionDurationMid,
+    paddingXS,
+    padding,
+    paddingLG,
+    fontSizeLG,
+    lineHeightLG,
+    lineWidth,
+    lineType,
+    colorSplit,
+    marginXS,
+    colorIcon,
+    colorIconHover,
+    colorBgTextHover,
+    colorBgTextActive,
+    colorText,
+    fontWeightStrong,
+    footerPaddingBlock,
+    footerPaddingInline,
+    calc
+  } = token2;
+  const wrapperCls = `${componentCls}-content-wrapper`;
+  return {
+    [componentCls]: {
+      position: "fixed",
+      inset: 0,
+      zIndex: zIndexPopup,
+      pointerEvents: "none",
+      color: colorText,
+      "&-pure": {
+        position: "relative",
+        background: colorBgElevated,
+        display: "flex",
+        flexDirection: "column",
+        [`&${componentCls}-left`]: {
+          boxShadow: token2.boxShadowDrawerLeft
+        },
+        [`&${componentCls}-right`]: {
+          boxShadow: token2.boxShadowDrawerRight
+        },
+        [`&${componentCls}-top`]: {
+          boxShadow: token2.boxShadowDrawerUp
+        },
+        [`&${componentCls}-bottom`]: {
+          boxShadow: token2.boxShadowDrawerDown
+        }
+      },
+      "&-inline": {
+        position: "absolute"
+      },
+      // ====================== Mask ======================
+      [`${componentCls}-mask`]: {
+        position: "absolute",
+        inset: 0,
+        zIndex: zIndexPopup,
+        background: colorBgMask,
+        pointerEvents: "auto"
+      },
+      // ==================== Content =====================
+      [wrapperCls]: {
+        position: "absolute",
+        zIndex: zIndexPopup,
+        maxWidth: "100vw",
+        transition: `all ${motionDurationSlow}`,
+        "&-hidden": {
+          display: "none"
+        }
+      },
+      // Placement
+      [`&-left > ${wrapperCls}`]: {
+        top: 0,
+        bottom: 0,
+        left: {
+          _skip_check_: true,
+          value: 0
+        },
+        boxShadow: token2.boxShadowDrawerLeft
+      },
+      [`&-right > ${wrapperCls}`]: {
+        top: 0,
+        right: {
+          _skip_check_: true,
+          value: 0
+        },
+        bottom: 0,
+        boxShadow: token2.boxShadowDrawerRight
+      },
+      [`&-top > ${wrapperCls}`]: {
+        top: 0,
+        insetInline: 0,
+        boxShadow: token2.boxShadowDrawerUp
+      },
+      [`&-bottom > ${wrapperCls}`]: {
+        bottom: 0,
+        insetInline: 0,
+        boxShadow: token2.boxShadowDrawerDown
+      },
+      [`${componentCls}-content`]: {
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        overflow: "auto",
+        background: colorBgElevated,
+        pointerEvents: "auto"
+      },
+      // Header
+      [`${componentCls}-header`]: {
+        display: "flex",
+        flex: 0,
+        alignItems: "center",
+        padding: `${unit$1(padding)} ${unit$1(paddingLG)}`,
+        fontSize: fontSizeLG,
+        lineHeight: lineHeightLG,
+        borderBottom: `${unit$1(lineWidth)} ${lineType} ${colorSplit}`,
+        "&-title": {
+          display: "flex",
+          flex: 1,
+          alignItems: "center",
+          minWidth: 0,
+          minHeight: 0
+        }
+      },
+      [`${componentCls}-extra`]: {
+        flex: "none"
+      },
+      [`${componentCls}-close`]: Object.assign({
+        display: "inline-flex",
+        width: calc(fontSizeLG).add(paddingXS).equal(),
+        height: calc(fontSizeLG).add(paddingXS).equal(),
+        borderRadius: borderRadiusSM,
+        justifyContent: "center",
+        alignItems: "center",
+        color: colorIcon,
+        fontWeight: fontWeightStrong,
+        fontSize: fontSizeLG,
+        fontStyle: "normal",
+        lineHeight: 1,
+        textAlign: "center",
+        textTransform: "none",
+        textDecoration: "none",
+        background: "transparent",
+        border: 0,
+        cursor: "pointer",
+        transition: `all ${motionDurationMid}`,
+        textRendering: "auto",
+        [`&${componentCls}-close-end`]: {
+          marginInlineStart: marginXS
+        },
+        [`&:not(${componentCls}-close-end)`]: {
+          marginInlineEnd: marginXS
+        },
+        "&:hover": {
+          color: colorIconHover,
+          backgroundColor: colorBgTextHover,
+          textDecoration: "none"
+        },
+        "&:active": {
+          backgroundColor: colorBgTextActive
+        }
+      }, genFocusStyle(token2)),
+      [`${componentCls}-title`]: {
+        flex: 1,
+        margin: 0,
+        fontWeight: token2.fontWeightStrong,
+        fontSize: fontSizeLG,
+        lineHeight: lineHeightLG
+      },
+      // Body
+      [`${componentCls}-body`]: {
+        flex: 1,
+        minWidth: 0,
+        minHeight: 0,
+        padding: paddingLG,
+        overflow: "auto",
+        [`${componentCls}-body-skeleton`]: {
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center"
+        }
+      },
+      // Footer
+      [`${componentCls}-footer`]: {
+        flexShrink: 0,
+        padding: `${unit$1(footerPaddingBlock)} ${unit$1(footerPaddingInline)}`,
+        borderTop: `${unit$1(lineWidth)} ${lineType} ${colorSplit}`
+      },
+      // ====================== RTL =======================
+      "&-rtl": {
+        direction: "rtl"
+      }
+    }
+  };
+};
+const prepareComponentToken = (token2) => ({
+  zIndexPopup: token2.zIndexPopupBase,
+  footerPaddingBlock: token2.paddingXS,
+  footerPaddingInline: token2.padding
+});
+const useStyle = genStyleHooks("Drawer", (token2) => {
+  const drawerToken = merge(token2, {});
+  return [genDrawerStyle(drawerToken), genMotionStyle(drawerToken)];
+}, prepareComponentToken);
+var __rest = function(s2, e2) {
+  var t2 = {};
+  for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+  if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+    if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+  }
+  return t2;
+};
+const defaultPushState = {
+  distance: 180
+};
+const Drawer = (props) => {
+  const {
+    rootClassName,
+    width,
+    height,
+    size = "default",
+    mask = true,
+    push = defaultPushState,
+    open: open2,
+    afterOpenChange,
+    onClose,
+    prefixCls: customizePrefixCls,
+    getContainer: customizeGetContainer,
+    panelRef = null,
+    style: style2,
+    className,
+    "aria-labelledby": ariaLabelledby,
+    // Deprecated
+    visible,
+    afterVisibleChange,
+    maskStyle,
+    drawerStyle,
+    contentWrapperStyle,
+    destroyOnClose,
+    destroyOnHidden
+  } = props, rest = __rest(props, ["rootClassName", "width", "height", "size", "mask", "push", "open", "afterOpenChange", "onClose", "prefixCls", "getContainer", "panelRef", "style", "className", "aria-labelledby", "visible", "afterVisibleChange", "maskStyle", "drawerStyle", "contentWrapperStyle", "destroyOnClose", "destroyOnHidden"]);
+  const id2 = useId();
+  const ariaId = rest.title ? id2 : void 0;
+  const {
+    getPopupContainer,
+    getPrefixCls,
+    direction,
+    className: contextClassName,
+    style: contextStyle,
+    classNames: contextClassNames,
+    styles: contextStyles
+  } = useComponentConfig("drawer");
+  const prefixCls = getPrefixCls("drawer", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls);
+  const getContainer2 = (
+    // 有可能为 false，所以不能直接判断
+    customizeGetContainer === void 0 && getPopupContainer ? () => getPopupContainer(document.body) : customizeGetContainer
+  );
+  const drawerClassName = classNames({
+    "no-mask": !mask,
+    [`${prefixCls}-rtl`]: direction === "rtl"
+  }, rootClassName, hashId, cssVarCls);
+  const mergedWidth = reactExports.useMemo(() => width !== null && width !== void 0 ? width : size === "large" ? 736 : 378, [width, size]);
+  const mergedHeight = reactExports.useMemo(() => height !== null && height !== void 0 ? height : size === "large" ? 736 : 378, [height, size]);
+  const maskMotion = {
+    motionName: getTransitionName(prefixCls, "mask-motion"),
+    motionAppear: true,
+    motionEnter: true,
+    motionLeave: true,
+    motionDeadline: 500
+  };
+  const panelMotion = (motionPlacement) => ({
+    motionName: getTransitionName(prefixCls, `panel-motion-${motionPlacement}`),
+    motionAppear: true,
+    motionEnter: true,
+    motionLeave: true,
+    motionDeadline: 500
+  });
+  const innerPanelRef = usePanelRef();
+  const mergedPanelRef = composeRef(panelRef, innerPanelRef);
+  const [zIndex, contextZIndex] = useZIndex("Drawer", rest.zIndex);
+  const {
+    classNames: propClassNames = {},
+    styles: propStyles = {}
+  } = rest;
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement(ContextIsolator, {
+    form: true,
+    space: true
+  }, /* @__PURE__ */ reactExports.createElement(zIndexContext.Provider, {
+    value: contextZIndex
+  }, /* @__PURE__ */ reactExports.createElement(Drawer$1, Object.assign({
+    prefixCls,
+    onClose,
+    maskMotion,
+    motion: panelMotion
+  }, rest, {
+    classNames: {
+      mask: classNames(propClassNames.mask, contextClassNames.mask),
+      content: classNames(propClassNames.content, contextClassNames.content),
+      wrapper: classNames(propClassNames.wrapper, contextClassNames.wrapper)
+    },
+    styles: {
+      mask: Object.assign(Object.assign(Object.assign({}, propStyles.mask), maskStyle), contextStyles.mask),
+      content: Object.assign(Object.assign(Object.assign({}, propStyles.content), drawerStyle), contextStyles.content),
+      wrapper: Object.assign(Object.assign(Object.assign({}, propStyles.wrapper), contentWrapperStyle), contextStyles.wrapper)
+    },
+    open: open2 !== null && open2 !== void 0 ? open2 : visible,
+    mask,
+    push,
+    width: mergedWidth,
+    height: mergedHeight,
+    style: Object.assign(Object.assign({}, contextStyle), style2),
+    className: classNames(contextClassName, className),
+    rootClassName: drawerClassName,
+    getContainer: getContainer2,
+    afterOpenChange: afterOpenChange !== null && afterOpenChange !== void 0 ? afterOpenChange : afterVisibleChange,
+    panelRef: mergedPanelRef,
+    zIndex,
+    "aria-labelledby": ariaLabelledby !== null && ariaLabelledby !== void 0 ? ariaLabelledby : ariaId,
+    // TODO: In the future, destroyOnClose in rc-drawer needs to be upgrade to destroyOnHidden
+    destroyOnClose: destroyOnHidden !== null && destroyOnHidden !== void 0 ? destroyOnHidden : destroyOnClose
+  }), /* @__PURE__ */ reactExports.createElement(DrawerPanel, Object.assign({
+    prefixCls
+  }, rest, {
+    ariaId,
+    onClose
+  }))))));
+};
+const PurePanel = (props) => {
+  const {
+    prefixCls: customizePrefixCls,
+    style: style2,
+    className,
+    placement = "right"
+  } = props, restProps = __rest(props, ["prefixCls", "style", "className", "placement"]);
+  const {
+    getPrefixCls
+  } = reactExports.useContext(ConfigContext);
+  const prefixCls = getPrefixCls("drawer", customizePrefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls);
+  const cls = classNames(prefixCls, `${prefixCls}-pure`, `${prefixCls}-${placement}`, hashId, cssVarCls, className);
+  return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", {
+    className: cls,
+    style: style2
+  }, /* @__PURE__ */ reactExports.createElement(DrawerPanel, Object.assign({
+    prefixCls
+  }, restProps))));
+};
+Drawer._InternalPanelDoNotUseOrYouWillBeFired = PurePanel;
 let message = null;
 let act = (callback) => callback();
 let taskQueue = [];
@@ -22669,7 +24187,7 @@ const baseStaticMethods = {
   destroy,
   config: setMessageGlobalConfig,
   useMessage,
-  _InternalPanelDoNotUseOrYouWillBeFired: PurePanel$1
+  _InternalPanelDoNotUseOrYouWillBeFired: PurePanel$2
 };
 const staticMethods = baseStaticMethods;
 methods.forEach((type4) => {
@@ -23788,13 +25306,13 @@ function transformForSvg(_ref2) {
   var inner = {
     transform: "".concat(innerTranslate, " ").concat(innerScale, " ").concat(innerRotate)
   };
-  var path = {
+  var path2 = {
     transform: "translate(".concat(iconWidth / 2 * -1, " -256)")
   };
   return {
     outer,
     inner,
-    path
+    path: path2
   };
 }
 function transformForCss(_ref2) {
@@ -25604,13 +27122,13 @@ var PowerTransforms = {
       var inner = {
         transform: "".concat(innerTranslate, " ").concat(innerScale, " ").concat(innerRotate)
       };
-      var path = {
+      var path2 = {
         transform: "translate(".concat(iconWidth / 2 * -1, " -256)")
       };
       var operations = {
         outer,
         inner,
-        path
+        path: path2
       };
       return {
         tag: "g",
@@ -26347,6 +27865,11 @@ var faLink = {
   iconName: "link",
   icon: [576, 512, [128279, "chain"], "f0c1", "M419.5 96c-16.6 0-32.7 4.5-46.8 12.7-15.8-16-34.2-29.4-54.5-39.5 28.2-24 64.1-37.2 101.3-37.2 86.4 0 156.5 70 156.5 156.5 0 41.5-16.5 81.3-45.8 110.6l-71.1 71.1c-29.3 29.3-69.1 45.8-110.6 45.8-86.4 0-156.5-70-156.5-156.5 0-1.5 0-3 .1-4.5 .5-17.7 15.2-31.6 32.9-31.1s31.6 15.2 31.1 32.9c0 .9 0 1.8 0 2.6 0 51.1 41.4 92.5 92.5 92.5 24.5 0 48-9.7 65.4-27.1l71.1-71.1c17.3-17.3 27.1-40.9 27.1-65.4 0-51.1-41.4-92.5-92.5-92.5zM275.2 173.3c-1.9-.8-3.8-1.9-5.5-3.1-12.6-6.5-27-10.2-42.1-10.2-24.5 0-48 9.7-65.4 27.1L91.1 258.2c-17.3 17.3-27.1 40.9-27.1 65.4 0 51.1 41.4 92.5 92.5 92.5 16.5 0 32.6-4.4 46.7-12.6 15.8 16 34.2 29.4 54.6 39.5-28.2 23.9-64 37.2-101.3 37.2-86.4 0-156.5-70-156.5-156.5 0-41.5 16.5-81.3 45.8-110.6l71.1-71.1c29.3-29.3 69.1-45.8 110.6-45.8 86.6 0 156.5 70.6 156.5 156.9 0 1.3 0 2.6 0 3.9-.4 17.7-15.1 31.6-32.8 31.2s-31.6-15.1-31.2-32.8c0-.8 0-1.5 0-2.3 0-33.7-18-63.3-44.8-79.6z"]
 };
+var faChartLine = {
+  prefix: "fas",
+  iconName: "chart-line",
+  icon: [512, 512, ["line-chart"], "f201", "M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64L0 400c0 44.2 35.8 80 80 80l400 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L80 416c-8.8 0-16-7.2-16-16L64 64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7 262.6 153.4c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l73.4-73.4 57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"]
+};
 var faGear = {
   prefix: "fas",
   iconName: "gear",
@@ -26366,6 +27889,11 @@ var faCalendar = {
   prefix: "fas",
   iconName: "calendar",
   icon: [448, 512, [128197, 128198], "f133", "M128 0C110.3 0 96 14.3 96 32l0 32-32 0C28.7 64 0 92.7 0 128l0 48 448 0 0-48c0-35.3-28.7-64-64-64l-32 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32-128 0 0-32c0-17.7-14.3-32-32-32zM0 224L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-192-448 0z"]
+};
+var faCheck = {
+  prefix: "fas",
+  iconName: "check",
+  icon: [448, 512, [10003, 10004], "f00c", "M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"]
 };
 var faHouse = {
   prefix: "fas",
@@ -26426,6 +27954,11 @@ var faList = {
   prefix: "fas",
   iconName: "list",
   icon: [512, 512, ["list-squares"], "f03a", "M40 48C26.7 48 16 58.7 16 72l0 48c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24l0-48c0-13.3-10.7-24-24-24L40 48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM16 232l0 48c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24l0-48c0-13.3-10.7-24-24-24l-48 0c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24l0 48c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24l0-48c0-13.3-10.7-24-24-24l-48 0z"]
+};
+var faInbox = {
+  prefix: "fas",
+  iconName: "inbox",
+  icon: [512, 512, [], "f01c", "M91.8 32C59.9 32 32.9 55.4 28.4 86.9L.6 281.2c-.4 3-.6 6-.6 9.1L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-125.7c0-3-.2-6.1-.6-9.1L483.6 86.9C479.1 55.4 452.1 32 420.2 32L91.8 32zm0 64l328.5 0 27.4 192-59.9 0c-12.1 0-23.2 6.8-28.6 17.7l-14.3 28.6c-5.4 10.8-16.5 17.7-28.6 17.7l-120.4 0c-12.1 0-23.2-6.8-28.6-17.7l-14.3-28.6c-5.4-10.8-16.5-17.7-28.6-17.7L64.3 288 91.8 96z"]
 };
 var faChevronLeft = {
   prefix: "fas",
@@ -26522,200 +28055,253 @@ var faShield = {
   iconName: "shield",
   icon: [512, 512, [128737, "shield-blank"], "f132", "M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0z"]
 };
-const _pg = typeof formglut_admin !== "undefined" && formglut_admin.pages ? formglut_admin.pages : { all_forms: "all-forms.html", editor: "form-editor.html", entries: "entries.html", settings: "settings.html", entry_detail: "single-entry.html", preview: "preview.html" };
-const _dashboard = typeof formglut_admin !== "undefined" && formglut_admin.dashboard_url ? formglut_admin.dashboard_url : "/wp-admin/";
-const _pluginUrl = typeof formglut_admin !== "undefined" && formglut_admin.plugin_url ? formglut_admin.plugin_url : "";
-function Header({ nav, activePage }) {
+const admin = typeof formglut_admin !== "undefined" ? formglut_admin : {};
+const _pg = admin.pages || {
+  all_forms: "all-forms.html",
+  editor: "form-editor.html",
+  entries: "entries.html",
+  settings: "settings.html",
+  form_settings: "form-settings.html",
+  entry_detail: "single-entry.html",
+  preview: "preview.html",
+  pro_features: "pro-features.html"
+};
+const _dashboard = admin.dashboard_url || "/wp-admin/";
+const _pluginUrl = admin.plugin_url || "";
+function NavMenu() {
+  const [open2, setOpen] = reactExports.useState(false);
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get("page") || "";
+  const hasForm = !!params.get("form_id");
+  const current = {
+    "formglut-all-forms": "forms",
+    "formglut-editor": hasForm ? "forms" : "new",
+    "formglut-form-settings": "forms",
+    "formglut-entries": "entries",
+    "formglut-entry-detail": "entries",
+    "formglut-settings": "settings",
+    "formglut-pro-features": "pro"
+  }[page] || "";
   const items = [
-    { label: __("Forms", "formglut"), href: _pg.all_forms },
-    { label: __("Entries", "formglut"), href: _pg.entries },
-    { label: __("Settings", "formglut"), href: _pg.settings }
-  ].map((n2) => {
-    if (n2.label === activePage) n2.active = true;
-    return n2;
-  }).concat(nav || []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "fg-header", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fg-header-left", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: _dashboard, className: "fg-header-back", title: __("Back to WordPress Admin", "formglut"), children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginTop: "0.5px" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faChevronLeft }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHouse })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: _pluginUrl + "global-assets/images/formglut-logo.svg", alt: "FormGlut", className: "fg-logo-img" })
+    { key: "forms", label: __("All Forms", "formglut"), icon: faFileLines, href: _pg.all_forms },
+    { key: "new", label: __("Add New Form", "formglut"), icon: faPlus, href: _pg.editor },
+    { key: "entries", label: __("Entries", "formglut"), icon: faInbox, href: _pg.entries },
+    { key: "settings", label: __("Settings", "formglut"), icon: faGear, href: _pg.settings },
+    { key: "pro", label: __("Pro Features", "formglut"), icon: faStar, href: _pg.pro_features }
+  ].filter((i2) => i2.href);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "fg-hamburger", "aria-label": __("Open menu", "formglut"), "aria-expanded": open2, onClick: () => setOpen(true), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", {})
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "fg-header-nav", children: items.map((n2) => /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: n2.href, className: n2.active ? "active" : "", children: n2.label }, n2.label)) })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Drawer,
+      {
+        open: open2,
+        onClose: () => setOpen(false),
+        placement: "left",
+        width: 280,
+        closable: true,
+        title: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: _pluginUrl + "global-assets/images/formglut-logo.svg", alt: "FormGlut", className: "fg-drawer-logo" }),
+        rootClassName: "fg-nav-drawer",
+        styles: { body: { padding: "12px 0" }, header: { background: "linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%)", borderBottom: 0 } },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "fg-nav-list", children: items.map((i2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: i2.href, className: i2.key === current ? "active" : "", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ic", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: i2.icon }) }),
+            i2.label
+          ] }, i2.key)) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fg-nav-foot", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: _dashboard, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ic", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FontAwesomeIcon, { icon: faHouse }) }),
+            __("WordPress Dashboard", "formglut")
+          ] }) })
+        ]
+      }
+    )
   ] });
 }
 export {
-  _inherits as $,
-  RefResizeObserver as A,
+  _defineProperty$1 as $,
+  RefIcon as A,
   Button as B,
   CONTAINER_MAX_OFFSET as C,
   DisabledContext as D,
-  Tooltip2 as E,
+  RefResizeObserver as E,
   FastColor as F,
-  Trigger as G,
-  Header as H,
+  Skeleton as G,
+  Tooltip2 as H,
   Icon as I,
-  VariantContext as J,
+  Trigger as J,
   KeyCode as K,
   List as L,
-  Variants as M,
-  NoFormStyle as N,
-  WrapperField as O,
+  VariantContext as M,
+  NavMenu as N,
+  Variants as O,
   Popup as P,
-  _classCallCheck$1 as Q,
+  WrapperField as Q,
   React as R,
   SizeContext as S,
   TARGET_CLS as T,
-  _createClass$1 as U,
+  _classCallCheck$1 as U,
   ValidateMessagesContext as V,
   Wave as W,
-  _createSuper as X,
-  _defineProperty$1 as Y,
-  _extends as Z,
+  _createClass$1 as X,
+  _createSuper as Y,
+  _dashboard as Z,
   _assertThisInitialized as _,
   CSSMotion as a,
-  faSpinner as a$,
-  _objectSpread2$1 as a0,
-  _objectWithoutProperties as a1,
-  _pg as a2,
-  _slicedToArray$1 as a3,
-  _toArray as a4,
-  _toConsumableArray$1 as a5,
-  _typeof$1 as a6,
-  canUseDom as a7,
-  classNames as a8,
-  clearFix as a9,
-  faFileLines as aA,
-  faFloppyDisk as aB,
-  faFont as aC,
-  faGear as aD,
-  faGlobe as aE,
-  faHandshake as aF,
-  faHashtag as aG,
-  faHeading as aH,
-  faLink as aI,
-  faList as aJ,
-  faLock as aK,
-  faMagnifyingGlass as aL,
-  faMapLocation as aM,
-  faMask as aN,
-  faMoneyBill as aO,
-  faPalette as aP,
-  faPaperPlane as aQ,
-  faPenToSquare as aR,
-  faPercent as aS,
-  faPhone as aT,
-  faPlus as aU,
-  faPrint as aV,
-  faRotateLeft as aW,
-  faRotateRight as aX,
-  faShield as aY,
-  faShieldHalved as aZ,
-  faSliders as a_,
-  cloneElement as aa,
-  commonjsGlobal as ab,
-  composeRef as ac,
-  contains as ad,
-  convertLegacyProps as ae,
-  createRoot$1 as af,
-  devUseWarning as ag,
-  faArrowDown as ah,
-  faArrowLeft as ai,
-  faArrowUp as aj,
-  faBarcode as ak,
-  faCalendar as al,
-  faCalendarDays as am,
-  faCertificate as an,
-  faCheckDouble as ao,
-  faCircleCheck as ap,
-  faCircleDot as aq,
-  faCircleInfo as ar,
-  faClock as as,
-  faCode as at,
-  faCopy as au,
-  faEnvelope as av,
-  faEnvelopeOpen as aw,
-  faExpand as ax,
-  faEye as ay,
-  faEyeSlash as az,
+  faPlus as a$,
+  _extends as a0,
+  _inherits as a1,
+  _objectSpread2$1 as a2,
+  _objectWithoutProperties as a3,
+  _pg as a4,
+  _pluginUrl as a5,
+  _slicedToArray$1 as a6,
+  _toArray as a7,
+  _toConsumableArray$1 as a8,
+  _typeof$1 as a9,
+  faCopy as aA,
+  faEnvelope as aB,
+  faEnvelopeOpen as aC,
+  faExpand as aD,
+  faEye as aE,
+  faEyeSlash as aF,
+  faFileLines as aG,
+  faFloppyDisk as aH,
+  faFont as aI,
+  faGear as aJ,
+  faGlobe as aK,
+  faHandshake as aL,
+  faHashtag as aM,
+  faHeading as aN,
+  faHouse as aO,
+  faLink as aP,
+  faList as aQ,
+  faLock as aR,
+  faMagnifyingGlass as aS,
+  faMapLocation as aT,
+  faMask as aU,
+  faMoneyBill as aV,
+  faPalette as aW,
+  faPaperPlane as aX,
+  faPenToSquare as aY,
+  faPercent as aZ,
+  faPhone as a_,
+  canUseDom as aa,
+  classNames as ab,
+  clearFix as ac,
+  cloneElement as ad,
+  commonjsGlobal as ae,
+  composeRef as af,
+  contains as ag,
+  convertLegacyProps as ah,
+  createRoot$1 as ai,
+  devUseWarning as aj,
+  faArrowDown as ak,
+  faArrowLeft as al,
+  faArrowUp as am,
+  faBarcode as an,
+  faCalendar as ao,
+  faCalendarDays as ap,
+  faCertificate as aq,
+  faChartLine as ar,
+  faCheck as as,
+  faCheckDouble as at,
+  faChevronLeft as au,
+  faCircleCheck as av,
+  faCircleDot as aw,
+  faCircleInfo as ax,
+  faClock as ay,
+  faCode as az,
   CSSMotionList as b,
-  useMemo as b$,
-  faSquareCheck as b0,
-  faStar as b1,
-  faTableColumns as b2,
-  faTrash as b3,
-  faTrashCan as b4,
-  faUser as b5,
-  faXmark as b6,
-  fillRef as b7,
-  genCompactItemStyle as b8,
-  genFocusOutline as b9,
-  localeValues as bA,
-  merge as bB,
-  omit as bC,
-  operationUnit as bD,
-  pickAttrs as bE,
-  reactDomExports as bF,
-  reactExports as bG,
-  resetComponent as bH,
-  resetIcon as bI,
-  set as bJ,
-  staticMethods as bK,
-  supportNodeRef as bL,
-  supportRef as bM,
-  textEllipsis as bN,
-  toArray$3 as bO,
-  unit$1 as bP,
-  unstableSetRender as bQ,
-  useCSSVarCls as bR,
-  useCompactItemContext as bS,
-  useComponentConfig as bT,
-  useComposeRef as bU,
-  useEvent as bV,
-  useForm as bW,
-  useId as bX,
-  useLayoutEffect as bY,
-  useLayoutUpdateEffect as bZ,
-  useLocale as b_,
-  genFocusStyle as ba,
-  genRoundedArrow as bb,
-  genStyleHooks as bc,
-  genSubStyleComponent as bd,
-  get as be,
-  getArrowOffsetToken as bf,
-  getArrowStyle as bg,
-  getArrowToken as bh,
-  getConfirmLocale as bi,
-  getDOM as bj,
-  getDefaultExportFromCjs as bk,
-  getNodeRef as bl,
-  getPlacements as bm,
-  getScrollBarSize as bn,
-  getTargetScrollBarSize as bo,
-  getTransitionName as bp,
-  globalConfig as bq,
-  initCollapseMotion as br,
-  initMotion as bs,
-  initZoomMotion as bt,
-  isEqual as bu,
-  isMobile as bv,
-  isVisible as bw,
-  jsxRuntimeExports as bx,
-  locale as by,
-  locale$3 as bz,
+  useClosable as b$,
+  faPrint as b0,
+  faRotateLeft as b1,
+  faRotateRight as b2,
+  faShield as b3,
+  faShieldHalved as b4,
+  faSliders as b5,
+  faSpinner as b6,
+  faSquareCheck as b7,
+  faStar as b8,
+  faTableColumns as b9,
+  initZoomMotion as bA,
+  isEqual as bB,
+  isMobile as bC,
+  isVisible as bD,
+  jsxRuntimeExports as bE,
+  locale as bF,
+  locale$3 as bG,
+  localeValues as bH,
+  merge as bI,
+  mergeProps as bJ,
+  omit as bK,
+  operationUnit as bL,
+  pickAttrs as bM,
+  pickClosable as bN,
+  reactDomExports as bO,
+  reactExports as bP,
+  resetComponent as bQ,
+  resetIcon as bR,
+  set as bS,
+  staticMethods as bT,
+  supportNodeRef as bU,
+  supportRef as bV,
+  textEllipsis as bW,
+  toArray$3 as bX,
+  unit$1 as bY,
+  unstableSetRender as bZ,
+  useCSSVarCls as b_,
+  faTrash as ba,
+  faTrashCan as bb,
+  faUser as bc,
+  faXmark as bd,
+  fillRef as be,
+  genCompactItemStyle as bf,
+  genFocusOutline as bg,
+  genFocusStyle as bh,
+  genRoundedArrow as bi,
+  genStyleHooks as bj,
+  genSubStyleComponent as bk,
+  get as bl,
+  getArrowOffsetToken as bm,
+  getArrowStyle as bn,
+  getArrowToken as bo,
+  getConfirmLocale as bp,
+  getDOM as bq,
+  getDefaultExportFromCjs as br,
+  getNodeRef as bs,
+  getPlacements as bt,
+  getScrollBarSize as bu,
+  getTargetScrollBarSize as bv,
+  getTransitionName as bw,
+  globalConfig as bx,
+  initCollapseMotion as by,
+  initMotion as bz,
   Compact$1 as c,
-  useMergedState as c0,
-  useSafeState as c1,
-  useSize as c2,
-  useToken as c3,
-  useWatch$1 as c4,
-  useZIndex as c5,
-  warning$2 as c6,
-  warningOnce as c7,
-  wrapperRaf as c8,
-  zIndexContext as c9,
-  zoomIn as ca,
+  useCompactItemContext as c0,
+  useComponentConfig as c1,
+  useComposeRef as c2,
+  useEvent as c3,
+  useForm as c4,
+  useId as c5,
+  useLayoutEffect as c6,
+  useLayoutUpdateEffect as c7,
+  useLocale as c8,
+  useMemo as c9,
+  useMergedState as ca,
+  usePanelRef as cb,
+  useSafeState as cc,
+  useSize as cd,
+  useToken as ce,
+  useWatch$1 as cf,
+  useZIndex as cg,
+  warning$2 as ch,
+  warningOnce as ci,
+  wrapperRaf as cj,
+  zIndexContext as ck,
+  zoomIn as cl,
   ConfigContext as d,
   ConfigProvider as e,
   Context as f,
@@ -26728,16 +28314,16 @@ export {
   FormProvider2 as m,
   Keyframe as n,
   ListContext as o,
-  NoStyleItemContext as p,
-  Portal as q,
-  PresetColors as r,
-  ReactDOM as s,
-  RefForm as t,
-  RefIcon$3 as u,
-  RefIcon$2 as v,
-  RefIcon$4 as w,
-  RefIcon$5 as x,
-  RefIcon$1 as y,
-  RefIcon as z
+  NoFormStyle as p,
+  NoStyleItemContext as q,
+  Portal as r,
+  PresetColors as s,
+  ReactDOM as t,
+  RefForm as u,
+  RefIcon$3 as v,
+  RefIcon$2 as w,
+  RefIcon$4 as x,
+  RefIcon$5 as y,
+  RefIcon$1 as z
 };
-//# sourceMappingURL=Header-DQeOh4jx.js.map
+//# sourceMappingURL=NavMenu-D0YBC0d1.js.map

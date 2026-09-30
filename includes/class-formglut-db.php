@@ -39,6 +39,7 @@ class FormGlut_DB {
 			has_payment tinyint(1) NOT NULL DEFAULT 0,
 			type varchar(45) NOT NULL DEFAULT '',
 			conditions text NOT NULL,
+			settings longtext NULL,
 			views bigint UNSIGNED NOT NULL DEFAULT 0,
 			created_by bigint UNSIGNED NOT NULL DEFAULT 0,
 			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

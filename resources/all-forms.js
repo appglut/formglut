@@ -1,100 +1,16 @@
-import { b_ as useLocale$1, bA as localeValues, R as React, u as RefIcon$3, bE as pickAttrs, a5 as _toConsumableArray, bG as reactExports, a8 as classNames, bs as initMotion, n as Keyframe, bU as useComposeRef, a0 as _objectSpread2, a6 as _typeof, Z as _extends, a3 as _slicedToArray, a as CSSMotion, bX as useId, ad as contains, K as KeyCode, q as Portal, a7 as canUseDom, bV as useEvent, B as Button, ae as convertLegacyProps, bi as getConfirmLocale, h as DisabledContextProvider, bc as genStyleHooks, bt as initZoomMotion, bB as merge, bP as unit, bH as resetComponent, ba as genFocusStyle, d as ConfigContext, bR as useCSSVarCls, ac as composeRef, c5 as useZIndex, g as ContextIsolator, c9 as zIndexContext, bp as getTransitionName, bd as genSubStyleComponent, a9 as clearFix, e as ConfigProvider, c3 as useToken, C as CONTAINER_MAX_OFFSET, v as RefIcon$4, w as RefIcon$5, x as RefIcon$6, y as RefIcon$7, bQ as unstableSetRender, bq as globalConfig, ab as commonjsGlobal, bk as getDefaultExportFromCjs, G as Trigger, Y as _defineProperty, c0 as useMergedState, c8 as wrapperRaf, c7 as warningOnce, bZ as useLayoutUpdateEffect, bY as useLayoutEffect, bw as isVisible, A as RefResizeObserver, a1 as _objectWithoutProperties, U as _createClass, Q as _classCallCheck, bC as omit, F as FastColor, bh as getArrowToken, b8 as genCompactItemStyle, bN as textEllipsis, bb as genRoundedArrow, I as Icon$1, bT as useComponentConfig, bS as useCompactItemContext, c2 as useSize, D as DisabledContext, k as FormItemInputContext, by as locale, bK as staticMethods, bx as jsxRuntimeExports, a2 as _pg, i as FontAwesomeIcon, aR as faPenToSquare, aD as faGear, ay as faEye, E as Tooltip, au as faCopy, b3 as faTrash, H as Header, aU as faPlus, ap as faCircleCheck, b4 as faTrashCan, b6 as faXmark, aL as faMagnifyingGlass, am as faCalendarDays, aX as faRotateRight, aA as faFileLines, b1 as faStar, af as createRoot } from "./chunks/Header-DQeOh4jx.js";
+import { a8 as _toConsumableArray, bP as reactExports, ab as classNames, bz as initMotion, n as Keyframe, R as React, c2 as useComposeRef, a2 as _objectSpread2, a9 as _typeof, bM as pickAttrs, a0 as _extends, a6 as _slicedToArray, a as CSSMotion, c5 as useId, ag as contains, K as KeyCode, r as Portal, aa as canUseDom, B as Button, ah as convertLegacyProps, c8 as useLocale$1, bp as getConfirmLocale, h as DisabledContextProvider, v as RefIcon$3, bj as genStyleHooks, bA as initZoomMotion, bI as merge, bY as unit, bQ as resetComponent, bh as genFocusStyle, d as ConfigContext, b_ as useCSSVarCls, b$ as useClosable, bN as pickClosable, cb as usePanelRef, af as composeRef, cg as useZIndex, g as ContextIsolator, ck as zIndexContext, bw as getTransitionName, G as Skeleton, bk as genSubStyleComponent, ac as clearFix, e as ConfigProvider, ce as useToken, C as CONTAINER_MAX_OFFSET, w as RefIcon$4, x as RefIcon$5, y as RefIcon$6, z as RefIcon$7, bZ as unstableSetRender, bx as globalConfig, bH as localeValues, ae as commonjsGlobal, br as getDefaultExportFromCjs, J as Trigger, $ as _defineProperty, c3 as useEvent, ca as useMergedState, cj as wrapperRaf, ci as warningOnce, c7 as useLayoutUpdateEffect, c6 as useLayoutEffect, bD as isVisible, E as RefResizeObserver, a3 as _objectWithoutProperties, X as _createClass, U as _classCallCheck, bK as omit, F as FastColor, bo as getArrowToken, bf as genCompactItemStyle, bW as textEllipsis, bi as genRoundedArrow, I as Icon$1, c1 as useComponentConfig, c0 as useCompactItemContext, cd as useSize, D as DisabledContext, k as FormItemInputContext, bF as locale, bT as staticMethods, bE as jsxRuntimeExports, a4 as _pg, i as FontAwesomeIcon, aY as faPenToSquare, aJ as faGear, aE as faEye, H as Tooltip, aA as faCopy, ba as faTrash, a$ as faPlus, av as faCircleCheck, bb as faTrashCan, bd as faXmark, aS as faMagnifyingGlass, ap as faCalendarDays, b2 as faRotateRight, aG as faFileLines, b8 as faStar, ai as createRoot } from "./chunks/NavMenu-D0YBC0d1.js";
 import { _ as __ } from "./chunks/default-i18n-Bi0ZJkXv.js";
+import { H as Header } from "./chunks/Header-BoZ45_PN.js";
 import { i as getFormStats, j as getForms, a as deleteForm, b as duplicateForm, m as updateFormStatus, c as createForm } from "./chunks/api-CyfhXhZs.js";
-import { S as Switch } from "./chunks/index-Cg_vhjBG.js";
-import { A as ActionButton, S as Skeleton, a as Space, P as Popconfirm } from "./chunks/index-Bbou1sxC.js";
-import { F as ForwardOverflow, o as genOverflowStyle, t as getMultipleSelectorUnit, v as initComponentToken, n as genOutlinedStyle, r as genUnderlinedStyle, j as genFilledStyle, e as genBorderlessStyle, w as initInputToken, G as slideUpOut, A as slideDownOut, C as slideUpIn, z as slideDownIn, p as genPlaceholderStyle, y as initSlideMotion, x as initMoveMotion, J as useIcons$1, K as useVariant, u as getStatusClassNames, s as getMergedStatus, q as genPurePanel, M as withPureRenderTheme, I as Input$1, S as Select } from "./chunks/index-DUFQZRHD.js";
-import { m as mergeProps, F as ForwardTable } from "./chunks/Table-Cw21W_QS.js";
-import { g as getMediaSize, R as Row, C as Col } from "./chunks/row-tEwXQ9AX.js";
-import "./chunks/EllipsisOutlined-Bj9WiQlh.js";
-import "./chunks/useForm-DbJu_6Bo.js";
-function pickClosable(context) {
-  if (!context) {
-    return void 0;
-  }
-  const {
-    closable,
-    closeIcon
-  } = context;
-  return {
-    closable,
-    closeIcon
-  };
-}
-function useClosableConfig(closableCollection) {
-  const {
-    closable,
-    closeIcon
-  } = closableCollection || {};
-  return React.useMemo(() => {
-    if (
-      // If `closable`, whatever rest be should be true
-      !closable && (closable === false || closeIcon === false || closeIcon === null)
-    ) {
-      return false;
-    }
-    if (closable === void 0 && closeIcon === void 0) {
-      return null;
-    }
-    let closableConfig = {
-      closeIcon: typeof closeIcon !== "boolean" && closeIcon !== null ? closeIcon : void 0
-    };
-    if (closable && typeof closable === "object") {
-      closableConfig = Object.assign(Object.assign({}, closableConfig), closable);
-    }
-    return closableConfig;
-  }, [closable, closeIcon]);
-}
-const EmptyFallbackCloseCollection = {};
-const useClosable = (propCloseCollection, contextCloseCollection, fallbackCloseCollection = EmptyFallbackCloseCollection) => {
-  const propCloseConfig = useClosableConfig(propCloseCollection);
-  const contextCloseConfig = useClosableConfig(contextCloseCollection);
-  const [contextLocale] = useLocale$1("global", localeValues.global);
-  const closeBtnIsDisabled = typeof propCloseConfig !== "boolean" ? !!(propCloseConfig === null || propCloseConfig === void 0 ? void 0 : propCloseConfig.disabled) : false;
-  const mergedFallbackCloseCollection = React.useMemo(() => Object.assign({
-    closeIcon: /* @__PURE__ */ React.createElement(RefIcon$3, null)
-  }, fallbackCloseCollection), [fallbackCloseCollection]);
-  const mergedClosableConfig = React.useMemo(() => {
-    if (propCloseConfig === false) {
-      return false;
-    }
-    if (propCloseConfig) {
-      return mergeProps(mergedFallbackCloseCollection, contextCloseConfig, propCloseConfig);
-    }
-    if (contextCloseConfig === false) {
-      return false;
-    }
-    if (contextCloseConfig) {
-      return mergeProps(mergedFallbackCloseCollection, contextCloseConfig);
-    }
-    return !mergedFallbackCloseCollection.closable ? false : mergedFallbackCloseCollection;
-  }, [propCloseConfig, contextCloseConfig, mergedFallbackCloseCollection]);
-  return React.useMemo(() => {
-    var _a, _b;
-    if (mergedClosableConfig === false) {
-      return [false, null, closeBtnIsDisabled, {}];
-    }
-    const {
-      closeIconRender
-    } = mergedFallbackCloseCollection;
-    const {
-      closeIcon
-    } = mergedClosableConfig;
-    let mergedCloseIcon = closeIcon;
-    const ariaOrDataProps = pickAttrs(mergedClosableConfig, true);
-    if (mergedCloseIcon !== null && mergedCloseIcon !== void 0) {
-      if (closeIconRender) {
-        mergedCloseIcon = closeIconRender(closeIcon);
-      }
-      mergedCloseIcon = /* @__PURE__ */ React.isValidElement(mergedCloseIcon) ? /* @__PURE__ */ React.cloneElement(mergedCloseIcon, Object.assign(Object.assign(Object.assign({}, mergedCloseIcon.props), {
-        "aria-label": (_b = (_a = mergedCloseIcon.props) === null || _a === void 0 ? void 0 : _a["aria-label"]) !== null && _b !== void 0 ? _b : contextLocale.close
-      }), ariaOrDataProps)) : /* @__PURE__ */ React.createElement("span", Object.assign({
-        "aria-label": contextLocale.close
-      }, ariaOrDataProps), mergedCloseIcon);
-    }
-    return [true, mergedCloseIcon, closeBtnIsDisabled, ariaOrDataProps];
-  }, [closeBtnIsDisabled, contextLocale.close, mergedClosableConfig, mergedFallbackCloseCollection]);
-};
+import { S as Switch } from "./chunks/index-C0Htsu4a.js";
+import { A as ActionButton, S as Space, P as Popconfirm } from "./chunks/index-CpZl-a5U.js";
+import { F as ForwardOverflow, n as genOverflowStyle, s as getMultipleSelectorUnit, u as initComponentToken, m as genOutlinedStyle, q as genUnderlinedStyle, i as genFilledStyle, e as genBorderlessStyle, v as initInputToken, C as slideUpOut, z as slideDownOut, A as slideUpIn, y as slideDownIn, o as genPlaceholderStyle, x as initSlideMotion, w as initMoveMotion, H as useIcons$1, J as useVariant, t as getStatusClassNames, r as getMergedStatus, p as genPurePanel, K as withPureRenderTheme, I as Input$1, S as Select } from "./chunks/index-CEbUDJaq.js";
+import { F as ForwardTable } from "./chunks/Table-DSNMf6bZ.js";
+import { g as getMediaSize, R as Row, C as Col } from "./chunks/row-B3Lz9em4.js";
+import "./chunks/index-DXRCHqrQ.js";
+import "./chunks/EllipsisOutlined-Cbet2jbC.js";
+import "./chunks/collapse-DdhdDMvL.js";
+import "./chunks/useForm-BgzEbaR7.js";
 function mergeClassNames(schema, ...classNames$1) {
   const mergedSchema = schema || {};
   return classNames$1.reduce((acc, cur) => {
@@ -600,28 +516,6 @@ var DialogWrap = function DialogWrap2(props) {
 };
 DialogWrap.displayName = "Dialog";
 const canUseDocElement = () => canUseDom() && window.document.documentElement;
-function voidFunc() {
-}
-const WatermarkContext = /* @__PURE__ */ reactExports.createContext({
-  add: voidFunc,
-  remove: voidFunc
-});
-function usePanelRef(panelSelector) {
-  const watermark = reactExports.useContext(WatermarkContext);
-  const panelEleRef = reactExports.useRef(null);
-  const panelRef = useEvent((ele) => {
-    if (ele) {
-      const innerContentEle = panelSelector ? ele.querySelector(panelSelector) : ele;
-      if (innerContentEle) {
-        watermark.add(innerContentEle);
-        panelEleRef.current = innerContentEle;
-      }
-    } else {
-      watermark.remove(panelEleRef.current);
-    }
-  });
-  return panelRef;
-}
 const NormalCancelBtn = () => {
   const {
     cancelButtonProps,
